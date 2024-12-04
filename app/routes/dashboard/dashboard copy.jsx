@@ -25,7 +25,7 @@ function isEmpty(value) {
 
 
 
-const Dashboard = ({ articles, prepareEditor, articlesPerPage }) => {
+const Dashboard = ({ articles, articlesPerPage }) => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const [selectedArticles, setSelectedArticles] = useState(new Set()); // Articles sélectionnés
@@ -174,35 +174,7 @@ const Dashboard = ({ articles, prepareEditor, articlesPerPage }) => {
         />
       ),
       shortcut: true,
-    },
-    {
-      key: 'taggedWith1',
-      label: 'Tagged with',
-      filter: (
-        <TextField
-          label="Tagged with"
-          value={taggedWith}
-          onChange={handleTaggedWithChange}
-          autoComplete="off"
-          labelHidden
-        />
-      ),
-      shortcut: true,
-    },
-    {
-      key: 'taggedWith1',
-      label: 'Tagged with',
-      filter: (
-        <TextField
-          label="Tagged with"
-          value={taggedWith}
-          onChange={handleTaggedWithChange}
-          autoComplete="off"
-          labelHidden
-        />
-      ),
-      shortcut: true,
-    },
+    }
   ];
 
 
@@ -237,7 +209,7 @@ const Dashboard = ({ articles, prepareEditor, articlesPerPage }) => {
   
 
   return (
-    <Page fullWidth title="Articles de blog" compactTitle primaryAction={{ content: "Ajouter un article de blog", disabled: false, onAction: () => EditArticle(null) }}>
+    <Page fullWidth title="Articles de blog" compactTitle primaryAction={{ content: "Ajouter un article de blog", disabled: false, url: "/articles/new" }}>
       <Layout>
         <Layout.Section>
           <Card
@@ -253,7 +225,7 @@ const Dashboard = ({ articles, prepareEditor, articlesPerPage }) => {
 
                 return (
                   <ResourceItem
-                    onClick={() => EditArticle(id)}
+                  url={"/articles/" + splitId}
                     id={id}
                     media={
                       <div>

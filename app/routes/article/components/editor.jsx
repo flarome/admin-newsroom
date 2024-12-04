@@ -25,7 +25,7 @@ import MainImage from "./MainImage";
 
 import { beforeunload } from "../../../modules/EventListener";
 
-const Editor = ({ derivedState, blog, isNewArticle, setDerivedState, prepareBlog, prepareArticle, setToastMessage, setIsLoading }) => {
+const Editor = ({ derivedState, blog, isNewArticle, setDerivedState, setIsLoading }) => {
   // Errors
 
   const [errors, setErrors] = useState({});

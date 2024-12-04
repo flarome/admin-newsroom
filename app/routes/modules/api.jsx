@@ -1,6 +1,21 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_BACKEND_API;
+const API_BASE_URL = "/";
+
+
+
+export const articlesFetch = async (variables) => {
+  try {
+
+    
+    const response = await axios.post(`${API_BASE_URL}?_a=articlesFetch`, variables);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching articles:', error);
+    throw error;
+  }
+};
+
 
 
 
@@ -54,15 +69,6 @@ export const adjacentArticle = async (variables) => {
   }
 };
 
-export const articlesFetch = async (variables) => {
-  try {
-    const response = await axios.post(`${API_BASE_URL}?_a=articlesFetch`, variables);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching articles:', error);
-    throw error;
-  }
-};
 
 export const articleDelete = async (variables) => {
   try {
