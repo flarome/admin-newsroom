@@ -1,0 +1,31 @@
+@media (min-width: 30.625em) {
+    ._MobileBridgePageChildrenWrapper_4mpvp_1 {
+        padding-top:var(--p-space-400)
+    }
+}
+
+[mobile-bridge=true] *:not(input):not(textarea):not(select) {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none
+}
+
+[mobile-bridge=true] [class^=Polaris-Page__Content]:first-of-type {
+    padding-top: 0
+}
+
+[mobile-bridge=true] [class~=Polaris-Page] {
+    padding-bottom: env(safe-area-inset-bottom)
+}
+
+@media not print {
+    [mobile-bridge=true] [class^=Polaris-Page] .Polaris-Box--visuallyHidden:first-child {
+        display: none!important
+    }
+}
+
+@media print {
+    [mobile-bridge=true] [class^=Polaris-Page] .Polaris-Box--visuallyHidden:first-child {
+        all: inherit!important;
+        padding: var(--p-space-400)!important
+    }
+}

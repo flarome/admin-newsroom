@@ -1,0 +1,106 @@
+._TitleCell_du697_4 {
+    min-width: 12.5rem;
+    max-width: 15vw
+}
+
+._TitleCell_du697_4:hover ._PreviewLinkContainer_du697_10,._TitleCell_du697_4:focus-within ._PreviewLinkContainer_du697_10 {
+    opacity: 1
+}
+
+._ImageCell_du697_16 {
+    width: 3.4375rem;
+    text-align: right;
+    white-space: nowrap
+}
+
+._TitleWrapper_du697_22 {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0 var(--p-space-400);
+    place-items: center start;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: normal
+}
+
+._LinkBlock_du697_32 {
+    font-weight: var(--p-font-weight-semibold);
+    position: relative
+}
+
+._LinkBlock_du697_32:after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    top: -.0625rem;
+    right: -.0625rem;
+    bottom: -.0625rem;
+    left: -.0625rem;
+    display: block;
+    pointer-events: none;
+    box-shadow: 0 0 0 -.0625rem var(--p-color-border-focus);
+    transition: box-shadow var(--p-motion-duration-100) var(--p-motion-ease);
+    border-radius: calc(var(--p-border-radius-100) + .0625rem)
+}
+
+._LinkBlock_du697_32 {
+    height: 100%;
+    color: var(--p-color-text);
+    text-decoration: none
+}
+
+._LinkBlock_du697_32:hover,._LinkBlock_du697_32:active {
+    text-decoration: underline
+}
+
+._LinkBlock_du697_32:focus {
+    outline: none;
+    text-decoration: underline
+}
+
+._LinkBlock_du697_32:focus-visible:not(:active):after {
+    box-shadow: 0 0 0 .125rem var(--p-color-border-focus);
+    outline: var(--p-border-width-025) solid transparent
+}
+
+._PreviewLinkContainer_du697_10 {
+    opacity: 0;
+    transition: opacity var(--p-motion-ease) var(--p-motion-duration-200);
+    height: 1.25rem
+}
+
+._PreviewLinkContainer_du697_10:hover svg {
+    color: var(--p-color-border-focus)
+}
+
+._PreviewLink_du697_10 {
+    position: relative
+}
+
+._PreviewLink_du697_10:after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    top: -.0625rem;
+    right: -.0625rem;
+    bottom: -.0625rem;
+    left: -.0625rem;
+    display: block;
+    pointer-events: none;
+    box-shadow: 0 0 0 -.0625rem var(--p-color-border-focus);
+    transition: box-shadow var(--p-motion-duration-100) var(--p-motion-ease);
+    border-radius: calc(var(--p-border-radius-100) + .0625rem)
+}
+
+._PreviewLink_du697_10 {
+    display: inline-block;
+    color: inherit
+}
+
+._PreviewLink_du697_10:focus {
+    outline: none
+}
+
+._PreviewLink_du697_10:focus svg {
+    color: var(--p-color-border-focus)
+}

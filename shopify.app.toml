@@ -1,0 +1,33 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+client_id = "cee8ee508513d9fd031e6e8a453f8331"
+name = "newsroom"
+handle = "newsroom"
+application_url = "https://clusters-nail-ee-fully.trycloudflare.com"
+embedded = true
+
+[build]
+automatically_update_urls_on_dev = true
+dev_store_url = "flarome-api.myshopify.com"
+include_config_on_deploy = true
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "read_content,read_metaobjects,read_online_store_pages,read_themes,write_content,write_metaobjects,write_products,write_themes"
+
+[auth]
+redirect_urls = [
+  "https://clusters-nail-ee-fully.trycloudflare.com/auth/callback",
+  "https://clusters-nail-ee-fully.trycloudflare.com/auth/shopify/callback",
+  "https://clusters-nail-ee-fully.trycloudflare.com/api/auth/callback"
+]
+
+[webhooks]
+api_version = "2024-10"
+
+  [[webhooks.subscriptions]]
+  topics = [ "app/uninstalled" ]
+  uri = "/webhooks/app/uninstalled"
+
+[pos]
+embedded = false
