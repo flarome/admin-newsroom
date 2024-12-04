@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 import striptags from "striptags";
-import truncateWords from "../../../global-modules/utils/truncateWords";
+import { truncateWords } from "../../../global-modules/utils/truncateWords";
 import { TextField, FormLayout, Card, BlockStack, InlineStack, Text, Button, Bleed, Divider } from "@shopify/polaris";
 
 const Seo = ({ blogUrl, metaDescription, setMetaDescription, metaTitle, setMetaTitle, handle, setMetaHandle, title, content: c1 }) => {

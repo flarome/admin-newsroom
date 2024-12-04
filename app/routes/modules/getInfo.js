@@ -7,7 +7,7 @@
  * @returns {Object} Un objet contenant uniquement les champs demandés.
  */
 import { formatDate } from "../../global-modules/utils/formatDate";
-import  parseJSONSafe from "../../global-modules/utils/parseJSONSafe";
+import { parseJSONSafe } from "../../global-modules/utils/parseJSONSafe";
 
 export const defaultImage = {
   downloadUrl: "",
