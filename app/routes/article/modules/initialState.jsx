@@ -21,7 +21,8 @@ export const initialArticle =  {
   }; 
 
   export const initalBlog =  {
-
+tags: [],
+url: null
     }; 
     
   

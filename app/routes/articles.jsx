@@ -47,7 +47,7 @@ import "../styles/main/render-common.css";
 import "../styles/main/styles.css";
 import "../styles/main/use-definition-type.css";
 import "../styles/main/usePageProps.css";
- 
+  
 import "../styles/local.css";
 import "../styles/articleLists.css";
 import "../styles/main.css";
@@ -56,6 +56,11 @@ import "../styles/vendor1.css";
 import "../styles/vendor3.css";
 import "../styles/theme.css";
 import "../styles/articleDetails.css";
+import ToastNotification from "../components/toastNotification";
+
+import { Frame, Toast } from "@shopify/polaris";
+
+import { ToastProvider } from "../context/toast";
 
 export const links = () => [{ rel: "stylesheet", href: polarisStyles }];
 
@@ -76,7 +81,17 @@ export default function App() {
         </Link>
         <Link to="/articles/additional">Additional page</Link>
       </NavMenu>
+
+      <Frame>
+      <ToastProvider>
+      <ToastNotification />
       <Outlet />
+
+
+
+
+      </ToastProvider>
+      </Frame>
     </AppProvider>
   );
 }

@@ -2,12 +2,22 @@ import actions from "./modules/actions"
 import { getBlogId } from "./modules/utils/getBlogId";
 import { getThemeId } from "./modules/utils/getThemeId";
 import { admin, storefront } from "./modules/utils/executeWithRetry";
-
+import validateAction from "./modules/midelware/validateAction";
 export async function api(client, shopify, req, transmiseErrors = null, transmiseMake = null) {
-  try { 
+  try {
+
+   const {success, message} = validateAction(req);
+
+   if (!success) {
+    throw new Error(message);
+   }
+
+
+
     const { body, action } = req; 
 
-    console.log('body8192', body)
+
+    console.log('bodyrere', body)
 
     // Vérification de l'action spécifiée
     const actionConfig = actions[action] || {};
@@ -59,8 +69,6 @@ export async function api(client, shopify, req, transmiseErrors = null, transmis
       // Attendre que toutes les promesses soient terminées
       await Promise.all(actionPromises);
     }
-
-    console.log('892829');
     // Gestion du type de builder
     const { type, build } = actionConfig.builder || {};
 
@@ -86,10 +94,8 @@ export async function api(client, shopify, req, transmiseErrors = null, transmis
     console.error("Erreur dans l'API :", err.message);
     console.log("Pile d'appels :");
     console.log(err.stack); // Affiche la stack trace
-    return {
-      success: false,
-      error: err.message,
-    };
+    throw new Error(err.message);
+    
   }
 }
 

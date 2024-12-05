@@ -1,25 +1,18 @@
-const actions = require("../actions");
+import actions from "../actions";
 
-function validateAction(req, res, next) {
-  const { _a } = req.query;
+export default function validateAction(req) {
+  const { action } = req;
 
   // Vérification si l'action est valide
-  if (!actions[_a]) {
+  if (!actions[action]) {
     console.error("Action non supportée ou module manquant.");
-    return res.status(400).json({ success: false, message: "Action non supportée." });
+    return { success: false, message: "Action non supportée." };
   }
 
   // Log de l'action
-  console.info(`Action demandée: ${_a}`);
+  console.info(`Action demandée: ${action}`);
 
-  // Déterminer la valeur de "where" selon l'action
-  switch (_a) {
-  }
-
-  // Affectation correcte de where à req
-  req.action = _a;
-
+  return { success: true, message: "" };
   // Passer au middleware suivant
-  next();
 }
-module.exports = validateAction;
+

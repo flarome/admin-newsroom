@@ -21,16 +21,16 @@ const Extrait = ({ setExtrait, extrait }) => {
 
           {isOpen && (
             <div className="v7Z1h">
-              <div class="Polaris-Labelled--hidden">
-                <div class="Polaris-Labelled__LabelWrapper">
-                  <div class="Polaris-Label">
-                    <label id="contentLabel" for="extrait" class="Polaris-Label__Text">
-                      <span class="Polaris-Text--root Polaris-Text--bodyMd">Ajoutez un résumé de l’article qui s’affichera sur votre page d’accueil ou votre blog.</span>
+              <div className="Polaris-Labelled--hidden">
+                <div className="Polaris-Labelled__LabelWrapper">
+                  <div className="Polaris-Label">
+                    <label id="contentLabel" htmlFor="extrait" className="Polaris-Label__Text">
+                      <span className="Polaris-Text--root Polaris-Text--bodyMd">Ajoutez un résumé de l’article qui s’affichera sur votre page d’accueil ou votre blog.</span>
                     </label>
                   </div>
                 </div>
-                <div class="Polaris-Connected">
-                  <div class="Polaris-Connected__Item Polaris-Connected__Item--primary">
+                <div className="Polaris-Connected">
+                  <div className="Polaris-Connected__Item Polaris-Connected__Item--primary">
 
                     <EditorText content={extrait} setContent={setExtrait} selector="extrait" />
 
