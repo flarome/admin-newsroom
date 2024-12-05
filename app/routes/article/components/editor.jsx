@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 
+import { useNavigate } from "@remix-run/react";
+
 import * as lodash from 'lodash';
 const { isEqual } = lodash;
 
@@ -27,6 +29,7 @@ import { beforeunload } from "../../../modules/EventListener";
 
 const Editor = ({ derivedState, blog, isNewArticle, setDerivedState, setIsLoading }) => {
   // Errors
+  const navigate = useNavigate();
 
   const [errors, setErrors] = useState({});
 
@@ -123,7 +126,9 @@ const Editor = ({ derivedState, blog, isNewArticle, setDerivedState, setIsLoadin
 
   const handleCloseEditor = (force = true) => {
     if (force || !isModified) {
-      prepareBlog();
+    
+      navigate(-1);
+    
       setActive(false);
     } else {
       handleChange(!active);

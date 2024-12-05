@@ -6,9 +6,10 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 
+
 export default function App() {
   return (
-    <html>
+    <html lang="fr-FR">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />

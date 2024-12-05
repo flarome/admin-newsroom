@@ -17,12 +17,11 @@ const EditorText = ({ content, setContent, selector }) => {
     <Tinymce
     id={selector}
     
-      apiKey={process.env.REACT_APP_TINYMCE_API_KEY}
+      apiKey={"3vdnn17de1i4j6h9fh5l9g1fr75h4qtg2jpf2fts725i2y71"}
       value={content}
       onEditorChange={newContent => setContent(newContent)}
       init={{
         language: "fr_FR",
-        language_url: "/tinymce/fr_FR.js",
         forced_root_block: false, // Empêche l'ajout automatique de balises <p>
         verify_html: false, // Désactive la validation du HTML (préserve le contenu tel quel)
         entity_encoding: "raw", // Conserve les entités HTML sans les encoder

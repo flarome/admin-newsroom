@@ -9,7 +9,7 @@ import { authenticate, unauthenticated } from "../shopify.server";
 import Loading from "./dashboard/Loading";
 import Dashboard from "./dashboard/dashboard copy";
 
-import { api } from "../backend/api";
+import { api } from "../.server/api";
 
 // Nombre d'articles par page
 const articlesPerPage = 20;

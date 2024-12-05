@@ -4,7 +4,7 @@ import { getArticleInfo } from "../modules/getInfo";
 import { Page, Badge, Layout, TextField ,Thumbnail,  FormLayout, Modal, PageActions, Card, Box, BlockStack, InlineStack, Text, Button, Bleed, Divider, Icon, LegacyCard, ResourceList, Avatar, ResourceItem, LegacyFilters } from "@shopify/polaris";
 import { ChevronLeftIcon, ChevronRightIcon, DeleteIcon } from "@shopify/polaris-icons";
 
-
+import { useNavigate } from "@remix-run/react";
 
 function disambiguateLabel(key, value) {
   switch (key) {
@@ -204,7 +204,7 @@ const Dashboard = ({ articles, articlesPerPage }) => {
     </LegacyFilters>
   );
 
-  
+  const navigate = useNavigate();
 
   
 
@@ -225,7 +225,10 @@ const Dashboard = ({ articles, articlesPerPage }) => {
 
                 return (
                   <ResourceItem
-                  url={"/articles/" + splitId}
+
+                  onClick={() => navigate("./"+splitId)}
+
+
                     id={id}
                     media={
                       <div>
