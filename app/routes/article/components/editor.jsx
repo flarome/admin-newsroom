@@ -3,6 +3,7 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 // Remix
 import { useFetcher, useNavigate, useLocation } from "@remix-run/react"; // Utiliser fetcher pour déclencher l'action
 
+import { useArticle } from "../context/ArticleProvider";
 // Backend API
 import graphql from "../../../config/actions";
 import { submitAsync } from "../../../utils/submitAsync";
@@ -55,12 +56,17 @@ import MainImage from "./MainImage";
 import { beforeunload } from "../../../modules/EventListener";
 
 const Editor = ({
-  derivedState,
-  blog,
-  isNewArticle,
-  setDerivedState,
-  setIsLoading
+
+
 }) => {
+
+  const { fields, setFields, isLoading, blog,
+    setIsLoading,  } = useArticle();
+
+    const derivedState = fields;
+    const setDerivedState = setFields;
+    const isNewArticle = fields.isNewArticle || true;
+    
 
   const location = useLocation(); // Récupérer l'URL actuelle
 
@@ -84,8 +90,14 @@ const Editor = ({
 
   // Form
 
-  const [fields, setFields] = useState(derivedState);
 
+
+
+    // Synchroniser l'état local avec la prop derivedState
+    useEffect(() => {
+      setFields(derivedState);
+    }, [derivedState]);
+    
   const otherInfo = [
     {
       label: "Url téléchargement médias",

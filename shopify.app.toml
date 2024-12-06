@@ -3,7 +3,7 @@
 client_id = "cee8ee508513d9fd031e6e8a453f8331"
 name = "newsroom"
 handle = "newsroom"
-application_url = "https://experimental-worked-approve-shape.trycloudflare.com"
+application_url = "https://announcements-weeks-solve-french.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "read_content,read_metaobjects,read_online_store_pages,read_themes,unau
 
 [auth]
 redirect_urls = [
-  "https://experimental-worked-approve-shape.trycloudflare.com/auth/callback",
-  "https://experimental-worked-approve-shape.trycloudflare.com/auth/shopify/callback",
-  "https://experimental-worked-approve-shape.trycloudflare.com/api/auth/callback"
+  "https://announcements-weeks-solve-french.trycloudflare.com/auth/callback",
+  "https://announcements-weeks-solve-french.trycloudflare.com/auth/shopify/callback",
+  "https://announcements-weeks-solve-french.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]

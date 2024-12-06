@@ -76,7 +76,7 @@ export default function App() {
   return (
     <AppProvider i18n={polarisTranslations} theme="light" isEmbeddedApp apiKey={apiKey}>
       <NavMenu>
-        <Link to="/articles" rel="home">
+        <Link to="/articles" rel="home" reloadDocument>
           Home
         </Link>
         <Link to="/articles/additional">Additional page</Link>
