@@ -162,7 +162,7 @@ export function ArticleProvider({ children }) {
       banners: fetchedBanners = [],
     } = response;
     const state = location.state || {};
-    const bannerIds = state.bannerIds || [];
+    let bannerIds = state.bannerIds || [];
 
     if (!fetchedErrors || Object.keys(fetchedErrors).length === 0) {
       setFields(article || initialArticle);
@@ -177,7 +177,10 @@ export function ArticleProvider({ children }) {
     setBanners(
       generateBanners(article, fetchedErrors, fetchedBanners, bannerIds),
     );
+
+    bannerIds = [];
     setIsLoading(false);
+
   };
 
   return (

@@ -50,6 +50,7 @@ import MainImage from "../components/MainImage";
 
 // Event
 import { beforeunload } from "../../../modules/EventListener";
+import { constants } from "buffer";
 
 const Editor = ({}) => {
   // Remix
@@ -76,6 +77,14 @@ const Editor = ({}) => {
     return fields.isNewArticle;
   }, [fields]);
 
+
+
+  const hasFieldsErrors = useMemo(() => {
+    return  Object.keys(errors).length > 0;
+  }, [errors]);
+
+
+  
 
   // Form
 
@@ -247,7 +256,7 @@ const Editor = ({}) => {
 
 
   const fetcherAdjacentArticle = useFetcherWithPromise(
-    "adjacentArticle" + originalFields.id,
+    "adjacentArticle" + originalFields.id + originalFields.defaultCursor,
   );
 
    // Fetch des articles adjacents
@@ -295,6 +304,11 @@ useEffect(() => {
 }, [originalFields.defaultCursor]);
 
 
+const disabledSubmit = useMemo(() => {
+  return !isModified || hasFieldsErrors;
+}, [hasFieldsErrors, isModified]);
+
+
   return (
     <div>
       {" "}
@@ -302,7 +316,7 @@ useEffect(() => {
         <button
           variant="primary"
           onClick={() => handleSubmit()}
-          disabled={!isModified}
+          disabled={disabledSubmit}
           loading={isLoadingSubmit ? "" : undefined}
         ></button>
         <button
@@ -579,7 +593,7 @@ useEffect(() => {
             <PageActions
               primaryAction={{
                 content: !isNewArticle ? "Enregistrer" : "Créer",
-                disabled: !isModified,
+                disabled: disabledSubmit,
                 onAction: () => handleSubmit(),
                 loading: isLoadingSubmit,
               }}

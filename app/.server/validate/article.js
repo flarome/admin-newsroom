@@ -1,32 +1,24 @@
-
-
-
 export default async function applyPromoCode(blogId, themeId, body, response) {
-      
-   // Initialisation de l'objet promoCode avec le code de réduction
+  // Initialisation de l'objet promoCode avec le code de réduction
+  console.log('trhjtghjr', response);
+  
+  const newErrors = {}; 
 
-
-   console.log('trhjtghjr', response)
-    const newErrors = {}; 
-
-  // Exclure l'article avec l'ID égal à body.id
+  // Vérification de l'existence de body.id et exclusion de l'article avec cet ID
   const handles = response.blog.articles?.edges
-    ?.filter((edge) => edge.node.id !== body.id) // Filtrer les articles par ID
+    ?.filter((edge) => body.id ? edge.node.id !== body.id : true) // Filtrer si body.id existe
     .map((edge) => edge.node.handle); // Extraire uniquement les handles
 
   // Vérifier si le handle existe déjà dans le tableau filtré
   const available = !handles.includes(body.handle);
 
+  if (!available) {
+    newErrors.handle = "Ancre n'est pas disponible"; 
+  }
 
-    if (!available) {
-      newErrors.handle = "Ancre n'est pas disponible"; 
-    }
-
-    if (!body.title.trim()) {
-      newErrors.title = "Titre à renseigner"; 
-    }
-
-
+  if (!body.title.trim()) {
+    newErrors.title = "Titre à renseigner"; 
+  }
 
   // Si le code est déjà appliqué, définir l'erreur
   if (newErrors && Object.keys(newErrors).length > 0) {
@@ -42,4 +34,3 @@ export default async function applyPromoCode(blogId, themeId, body, response) {
     errors: {}
   };
 }
-
