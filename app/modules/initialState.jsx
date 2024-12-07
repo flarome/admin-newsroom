@@ -1,6 +1,7 @@
 import { defaultImage } from "../routes/modules/getInfo";
 export const initialArticle = {
   isNewArticle: true,
+  defaultCursor: "",
   id: null,
   url: null,
   title: "",

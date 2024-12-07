@@ -235,6 +235,66 @@ const Editor = ({}) => {
   // HandleModifiedBanner
   const [active, setActive] = useState(false);
   const handleChange = useCallback(() => setActive(!active), [active]);
+
+
+
+  const [pagination, setPagination] = useState({
+    hasPrevious: false,
+    hasNext: false,
+    onPrevious: null,
+    onNext: null,
+  })
+
+
+  const fetcherAdjacentArticle = useFetcherWithPromise(
+    "adjacentArticle" + originalFields.id,
+  );
+
+   // Fetch des articles adjacents
+useEffect(() => {
+  const fetchAdjacentArticles = async () => {
+    try {
+      const response = await loadArticle(
+        fetcherAdjacentArticle,
+        null,
+        "adjacentArticle",
+        { defaultCursor: originalFields.defaultCursor },
+        false
+      );
+
+      const { articleBefore: previous, articleAfter: next } = response;
+
+      setPagination({
+        hasPrevious: !!(previous && previous.id),
+        hasNext: !!(next && next.id),
+        onPrevious: previous
+          ? () => {
+              const previousId = previous.id.split("/").pop();
+              navigate(`../${previousId}`, {
+                replace: false,
+                relative: "path",
+              });
+            }
+          : null,
+        onNext: next
+          ? () => {
+              const nextId = next.id.split("/").pop();
+              navigate(`../${nextId}`, {
+                replace: false,
+                relative: "path",
+              });
+            }
+          : null,
+      });
+    } catch (error) {
+      console.error("Erreur lors du chargement des articles adjacents :", error);
+    }
+  };
+
+  fetchAdjacentArticles();
+}, [originalFields.defaultCursor]);
+
+
   return (
     <div>
       {" "}
@@ -280,8 +340,10 @@ const Editor = ({}) => {
           },
         ]}
         pagination={{
-          hasPrevious: true,
-          hasNext: true,
+          hasPrevious: pagination.hasPrevious,
+          hasNext: pagination.hasNext,
+          onPrevious: pagination.onPrevious,
+          onNext: pagination.onNext,
         }}
       >
         <Layout>

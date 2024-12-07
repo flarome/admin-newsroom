@@ -46,6 +46,7 @@ export const formatArticle = (article) => {
 
     return {
       isNewArticle: false,
+      defaultCursor: article.defaultCursor || initialState.defaultCursor,
       id: id,
       url: url || initialState.url,
       title: title || initialState.title,

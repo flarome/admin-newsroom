@@ -5,6 +5,8 @@ import getBlog from "./get/blog";
 import getArticle from "./get/article";
 import getShop from "./get/shop";
 import getTheme from "./get/theme";
+import getArticleAfter from "./get/articleAfter";
+import getArticlePrevious from "./get/articlePrevious";
 
 import putArticleCreate from "./put/articleCreate";
 import putArticleUpdate from "./put/articleUpdate";
@@ -15,6 +17,7 @@ import goArticleDetails from "./go/articleDetails";
 import goAuthorAutocomplete from "./go/authorAutocomplete";
 import goArticleDelete from "./go/articleDelete";
 import goArticleCreate from "./go/articleCreate"
+import goAdjacentArticle from "./go/adjacentArticle"
 const actions = {
   authorAutocomplete: {
     get: {
@@ -51,6 +54,24 @@ const actions = {
       type: "return",
       build: goArticleCreate
     },
+  },
+  adjacentArticle: {
+
+    get: {
+      articlePrevious: {
+        condition: (body) => body.defaultCursor && body.defaultCursor !== "",
+        mutation: getArticlePrevious,
+      },
+      articleAfter: {
+        condition: (body) => body.defaultCursor && body.defaultCursor !== "",
+        mutation: getArticleAfter,
+      },
+    },
+    builder: {
+      type: "return",
+      build: goAdjacentArticle
+    },
+
   },
   articleUpdate: {
     preValidate: {
@@ -116,6 +137,7 @@ const actions = {
       build: goArticleDetails,
     },
   },
+  
   articlesFetch: {
     get: {
       articles: {
