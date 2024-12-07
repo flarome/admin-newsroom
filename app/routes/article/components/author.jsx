@@ -1,10 +1,22 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
 import { Popover } from "react-tiny-popover";
 
-import { authorAutocomplete } from "../../modules/api";
-
+import { useFetcherWithPromise } from "../../../utils/useFetcherWithPromise";
+import { useArticle } from "../context/ArticleProvider";
 
 const Author = ({ author, setAuthor }) => {
+    // Article Provider
+    const {
+      loadArticle,
+    } = useArticle();
+
+
+
+    const fetcher = useFetcherWithPromise(
+      "authorAutocomplete",
+    );
+
+    
   const [isFocused, setIsFocused] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false); // Etat pour ouvrir/fermer le modal pour l'image principale
   const [isLoading, setIsLoading] = useState(false);
@@ -45,7 +57,15 @@ const Author = ({ author, setAuthor }) => {
       try {
         if (!isCH) {
           setIsLoading(true);
-          const authors = await authorAutocomplete({ first: 250 });
+
+          const authors = await loadArticle(
+            fetcher,
+            null,
+            "authorAutocomplete",
+            { first: 250 },
+            false,
+          );
+
 
           // Mise à jour des états
           setCH(true);

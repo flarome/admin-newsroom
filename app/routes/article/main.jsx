@@ -1,16 +1,13 @@
 import React, { useEffect } from "react";
 
-
 import { ArticleProvider, useArticle } from "./context/ArticleProvider";
 
 import { useFetcherWithPromise } from "../../utils/useFetcherWithPromise";
 
-// Composants personnalisés
-import Loading from "./components/loading";
-import Editor from "./components/editor";
+// State
+import Loading from "./state/loading";
+import Editor from "./state/editor";
 
-
-  
 export function Article({ articleId, hasArticle }) {
   return (
     <ArticleProvider>
@@ -25,7 +22,10 @@ function ArticleContent({ articleId, hasArticle }) {
   const { isLoading, loadArticle } = useArticle();
 
   useEffect(() => {
-    loadArticle(fetcher, "initial", "articleDetails", {hasArticle, articleId});
+    loadArticle(fetcher, "initial", "articleDetails", {
+      hasArticle,
+      articleId,
+    });
   }, [articleId]);
 
   if (isLoading) {

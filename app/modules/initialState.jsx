@@ -1,4 +1,4 @@
-import { defaultImage } from "../../modules/getInfo"; 
+import { defaultImage } from "../routes/modules/getInfo"; 
 export const initialArticle =  {
   isNewArticle: true,
   id: null,

@@ -1,6 +1,6 @@
-import { getArticleInfo } from "../../modules/getInfo";
-import { initialArticle as initialState } from "./initialState";
-import { articleDetails } from "../../modules/api";
+import { getArticleInfo } from "./getInfo";
+import { initialArticle as initialState } from "../../modules/initialState";
+
  
 export const formatArticle = article => {
     try {
@@ -28,25 +28,10 @@ export const formatArticle = article => {
           isPublished: typeof isPublished !== "undefined" ? isPublished : initialState.isPublished,
         };
 
-  
+   
     } catch (error) {
       console.error("Erreur lors du chargement des articles ou du blog :", error);
     }
   };
 
 
-export const loadArticle = async currentArticleId => {
-  try {
-    const { article, blog } = await articleDetails({ hasArticle: currentArticleId ? true : false, articleId: currentArticleId });
-
-    const d2 = formatArticle(article);
-    return {
-      article: d2,
-
-      blog,
-    };
-
-  } catch (error) {
-    console.error("Erreur lors du chargement des articles ou du blog :", error);
-  }
-};

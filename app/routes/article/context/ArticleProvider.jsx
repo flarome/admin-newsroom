@@ -1,10 +1,9 @@
 import React, { createContext, useContext, useState, useMemo } from "react";
-import { initialArticle, initalBlog } from "../modules/initialState";
+import { initialArticle, initalBlog } from "../../../modules/initialState";
 import { useLocation, useNavigate } from "@remix-run/react";
 import graphql from "../../../config/actions";
 import { Link } from "@shopify/polaris";
 import { CheckCircleIcon, AlertCircleIcon } from "@shopify/polaris-icons";
-
 // Créez le contexte
 const ArticleContext = createContext();
 
@@ -27,11 +26,55 @@ export function ArticleProvider({ children }) {
 
   // Fonction pour retirer une bannière
   const removeBanner = (id) => {
-    setBanners((prevBanners) => prevBanners.filter((banner) => banner.id !== id));
+    setBanners((prevBanners) =>
+      prevBanners.filter((banner) => banner.id !== id),
+    );
+  };
+
+  // Fonction pour mettre à jour les bannières d'erreurs
+  const updateErrorBanner = (updatedErrors) => {
+    if (Object.keys(updatedErrors).length > 0) {
+      setBanners((prevBanners) => [
+        ...prevBanners.filter((banner) => banner.id !== "articleFormErrors"),
+        {
+          id: "articleFormErrors",
+          title: `Il y a ${Object.keys(updatedErrors).length} erreur${Object.keys(updatedErrors).length > 1 ? "s" : ""}`,
+          content: (
+            <ul className="Polaris-List Polaris-List--spacingLoose">
+              {Object.values(updatedErrors).map((error, index) => (
+                <li key={index} className="Polaris-List__Item">
+                  {error}
+                </li>
+              ))}
+            </ul>
+          ),
+          tone: "critical",
+          icon: AlertCircleIcon,
+          removable: false,
+        },
+      ]);
+    } else {
+      removeBanner("articleFormErrors"); // Supprime la bannière si plus aucune erreur n'existe
+    }
+  };
+
+  // Fonction pour supprimer une erreur spécifique
+  const removeError = (key) => {
+    setErrors((prevErrors) => {
+      const updatedErrors = { ...prevErrors };
+      delete updatedErrors[key]; // Supprime l'erreur spécifique
+      updateErrorBanner(updatedErrors); // Met à jour la bannière des erreurs
+      return updatedErrors;
+    });
   };
 
   // Fonction pour générer les bannières dynamiquement
-  const generateBanners = (article, fetchedErrors, fetchedBanners, bannerIds) => {
+  const generateBanners = (
+    article,
+    fetchedErrors,
+    fetchedBanners,
+    bannerIds,
+  ) => {
     const dynamicBanners = [...fetchedBanners];
 
     if (bannerIds.includes("articleCreateSuccess")) {
@@ -89,7 +132,13 @@ export function ArticleProvider({ children }) {
   };
 
   // Fonction pour charger un article
-  const loadArticle = async (fetcher, load, action, body = {}, assign = true) => {
+  const loadArticle = async (
+    fetcher,
+    load,
+    action,
+    body = {},
+    assign = true,
+  ) => {
     if (load === "initial") {
       setIsLoading(true);
     }
@@ -99,14 +148,19 @@ export function ArticleProvider({ children }) {
         action: action,
         body: JSON.stringify(body),
       },
-      graphql
+      graphql,
     );
 
     if (!assign) {
       return response;
     }
 
-    const { article, blog, errors: fetchedErrors = {}, banners: fetchedBanners = [] } = response;
+    const {
+      article,
+      blog,
+      errors: fetchedErrors = {},
+      banners: fetchedBanners = [],
+    } = response;
     const state = location.state || {};
     const bannerIds = state.bannerIds || [];
 
@@ -114,7 +168,9 @@ export function ArticleProvider({ children }) {
     setOriginalFields(article || initialArticle);
     setBlog(blog || initalBlog);
     setErrors(fetchedErrors);
-    setBanners(generateBanners(article, fetchedErrors, fetchedBanners, bannerIds));
+    setBanners(
+      generateBanners(article, fetchedErrors, fetchedBanners, bannerIds),
+    );
     setIsLoading(false);
   };
 
@@ -122,16 +178,15 @@ export function ArticleProvider({ children }) {
     <ArticleContext.Provider
       value={{
         errors,
+
         banners,
-        setBanners,
-        setErrors,
+
+        removeError,
         originalFields,
         fields,
         setFields,
+isLoading,
         blog,
-        setBlog,
-        isLoading,
-        setIsLoading,
         loadArticle,
       }}
     >

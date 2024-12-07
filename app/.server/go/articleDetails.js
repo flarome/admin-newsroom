@@ -1,5 +1,5 @@
-import { initialArticle, initalBlog } from "../../routes/article/modules/initialState";
-
+import { initialArticle } from "../../modules/initialState";
+import { formatArticle } from "../modules/formatArticle";
 // Fonction pour filtrer et formater les templates d'articles
 export function extractArticleTemplates(files) {
   return files
@@ -39,15 +39,11 @@ return {
   
     // Construction de la réponse finale
     return {
-      article: body.hasArticle ? {  
+      article: body.hasArticle ? formatArticle({  
         ...response.article,
         url: `${baseUrl}${response.blog.handle}/${response.article.handle}`,
-      } : {...initialArticle},
-      success: body.success ? true
-
-
-
-       : false,
+      }) : {...initialArticle},
+    
       shop: response.shop,
       blog: {
         ...response.blog,
