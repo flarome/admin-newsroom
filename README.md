@@ -1,10 +1,12 @@
-# Shopify App Template - Remix
+# Flarome Newsroom App - Remix
 
-This is a template for building a [Shopify app](https://shopify.dev/docs/apps/getting-started) using the [Remix](https://remix.run) framework.
+This is the official app used by Flarome to write blog articles.
 
-Rather than cloning this repo, you can use your preferred package manager and the Shopify CLI with [these steps](https://shopify.dev/docs/apps/getting-started/create).
+Rather than cloning this repo, you can use this code to create your own project or integrate it into your store. However, please note that this code is specifically developed for Flarome’s infrastructure, and its features are designed to integrate with Flarome’s services, infrastructure, methods, tools, and private CMS. Since this CMS is private and not public, the code provided will not be useful to you without modifications to adapt it to your own infrastructure.
 
-Visit the [`shopify.dev` documentation](https://shopify.dev/docs/api/shopify-app-remix) for more details on the Remix app package.
+Flarome has scaled extensively with its own caches, modules, servers, templates, and code. In this repository, you will find all the necessary resources for our private CMS, including the backend server for generating blog articles, but not the public part of the code, which is available on our website www.flarome.com (/blogs/newsroom).
+
+
 
 ## Quick start
 
