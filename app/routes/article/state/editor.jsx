@@ -312,7 +312,7 @@ const disabledSubmit = useMemo(() => {
   return (
     <div>
       {" "}
-      <SaveBar id="modifier" discardConfirmation={true} open={isNewArticle}>
+      <SaveBar id="modifier" discardConfirmation="" open={isNewArticle}>
         <button
           variant="primary"
           onClick={() => handleSubmit()}
