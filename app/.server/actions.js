@@ -1,20 +1,20 @@
-import validateArticle from "../validate/article";
+import validateArticle from "./validate/article";
 
-import getArticles from "../get/articles";
-import getBlog from "../get/blog";
-import getArticle from "../get/article";
-import getShop from "../get/shop";
-import getTheme from "../get/theme";
+import getArticles from "./get/articles";
+import getBlog from "./get/blog";
+import getArticle from "./get/article";
+import getShop from "./get/shop";
+import getTheme from "./get/theme";
 
-import putArticleCreate from "../put/articleCreate";
-import putArticleUpdate from "../put/articleUpdate";
-import putArticleDelete from "../put/articleDelete";
+import putArticleCreate from "./put/articleCreate";
+import putArticleUpdate from "./put/articleUpdate";
+import putArticleDelete from "./put/articleDelete";
 
-import goArticlesFetch from "../go/articlesFetch";
-import goArticleDetails from "../go/articleDetails";
-import goAuthorAutocomplete from "../go/authorAutocomplete";
-import goArticleDelete from "../go/articleDelete";
-import goArticleCreate from "../go/articleCreate"
+import goArticlesFetch from "./go/articlesFetch";
+import goArticleDetails from "./go/articleDetails";
+import goAuthorAutocomplete from "./go/authorAutocomplete";
+import goArticleDelete from "./go/articleDelete";
+import goArticleCreate from "./go/articleCreate"
 const actions = {
   authorAutocomplete: {
     get: {
@@ -28,7 +28,20 @@ const actions = {
     },
   },
   articleCreate: {
-    preValidate: validateArticle,
+    preValidate: {
+
+
+      get: {
+
+        blog: {
+          mutation: getBlog,
+        },
+
+
+      },
+      validate: validateArticle
+
+    } ,
     get: {
       article: {
         mutation: putArticleCreate,
@@ -40,7 +53,20 @@ const actions = {
     },
   },
   articleUpdate: {
-    preValidate: validateArticle,
+    preValidate: {
+
+
+      get: {
+
+        blog: {
+          mutation: getBlog,
+        },
+
+
+      },
+      validate: validateArticle
+
+    } ,
     get: {
       article: {
         mutation: putArticleUpdate,

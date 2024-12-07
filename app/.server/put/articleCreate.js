@@ -26,7 +26,7 @@ export default function applyPromoCode(body, blogId) {
     variables: {
       article: {
         blogId: blogId,
-        ...generateArticle(body)
+        ...generateArticle(body, true)
       },
     },
     mutationName: "articleCreate",

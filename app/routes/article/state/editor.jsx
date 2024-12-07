@@ -36,7 +36,7 @@ import { ViewIcon } from "@shopify/polaris-icons";
 
 import { useToast } from "../../../context/toast";
 // Global components
-import EditorText from "../../Editor";
+import EditorText from "../../../tinymce/Editor";
 
 // Local components
 import Author from "../components/author";
@@ -431,12 +431,19 @@ const Editor = ({}) => {
               />
 
               <Seo
+              isNewArticle={isNewArticle}
+              errorHandle={errors.handle || false}
+              initialHandle={originalFields.handle}
                 blogUrl={blog?.url + "/"}
                 metaDescription={fields.metaDescription}
                 setMetaDescription={(content) =>
                   handleChangeFields(content, "metaDescription")
                 }
                 metaTitle={fields.metaTitle}
+                setRedirectNewHandle={(content) =>
+                  handleChangeFields(content, "redirectNewHandle")
+                }
+                redirectNewHandle={fields.redirectNewHandle}
                 setMetaTitle={(content) =>
                   handleChangeFields(content, "metaTitle")
                 }

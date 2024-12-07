@@ -6,8 +6,8 @@ import { useFetcherWithPromise } from "../utils/useFetcherWithPromise";
 import { authenticate } from "../shopify.server";
 
 // Composants personnalisés
-import Loading from "./dashboard/Loading";
-import Dashboard from "./dashboard/dashboard copy";
+import Loading from "./dashboard/state/Loading";
+import Dashboard from "./dashboard/state/dashboard";
 
 
 import graphql from "../config/actions";

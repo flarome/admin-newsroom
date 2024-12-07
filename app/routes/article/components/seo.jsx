@@ -1,9 +1,17 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import striptags from "striptags";
 import { truncateWords } from "../../../global-modules/utils/truncateWords";
-import { TextField, FormLayout, Card, BlockStack, InlineStack, Text, Button, Bleed, Divider } from "@shopify/polaris";
+import { TextField, FormLayout, Card, BlockStack, InlineStack, Text, Button, Bleed, Divider, Checkbox } from "@shopify/polaris";
 
-const Seo = ({ blogUrl, metaDescription, setMetaDescription, metaTitle, setMetaTitle, handle, setMetaHandle, title, content: c1 }) => {
+const Seo = ({ isNewArticle, errorHandle, blogUrl, metaDescription,  redirectNewHandle, setRedirectNewHandle, initialHandle, setMetaDescription, metaTitle, setMetaTitle, handle, setMetaHandle, title, content: c1 }) => {
+  const [isModified, setIsModified] = useState(false); // Tracks if handle is modified
+
+  // Update isModified whenever handle changes
+  useEffect(() => {
+    setIsModified(handle !== initialHandle);
+  }, [handle, initialHandle]);
+
+
   const [isOpen, setIsOpen] = useState(false);
 
   const metaTitleMaxLength = 70; // Limite pour le méta-titre
@@ -79,7 +87,7 @@ const Seo = ({ blogUrl, metaDescription, setMetaDescription, metaTitle, setMetaT
                   onChange={(value, id) => setMetaHandle(value)} // Ou simplement `handleChange` si pas besoin d'ajuster
                   autoComplete="off"
                   value={handle}
-                  error={false}
+                  error={errorHandle || false}
                   id="handle"
                   type="text"
                   clearButton={true}
@@ -88,6 +96,24 @@ const Seo = ({ blogUrl, metaDescription, setMetaDescription, metaTitle, setMetaT
                   prefix={blogUrl}
                 />
               </FormLayout>
+
+              {isModified && !isNewArticle && (
+  <FormLayout>
+
+<Checkbox
+          label={`Créez une adresse URL de redirection pour ${initialHandle}→${handle}`}
+          checked={redirectNewHandle}
+          onChange={setRedirectNewHandle}
+        />
+
+
+  </FormLayout>
+
+
+              ) 
+              
+            
+            }
             </BlockStack>
           </div>
         )}

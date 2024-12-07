@@ -3,7 +3,7 @@
 client_id = "cee8ee508513d9fd031e6e8a453f8331"
 name = "newsroom"
 handle = "newsroom"
-application_url = "https://shakespeare-flashers-appreciated-barely.trycloudflare.com"
+application_url = "https://south-map-preserve-liable.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "read_content,read_metaobjects,read_online_store_pages,read_themes,unau
 
 [auth]
 redirect_urls = [
-  "https://shakespeare-flashers-appreciated-barely.trycloudflare.com/auth/callback",
-  "https://shakespeare-flashers-appreciated-barely.trycloudflare.com/auth/shopify/callback",
-  "https://shakespeare-flashers-appreciated-barely.trycloudflare.com/api/auth/callback"
+  "https://south-map-preserve-liable.trycloudflare.com/auth/callback",
+  "https://south-map-preserve-liable.trycloudflare.com/auth/shopify/callback",
+  "https://south-map-preserve-liable.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]

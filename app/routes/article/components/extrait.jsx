@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import EditorText from "../../Editor";
+import EditorText from "../../../tinymce/Editor";
 import { TextField, FormLayout, Card, BlockStack, InlineStack, Text, Button, Bleed, Divider, TextContainer } from "@shopify/polaris";
 const Extrait = ({ setExtrait, extrait }) => {
   const [isOpen, setIsOpen] = useState(false);

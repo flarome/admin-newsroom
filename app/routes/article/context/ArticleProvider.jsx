@@ -164,10 +164,16 @@ export function ArticleProvider({ children }) {
     const state = location.state || {};
     const bannerIds = state.bannerIds || [];
 
-    setFields(article || initialArticle);
-    setOriginalFields(article || initialArticle);
-    setBlog(blog || initalBlog);
-    setErrors(fetchedErrors);
+    if (!fetchedErrors || Object.keys(fetchedErrors).length === 0) {
+      setFields(article || initialArticle);
+      setOriginalFields(article || initialArticle);
+      setBlog(blog || initalBlog);
+    } else {
+      setErrors(fetchedErrors);
+    }
+    
+  
+  
     setBanners(
       generateBanners(article, fetchedErrors, fetchedBanners, bannerIds),
     );

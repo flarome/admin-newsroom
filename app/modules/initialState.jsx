@@ -1,28 +1,26 @@
-import { defaultImage } from "../routes/modules/getInfo"; 
-export const initialArticle =  {
+import { defaultImage } from "../routes/modules/getInfo";
+export const initialArticle = {
   isNewArticle: true,
   id: null,
-    url: null,
-    title: "",
-    subTitle: "",
-    extrait: "",
-    metaDescription: "",
-    metaTitle: "",
-    downloadsAllsMedia: "",
-    handle: "",
-    date: "",
-    author: "",
-    mainImage: defaultImage,
-    content: "",
-    tags: [],
-    template: "",
-    isPublished: false,
+  url: null,
+  title: "",
+  subTitle: "",
+  extrait: "",
+  metaDescription: "",
+  metaTitle: "",
+  downloadsAllsMedia: "",
+  handle: "",
+  redirectNewHandle: false,
+  date: "",
+  author: "",
+  mainImage: defaultImage,
+  content: "",
+  tags: [],
+  template: "",
+  isPublished: false,
+};
 
-  }; 
-
-  export const initalBlog =  {
-tags: [],
-url: null
-    }; 
-    
-  
+export const initalBlog = {
+  tags: [],
+  url: null,
+};

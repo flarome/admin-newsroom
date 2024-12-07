@@ -1,7 +1,9 @@
-import actions from "../actions";
+import actions from "../../actions";
 
 export default function validateAction(req) {
   const { action } = req;
+
+  let requireBlog = false, requireTheme = false;
 
   // Vérification si l'action est valide
   if (!actions[action]) {
@@ -9,10 +11,26 @@ export default function validateAction(req) {
     return { success: false, message: "Action non supportée." };
   }
 
+  switch (action.trim()) {
+    case "articleDetails":
+    case "articleCreate":
+      case "articleUpdate":
+      requireBlog = true;
+      
+
+    case "articleDetails":
+      requireTheme = true;
+    
+
+    default:
+      // Aucune action spécifique pour les autres cas
+      break;
+  }
+
   // Log de l'action
   console.info(`Action demandée: ${action}`);
+  console.info(`Requiert un blog: ${requireBlog}, Requiert un thème: ${requireTheme}`);
 
-  return { success: true, message: "" };
-  // Passer au middleware suivant
+  // Retourner les résultats de validation
+  return { success: true, message: "", requireBlog, requireTheme };
 }
-

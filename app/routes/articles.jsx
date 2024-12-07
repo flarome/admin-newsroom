@@ -79,7 +79,7 @@ export default function App() {
         <Link to="/articles" rel="home" reloadDocument>
           Home
         </Link>
-        <Link to="/articles/additional">Additional page</Link>
+        <Link to="/articles/rss" reloadDocument>Flux RSS</Link>
       </NavMenu>
 
       <Frame>

@@ -1,13 +1,24 @@
-export default function applyPromoCode(blogId, body) {
+
+
+
+export default async function applyPromoCode(blogId, themeId, body, response) {
       
    // Initialisation de l'objet promoCode avec le code de réduction
 
 
-console.log('ici')
-console.log('body.title.trim()', body.title.trim())
-    const newErrors = {};
+   console.log('trhjtghjr', response)
+    const newErrors = {}; 
+
+    const handles = response.blog.articles?.edges?.map((edge) => edge.node.handle);
+    const available = !handles.includes(body.handle);
+
+
+    if (!available) {
+      newErrors.handle = "Ancre n'est pas disponible"; 
+    }
+
     if (!body.title.trim()) {
-      newErrors.title = "Titre à renseigner";
+      newErrors.title = "Titre à renseigner"; 
     }
 
 

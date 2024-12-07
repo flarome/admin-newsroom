@@ -1,167 +1,157 @@
-/**
- * Récupère dynamiquement les informations demandées d'un produit.
- *
- * @param {Array<string>} fields - Liste des champs souhaités (ex : ['title', 'description']).
- * @param {Object} product - L'objet produit à traiter.
- * @param {Number} index - L'index du produit dans la liste.
- * @returns {Object} Un objet contenant uniquement les champs demandés.
- */
 import { formatDate } from "../../global-modules/utils/formatDate";
 import { parseJSONSafe } from "../../global-modules/utils/parseJSONSafe";
 
 export const defaultImage = {
-  downloadUrl: "",
-  alt: "",
-  caption: "",
-  sizes: {
-    s551_980: "",
-    s1102_1960: "",
-    s389_692: "",
-    s778_1384: "",
-    s416_416: "",
-    s832_832: "",
-    s207_368: "",
-    s414_736: "",
-    s132_132: "",
-    s264_264: "",
-    s300_300: "",
-    s600_600: "",
-    s369_656: "",
-    s738_1312: "",
-    s900_900: "",
-    s630_1200: "",
-    s520_416: "",
-    s1040_832: "",
-    s603_1072: "",
-    s1206_2144: "",
-    s810_1440: "",
-    s1620_2880: "",
-  },
-};
+    downloadUrl: "",
+    alt: "",
+    caption: "",
+    sizes: {
+      s551_980: "",
+      s1102_1960: "",
+      s389_692: "",
+      s778_1384: "",
+      s416_416: "",
+      s832_832: "",
+      s207_368: "",
+      s414_736: "",
+      s132_132: "",
+      s264_264: "",
+      s300_300: "",
+      s600_600: "",
+      s369_656: "",
+      s738_1312: "",
+      s900_900: "",
+      s630_1200: "",
+      s520_416: "",
+      s1040_832: "",
+      s603_1072: "",
+      s1206_2144: "",
+      s810_1440: "",
+      s1620_2880: "",
+    },
+  };
 
-export function getImageInfo(img) {
-  const info = {};
-  const sizes = img?.sizes || {};
-  info.mainImage = img || defaultImage;
-  info.mainImageSizes = sizes;
-  info.mainImageAlt = img?.alt;
-  info.mainImageScare = sizes.scare || sizes.s132_132 || sizes.s300_300 || sizes.s416_416 || sizes.s600_600 || sizes.s832_832 || sizes.s900_900 || sizes.s1040_832 || sizes.s1102_1960;
-
-  return info;
-  
+/**
+ * Extrait les informations d'une image.
+ * @param {Object} img - L'objet image.
+ * @returns {Object} Les informations principales de l'image.
+ */
+export function getImageInfo(img = defaultImage) {
+  const sizes = img.sizes || {};
+  return {
+    mainImage: img,
+    mainImageSizes: sizes,
+    mainImageAlt: img.alt || "",
+    mainImageScare: sizes.scare || sizes.s132_132 || sizes.s300_300 || sizes.s416_416 || sizes.s600_600,
+  };
 }
-export function getArticleInfo(fields, article, local, trr = 30) {
-  const contentJson1 = article.metafields?.edges?.find(edge => edge.node.namespace === "article" && edge.node.key === "data_json")?.node?.value || null;
 
-  const contentJson = contentJson1 ? parseJSONSafe(contentJson1) : null;
+/**
+ * Extrait les informations de contenu JSON d'un article.
+ * @param {Object} data - L'objet contenant les données JSON de contenu.
+ * @returns {Object} Les informations principales du contenu.
+ */
+export function getContent(data = {}) {
+  const content = data.content || {};
+  return {
+    contentJson: content.json || null,
+    rebuiltHtml: content.rebuiltHtml || null,
+    originalHtml: content.originalHtml || null,
+  };
+}
 
-  const title = article.title;
+/**
+ * Extrait les informations demandées d'un article selon une liste de champs.
+ * @param {Array<string>} fields - Liste des champs souhaités (ex : ['title', 'description']).
+ * @param {Object} article - L'objet article à traiter.
+ * @returns {Object} Un objet contenant uniquement les champs demandés.
+ */
+export function getArticleInfo(fields, article) {
+  const contentJson = parseJSONSafe(
+    article?.metafields?.edges?.find(
+      (edge) => edge.node.namespace === "article" && edge.node.key === "data_json"
+    )?.node?.value
+  );
+
+  const now = new Date();
+
   return fields.reduce((info, field) => {
     switch (field) {
       case "title":
-        info.title = title;
+        info.title = article.title || "";
         break;
-        case "author":
-          info.author = article.author?.name;
-          break;
-        case "url":
-          info.url = article.url;
-          break;
+      case "author":
+        info.author = article.author?.name || "";
+        break;
+      case "url":
+        info.url = article.onlineStoreUrl || article.url || "";
+        break;
       case "subTitle":
-        info.subTitle = contentJson?.subtitle;
+        info.subTitle = contentJson?.subtitle || "";
         break;
       case "extrait":
-        info.extrait = article.summary;
+        info.extrait = article.summary || "";
         break;
       case "tags":
-        // Assigner la liste filtrée à `info.tags`
-        info.tags = article.tags && article.tags.length > 0 ? article.tags : [];
-
+        info.tags = article.tags?.length ? article.tags : [];
         break;
-      case "metaTitle": 
+      case "metaTitle":
         info.metaTitle = "";
-        break;
-      case "handle":
-        info.handle = article.handle;
         break;
       case "metaDescription":
         info.metaDescription = "";
         break;
-      case "url":
-        info.url = article.onlineStoreUrl || "";
+      case "handle":
+        info.handle = article.handle || "";
         break;
       case "mainImage":
-        const img = contentJson?.media?.mainImage;
-        const sizes = img?.sizes || {};
-        info.mainImage = img || defaultImage;
-        info.mainImageSizes = sizes;
-        info.mainImageAlt = img?.alt || title;
-        info.mainImageScare = sizes.scare || sizes.s132_132 || sizes.s300_300 || sizes.s416_416 || sizes.s600_600 || sizes.s832_832 || sizes.s900_900 || sizes.s1040_832 || sizes.s1102_1960;
+        Object.assign(info, getImageInfo(contentJson?.media?.mainImage));
         break;
       case "downloadsAllsMedia":
         info.downloadsAllsMedia = contentJson?.downloadsAllsMedia || "";
-
         break;
       case "isPublished":
-        info.isPublished = article.isPublished;
+        info.isPublished = article.isPublished || false;
         break;
       case "template":
-        info.template = article.templateSuffix;
+        info.template = article.templateSuffix || "";
         break;
       case "date":
-        const date = article.publishedAt || new Date().toISOString();
-        info.date = new Date(date).toISOString().split("T")[0];
+        info.date = article.publishedAt
+          ? new Date(article.publishedAt).toISOString().split("T")[0]
+          : "";
         break;
       case "content":
-        info.content = article.content || article.body || "";
+        Object.assign(info, getContent(contentJson));
         break;
       case "modified":
-        const upadte = article.updatedAt || new Date().toISOString();
-        info.lastModified = new Date(upadte);
+        const updatedAt = new Date(article.updatedAt || now);
+        info.lastModified = updatedAt.toISOString();
+        const diff = now - updatedAt;
 
-        const now = new Date();
-        const diff = now - new Date(upadte); // Différence en millisecondes
-
-        const seconds = Math.floor(diff / 1000);
-        const minutes = Math.floor(seconds / 60);
-        const hours = Math.floor(minutes / 60);
-
-        // Cas où le temps est inférieur ou égal à 5 minutes
-        if (minutes <= 5) {
-          info.lastModifiedText = `À l’instant`;
-          break;
+        if (diff < 5 * 60 * 1000) {
+          info.lastModifiedText = "À l’instant";
+        } else if (diff < 60 * 60 * 1000) {
+          info.lastModifiedText = `Il y a ${Math.floor(diff / 60000)} min`;
+        } else if (diff < 6 * 60 * 60 * 1000) {
+          const hours = Math.floor(diff / 3600000);
+          const minutes = Math.floor((diff % 3600000) / 60000);
+          info.lastModifiedText = minutes
+            ? `Il y a ${hours} h ${minutes} min`
+            : `Il y a ${hours} h`;
+        } else {
+          info.lastModifiedText = formatDate(updatedAt, "fr-FR");
         }
-
-        // Cas où le temps est supérieur à 5 minutes mais inférieur à 1 heure
-        if (minutes < 60) {
-          info.lastModifiedText = `Il y a ${minutes} min`;
-          break;
-        }
-
-        // Cas où le temps est supérieur à 1 heure mais inférieur à 6 heures
-        if (hours < 6) {
-          const remainingMinutes = minutes % 60; // Minutes restantes après les heures
-          if (remainingMinutes === 0) {
-            info.lastModifiedText = `Il y a ${hours} h`;
-            break;
-          }
-          info.lastModifiedText = `Il y a ${hours} h ${remainingMinutes} min`;
-          break;
-        }
-
-        info.lastModifiedText = formatDate(upadte, "fr-FR");
         break;
       case "id":
-        info.id = article.id;
-        info.splitId = article.id.split("/").pop();
+        info.id = article.id || "";
+        info.splitId = article.id?.split("/")?.pop() || "";
         break;
       default:
-        info[field] = ""; // Si le champ demandé n’existe pas, on renvoie `null`
-        console.warn(`Le champ ${field} n'est pas reconnu.`);
+        console.warn(`Le champ "${field}" n'est pas reconnu.`);
+        info[field] = null; // Retourne `null` pour les champs non reconnus
     }
 
     return info;
   }, {});
 }
-
-

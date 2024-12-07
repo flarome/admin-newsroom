@@ -42,7 +42,7 @@ id
     variables: {
         id: body.id,
       article: {
-        ...generateArticle(body)
+        ...generateArticle(body, false)
       },
     },
     mutationName: "articleUpdate",
