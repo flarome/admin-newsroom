@@ -9,6 +9,7 @@
           articles(first: 250) {
           edges {
               node {
+              id
  handle
 }
 

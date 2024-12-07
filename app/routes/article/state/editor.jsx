@@ -143,6 +143,7 @@ const Editor = ({}) => {
 
       if (isNewArticle) {
         shopify.saveBar.hide("modifier");
+        showToast("Article créé");
         return navigate("../" + response.id.split("/").pop(), {
           replace: true,
           relative: "path",

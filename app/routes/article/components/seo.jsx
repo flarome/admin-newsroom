@@ -83,7 +83,7 @@ const Seo = ({ isNewArticle, errorHandle, blogUrl, metaDescription,  redirectNew
               {/* URL et ancre */}
               <FormLayout>
                 <TextField
-                  label="Handle"
+                  label="URL et ancre"
                   onChange={(value, id) => setMetaHandle(value)} // Ou simplement `handleChange` si pas besoin d'ajuster
                   autoComplete="off"
                   value={handle}

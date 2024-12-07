@@ -14,6 +14,7 @@ export default function validateAction(req) {
   switch (action.trim()) {
     case "articleDetails":
     case "articleCreate":
+      case "articlesFetch":
       case "articleUpdate":
       requireBlog = true;
       

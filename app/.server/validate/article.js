@@ -9,8 +9,13 @@ export default async function applyPromoCode(blogId, themeId, body, response) {
    console.log('trhjtghjr', response)
     const newErrors = {}; 
 
-    const handles = response.blog.articles?.edges?.map((edge) => edge.node.handle);
-    const available = !handles.includes(body.handle);
+  // Exclure l'article avec l'ID égal à body.id
+  const handles = response.blog.articles?.edges
+    ?.filter((edge) => edge.node.id !== body.id) // Filtrer les articles par ID
+    .map((edge) => edge.node.handle); // Extraire uniquement les handles
+
+  // Vérifier si le handle existe déjà dans le tableau filtré
+  const available = !handles.includes(body.handle);
 
 
     if (!available) {
