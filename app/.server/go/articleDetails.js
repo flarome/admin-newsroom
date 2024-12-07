@@ -1,3 +1,5 @@
+import { initialArticle, initalBlog } from "../../routes/article/modules/initialState";
+
 // Fonction pour filtrer et formater les templates d'articles
 export function extractArticleTemplates(files) {
   return files
@@ -32,13 +34,20 @@ return {
     }
     // Génération des URLs des articles et des blogs
     const baseUrl = response.shop.url + "/blogs/";
+
+    console.log('re8192', response);
   
     // Construction de la réponse finale
     return {
       article: body.hasArticle ? {  
         ...response.article,
         url: `${baseUrl}${response.blog.handle}/${response.article.handle}`,
-      } : {},
+      } : {...initialArticle},
+      success: body.success ? true
+
+
+
+       : false,
       shop: response.shop,
       blog: {
         ...response.blog,

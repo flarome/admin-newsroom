@@ -1,14 +1,42 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 
 import { getArticleInfo } from "../modules/getInfo";
-import { Page, Badge, Layout, TextField ,Thumbnail,  FormLayout, Modal, PageActions, Card, Box, BlockStack, InlineStack, Text, Button, Bleed, Divider, Icon, LegacyCard, ResourceList, Avatar, ResourceItem, LegacyFilters } from "@shopify/polaris";
-import { ChevronLeftIcon, ChevronRightIcon, DeleteIcon } from "@shopify/polaris-icons";
+import {
+  Page,
+  Badge,
+  Layout,
+  TextField,
+  Thumbnail,
+  FormLayout,
+  Modal,
+  PageActions,
+  Card,
+  Box,
+  BlockStack,
+  InlineStack,
+  Text,
+  Button,
+  Bleed,
+  Divider,
+  Icon,
+  LegacyCard,
+  ResourceList,
+  Avatar,
+  ResourceItem,
+  LegacyFilters,
+  Link,
+} from "@shopify/polaris";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  DeleteIcon,
+} from "@shopify/polaris-icons";
 
-import { useHref } from "@remix-run/react";
+import { useHref, useNavigate } from "@remix-run/react";
 
 function disambiguateLabel(key, value) {
   switch (key) {
-    case 'taggedWith1':
+    case "taggedWith1":
       return `Tagged with ${value}`;
     default:
       return value;
@@ -19,13 +47,15 @@ function isEmpty(value) {
   if (Array.isArray(value)) {
     return value.length === 0;
   } else {
-    return value === '' || value == null;
+    return value === "" || value == null;
   }
 }
 
-
-
 const Dashboard = ({ articles, articlesPerPage }) => {
+  const navigate = useNavigate();
+
+  const [imageLoaded, setImageLoaded] = useState(false);
+
   const [currentPage, setCurrentPage] = useState(1);
 
   const [selectedArticles, setSelectedArticles] = useState(new Set()); // Articles sélectionnés
@@ -58,13 +88,21 @@ const Dashboard = ({ articles, articlesPerPage }) => {
 
   const filteredArticles = useMemo(() => {
     return articles
-      .filter(article => {
+      .filter((article) => {
         // Filtrer par recherche (titre, handle ou tags)
         const lowerSearch = searchTerm && searchTerm.toLowerCase();
-        const matchesSearch = !searchTerm || searchTerm === "" || article.title.toLowerCase().includes(lowerSearch) || article.handle.toLowerCase().includes(lowerSearch) || article.tags.some(tag => tag.toLowerCase().includes(lowerSearch));
+        const matchesSearch =
+          !searchTerm ||
+          searchTerm === "" ||
+          article.title.toLowerCase().includes(lowerSearch) ||
+          article.handle.toLowerCase().includes(lowerSearch) ||
+          article.tags.some((tag) => tag.toLowerCase().includes(lowerSearch));
 
         // Filtrer par visibilité
-        const matchesVisibility = filterVisibility === "3" || (filterVisibility === "1" && article.isPublished === true) || (filterVisibility === "2" && article.isPublished !== true);
+        const matchesVisibility =
+          filterVisibility === "3" ||
+          (filterVisibility === "1" && article.isPublished === true) ||
+          (filterVisibility === "2" && article.isPublished !== true);
 
         // Filtrer par tag
         const matchesTag = filterTag === "" || article.tags.includes(filterTag);
@@ -88,12 +126,15 @@ const Dashboard = ({ articles, articlesPerPage }) => {
   }, [articles, searchTerm, filterVisibility, filterTag, sortBy]);
 
   const startIndex = (currentPage - 1) * articlesPerPage;
-  const currentArticles = filteredArticles.slice(startIndex, startIndex + articlesPerPage);
+  const currentArticles = filteredArticles.slice(
+    startIndex,
+    startIndex + articlesPerPage,
+  );
   const pageArticles = currentArticles.length;
   const totalPages = Math.ceil(filteredArticles.length / articlesPerPage);
   const hasSelected = selectedArticles?.size !== 0;
 
-  const handlepageChange = page => {
+  const handlepageChange = (page) => {
     setCurrentPage(page);
     resetFilters();
   };
@@ -129,17 +170,7 @@ const Dashboard = ({ articles, articlesPerPage }) => {
     },
   ];
 
-
-
-
-
-
-
-
-
-
-
-  const [taggedWith, setTaggedWith] = useState('VIP');
+  const [taggedWith, setTaggedWith] = useState("VIP");
   const [queryValue, setQueryValue] = useState(undefined);
 
   const handleTaggedWithChange = useCallback(
@@ -159,11 +190,10 @@ const Dashboard = ({ articles, articlesPerPage }) => {
     handleQueryValueRemove();
   }, [handleQueryValueRemove, handleTaggedWithRemove]);
 
-
   const filters = [
     {
-      key: 'taggedWith1',
-      label: 'Tagged with',
+      key: "taggedWith1",
+      label: "Tagged with",
       filter: (
         <TextField
           label="Tagged with"
@@ -174,22 +204,21 @@ const Dashboard = ({ articles, articlesPerPage }) => {
         />
       ),
       shortcut: true,
-    }
+    },
   ];
 
-
+  const hasArticles = articles && articles.length > 0;
 
   const appliedFilters =
-  taggedWith && !isEmpty(taggedWith)
-    ? [
-        {
-          key: 'taggedWith1',
-          label: disambiguateLabel('taggedWith1', taggedWith),
-          onRemove: handleTaggedWithRemove,
-        },
-      ]
-    : [];
-
+    taggedWith && !isEmpty(taggedWith)
+      ? [
+          {
+            key: "taggedWith1",
+            label: disambiguateLabel("taggedWith1", taggedWith),
+            onRemove: handleTaggedWithRemove,
+          },
+        ]
+      : [];
 
   const filterControl = (
     <LegacyFilters
@@ -199,107 +228,200 @@ const Dashboard = ({ articles, articlesPerPage }) => {
       onQueryChange={setSearchTerm}
       onQueryClear={handleQueryValueRemove}
       onClearAll={handleClearAll}
-    >
-
-    </LegacyFilters>
+    ></LegacyFilters>
   );
 
-
-
-  
-
   return (
-    <Page fullWidth title="Articles de blog" compactTitle primaryAction={{ content: "Ajouter un article de blog", disabled: false, url: "/articles/new" }}>
+    <Page
+      fullWidth={hasArticles}
+      title="Articles de blog" // Affiche le titre uniquement si hasArticles est true
+      compactTitle
+      primaryAction={
+        hasArticles
+          ? {
+              content: "Ajouter un article de blog",
+              disabled: false,
+              url: "/articles/new",
+            }
+          : undefined
+      } // Affiche l'action uniquement si hasArticles est true
+    >
       <Layout>
         <Layout.Section>
-          <Card
-          padding={{xs: '0'}}
-          >
-         
-            <ResourceList
-              resourceName={resourceName}
-              items={currentArticles}
-             
-              renderItem={(item) => {
-                const { title, mainImageScare, mainImageAlt, isPublished, id, splitId, lastModifiedText } = getArticleInfo(["title", "downloadsAllsMedia", "handle", "date", "mainImage", "content", "tags", "template", "isPublished", "id", "modified"], item, "fr-FR", 50);
+          <Card padding={{ xs: "0" }}>
+            {hasArticles ? (
+              <ResourceList
+                resourceName={resourceName}
+                items={currentArticles}
+                renderItem={(item) => {
+                  const {
+                    title,
+                    mainImageScare,
+                    mainImageAlt,
+                    isPublished,
+                    id,
+                    splitId,
+                    lastModifiedText,
+                  } = getArticleInfo(
+                    [
+                      "title",
+                      "downloadsAllsMedia",
+                      "handle",
+                      "date",
+                      "mainImage",
+                      "content",
+                      "tags",
+                      "template",
+                      "isPublished",
+                      "id",
+                      "modified",
+                    ],
+                    item,
+                    "fr-FR",
+                    50,
+                  );
 
-
-                return (
-                  <ResourceItem
- 
-                 
-url={useHref("./" + splitId, { relative: "path"})}
-
-                    id={id}
-                    media={
-                      <div>
-                        {mainImageScare ? (
-                          <Thumbnail size="large" alt={mainImageAlt} source={mainImageScare}></Thumbnail>
-                        ) : (
-                          <div className="PCdp6 O3SI5">
-                            <svg viewBox="0 0 20 20" className="mGpXg SwMUh">
-                              <path d="M12.5 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"></path>
-                              <path fillRule="evenodd" d="M9.018 3.5h1.964c.813 0 1.469 0 2 .043.546.045 1.026.14 1.47.366a3.75 3.75 0 0 1 1.64 1.639c.226.444.32.924.365 1.47.043.531.043 1.187.043 2v1.964c0 .813 0 1.469-.043 2-.045.546-.14 1.026-.366 1.47a3.75 3.75 0 0 1-1.639 1.64c-.444.226-.924.32-1.47.365-.531.043-1.187.043-2 .043h-1.964c-.813 0-1.469 0-2-.043-.546-.045-1.026-.14-1.47-.366a3.75 3.75 0 0 1-1.64-1.639c-.226-.444-.32-.924-.365-1.47-.043-.531-.043-1.187-.043-2v-1.964c0-.813 0-1.469.043-2 .045-.546.14-1.026.366-1.47a3.75 3.75 0 0 1 1.639-1.64c.444-.226.924-.32 1.47-.365.531-.043 1.187-.043 2-.043Zm-1.877 1.538c-.454.037-.715.107-.912.207a2.25 2.25 0 0 0-.984.984c-.1.197-.17.458-.207.912-.037.462-.038 1.057-.038 1.909v1.428l.723-.867a1.75 1.75 0 0 1 2.582-.117l2.695 2.695 1.18-1.18a1.75 1.75 0 0 1 2.604.145l.216.27v-2.374c0-.852 0-1.447-.038-1.91-.037-.453-.107-.714-.207-.911a2.25 2.25 0 0 0-.984-.984c-.197-.1-.458-.17-.912-.207-.462-.037-1.056-.038-1.909-.038h-1.9c-.852 0-1.447 0-1.91.038-.453-.037-.714-.107-.911-.207a2.25 2.25 0 0 1-.984-.984c-.1-.197-.17-.458-.207-.912Z"></path>
-                            </svg>
-                          </div>
-                        )}
-                      </div>
-                    }
-                    accessibilityLabel={`Afficher les détails pour ${title}`}
-                  >
-                    <div className="Polaris-BlockStack" style={{ "--pc-block-stack-order": "column" }}>
+                  return (
+                    <ResourceItem
+                      url={useHref("./" + splitId, { relative: "path" })}
+                      id={id}
+                      media={
+                        <div>
+                          {mainImageScare ? (
+                            <Thumbnail
+                              size="large"
+                              alt={mainImageAlt}
+                              source={mainImageScare}
+                            ></Thumbnail>
+                          ) : (
+                            <div className="PCdp6 O3SI5">
+                              <svg viewBox="0 0 20 20" className="mGpXg SwMUh">
+                                <path d="M12.5 9a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"></path>
+                                <path
+                                  fillRule="evenodd"
+                                  d="M9.018 3.5h1.964c.813 0 1.469 0 2 .043.546.045 1.026.14 1.47.366a3.75 3.75 0 0 1 1.64 1.639c.226.444.32.924.365 1.47.043.531.043 1.187.043 2v1.964c0 .813 0 1.469-.043 2-.045.546-.14 1.026-.366 1.47a3.75 3.75 0 0 1-1.639 1.64c-.444.226-.924.32-1.47.365-.531.043-1.187.043-2 .043h-1.964c-.813 0-1.469 0-2-.043-.546-.045-1.026-.14-1.47-.366a3.75 3.75 0 0 1-1.64-1.639c-.226-.444-.32-.924-.365-1.47-.043-.531-.043-1.187-.043-2v-1.964c0-.813 0-1.469.043-2 .045-.546.14-1.026.366-1.47a3.75 3.75 0 0 1 1.639-1.64c.444-.226.924-.32 1.47-.365.531-.043 1.187-.043 2-.043Zm-1.877 1.538c-.454.037-.715.107-.912.207a2.25 2.25 0 0 0-.984.984c-.1.197-.17.458-.207.912-.037.462-.038 1.057-.038 1.909v1.428l.723-.867a1.75 1.75 0 0 1 2.582-.117l2.695 2.695 1.18-1.18a1.75 1.75 0 0 1 2.604.145l.216.27v-2.374c0-.852 0-1.447-.038-1.91-.037-.453-.107-.714-.207-.911a2.25 2.25 0 0 0-.984-.984c-.197-.1-.458-.17-.912-.207-.462-.037-1.056-.038-1.909-.038h-1.9c-.852 0-1.447 0-1.91.038-.453-.037-.714-.107-.911-.207a2.25 2.25 0 0 1-.984-.984c-.1-.197-.17-.458-.207-.912Z"
+                                ></path>
+                              </svg>
+                            </div>
+                          )}
+                        </div>
+                      }
+                      accessibilityLabel={`Afficher les détails pour ${title}`}
+                    >
                       <div
-                        className="Polaris-InlineStack"
-                        style={{
-                          "--pc-inline-stack-wrap": "wrap",
-                          "--pc-inline-stack-gap-xs": "var(--p-space-100)",
-                          "--pc-inline-stack-flex-direction-xs": "row",
-                        }}
+                        className="Polaris-BlockStack"
+                        style={{ "--pc-block-stack-order": "column" }}
                       >
-                        <h3 className="Polaris-Text--root Polaris-Text--bodyMd Polaris-Text--semibold" tabIndex="-1">
-                          {title}
-                        </h3>
-              
-                        {!isPublished && (
-                          <span className="Polaris-Badge Polaris-Badge--toneInfo">
-                            <span className="Polaris-Text--root Polaris-Text--visuallyHidden">Informations</span>
-                            <span className="Polaris-Text--root Polaris-Text--bodySm">Masqué</span>
-                          </span>
-                        )}
-                      </div>
-                      <span className="Polaris-Text--root Polaris-Text--bodyMd Polaris-Text--breakAlways Polaris-Text--subdued">Dernière édition : {lastModifiedText}</span>
-                    </div>
-                  </ResourceItem>
-                );
-              }}
-              selectable
-              hasMoreItems={articles.length !== pageArticles.length}
+                        <div
+                          className="Polaris-InlineStack"
+                          style={{
+                            "--pc-inline-stack-wrap": "wrap",
+                            "--pc-inline-stack-gap-xs": "var(--p-space-100)",
+                            "--pc-inline-stack-flex-direction-xs": "row",
+                          }}
+                        >
+                          <h3
+                            className="Polaris-Text--root Polaris-Text--bodyMd Polaris-Text--semibold"
+                            tabIndex="-1"
+                          >
+                            {title}
+                          </h3>
 
-              selectedItems={selectedItems}
-              
-              onSelectionChange={setSelectedItems}
-              promotedBulkActions={promotedBulkActions}
-              bulkActions={bulkActions}
-              filterControl={filterControl}
-              totalItemsCount={articles.length}
-              pagination={{
-                hasNext: currentPage !== totalPages,
-                hasPrevious: currentPage !== 1,
-                onNext: () => handlepageChange(currentPage + 1),
-                onPrevious: () => handlepageChange(currentPage - 1),
-              }}
-              sortValue={sortBy}
-              sortOptions={[
-                {label: 'Modifié (le plus récent)', value: 'modifiedDesc'},
-                {label: 'Modifié (le moins récent)', value: 'modifiedAsc'},
-                {label: 'Titre (A à Z)', value: 'titleAsc'},
-                {label: 'Titre (Z à A)', value: 'titleDesc'},
-              ]}
-              onSortChange={(selected) => {
-                setSortBy(selected);
-                console.log(`Sort option changed to ${selected}.`);
-              }}
-            />
+                          {!isPublished && (
+                            <span className="Polaris-Badge Polaris-Badge--toneInfo">
+                              <span className="Polaris-Text--root Polaris-Text--visuallyHidden">
+                                Informations
+                              </span>
+                              <span className="Polaris-Text--root Polaris-Text--bodySm">
+                                Masqué
+                              </span>
+                            </span>
+                          )}
+                        </div>
+                        <span className="Polaris-Text--root Polaris-Text--bodyMd Polaris-Text--breakAlways Polaris-Text--subdued">
+                          Dernière édition : {lastModifiedText}
+                        </span>
+                      </div>
+                    </ResourceItem>
+                  );
+                }}
+                selectable
+                hasMoreItems={articles.length !== pageArticles.length}
+                selectedItems={selectedItems}
+                onSelectionChange={setSelectedItems}
+                promotedBulkActions={promotedBulkActions}
+                bulkActions={bulkActions}
+                filterControl={filterControl}
+                totalItemsCount={articles.length}
+                pagination={{
+                  hasNext: currentPage !== totalPages,
+                  hasPrevious: currentPage !== 1,
+                  onNext: () => handlepageChange(currentPage + 1),
+                  onPrevious: () => handlepageChange(currentPage - 1),
+                }}
+                sortValue={sortBy}
+                sortOptions={[
+                  { label: "Modifié (le plus récent)", value: "modifiedDesc" },
+                  { label: "Modifié (le moins récent)", value: "modifiedAsc" },
+                  { label: "Titre (A à Z)", value: "titleAsc" },
+                  { label: "Titre (Z à A)", value: "titleDesc" },
+                ]}
+                onSortChange={(selected) => {
+                  setSortBy(selected);
+                  console.log(`Sort option changed to ${selected}.`);
+                }}
+              />
+            ) : (
+              <Box
+                paddingBlockStart={{ xs: "500" }}
+                paddingBlockEnd={{ xs: "1600" }}
+                paddingInline={{ xs: "0" }}
+              >
+                <BlockStack inlineAlign="center">
+                  <div className="Polaris-EmptyState__ImageContainer">
+                    <img
+                      alt=""
+                      onLoad={() => setImageLoaded(true)}
+                      src="https://cdn.shopify.com/shopifycloud/online-store-web/assets/5e0ea0e5bf84f479d0d567e414f111ef388fe03f3beb28d64992b12e6dbad1d1.svg"
+                      className={`Polaris-EmptyState__Image ${imageLoaded ? "Polaris-EmptyState--loaded" : ""}`}
+                      role="presentation"
+                    />
+                    <div
+                      className={`Polaris-EmptyState__SkeletonImage ${imageLoaded ? "Polaris-EmptyState--loaded" : ""}`}
+                    ></div>
+                  </div>
+
+                  <Box maxWidth="100%">
+                    <BlockStack inlineAlign="center">
+                      <Box paddingBlockEnd={{ xs: "400" }}>
+                        <Box paddingBlockEnd={{ xs: "150" }}></Box>
+                        <span className="Polaris-Text--root Polaris-Text--bodySm Polaris-Text--block Polaris-Text--center">
+                          Les articles de blog sont un excellent moyen de créer
+                          une communauté autour de vos produits et de votre
+                          marque.
+                        </span>
+                      </Box>
+
+                      <InlineStack>
+                        <Button
+                           url={useHref("./new", { relative: "path" })}
+
+                          onClick={() => navigate("./new",  {
+                            relative: "path"
+                          })} // Ou simplement `handleChange` si pas besoin d'ajuster
+                          textAlign="center"
+                          variant="primary"
+                        >
+                          <span className="Polaris-Text--root Polaris-Text--bodySm Polaris-Text--semibold">
+                            Créer un article de blog
+                          </span>
+                        </Button>
+                      </InlineStack>
+                    </BlockStack>
+                  </Box>
+                </BlockStack>
+              </Box>
+            )}
           </Card>
         </Layout.Section>
       </Layout>

@@ -14,7 +14,7 @@ import goArticlesFetch from "../go/articlesFetch";
 import goArticleDetails from "../go/articleDetails";
 import goAuthorAutocomplete from "../go/authorAutocomplete";
 import goArticleDelete from "../go/articleDelete";
-
+import goArticleCreate from "../go/articleCreate"
 const actions = {
   authorAutocomplete: {
     get: {
@@ -35,14 +35,8 @@ const actions = {
       },
     },
     builder: {
-      type: "rePost",
-      build: {
-        action: "articleDetails", // Action à réexécuter
-        body: (response) => ({
-          articleId: response.article.article.id, // Exemple de données dynamiques
-          hasArticle: true,
-        }), // Génération dynamique du body
-      },
+      type: "return",
+      build: goArticleCreate
     },
   },
   articleUpdate: {
@@ -57,7 +51,7 @@ const actions = {
       build: {
         action: "articleDetails", // Action à réexécuter
         body: (response) => ({
-          articleId: response.article.article.id, // Exemple de données dynamiques
+          articleId: response.article.article.id.split('/').pop(), // Exemple de données dynamiques
           hasArticle: true,
         }), // Génération dynamique du body
       },

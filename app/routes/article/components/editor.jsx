@@ -2,9 +2,13 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 
 // Remix
 import { useFetcher, useNavigate, useLocation } from "@remix-run/react"; // Utiliser fetcher pour déclencher l'action
+import {SaveBar, useAppBridge} from '@shopify/app-bridge-react';
 
+import { useFetcherWithPromise } from "../../../utils/useFetcherWithPromise";
 import { useArticle } from "../context/ArticleProvider";
 // Backend API
+import { useHref } from "@remix-run/react";
+
 import graphql from "../../../config/actions";
 import { submitAsync } from "../../../utils/submitAsync";
 import { articleCreate, articleDelete, articleUpdate } from "../../modules/api";
@@ -31,9 +35,8 @@ import {
   Bleed,
   Divider,
 } from "@shopify/polaris";
-import { ViewIcon } from "@shopify/polaris-icons";
+import { ViewIcon, CheckCircleIcon } from "@shopify/polaris-icons";
 
- 
 // Global modules
 import { setAppState } from "../../modules/state";
 import { formatArticle } from "../modules/loadArticle";
@@ -55,31 +58,24 @@ import MainImage from "./MainImage";
 // Event
 import { beforeunload } from "../../../modules/EventListener";
 
-const Editor = ({
+const Editor = ({}) => {
+  const shopify = useAppBridge();
 
 
-}) => {
+  const { fields, setFields, blog, setIsLoading, originalFields, errors, setErrors, loadArticle } = useArticle();
 
-  const { fields, setFields, isLoading, blog,
-    setIsLoading,  } = useArticle();
+  const derivedState = originalFields;
+  const setDerivedState = setFields;
+  const isNewArticle = fields.isNewArticle;
 
-    const derivedState = fields;
-    const setDerivedState = setFields;
-    const isNewArticle = fields.isNewArticle || true;
-    
-
-  const location = useLocation(); // Récupérer l'URL actuelle
 
   const { showToast } = useToast();
-  
+
   // Errors
   const navigate = useNavigate();
 
-  const [errors, setErrors] = useState({});
 
-  const listErrors = useMemo(() => {
-    return Object.values(errors);
-  }, [errors]);
+
 
   const handleRemoveError = useCallback((key) => {
     setErrors((prevErrors) => {
@@ -90,14 +86,11 @@ const Editor = ({
 
   // Form
 
+  // Synchroniser l'état local avec la prop derivedState
+  useEffect(() => {
+    setFields(derivedState);
+  }, [derivedState]);
 
-
-
-    // Synchroniser l'état local avec la prop derivedState
-    useEffect(() => {
-      setFields(derivedState);
-    }, [derivedState]);
-    
   const otherInfo = [
     {
       label: "Url téléchargement médias",
@@ -118,44 +111,67 @@ const Editor = ({
     return !isEqual(fields, derivedState);
   }, [fields, derivedState]);
 
+
+
+  useEffect(() => {
+    if (isModified) {
+      shopify.saveBar.show('modifier');
+
+    } else if (!isNewArticle) {
+
+      shopify.saveBar.hide('modifier');
+    }
+ 
+  }, [isModified]); // Déclenche l'effet chaque fois que `isModified` change
+
+  const handleSaveBar = useCallback(() => shopify.saveBar.toggle('modifier'));
+
+
   useEffect(() => {
     beforeunload(isModified);
   }, [isModified]); // Déclenche l'effet chaque fois que `isModified` change
 
   // Banner
+ 
 
-  const [success, setSuccess] = useState(false);
 
   // Submit
+  const fetcherArticleCreate = useFetcherWithPromise("articleCreate" + derivedState.id);
+  const fetcherArticleUpdate = useFetcherWithPromise("articleUpdate" + derivedState.id);
 
   const handleSubmit = async () => {
+    setIsLoadingSubmit(true);
     // Détermine la fonction à appeler en fonction de l'état (nouvel article ou modification existante)
-    const action = isNewArticle ? articleCreate : articleUpdate;
-    const params = fields;
+    const fetcher = isNewArticle ? fetcherArticleCreate : fetcherArticleUpdate;
+    const action = isNewArticle ? "articleCreate" : "articleUpdate";
 
+  
+  
     try {
-      // Appel de l'API correspondante
-      const { article, errors } = await action(params);
 
-      if (!errors || !Object.keys(errors).length > 0) {
-        // Réinitialise les erreurs, met à jour l'article et change l'état général
-        setIsLoading(true);
+      const response = await loadArticle(fetcher, null, action, fields, !isNewArticle);
 
-        setDerivedState(formatArticle(article));
+      if (isNewArticle) {
+        shopify.saveBar.hide('modifier');
+        return navigate('../' + response.id.split('/').pop() , {
+          relative: "path",
+          state: {
+            bannerIds: ["articleCreateSuccess"],
+          },
+    
+          
+        });
 
-        setIsLoading(false); // Arrête l'indicateur de chargement
-        setErrors({});
-        setAppState(true, article.id);
-        setSuccess(isNewArticle); // Indique si une création a réussi
-      } else {
-        // Enregistre et affiche les erreurs en cas d'échec
-        setErrors(errors);
-        setSuccess(false);
       }
+
+
+
+
     } catch (error) {
       console.error("Une erreur s'est produite lors du traitement :", error);
       // Vous pouvez ici gérer les erreurs non prévues
     } finally {
+      setIsLoadingSubmit(false);
     }
   };
 
@@ -164,7 +180,7 @@ const Editor = ({
     if (id) {
       prepareArticle(id);
     } else {
-      setSuccess(false);
+
 
       setErrors({});
       setDerivedState(formatArticle(null));
@@ -174,100 +190,63 @@ const Editor = ({
     setIsLoading(false);
   };
 
-  const handleCloseEditor = (event = null, force = true, reloadData = false) => {
+  const handleCloseEditor = (
+    event = null,
+    force = true,
+    reloadData = false,
+  ) => {
     if (force || !isModified) {
       // Si l'article est modifié, prévenir la navigation
- 
-      if (reloadData) {
-        window.location.href = location.pathname.split('/').slice(0, -1).join('/'); // Redirige vers l'URL actuelle, ce qui forcera un rafraîchissement
 
-      } else {
-
-        navigate(-1);
-      }
-
-   
-     
-   
-
-     
-      
-     
+        navigate(-1, {
+          replace: true,
+          relative: "path",
+          state: { reload: true },
+        });
+  
     } else {
-
       if (event) {
         event.preventDefault(); // Empêcher la navigation par défaut
-
       }
       // Si l'article n'est pas modifié, on peut naviguer normalement
-   
-
 
       handleChange(!active);
     }
   };
 
-
   const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
   const [isLoadingDelete, setIsLoadingDelete] = useState(false);
 
-
-
-
   const articleDelete = useFetcher({ key: "articleDelete" });
 
+  const handleDelete = async () => {
+    setIsLoadingDelete(true);
 
-const handleDelete = async () => {
-  setIsLoadingDelete(true);
+    try {
+      // Soumettre et attendre la fin
+      await submitAsync(
+        articleDelete,
+        {
+          action: "articleDelete",
+          body: JSON.stringify({ articleId: derivedState.id }),
+        },
+        graphql,
+      );
 
-  try {
-    // Soumettre et attendre la fin
-    await submitAsync(
-      articleDelete,
-      {
-        action: "articleDelete",
-        body: JSON.stringify({ articleId: derivedState.id }),
-      },
-     graphql
-    );
+      // Succès : afficher un message et mettre à jour l'état
 
-
-   /* navigate('/articles', {
-      state: { toastMessage: 'Article supprimé avec succès' } // Passer un message dans l'état de navigation
-    });
-    
-    
-    const { state } = useLocation(); // Accéder à l'état de la navigation
-  const { showToast } = useToast();
-
-  React.useEffect(() => {
-    if (state?.toastMessage) {
-      showToast(state.toastMessage); // Affichage du toast passé par l'état
+      showToast("Article supprimé");
+      handleCloseEditor(null, true, true);
+    } catch (error) {
+      // En cas d'erreur
+      console.error("Erreur lors de la suppression :", error);
+      setErrors(error);
+    } finally {
+      setIsModalOpen(false);
+      setIsLoadingDelete(false);
     }
-  }, [state, showToast]);*/
-
-
-
-    // Succès : afficher un message et mettre à jour l'état
-    setSuccess(false);
-    showToast("Article supprimé");
-    handleCloseEditor(null, true, true);
-  } catch (error) {
-    // En cas d'erreur
-    console.error("Erreur lors de la suppression :", error);
-    setErrors(error);
-  } finally {
-    setIsModalOpen(false);
-    setIsLoadingDelete(false);
-  }
-};
-
-  const handleSubmit1 = async () => {
-    setIsLoadingSubmit(true);
-    handleSubmit();
-    setIsLoadingSubmit(false);
-    // Détermine la fonction à appeler en fonction de l'état (nouvel article ou modification existante
   };
+
 
   // HandleDeleteBanner
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -275,16 +254,37 @@ const handleDelete = async () => {
     () => setIsModalOpen((isModalOpen) => !isModalOpen),
     [],
   );
+  
 
   // HandleModifiedBanner
   const [active, setActive] = useState(false);
   const handleChange = useCallback(() => setActive(!active), [active]);
   return (
+
+    <div>  <SaveBar id="modifier" discardConfirmation={true} open={isNewArticle}>
+    <button variant="primary" onClick={() => handleSubmit()} disabled={!isModified} loading={isLoadingSubmit ? "" : undefined}></button>
+    <button 
+  onClick={() => {
+    if (isModified) {
+      setFields(derivedState);  // Appel de la fonction si isModified est vrai
+    } else {
+      handleSaveBar();  // Appel de handleSaveBar si isModified est faux
+      handleCloseEditor(null, true, false);  // Appel de handleCloseEditor dans tous les cas
+    }
+   
+  }}
+>
+  Save
+</button>
+
+  </SaveBar>
+  
     <Page
       backAction={{
         accessibilityLabel: "Accéder à la section des articles de blog",
-         url: location.pathname.split('/').slice(0, -1).join('/'), 
-         onAction: (event) => handleCloseEditor(event, false, false)
+                         
+url: useHref("../" , { relative: "path"}),
+        onAction: (event) => handleCloseEditor(event, false, false),
       }}
       title={derivedState?.title || `Ajouter un article de blog`}
       titleMetadata={
@@ -292,11 +292,6 @@ const handleDelete = async () => {
         !derivedState?.isPublished && <Badge tone="info">Masqué</Badge>
       }
       compactTitle
-      primaryAction={{
-        content: "Enregistrer",
-        disabled: false,
-        onAction: () => alert("View on your store action"),
-      }}
       secondaryActions={[
         {
           content: "Aperçu",
@@ -313,12 +308,7 @@ const handleDelete = async () => {
       <Layout>
         <Layout.Section>
           <Banner
-            errors={listErrors}
-            success={success}
-            handleChangeArticle={handleChangeArticle}
-            title={derivedState.title}
-            url={derivedState.url}
-            isPublished={derivedState.isPublished}
+    
           />
         </Layout.Section>
         <Layout.Section>
@@ -538,7 +528,7 @@ const handleDelete = async () => {
             primaryAction={{
               content: !isNewArticle ? "Enregistrer" : "Créer",
               disabled: !isModified,
-              onAction: () => handleSubmit1(),
+              onAction: () => handleSubmit(),
               loading: isLoadingSubmit,
             }}
             secondaryActions={[
@@ -553,7 +543,9 @@ const handleDelete = async () => {
         </Layout.Section>
       </Layout>
 
-      <Modal
+     
+    </Page>
+    <Modal
         open={isModalOpen}
         onClose={toggleModal}
         title={`Supprimer ${derivedState.title} ?`}
@@ -598,7 +590,7 @@ const handleDelete = async () => {
           </p>
         </Modal.Section>
       </Modal>
-    </Page>
+    </div>
   );
 };
 

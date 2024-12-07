@@ -1,10 +1,7 @@
 import React from "react";
 import { Banner as ShopifyBanner } from "@shopify/polaris";
 
-import { useArticle } from "../context/ArticleProvider";
-const BannerList = ({  }) => {
-  const { banners } = useArticle();
-
+const BannerList = ({ banners }) => {
   if (banners.length === 0) return null; // Pas de bannières à afficher
 
   return (

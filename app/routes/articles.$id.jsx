@@ -1,43 +1,22 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import { authenticate } from "../shopify.server"; 
+
 import { useParams } from "@remix-run/react"; // Utiliser fetcher pour déclencher l'action
-import { authenticate } from "../shopify.server";
 
-import { ArticleProvider, useArticle } from "./article/context/ArticleProvider";
+// Importation de la fonction loader et du composant Article
+import { Article as ArticleComponent } from "./article/main";
 
-import { useFetcherWithPromise } from "../utils/useFetcherWithPromise";
-
-// Composants personnalisés
-import Loading from "./article/components/loading";
-import Editor from "./article/components/editor";
-
-// Loader pour l'authentification
+// Exposition de la fonction loader
 export const loader = async ({ request, params }) => {
   await authenticate.admin(request);
   return null;
 };
 
-export default function Article() {
+// Composant principal de la page
+export default function ArticlePage() {
   const params = useParams();
-
+  
   return (
-    <ArticleProvider>
-      <ArticleContent articleId={params.id} />
-    </ArticleProvider>
+      <ArticleComponent articleId={params.id} hasArticle={true} />
   );
-}
-
-function ArticleContent({ articleId }) {
-  const fetcher = useFetcherWithPromise("articleDetails" + articleId);
-
-  const { isLoading, loadArticle } = useArticle();
-
-  useEffect(() => {
-    loadArticle(articleId, fetcher, true);
-  }, [articleId]);
-
-  if (isLoading) {
-    return <Loading />;
-  }
-
-  return <Editor />;
 }

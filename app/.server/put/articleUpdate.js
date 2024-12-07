@@ -20,8 +20,25 @@ id
 `;
 
 export default function applyPromoCode(body, blogId) {
+  console.log('body.id1Y282I3YU3', body.id)
   return {
-    mutation,
+    mutation: `
+
+mutation UpdateArticle($article: ArticleUpdateInput!) {
+  articleUpdate(id: "${body.id}", article: $article) {
+        article {
+         
+id
+
+        }
+        userErrors {
+          code
+          field
+          message
+        }
+      }
+    }
+`,
     variables: {
         id: body.id,
       article: {

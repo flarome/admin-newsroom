@@ -50,6 +50,10 @@ export async function api(client, shopify, req, transmiseErrors = null, transmis
 
         const { mutation, variables, mutationName, fetchMode } = getAction.mutation(body, blogId, themeId);
 
+        console.log('---------------------');
+        console.log('MUTATION', mutationName);
+        console.log('---------------------');
+        
 
         // Exécution de la requête (admin ou storefront)
         const { response: fetchedResponse, userErrors: fetchedUserErrors } =
@@ -57,6 +61,8 @@ export async function api(client, shopify, req, transmiseErrors = null, transmis
             ? await admin(mutation, variables, mutationName, shopify)
             : await storefront(mutation, variables, mutationName, client);
 
+
+            console.log('await admin(mutation, variables, mutationName, shopify)', await admin(mutation, variables, mutationName, shopify));
         // Mise à jour de la réponse globale
         response[key] = fetchedResponse;
 
@@ -78,6 +84,7 @@ export async function api(client, shopify, req, transmiseErrors = null, transmis
     } else if (type === "rePost") {
       // Récupérer la nouvelle action et le nouveau body
       const nextAction = build.action;
+      console.log('respreurieueriueionse', response);
       const nextBody = !errors || !Object.keys(errors).length > 0 ? typeof build.body === "function" ? build.body(response) : build.body : null;
 
       // Réexécuter l'API avec les nouveaux paramètres
@@ -91,8 +98,6 @@ export async function api(client, shopify, req, transmiseErrors = null, transmis
       userErrors,
     };
   } catch (err) {
-    console.error("Erreur dans l'API :", err.message);
-    console.log("Pile d'appels :");
     console.log(err.stack); // Affiche la stack trace
     throw new Error(err.message);
     
