@@ -1,9 +1,9 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
 client_id = "cee8ee508513d9fd031e6e8a453f8331"
-name = "newsroom"
+name = "Newsroom"
 handle = "newsroom"
-application_url = "https://south-map-preserve-liable.trycloudflare.com"
+application_url = "https://election-attachments-fair-blow.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "read_content,read_metaobjects,read_online_store_pages,read_themes,unau
 
 [auth]
 redirect_urls = [
-  "https://south-map-preserve-liable.trycloudflare.com/auth/callback",
-  "https://south-map-preserve-liable.trycloudflare.com/auth/shopify/callback",
-  "https://south-map-preserve-liable.trycloudflare.com/api/auth/callback"
+  "https://election-attachments-fair-blow.trycloudflare.com/auth/callback",
+  "https://election-attachments-fair-blow.trycloudflare.com/auth/shopify/callback",
+  "https://election-attachments-fair-blow.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
@@ -27,7 +27,7 @@ api_version = "2024-10"
 
   [[webhooks.subscriptions]]
   topics = [ "app/uninstalled" ]
-  uri = "/webhooks/app/uninstalled"
+  uri = "https://minister-configuring-reproduce-hepatitis.trycloudflare.com/webhooks/app/uninstalled"
 
 [pos]
 embedded = false

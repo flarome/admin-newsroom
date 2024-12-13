@@ -18,7 +18,7 @@ const mutation = `
 
 `;
 
-export default function applyPromoCode(body, blogId) {
+export default function applyPromoCode(body, blogId, themeId, client, shopify) {
 
 
   return {
@@ -26,7 +26,7 @@ export default function applyPromoCode(body, blogId) {
     variables: {
       article: {
         blogId: blogId,
-        ...generateArticle(body, true)
+        ...generateArticle(body, true, shopify)
       },
     },
     mutationName: "articleCreate",

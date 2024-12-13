@@ -116,7 +116,7 @@ export async function api(
           }
 
           const { mutation, variables, mutationName, fetchMode } =
-            getAction.mutation(body, blogId, themeId);
+            getAction.mutation(body, blogId, themeId, client, shopify);
 
           console.log("---------------------");
           console.log("MUTATION", mutationName);
@@ -144,7 +144,7 @@ export async function api(
 
       // Attendre que toutes les promesses soient terminées
       await Promise.all(actionPromises);
-    }
+    } 
     // Gestion du type de builder
     const { type, build } = actionConfig.builder || {};
 

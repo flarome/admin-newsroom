@@ -195,6 +195,7 @@ export function ArticleProvider({ children }) {
         fields,
         setFields,
 isLoading,
+setIsLoading,
         blog,
         loadArticle,
       }}

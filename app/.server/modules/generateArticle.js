@@ -1,8 +1,9 @@
 import { generateHtml } from "./generateContent";
 
-export function generateArticle(body, isNewArticle) {
+export function generateArticle(body, isNewArticle, shopify) {
   const {
     title,
+    id,
     subTitle,
     extrait,
     metaDescription,
@@ -18,7 +19,7 @@ export function generateArticle(body, isNewArticle) {
     template,
     isPublished,
   } = body;
-  const { originalHtml, rebuiltHtml, jsonContent } = generateHtml(content);
+  const { originalHtml, rebuiltHtml, jsonContent } = generateHtml(content, id, shopify);
 
   return {
     metafields: {

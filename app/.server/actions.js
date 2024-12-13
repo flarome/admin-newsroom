@@ -16,8 +16,10 @@ import goArticlesFetch from "./go/articlesFetch";
 import goArticleDetails from "./go/articleDetails";
 import goAuthorAutocomplete from "./go/authorAutocomplete";
 import goArticleDelete from "./go/articleDelete";
-import goArticleCreate from "./go/articleCreate"
-import goAdjacentArticle from "./go/adjacentArticle"
+import goArticleCreate from "./go/articleCreate";
+import goAdjacentArticle from "./go/adjacentArticle";
+
+
 const actions = {
   authorAutocomplete: {
     get: {
@@ -32,19 +34,13 @@ const actions = {
   },
   articleCreate: {
     preValidate: {
-
-
       get: {
-
         blog: {
           mutation: getBlog,
         },
-
-
       },
-      validate: validateArticle
-
-    } ,
+      validate: validateArticle,
+    },
     get: {
       article: {
         mutation: putArticleCreate,
@@ -52,11 +48,10 @@ const actions = {
     },
     builder: {
       type: "return",
-      build: goArticleCreate
+      build: goArticleCreate,
     },
   },
   adjacentArticle: {
-
     get: {
       articlePrevious: {
         condition: (body) => body.defaultCursor && body.defaultCursor !== "",
@@ -69,25 +64,18 @@ const actions = {
     },
     builder: {
       type: "return",
-      build: goAdjacentArticle
+      build: goAdjacentArticle,
     },
-
   },
   articleUpdate: {
     preValidate: {
-
-
       get: {
-
         blog: {
           mutation: getBlog,
         },
-
-
       },
-      validate: validateArticle
-
-    } ,
+      validate: validateArticle,
+    },
     get: {
       article: {
         mutation: putArticleUpdate,
@@ -98,7 +86,7 @@ const actions = {
       build: {
         action: "articleDetails", // Action à réexécuter
         body: (response) => ({
-          articleId: response.article.article.id.split('/').pop(), // Exemple de données dynamiques
+          articleId: response.article.article.id.split("/").pop(), // Exemple de données dynamiques
           hasArticle: true,
         }), // Génération dynamique du body
       },
@@ -137,7 +125,7 @@ const actions = {
       build: goArticleDetails,
     },
   },
-  
+
   articlesFetch: {
     get: {
       articles: {
