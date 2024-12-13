@@ -19,7 +19,7 @@ id
     }
 `;
 
-export default function applyPromoCode(body, blogId, themeId, client, shopify) {
+export default async function applyPromoCode(body, blogId, themeId, client, shopify) {
   console.log('body.id1Y282I3YU3', body.id)
   return {
     mutation: `
@@ -42,7 +42,7 @@ id
     variables: {
         id: body.id,
       article: {
-        ...generateArticle(body, false, shopify)
+        ...await generateArticle(body, false, shopify)
       },
     },
     mutationName: "articleUpdate",

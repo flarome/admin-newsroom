@@ -18,6 +18,7 @@ export async function getStagedUploadTarget(shopify, filePath, mimeType, name) {
       stagedUploadsCreate(input: $input) {
         stagedTargets {
           url
+           resourceUrl
           parameters {
             name
             value
@@ -31,6 +32,8 @@ export async function getStagedUploadTarget(shopify, filePath, mimeType, name) {
     }
   `;
 
+  const fileStats = fs.statSync(filePath);
+
   const variables = {
     input: [
       {
@@ -38,12 +41,12 @@ export async function getStagedUploadTarget(shopify, filePath, mimeType, name) {
         filename: name,
         mimeType,
         httpMethod: "POST",
-        fileSize: fs.statSync(filePath).size,
+        fileSize: fileStats.size.toString(),
       },
     ],
   };
 
-  const response = await admin(
+  const { response } = await admin(
     mutation,
     variables,
     "stagedUploadsCreate",
@@ -63,6 +66,7 @@ export async function getStagedUploadTarget(shopify, filePath, mimeType, name) {
 export async function uploadFile(stagedTarget, filePath) {
   const { url, parameters } = stagedTarget;
 
+  console.log('u18293rl', url);
   const formData = new FormData();
   parameters.forEach((param) => formData.append(param.name, param.value));
   formData.append("file", fs.createReadStream(filePath));
@@ -88,12 +92,14 @@ export async function uploadFile(stagedTarget, filePath) {
  */
 export default async function uploadToShopify(
   shopify,
+  name,
   filePath,
   mimeType,
   altText,
+  ecrase
 ) {
   try {
-    const name = filePath.split("/").pop();
+   
     const stagedTarget = await getStagedUploadTarget(
       shopify,
       filePath,
@@ -101,7 +107,7 @@ export default async function uploadToShopify(
       name,
     );
     await uploadFile(stagedTarget, filePath);
-    return await checkAndUpdateFiles(shopify, stagedTarget.url, altText, name);
+    return await checkAndUpdateFiles(shopify, stagedTarget.resourceUrl, altText, name, ecrase);
   } catch (err) {
     console.error("Erreur lors de uploadToShopify :", err.message);
     throw err;

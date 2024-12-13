@@ -49,6 +49,7 @@ export default defineConfig({
     }),
     tsconfigPaths(),
   ],
+  assetsInclude: ["**/*.rtf"],
   build: {
     assetsInlineLimit: 0,
   },

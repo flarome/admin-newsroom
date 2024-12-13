@@ -18,7 +18,7 @@ const mutation = `
 
 `;
 
-export default function applyPromoCode(body, blogId, themeId, client, shopify) {
+export default async function applyPromoCode(body, blogId, themeId, client, shopify) {
 
 
   return {
@@ -26,7 +26,7 @@ export default function applyPromoCode(body, blogId, themeId, client, shopify) {
     variables: {
       article: {
         blogId: blogId,
-        ...generateArticle(body, true, shopify)
+        ...await generateArticle(body, true, shopify)
       },
     },
     mutationName: "articleCreate",

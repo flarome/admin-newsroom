@@ -115,8 +115,11 @@ export async function api(
             return null; // Sauter cette action si la condition échoue
           }
 
-          const { mutation, variables, mutationName, fetchMode } =
-            getAction.mutation(body, blogId, themeId, client, shopify);
+
+
+
+          const { mutation, variables, mutationName, fetchMode } = typeof getAction.mutation === 'function' && getAction.mutation.constructor.name === 'AsyncFunction' ?
+            await getAction.mutation(body, blogId, themeId, client, shopify) : getAction.mutation(body, blogId, themeId, client, shopify);
 
           console.log("---------------------");
           console.log("MUTATION", mutationName);

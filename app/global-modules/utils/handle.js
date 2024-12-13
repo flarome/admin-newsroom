@@ -1,4 +1,4 @@
-function handle(str) {
+export default function handle(str) {
     if (!str) return;
     return str
         .normalize('NFD') // Décompose les caractères accentués en caractères de base + accents
@@ -10,4 +10,4 @@ function handle(str) {
         .replace(/--+/g, '-'); // Remplacer les tirets consécutifs par un seul tiret
 }
 
-module.exports = handle;
+

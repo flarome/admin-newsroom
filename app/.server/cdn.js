@@ -17,7 +17,7 @@ async function fileExists(shopify, filename) {
     `;
     const variables = { query: `filename:${filename?.trim()}` };
   
-    const response = await admin(mutation, variables, 'files', shopify);
+    const { response } = await admin(mutation, variables, 'files', shopify);
     const files = response.edges || [];
   
     return files.length > 0
@@ -39,7 +39,7 @@ async function getFile(shopify, id) {
       }
     }
   `;
-  const response = await admin(query, {}, 'node', shopify) || {};
+  const { response } = await admin(query, {}, 'node', shopify) || {};
   return response;
 }
 
@@ -61,7 +61,7 @@ async function updateFile(shopify, fileId, url, altText) {
   `;
   const variables = { input: [{ alt: altText, id: fileId, originalSource: url }] };
 
-  const response = await admin(mutation, variables, 'fileUpdate', shopify);
+  const { response } = await admin(mutation, variables, 'fileUpdate', shopify);
 
   return { errors: response.userErrors, id: response.files[0]?.id };
 }
@@ -83,15 +83,15 @@ async function createFile(shopify, url, filename, altText) {
     }
   `;
   const variables = { files: [{ alt: altText, originalSource: url, filename }] };
-  const response = await admin(mutation, variables, 'fileCreate', shopify);
+  const { response } = await admin(mutation, variables, 'fileCreate', shopify);
   return { errors: response.userErrors, id: response.files[0]?.id };
 }
 
 // Fonction principale pour gérer les fichiers
-async function handleFile(shopify, url, filename, altText) {
+async function handleFile(shopify, url, filename, altText, ecrase) {
     const { hasFile, id: fileId } = await fileExists(shopify, filename);
   
-    if (hasFile && fileId) {
+    if (ecrase && hasFile && fileId) {
       console.log(`Le fichier ${filename} existe. Tentative de mise à jour...`);
       const { errors, id } = await updateFile(shopify, fileId, url, altText);
       if (errors.length > 0) {
@@ -113,10 +113,10 @@ async function handleFile(shopify, url, filename, altText) {
   }
 
 // Fonction principale pour vérifier et mettre à jour les fichiers
-export async function checkAndUpdateFiles(shopify, srcUrl, altText, name) {
+export async function checkAndUpdateFiles(shopify, srcUrl, altText, name, ecrase = false) {
     try {
       console.log('Mise à jour des fichiers...');
-      return await handleFile(shopify, srcUrl, name, altText);
+      return await handleFile(shopify, srcUrl, name, altText, ecrase);
     } catch (error) {
       console.error('Erreur lors de la vérification et de la mise à jour des fichiers :', error);
       throw error;
