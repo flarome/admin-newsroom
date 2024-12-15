@@ -1,0 +1,10 @@
+services:
+  - name: your-service-name
+    build:
+      commands:
+        - ./update-submodules.sh   # Exécuter le script de mise à jour des sous-modules avant de déployer
+    dockerfile_path: Dockerfile
+    env:
+      NODE_ENV: production
+    regions:
+      - your-region
