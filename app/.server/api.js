@@ -1,8 +1,9 @@
 import actions from "./actions";
-import { getBlogId } from "./modules/utils/getBlogId";
+import { getBlog } from "./modules/utils/getBlogId";
 import { getThemeId } from "./modules/utils/getThemeId";
 import { admin, storefront } from "./modules/utils/executeWithRetry";
 import validateAction from "./modules/midelware/validateAction";
+import { getCdnUrl } from "./modules/utils/getCdnUrl";
 export async function api(
   client,
   shopify,
@@ -24,16 +25,20 @@ export async function api(
     // Vérification de l'action spécifiée
     const actionConfig = actions[action] || {};
 
-    let blogId = null; 
+    let blog = null; 
     let themeId = null;
+    let cdnUrl = null;
+
+    cdnUrl = await getCdnUrl(shopify);
     // Récupération de l'ID du blog
     if (requireBlog) {
-      blogId = await getBlogId(client);
+      blog = await getBlog(client);
     }
     if(requireTheme) {
       themeId = await getThemeId(shopify);
     }
     
+    const { id: blogId  } = blog ? blog : {};
 
 
     let response = {};
@@ -68,9 +73,8 @@ export async function api(
             return null; // Sauter cette action si la condition échoue
           }
 
-          const { mutation, variables, mutationName, fetchMode } =
-            getAction.mutation(body, blogId, themeId);
-
+            const { mutation, variables, mutationName, fetchMode } = typeof getAction.mutation === 'function' && getAction.mutation.constructor.name === 'AsyncFunction' ?
+            await getAction.mutation(body, blogId, themeId, client, shopify, cdnUrl) : getAction.mutation(body, blogId, themeId, client, shopify, cdnUrl);
 
           // Exécution de la requête (admin ou storefront)
           const { response: fetchedResponse, userErrors: fetchedUserErrors } =
@@ -119,7 +123,7 @@ export async function api(
 
 
           const { mutation, variables, mutationName, fetchMode } = typeof getAction.mutation === 'function' && getAction.mutation.constructor.name === 'AsyncFunction' ?
-            await getAction.mutation(body, blogId, themeId, client, shopify) : getAction.mutation(body, blogId, themeId, client, shopify);
+            await getAction.mutation(body, blogId, themeId, client, shopify, cdnUrl) : getAction.mutation(body, blogId, themeId, client, shopify, cdnUrl);
 
           console.log("---------------------");
           console.log("MUTATION", mutationName);

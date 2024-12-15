@@ -3,13 +3,16 @@
 
 import { storefront } from './executeWithRetry';
 
-export async function getBlogId(client) {
+export async function getBlog(client) {
   try {
     // Définir la requête GraphQL pour récupérer l'ID du blog
     const query = `
       query GetArticlesFromBlog {
         blog(handle: "newsroom") {
           id
+          onlineStoreUrl
+
+          
         }
       }
     `;
@@ -18,7 +21,7 @@ export async function getBlogId(client) {
     // Exécuter la requête
     const { response } = await storefront(query, variables, 'blog', client);
   
-    return response.id;
+    return response;
   } catch (err) {
     console.error("Error in getBlogId:", err.message);
     throw new Error(`Failed to retrieve blog ID for handle.`);

@@ -1,6 +1,6 @@
 import { generateHtml } from "./generateContent";
 
-export async function generateArticle(body, isNewArticle, shopify) {
+export async function generateArticle(body, isNewArticle, shopify, cdnUrl) {
   const {
     title,
     subTitle,
@@ -18,7 +18,7 @@ export async function generateArticle(body, isNewArticle, shopify) {
     template,
     isPublished,
   } = body;
-  const { originalHtml, rebuiltHtml, jsonContent } = await generateHtml(content, shopify);
+  const { originalHtml, rebuiltHtml, jsonContent } = await generateHtml(content, shopify, cdnUrl);
 
   return {
     metafields: {

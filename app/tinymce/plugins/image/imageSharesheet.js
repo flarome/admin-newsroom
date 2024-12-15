@@ -1,26 +1,5 @@
-import { extractImageDataJson } from "../../../shared-instances/content/media/normalizeImageData";
+import { extractDataJson } from "../../../shared-instances/content/normalizeData";
 
-function handleImageOptionsChange(event, api) {
-  const data = api.getData(); // Récupérer l'état actuel des champs
-
-  // Logique pour désactiver les cases incompatibles
-  if (data.imageInline) {
-    api.setData({
-      imageBig: false,
-      imageFullbleed: false,
-    });
-  }
-
-  if (data.imageBig && data.imageFullbleed) {
-    // Si les deux sont sélectionnés, on corrige automatiquement
-    api.setData({ imageFullbleed: false });
-    // Afficher un message d'avertissement
-    tinyMCE.activeEditor.notificationManager.open({
-      text: "Image Big et Image Fullbleed ne peuvent pas être activées en même temps.",
-      type: "warning",
-    });
-  }
-}
 // Fonction pour générer initialData à partir de currentData
 function generateInitialData(currentData) {
   // Initialisation de initialData
@@ -195,7 +174,7 @@ export default function imageSharesheet(editor) {
 
         // Génère le HTML final pour <picture>
         const pictureHtml = `
-        <figure  data-json='${JSON.stringify(generateInitialData(data))}' class="${data.imageInline ? "image-inline" : ""} ${data.imageBig ? "image-big" : ""} ${data.imageFullbleed ? "image-fullbleed" : ""}">
+        <figure  data-json='${JSON.stringify({ ...generateInitialData(data), type: "image" }) }' class="${data.imageInline ? "image-inline" : ""} ${data.imageBig ? "image-big" : ""} ${data.imageFullbleed ? "image-fullbleed" : ""}">
           <picture>
             ${sources
               .map(
@@ -231,7 +210,7 @@ export default function imageSharesheet(editor) {
 
       if (pictureElement) {
         openImageDialog(
-          extractImageDataJson(pictureElement) || {},
+          extractDataJson(pictureElement) || {},
           false,
           pictureElement,
         );

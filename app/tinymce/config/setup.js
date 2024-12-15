@@ -1,10 +1,11 @@
-import imageSharesheet from "./plugins/image/imageSharesheet";
-
+import imageSharesheet from "../plugins/image/imageSharesheet";
+import location from "../plugins/location";
 export default function setup (editor) {
 
       // Liste des modules à ajouter à l'éditeur
   const modules = [
-    imageSharesheet
+    imageSharesheet,
+    location
   ];
 
   // Ajouter chaque module à l'éditeur

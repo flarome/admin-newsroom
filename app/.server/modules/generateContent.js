@@ -1,13 +1,34 @@
 import { JSDOM } from "jsdom";
+import { fileURLToPath } from "url";
 import AdmZip from "adm-zip";
 import fetch from "node-fetch";
-import crypto from "crypto"; 
-import path from "path";
+import crypto from "crypto";
+import path, { dirname } from "path";
 import handle from "../../global-modules/utils/handle";
 
-import { extractImageDataJson } from "../../shared-instances/content/media/normalizeImageData";
+import { extractDataJson } from "../../shared-instances/content/normalizeData";
 import uploadToShopify from "../uploadFile";
 import fs from "fs";
+import fsPromise from "fs/promises";
+
+const __filename = fileURLToPath(import.meta.url); // Conversion de l'URL du module vers un chemin de fichier
+const __dirname = dirname(__filename); // Obtention du répertoire du fichier
+
+let fileContent = "";
+async function getLegalCotent() {
+  const filePath = path.resolve(
+    __dirname,
+    "../../data-shopify/blog/legal/media.txt",
+  ); // Résoudre le chemin absolu
+
+  try {
+    fileContent = await fsPromise.readFile(filePath, "utf8");
+    console.log("rerezhjrehjrereer", fileContent); // Affiche le contenu du fichier
+  } catch (err) {
+    console.error("Erreur de lecture :", err);
+  }
+}
+await getLegalCotent();
 
 /**
  * Génère un UUID basé sur la position, la date/heure et un namespace personnalisé.
@@ -28,8 +49,6 @@ function generateCustomUUID(name, id) {
   return uuidLike;
 }
 
-
-
 export function supprimerDivEtGarderLesAutres(texteHTML) {
   // Créer un document DOM avec JSDOM
   const dom = new JSDOM(texteHTML);
@@ -45,14 +64,14 @@ export function supprimerDivEtGarderLesAutres(texteHTML) {
   return document.body.innerHTML;
 }
 
-
-
-
-
-
-
-
-async function generateZipFile(uuid, img, altText, shopify, retry = false) {
+async function generateZipFile(
+  uuid,
+  img,
+  altText,
+  shopify,
+  cdnUrl,
+  retry = false,
+) {
   try {
     const imgName = path.basename(img);
 
@@ -60,7 +79,7 @@ async function generateZipFile(uuid, img, altText, shopify, retry = false) {
     const response = await fetch(img);
     if (!response.ok) {
       throw new Error(
-        `Erreur lors du téléchargement de l'image : ${response.statusText}`
+        `Erreur lors du téléchargement de l'image : ${response.statusText}`,
       );
     }
     const imageBuffer = await response.buffer();
@@ -74,28 +93,23 @@ async function generateZipFile(uuid, img, altText, shopify, retry = false) {
     // Ajouter le fichier legal_notice.rtf au ZIP
 
     // Ajouter le fichier RTF au ZIP
-// Définir le chemin local du fichier RTF
-const rtfPath = path.resolve(__dirname, "../../data-shopify/blog/legal/media.rtf"); // Chemin absolu
+    // Définir le chemin local du fichier RTF
 
-// Ajouter le fichier RTF au ZIP
-zip.addLocalFile(rtfPath, '', "LEGAL_NOTICE.rtf");
+    zip.addFile("LEGAL_NOTICE.txt", Buffer.from(fileContent, "utf-8"));
 
     // Définir le chemin temporaire
     const baseDir = path.resolve();
     const tempDir = path.join(
       baseDir,
       "tmp",
-      handle(process.cwd()), 
-      handle(Date.now().toString())
+      handle(process.cwd()),
+      handle(Date.now().toString()),
     );
     if (!fs.existsSync(tempDir)) {
       fs.mkdirSync(tempDir, { recursive: true });
     }
 
-    let zipName = `newsroom_article_${uuid}_${path.basename(
-      img,
-      path.extname(img)
-    )}.zip`;
+    let zipName = `newsroom_article_media_${uuid}.zip`;
     const zipPath = path.join(tempDir, zipName);
 
     // Écriture du ZIP sur le disque
@@ -108,7 +122,7 @@ zip.addLocalFile(rtfPath, '', "LEGAL_NOTICE.rtf");
       zipPath,
       "application/zip",
       altText,
-      true
+      true,
     );
 
     // Nettoyer le fichier temporaire
@@ -121,36 +135,30 @@ zip.addLocalFile(rtfPath, '', "LEGAL_NOTICE.rtf");
       uploadedFileUrl?.fileStatus &&
       ["PROCESSING", "READY", "UPLOADED"].includes(uploadedFileUrl.fileStatus)
     ) {
-      return zipName;
-    } else if (
-      uploadedFileUrl?.fileStatus === "FAILED" &&
-      !retry
-    ) {
+      return cdnUrl + zipName;
+    } else if (uploadedFileUrl?.fileStatus === "FAILED" && !retry) {
       // Retenter avec un nom modifié
-      const timestamp = new Date()
-        .toISOString()
-        .replace(/[-:.TZ]/g, "");
+      const timestamp = new Date().toISOString().replace(/[-:.TZ]/g, "");
       zipName = `retry_${uuid}_${timestamp}_${path.basename(
         img,
-        path.extname(img)
+        path.extname(img),
       )}.zip`;
-      return await generateZipFile(uuid, img, altText, shopify, true);
+      return await generateZipFile(uuid, img, altText, shopify, cdnUrl, true);
     } else {
       return null;
     }
   } catch (error) {
-    console.error("Erreur :", error.message);
+    console.error("Erre1ur :", error.message);
     return null;
   }
 }
 
-
-
-async function generateJsonImage(dataJson, shopify) {
+async function generateJsonImage(dataJson, shopify, cdnUrl) {
   // Remplir les informations supplémentaires
   const img = dataJson.imagesrc;
-  const imgName = img ? img.split("/").pop() : "";
-  const uuid = generateCustomUUID(imgName, Date.now().toString());
+
+  const imgName = img ? path.basename(img.split("?")[0]) : "";
+  const uuid = generateCustomUUID(img, "");
 
   return {
     [dataJson.imageLayout]: {
@@ -158,7 +166,8 @@ async function generateJsonImage(dataJson, shopify) {
       imagesrc: img,
       caption: dataJson.caption,
       downloadFile:
-        (await generateZipFile(uuid, img, dataJson.alt, shopify)) || null,
+        (await generateZipFile(uuid, img, dataJson.alt, shopify, cdnUrl)) ||
+        null,
       dropcap: false, // Définir selon vos besoins
       modal: false, // Définir selon vos besoins
       clipboardText: "Copied to clipboard", // Optionnel
@@ -182,7 +191,7 @@ async function generateJsonImage(dataJson, shopify) {
     },
   };
 }
-export async function htmlToJson(htmlString, shopify) {
+export async function htmlToJson(htmlString, shopify, cdnUrl) {
   const dom = new JSDOM(htmlString);
   const elements = Array.from(
     dom.window.document.body
@@ -194,25 +203,28 @@ export async function htmlToJson(htmlString, shopify) {
   let currentBodyCopy = { bodyCopy: { content: [] } };
 
   for (const element of elements) {
-    if (element.tagName === "P") {
+    const data = extractDataJson(element) || {};
+    const type = data.type;
+const location = data.location;
+    if (type === "text" || element.tagName === "P") {
       // Ajouter un paragraphe au bodyCopy
       currentBodyCopy.bodyCopy.content.push({
         type: "text",
+        location: location || "",
         text: element.textContent.trim(),
       });
-    } else if (["H1", "H2", "H3"].includes(element.tagName)) {
+    } else if (type === "header" || type === "header-secondary") {
       // Ajouter un header au bodyCopy
       currentBodyCopy.bodyCopy.content.push({
-        type: "header",
-        text: element.textContent.trim(),
-        level: parseInt(element.tagName.charAt(1), 10),
+        type: data.type,
+        location: location || "",
+        header: element.textContent.trim(),
       });
-    } else if (element.tagName === "FIGURE") {
+    } else if (type === "image") {
       // Extraire les données JSON de la figure
-      const figureDataJson = extractImageDataJson(element);
 
       // Appeler une fonction asynchrone et attendre son résultat
-      const figureData = await generateJsonImage(figureDataJson, shopify);
+      const figureData = await generateJsonImage(data, shopify, cdnUrl);
 
       if (figureData) {
         // Ajouter le bodyCopy en cours au tableau body, s'il n'est pas vide
@@ -236,28 +248,6 @@ export async function htmlToJson(htmlString, shopify) {
   return body;
 }
 
-// Convertit JSON → Ancien HTML
-export function jsonToOldHtml(jsonContent) {
-  return jsonContent
-    .map((component) => {
-      if (component.bodyCopy) {
-        return component.bodyCopy.content
-          .map((contentItem) => {
-            if (contentItem.type === "text") {
-              return `<p>${contentItem.text}</p>`;
-            } else if (contentItem.type === "header") {
-              return `<${"h" + contentItem.level}>${contentItem.text}</${"h" + contentItem.level}>`;
-            }
-          })
-          .join("");
-      } else if (component.imageInline) {
-        return `<img src="${component.imageInline.src}" alt="${component.imageInline.alt}" />`;
-      } else {
-        return `<!-- Composant inconnu -->`;
-      }
-    })
-    .join("");
-}
 
 export function jsonToHtml(jsonContent) {
   let html = ""; // Contient le HTML généré
@@ -279,14 +269,11 @@ export function jsonToHtml(jsonContent) {
         .map((contentItem) => {
           if (contentItem.type === "text") {
             return `<div class="pagebody-copy">${contentItem.text}</div>`;
+          } else if (contentItem.type === "header-secondary") {
+         
+            return `<h2 class"pagebody-header pagebody-header--secondary">${contentItem.header}</h2>`;
           } else if (contentItem.type === "header") {
-            if (contentItem.level === 2) {
-              return `<h2 class="pagebody-header"><strong>${contentItem.text}</strong></h2>`;
-            } else if (contentItem.level === 3) {
-              return `<div class="pagebody-copy"><strong>${contentItem.text}</strong></div>`;
-            } else {
-              return `<h1 class="pagebody-header"><strong>${contentItem.text}</strong></h1>`;
-            }
+            return `<h2 class"pagebody-header">${contentItem.header}</h2>`;
           }
         })
         .join("");
@@ -300,14 +287,102 @@ export function jsonToHtml(jsonContent) {
         isOpen = false;
       }
 
-      // Ajoute l'image avec un conteneur propre
-      html += `
-          <div class="pagebody text component">
+      const element = component.imageInline || {};
+      const img = element.image || {};
+      const imgMetadata = img.metadata || {};
+      const alt = imgMetadata.alt || "";
+      const uuid = imgMetadata.uuid || "";
+      const srcs = imgMetadata.srcs || {};
+      const caption = component.caption || "";
+      const downloadFile = component.downloadFile || "";
+
+      // Préparer les sources d'image
+      const imgSmall =
+        srcs.small && srcs.small2x
+          ? `src="${srcs.small}" srcset="${srcs.small} 1x, ${srcs.small2x} 2x"`
+          : srcs.small
+            ? `src="${srcs.small}"`
+            : srcs.small2x
+              ? `src="${srcs.small2x}"`
+              : "";
+
+      const imgMedium =
+        srcs.medium && srcs.medium2x
+          ? `src="${srcs.medium}" srcset="${srcs.medium} 1x, ${srcs.medium2x} 2x"`
+          : srcs.medium
+            ? `src="${srcs.medium}"`
+            : srcs.medium2x
+              ? `src="${srcs.medium2x}"`
+              : "";
+
+      const mainImg =
+        srcs.large && srcs.large2x
+          ? `src="${srcs.large}" srcset="${srcs.large} 1x, ${srcs.large2x} 2x"`
+          : srcs.large
+            ? `src="${srcs.large}"`
+            : srcs.large2x
+              ? `src="${srcs.large2x}"`
+              : element.imagesrc
+                ? `src="${element.imagesrc}"`
+                : "";
+
+      // Construire le HTML pour l'image uniquement si des données sont disponibles
+      if (mainImg || imgSmall || imgMedium) {
+        html += `
+          <figure class="image component image-inline ${
+            element["body-copy-wide"] ? "body-copy-wide" : ""
+          }" ${alt ? `aria-label="Médias, ${alt}"` : ""}>
             <div class="component-content">
-              <img src="${component.imageInline.src}" alt="${component.imageInline.alt}" />
+              <div class="image-sharesheet" ${
+                img.analytics?.asset
+                  ? `data-analytics-activitymap-region-id="${img.analytics.asset}"`
+                  : ""
+              }>
+                <style type='text/css'>
+                  .image-${uuid} {
+                    width: 100%;
+                    padding-top: 56.224487%;
+                    height: auto;
+                  }
+                  @media only screen and (max-width: 1068px) {
+                    .image-${uuid} {
+                      padding-top: 56.213875%;
+                    }
+                  }
+                  @media only screen and (max-width: 734px) {
+                    .image-${uuid} {
+                      padding-top: 56.25%;
+                    }
+                  }
+                </style>
+                <div class="image-${uuid} image-asset">
+                  <picture class="picture">
+                    ${imgSmall ? `<source media="(max-width: 734px)" ${imgSmall}/>` : ""}
+                    ${imgMedium ? `<source media="(max-width: 1068px)" ${imgMedium}/>` : ""}
+                  <img class="picture-image" ${mainImg || imgSmall || imgMedium} alt="${alt}" />
+                  </picture>
+                </div>
+              </div>
             </div>
-          </div>
+            ${
+              caption || downloadFile
+                ? `
+                <div class="image-description">
+                  ${caption ? `<div>${caption}</div>` : ""}
+                  ${
+                    downloadFile
+                      ? `<a href="${downloadFile}" class="icon-arrowdown icon nr-cta-download" download 
+                            aria-label="Télécharger les médias${alt ? `, ${alt}` : ""}">
+                          </a>`
+                      : ""
+                  }
+                </div>
+              `
+                : ""
+            }
+          </figure>
         `;
+      }
     } else {
       // Gestion d'un type inconnu
       if (!isOpen) {
@@ -332,13 +407,14 @@ export function jsonToHtml(jsonContent) {
   return html;
 }
 
-export async function generateHtml(inputHtml, shopify) {
+export async function generateHtml(inputHtml, shopify, cdnUrl) {
   console.log("inputHtml", inputHtml);
 
   // Conversion HTML → JSON
   const jsonContent = await htmlToJson(
     supprimerDivEtGarderLesAutres(inputHtml),
     shopify,
+    cdnUrl,
   );
   console.log("JSON généré :", JSON.stringify(jsonContent, null, 2));
 
