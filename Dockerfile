@@ -6,14 +6,10 @@ WORKDIR /app
 
 ENV NODE_ENV=production
 
-COPY package.json package-lock.json* ./
 
-RUN npm ci --omit=dev && npm cache clean --force
-# Remove CLI packages since we don't need them in production by default.
-# Remove this line if you want to run CLI commands in your container.
-RUN npm remove @shopify/cli
 
-# Installer Git
+
+#Installer Git
 RUN apk update && apk add git
 
 # Étape 8 : Copier la clé privée SSH pour accéder aux sous-modules Git
@@ -35,6 +31,17 @@ RUN echo "Current working directory after submodule init: $(pwd)"
 # Étape 11 : Initialiser les sous-modules Git
 RUN git submodule update --init --recursive
 RUN git submodule update --remote
+
+
+
+
+
+COPY package.json package-lock.json* ./
+
+RUN npm ci --omit=dev && npm cache clean --force
+# Remove CLI packages since we don't need them in production by default.
+# Remove this line if you want to run CLI commands in your container.
+RUN npm remove @shopify/cli
 
 COPY . .
 
