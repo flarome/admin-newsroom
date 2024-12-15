@@ -5,3 +5,7 @@
 [submodule "app/data-shopify"]
 	path = app/data-shopify
 	url = git@github.com:flaromedeveloper/data-shopify
+[submodule "public/flarome.com-fr"]
+	path = public/flarome.com-fr
+	url = git@github.com:flaromedeveloper/flarome.com-fr
+	branch = "14#flarome.com_08-12-24_16-25-28@3.0.0"

@@ -3,7 +3,7 @@ import { Editor as Tinymce } from "@tinymce/tinymce-react";
 import setup from "./config/setup";
 import toolbar from "./config/toolbar";
 import StyleFormats from "./config/ styleFormats";
-import contentStyle from "./config/contentStyle";
+import contentCss from "./config/contentCss";
 import plugins from "./config/plugins";
 const EditorText = ({ content, setContent, selector }) => {
   return (
@@ -59,7 +59,7 @@ const EditorText = ({ content, setContent, selector }) => {
           },
         },
         advtemplate_templates: [],
-        content_style: contentStyle
+        content_css: contentCss
       
         }}
     />
