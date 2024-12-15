@@ -1,12 +1,3 @@
-FROM node:18-alpine
-
-EXPOSE 3000
-
-WORKDIR /app
-
-ENV NODE_ENV=production
-
-
 
 
 #Installer Git
@@ -31,6 +22,18 @@ RUN echo "Current working directory after submodule init: $(pwd)"
 # Étape 11 : Initialiser les sous-modules Git
 RUN git submodule update --init --recursive
 RUN git submodule update --remote
+
+
+
+
+FROM node:18-alpine
+
+EXPOSE 3000
+
+WORKDIR /app
+
+ENV NODE_ENV=production
+
 
 
 
