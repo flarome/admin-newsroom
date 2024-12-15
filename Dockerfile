@@ -14,7 +14,7 @@ RUN npm ci --omit=dev && npm cache clean --force
 RUN npm remove @shopify/cli
 
 # Installer Git
-RUN apt-get update && apt-get install -y git
+RUN apk update && apk add git
 
 # Étape 8 : Copier la clé privée SSH pour accéder aux sous-modules Git
 COPY /.ssh/id_rsa /root/.ssh/id_rsa
