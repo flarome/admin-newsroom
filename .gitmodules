@@ -1,0 +1,7 @@
+[submodule "app/flarome.com-fr"]
+	path = app/flarome.com-fr
+	url = git@github.com:flaromedeveloper/flarome.com-fr
+	branch = "14#flarome.com_08-12-24_16-25-28@3.0.0"
+[submodule "app/data-shopify"]
+	path = app/data-shopify
+	url = git@github.com:flaromedeveloper/data-shopify
