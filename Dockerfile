@@ -27,6 +27,11 @@ RUN chmod 600 /root/.ssh/id_rsa.pub
 # Étape 10 : Désactiver la vérification de l'hôte SSH pour éviter des questions interactives
 RUN echo "Host github.com\n  IdentityFile /root/.ssh/id_rsa\n  StrictHostKeyChecking no" > /root/.ssh/config
 
+
+
+# Afficher de nouveau le répertoire actuel après la commande `git submodule update`
+RUN echo "Current working directory after submodule init: $(pwd)"
+
 # Étape 11 : Initialiser les sous-modules Git
 RUN git submodule update --init --recursive
 RUN git submodule update --remote
