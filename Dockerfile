@@ -13,6 +13,9 @@ RUN npm ci --omit=dev && npm cache clean --force
 # Remove this line if you want to run CLI commands in your container.
 RUN npm remove @shopify/cli
 
+# Installer Git
+RUN apt-get update && apt-get install -y git
+
 # Étape 8 : Copier la clé privée SSH pour accéder aux sous-modules Git
 COPY /.ssh/id_rsa /root/.ssh/id_rsa
 COPY /.ssh/id_rsa.pub /root/.ssh/id_rsa.pub
