@@ -12,7 +12,7 @@ echo "Current dir"
 pwd
 
 echo "ISV 202"
-ls /opt/render/project/src/app/data-shopify
+ls /opt/render/project/src
 
 # Configuration de SSH pour utiliser les clés fournies dans le projet
 echo "Configuration de SSH..."
