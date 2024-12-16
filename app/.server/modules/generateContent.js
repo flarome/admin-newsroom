@@ -273,6 +273,14 @@ const location = data.location;
   return body;
 }
 
+function generateLocation(item) {
+
+  return item?.location ? `
+  <strong><span class="pagebody-location">${item.location.toUpperCase()}</span></strong>
+
+  ` : "";
+
+}
 
 export function jsonToHtml(jsonContent) {
   let html = ""; // Contient le HTML généré
@@ -292,13 +300,20 @@ export function jsonToHtml(jsonContent) {
       // Génère les éléments de contenu texte
       html += component.bodyCopy.content
         .map((contentItem) => {
+          const location = generateLocation(contentItem);
           if (contentItem.type === "text") {
-            return `<div class="pagebody-copy">${contentItem.text}</div>`;
+            return `
+            <div class="pagebody-copy">  ${location}${contentItem.text}</div>
+            
+
+             
+
+            `;
           } else if (contentItem.type === "header-secondary") {
          
-            return `<h2 class="pagebody-header pagebody-header--secondary">${contentItem.header}</h2>`;
+            return `<h2 class="pagebody-header pagebody-header--secondary">  ${location}${contentItem.header}</h2>`;
           } else if (contentItem.type === "header") {
-            return `<h2 class="pagebody-header">${contentItem.header}</h2>`;
+            return `<h2 class="pagebody-header">  ${location}${contentItem.header}</h2>`;
           }
         })
         .join("");

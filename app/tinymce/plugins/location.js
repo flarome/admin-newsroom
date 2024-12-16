@@ -97,7 +97,8 @@ export default function location(editor) {
                 // Insérer le contenu au début du parent
                 const strongElement = document.createElement("strong");
                 strongElement.setAttribute("data-location", "");
-  
+                strongElement.setAttribute("data-mce-ignore", "");
+               
                 locationSpan = document.createElement("span");
                 locationSpan.className = "pagebody-location";
                 locationSpan.setAttribute("data-location-content", ""); 
