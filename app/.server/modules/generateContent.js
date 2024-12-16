@@ -318,8 +318,8 @@ export function jsonToHtml(jsonContent) {
       const alt = imgMetadata.alt || "";
       const uuid = imgMetadata.uuid || "";
       const srcs = imgMetadata.srcs || {};
-      const caption = component.caption || "";
-      const downloadFile = component.downloadFile || "";
+      const caption = element.caption || "";
+      const downloadFile = element.downloadFile || "";
 
       // Préparer les sources d'image
       const imgSmall =
