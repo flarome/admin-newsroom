@@ -9,3 +9,11 @@
 	path = public/flarome.com-fr
 	url = git@github.com:flaromedeveloper/flarome.com-fr
 	branch = "14#flarome.com_08-12-24_16-25-28@3.0.0"
+[submodule "public/--force"]
+	path = public/--force
+	url = git@github.com:flaromedeveloper/flarome.com-fr.git
+	branch = "14#flarome.com_08-12-24_16-25-28@3.0.0"
+[submodule "public/web"]
+	path = public/web
+	url = git@github.com:flaromedeveloper/flarome.com-fr.git
+	branch = "14#flarome.com_08-12-24_16-25-28@3.0.0"
