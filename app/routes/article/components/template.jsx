@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback } from "react";
+import React, { useCallback } from "react";
 import { Select } from "@shopify/polaris";
 
 const Template = ({ templates: options, template, setTemplate, url, isPublished }) => {

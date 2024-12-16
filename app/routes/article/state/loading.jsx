@@ -1,5 +1,5 @@
 import React from "react";
-import { SkeletonPage, Layout, LegacyCard, SkeletonBodyText, TextContainer, SkeletonDisplayText, SkeletonThumbnail, PageActions } from "@shopify/polaris";
+import { SkeletonPage, Layout, LegacyCard, SkeletonBodyText, TextContainer, SkeletonDisplayText, PageActions } from "@shopify/polaris";
 
 const Loading = () => {
   return (

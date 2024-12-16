@@ -1,5 +1,4 @@
 import React from "react";
-import { TextField, Box } from "@shopify/polaris";
 
 const HandleDeleteBanner = ({ isModalOpen, toggleModal, title }) => {
   return (

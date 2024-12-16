@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import striptags from "striptags";
 import { truncateWords } from "../../../global-modules/utils/truncateWords";
-import { TextField, FormLayout, Card, BlockStack, InlineStack, Text, Button, Bleed, Divider, Checkbox } from "@shopify/polaris";
+import { TextField, FormLayout, Card, BlockStack, InlineStack, Bleed, Divider, Checkbox } from "@shopify/polaris";
 
 const Seo = ({ isNewArticle, errorHandle, blogUrl, metaDescription,  redirectNewHandle, setRedirectNewHandle, initialHandle, setMetaDescription, metaTitle, setMetaTitle, handle, setMetaHandle, title, content: c1 }) => {
   const [isModified, setIsModified] = useState(false); // Tracks if handle is modified

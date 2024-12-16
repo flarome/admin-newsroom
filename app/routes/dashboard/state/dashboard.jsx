@@ -3,28 +3,17 @@ import React, { useState, useMemo, useCallback } from "react";
 import { getArticleInfo } from "../../modules/getInfo";
 import {
   Page,
-  Badge,
   Layout,
   TextField,
   Thumbnail,
-  FormLayout,
-  Modal,
-  PageActions,
   Card,
   Box,
   BlockStack,
   InlineStack,
-  Text,
   Button,
-  Bleed,
-  Divider,
-  Icon,
-  LegacyCard,
   ResourceList,
-  Avatar,
   ResourceItem,
   LegacyFilters,
-  Link,
 } from "@shopify/polaris";
 import {
   ChevronLeftIcon,
