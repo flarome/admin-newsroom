@@ -18,7 +18,6 @@ const EditorText = ({ content, setContent, selector }) => {
         verify_html: false, // Désactive la validation du HTML (préserve le contenu tel quel)
         entity_encoding: "raw", // Conserve les entités HTML sans les encoder
         inline: false, // Désactive l'édition inline si activée
-        content_css: false, // Utilise le style par défaut pour éviter les interférences
         valid_elements: "*[*]", // Autorise tous les éléments et attributs (aucune restriction)
         valid_children: "+body[style|script|div],+div[style|p|a]", // Facultatif : autorise des structures spécifiques
         cleanup: false, // Désactive tout nettoyage du HTML
