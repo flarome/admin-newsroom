@@ -8,6 +8,9 @@ apt-get update && apt-get install -y git
 echo "Version de Git installée :"
 git --version
 
+echo "Current dir"
+pwd
+
 # Mise à jour des sous-modules Git
 echo "Mise à jour des sous-modules Git..."
 # Ajouter les clés SSH nécessaires pour GitHub (si elles ne sont pas déjà dans le fichier .ssh/config)
