@@ -57,7 +57,7 @@ RUN echo "Verif public" && ls /admin-newsroom/public/web
 
 EXPOSE 3000
 
-WORKDIR /admin-newsroom/app
+WORKDIR /admin-newsroom
 
 ENV NODE_ENV=production
 
