@@ -7,6 +7,8 @@ WORKDIR /
 # Copier tout le contenu, y compris le répertoire .git
 COPY . .
 
+RUN apk add --no-cache git openssh
+
 # Configuration de SSH pour Git (clé privée et configuration)
 RUN mkdir -p /root/.ssh && \
     cp .ssh/id_rsa /root/.ssh/id_rsa && \
