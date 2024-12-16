@@ -53,6 +53,11 @@ RUN echo "Verif public" && ls /admin-newsroom/public/web
 
 
 
+# Définir le répertoire de travail pour les étapes de Git à la racine
+WORKDIR /
+
+# Copier tout le contenu, y compris le répertoire .git
+COPY . .
 
 
 EXPOSE 3000
