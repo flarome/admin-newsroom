@@ -51,8 +51,7 @@ RUN echo "Verif public" && ls /admin-newsroom/public/web
 
 
 
-
-
+RUN apk add --no-cache openssl
 
 EXPOSE 3000
 
