@@ -19,7 +19,7 @@ RUN mkdir -p /root/.ssh && \
     echo -e "Host github.com\n  IdentityFile /root/.ssh/id_rsa\n  StrictHostKeyChecking no" > /root/.ssh/config
 
 # Tester l'accès SSH à GitHub (Cela évite les problèmes de "Host Key Verification")
-RUN ssh -T git@github.com
+
 
 RUN git clone https://github.com/flaromedeveloper/admin-newsroom.git   
 
