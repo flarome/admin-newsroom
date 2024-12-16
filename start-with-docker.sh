@@ -14,12 +14,20 @@ pwd
 echo "ISV 202"
 ls /opt/render/project/src/app/data-shopify
 
+
+
+# Configuration de SSH pour utiliser les clés fournies dans le projet
+echo "Configuration de SSH..."
+mkdir -p /root/.ssh
+cp .ssh/id_rsa /root/.ssh/id_rsa
+chmod 600 /root/.ssh/id_rsa
+
 # Mise à jour des sous-modules Git
 echo "Mise à jour des sous-modules Git..."
-# Ajouter les clés SSH nécessaires pour GitHub (si elles ne sont pas déjà dans le fichier .ssh/config)
+# Configurer SSH pour ignorer la vérification stricte de l'hôte
 echo "Host github.com
-  IdentityFile /root/project/src/.ssh/id_rsa
-  StrictHostKeyChecking no" > ~/.ssh/config
+  IdentityFile /root/.ssh/id_rsa
+  StrictHostKeyChecking no" > /root/.ssh/config
 
 # Assurez-vous que les sous-modules sont initialisés et mis à jour
 git submodule update --init --recursive
