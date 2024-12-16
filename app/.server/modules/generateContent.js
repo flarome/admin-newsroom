@@ -62,7 +62,7 @@ async function getLegalContent() {
 }
 
 (async () => {
-  await getLegalCotent();
+  await getLegalContent();
 })();
 
 async function generateZipFile(
