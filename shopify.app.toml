@@ -3,7 +3,7 @@
 client_id = "cee8ee508513d9fd031e6e8a453f8331"
 name = "Newsroom"
 handle = "newsroom"
-application_url = "https://social-identify-beer-theoretical.trycloudflare.com"
+application_url = "https://bathroom-icon-slip-philips.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "read_content,read_draft_orders,read_files,read_metaobjects,read_online
 
 [auth]
 redirect_urls = [
-  "https://social-identify-beer-theoretical.trycloudflare.com/auth/callback",
-  "https://social-identify-beer-theoretical.trycloudflare.com/auth/shopify/callback",
-  "https://social-identify-beer-theoretical.trycloudflare.com/api/auth/callback"
+  "https://bathroom-icon-slip-philips.trycloudflare.com/auth/callback",
+  "https://bathroom-icon-slip-philips.trycloudflare.com/auth/shopify/callback",
+  "https://bathroom-icon-slip-philips.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
