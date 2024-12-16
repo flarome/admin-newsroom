@@ -58,7 +58,7 @@ import "../styles/theme.css";
 import "../styles/articleDetails.css";
 import ToastNotification from "../components/toastNotification";
 
-import { Frame, Toast } from "@shopify/polaris";
+import { Frame, FooterHelp } from "@shopify/polaris";
 
 import { ToastProvider } from "../context/toast";
 
@@ -92,6 +92,15 @@ export default function App() {
 
       </ToastProvider>
       </Frame>
+
+      <FooterHelp>
+      Copyright © 2024 
+      <Link url="https://www.flarome.com">
+      Flarome
+      </Link>
+      . Touts droits Réservés.
+    </FooterHelp>
+
     </AppProvider>
   );
 }
