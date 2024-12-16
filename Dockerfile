@@ -23,7 +23,7 @@ RUN git config --global user.name "flaromedeveloper" && \
    git config --global user.email "developer@flarome.com"
 
 
-RUN git clone https://github.com/flaromedeveloper/admin-newsroom.git   
+RUN git clone git@github.com:flaromedeveloper/admin-newsroom.git   
 
 
 # Vérifier que le répertoire public/web a bien été initialisé
