@@ -8,7 +8,8 @@ WORKDIR /
 COPY . .
 
 # Vérifier que le répertoire public/web a bien été initialisé
-RUN echo "Verif201" && ls
+RUN echo "Verif201" && ls -a
+
 
 RUN apk add --no-cache git openssh
 
