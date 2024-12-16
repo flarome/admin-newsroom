@@ -196,6 +196,23 @@ async function generateJsonImage(dataJson, shopify, cdnUrl) {
     },
   };
 }
+function cleanHtml(element) {
+  const clonedElement = element.cloneNode(true); // Cloner l'élément pour éviter de modifier l'original
+
+  // Fonction récursive pour supprimer les nœuds avec l'attribut data-mce-ignore
+  function removeIgnoredNodes(node) {
+    if (node.nodeType === 1 && node.hasAttribute("data-mce-ignore")) {
+      node.remove(); // Supprimer l'élément si l'attribut existe
+    } else if (node.childNodes.length > 0) {
+      for (let i = node.childNodes.length - 1; i >= 0; i--) {
+        removeIgnoredNodes(node.childNodes[i]); // Vérifier les enfants récursivement
+      }
+    }
+  }
+
+  removeIgnoredNodes(clonedElement);
+  return clonedElement.innerHTML; // Récupérer le HTML nettoyé
+}
 export async function htmlToJson(htmlString, shopify, cdnUrl) {
   const dom = new JSDOM(htmlString);
   const elements = Array.from(
@@ -211,19 +228,23 @@ export async function htmlToJson(htmlString, shopify, cdnUrl) {
     const data = extractDataJson(element) || {};
     const type = data.type;
 const location = data.location;
+
+    // Nettoyer le contenu HTML pour retirer les éléments avec data-mce-ignore
+    const cleanedHtml = cleanHtml(element).trim();
+
     if (type === "text" || element.tagName === "P") {
       // Ajouter un paragraphe au bodyCopy
       currentBodyCopy.bodyCopy.content.push({
         type: "text",
         location: location || "",
-        text: element.textContent.trim(),
+        text: cleanedHtml,
       });
     } else if (type === "header" || type === "header-secondary") {
       // Ajouter un header au bodyCopy
       currentBodyCopy.bodyCopy.content.push({
         type: data.type,
         location: location || "",
-        header: element.textContent.trim(),
+        header: cleanedHtml,
       });
     } else if (type === "image") {
       // Extraire les données JSON de la figure
@@ -276,9 +297,9 @@ export function jsonToHtml(jsonContent) {
             return `<div class="pagebody-copy">${contentItem.text}</div>`;
           } else if (contentItem.type === "header-secondary") {
          
-            return `<h2 class"pagebody-header pagebody-header--secondary">${contentItem.header}</h2>`;
+            return `<h2 class="pagebody-header pagebody-header--secondary">${contentItem.header}</h2>`;
           } else if (contentItem.type === "header") {
-            return `<h2 class"pagebody-header">${contentItem.header}</h2>`;
+            return `<h2 class="pagebody-header">${contentItem.header}</h2>`;
           }
         })
         .join("");
