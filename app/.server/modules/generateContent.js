@@ -14,25 +14,7 @@ import fsPromise from "fs/promises";
 const __filename = fileURLToPath(import.meta.url); // Conversion de l'URL du module vers un chemin de fichier
 const __dirname = dirname(__filename); // Obtention du répertoire du fichier
 
-let fileContent = null;
-async function getLegalCotent() {
-  const filePath = path.resolve(
-    __dirname,
-    "../../data-shopify/blog/legal/media.txt",
-  ); // Résoudre le chemin absolu
 
-  try {
-    fileContent = await fsPromise.readFile(filePath, "utf8");
-   
-    console.log("rerezhjrehjrereer", fileContent); // Affiche le contenu du fichier
-    return fileContent;
-  } catch (err) {
-    console.error("Erreur de lecture :", err);
-  }
-}
-(async () => {
-  await getLegalCotent();
-})();
 
 
 /**
@@ -54,20 +36,34 @@ function generateCustomUUID(name, id) {
   return uuidLike;
 }
 
-export function supprimerDivEtGarderLesAutres(texteHTML) {
-  // Créer un document DOM avec JSDOM
-  const dom = new JSDOM(texteHTML);
-  const document = dom.window.document;
 
-  // Supprimer toutes les balises <div>
-  const divs = document.querySelectorAll("div");
-  divs.forEach(function (div) {
-    div.parentNode.removeChild(div);
-  });
+let fileContent = null;
+// Lecture du fichier media.txt
+async function getLegalContent() {
+  const filePath = path.resolve(
+    __dirname,
+    "../../data-shopify/blog/legal/media.txt"
+  ); // Résoudre le chemin absolu
 
-  // Retourner le texte sans les <div>, mais avec les autres balises HTML
-  return document.body.innerHTML;
+  if (fileContent !== null) return fileContent; // Si déjà lu, retourner le contenu
+
+  try {
+    fileContent = await fsPromise.readFile(filePath, "utf8");
+    console.log("Contenu de media.txt chargé :", fileContent);
+    return fileContent;
+  } catch (err) {
+    console.error(
+      "Erreur lors de la lecture de media.txt, contenu par défaut utilisé :",
+      err.message
+    );
+    fileContent = ""; // Utiliser un contenu vide en cas d'erreur
+    return fileContent;
+  }
 }
+
+(async () => {
+  await getLegalCotent();
+})();
 
 async function generateZipFile(
   uuid,
@@ -100,7 +96,10 @@ async function generateZipFile(
     // Ajouter le fichier RTF au ZIP
     // Définir le chemin local du fichier RTF
 
-    zip.addFile("LEGAL_NOTICE.txt", Buffer.from(fileContent ? fileContent : await getLegalCotent(), "utf-8"));
+   // Ajouter le fichier LEGAL_NOTICE.txt au ZIP
+   const legalContent = fileContent || (await getLegalContent());
+   zip.addFile("LEGAL_NOTICE.txt", Buffer.from(legalContent, "utf-8"));
+
 
     // Définir le chemin temporaire
     const baseDir = path.resolve();
@@ -438,7 +437,7 @@ export async function generateHtml(inputHtml, shopify, cdnUrl) {
 
   // Conversion HTML → JSON
   const jsonContent = await htmlToJson(
-    supprimerDivEtGarderLesAutres(inputHtml),
+    inputHtml,
     shopify,
     cdnUrl,
   );
