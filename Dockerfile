@@ -53,16 +53,20 @@ RUN echo "Verif public" && ls /admin-newsroom/public/web
 
 
 
+
+
+
+EXPOSE 3000
+
+WORKDIR /admin-newsroom
+
 # Définir le répertoire de travail pour les étapes de Git à la racine
 WORKDIR /
 
 # Copier tout le contenu, y compris le répertoire .git
 COPY . .
 
-
-EXPOSE 3000
-
-WORKDIR /admin-newsroom/app
+WORKDIR /app
 
 ENV NODE_ENV=production
 
