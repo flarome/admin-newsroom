@@ -21,22 +21,26 @@ const Extrait = ({ setExtrait, extrait }) => {
 
           {isOpen && (
             <div className="v7Z1h">
-              <div className="Polaris-Labelled--hidden">
-                <div className="Polaris-Labelled__LabelWrapper">
-                  <div className="Polaris-Label">
-                    <label id="contentLabel" htmlFor="extrait" className="Polaris-Label__Text">
-                      <span className="Polaris-Text--root Polaris-Text--bodyMd">Ajoutez un résumé de l’article qui s’affichera sur votre page d’accueil ou votre blog.</span>
-                    </label>
-                  </div>
-                </div>
-                <div className="Polaris-Connected">
-                  <div className="Polaris-Connected__Item Polaris-Connected__Item--primary">
 
-                    <EditorText content={extrait} setContent={setExtrait} selector="extrait" />
+    
 
-                  </div>
-                </div>
-              </div>
+
+     
+
+                    <TextField
+                    label="Ajoutez un résumé de l’article qui s’affichera sur votre page d’accueil ou votre blog."
+    labelHidden
+    onChange={(e) => setExtrait(e.target.value)}
+    autoComplete="off"
+    value={extrait}
+    id={extrait}
+    type="text"
+    multiline={4}
+    clearButton={true}
+    onClearButtonClick={() => setExtrait("")} // Callback pour gérer l'effacement
+  />
+
+
 
 
              

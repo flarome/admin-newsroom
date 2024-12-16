@@ -5,7 +5,7 @@ import fetch from "node-fetch";
 import crypto from "crypto";
 import path, { dirname } from "path";
 import handle from "../../global-modules/utils/handle";
- 
+
 import { extractDataJson } from "../../shared-instances/content/normalizeData";
 import uploadToShopify from "../uploadFile";
 import fs from "fs";
@@ -13,9 +13,6 @@ import fsPromise from "fs/promises";
 
 const __filename = fileURLToPath(import.meta.url); // Conversion de l'URL du module vers un chemin de fichier
 const __dirname = dirname(__filename); // Obtention du répertoire du fichier
-
-
-
 
 /**
  * Génère un UUID basé sur la position, la date/heure et un namespace personnalisé.
@@ -36,13 +33,12 @@ function generateCustomUUID(name, id) {
   return uuidLike;
 }
 
-
 let fileContent = null;
 // Lecture du fichier media.txt
 async function getLegalContent() {
   const filePath = path.resolve(
     __dirname,
-    "../../data-shopify/blog/legal/media.txt"
+    "../../data-shopify/blog/legal/media.txt",
   ); // Résoudre le chemin absolu
 
   if (fileContent !== null) return fileContent; // Si déjà lu, retourner le contenu
@@ -54,7 +50,7 @@ async function getLegalContent() {
   } catch (err) {
     console.error(
       "Erreur lors de la lecture de media.txt, contenu par défaut utilisé :",
-      err.message
+      err.message,
     );
     fileContent = ""; // Utiliser un contenu vide en cas d'erreur
     return fileContent;
@@ -96,10 +92,9 @@ async function generateZipFile(
     // Ajouter le fichier RTF au ZIP
     // Définir le chemin local du fichier RTF
 
-   // Ajouter le fichier LEGAL_NOTICE.txt au ZIP
-   const legalContent = fileContent || (await getLegalContent());
-   zip.addFile("LEGAL_NOTICE.txt", Buffer.from(legalContent, "utf-8"));
-
+    // Ajouter le fichier LEGAL_NOTICE.txt au ZIP
+    const legalContent = fileContent || (await getLegalContent());
+    zip.addFile("LEGAL_NOTICE.txt", Buffer.from(legalContent, "utf-8"));
 
     // Définir le chemin temporaire
     const baseDir = path.resolve();
@@ -226,11 +221,10 @@ export async function htmlToJson(htmlString, shopify, cdnUrl) {
   for (const element of elements) {
     const data = extractDataJson(element) || {};
     const type = data.type;
-const location = data.location;
+    const location = data.location;
 
     // Nettoyer le contenu HTML pour retirer les éléments avec data-mce-ignore
     const cleanedHtml = cleanHtml(element).trim();
-
 
     if (cleanedHtml === "") {
       // Si l'élément est vide, fermer le bodyCopy actuel et en ouvrir un nouveau
@@ -241,7 +235,6 @@ const location = data.location;
       continue; // Passer au prochain élément
     }
 
-    
     if (type === "text" || element.tagName === "P") {
       // Ajouter un paragraphe au bodyCopy
       currentBodyCopy.bodyCopy.content.push({
@@ -285,12 +278,12 @@ const location = data.location;
 }
 
 function generateLocation(item) {
-
-  return item?.location ? `
+  return item?.location
+    ? `
   <strong><span class="pagebody-location">${item.location.toUpperCase()}</span></strong>
 
-  ` : "";
-
+  `
+    : "";
 }
 
 export function jsonToHtml(jsonContent) {
@@ -321,7 +314,6 @@ export function jsonToHtml(jsonContent) {
 
             `;
           } else if (contentItem.type === "header-secondary") {
-         
             return `<h2 class="pagebody-header pagebody-header--secondary">  ${location}${contentItem.header}</h2>`;
           } else if (contentItem.type === "header") {
             return `<h2 class="pagebody-header">  ${location}${contentItem.header}</h2>`;
@@ -462,11 +454,7 @@ export async function generateHtml(inputHtml, shopify, cdnUrl) {
   console.log("inputHtml", inputHtml);
 
   // Conversion HTML → JSON
-  const jsonContent = await htmlToJson(
-    inputHtml,
-    shopify,
-    cdnUrl,
-  );
+  const jsonContent = await htmlToJson(inputHtml, shopify, cdnUrl);
   console.log("JSON généré :", JSON.stringify(jsonContent, null, 2));
 
   // Conversion JSON → HTML
