@@ -42,5 +42,13 @@ echo "Mise à jour des sous-modules Git..."
 git submodule update --init --recursive
 git submodule update --remote
 
+cd /opt/render/project/src/public/web
+git sparse-checkout init --cone
+git sparse-checkout set assets
+git submodule update --init --recursive
+
+echo "Verif public"
+ls /opt/render/project/src/public/web
+
 # Vérifiez que tout est à jour
 git submodule status
