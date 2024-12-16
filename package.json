@@ -2,6 +2,9 @@
   "name": "newsroom",
   "private": true,
   "scripts": {
+    "init": "./init.sh",
+    "start-with-docker": "./start-with-docker.sh",
+
     "build": "remix vite:build",
     "dev": "shopify app dev",
     "config:link": "shopify app config link",
@@ -9,7 +12,7 @@
     "deploy": "shopify app deploy",
     "config:use": "shopify app config use",
     "env": "shopify app env",
-    "start-with-docker": "./start-with-docker.sh",
+    
     "start": "remix-serve ./build/server/index.js",
     "docker-start": "npm run setup && npm run start",
     "setup": "prisma generate && prisma migrate deploy",
