@@ -11,11 +11,14 @@ git --version
 echo "Current dir"
 pwd
 
+echo "ISV 202"
+ls /opt/render/project/src/app/data-shopify
+
 # Mise à jour des sous-modules Git
 echo "Mise à jour des sous-modules Git..."
 # Ajouter les clés SSH nécessaires pour GitHub (si elles ne sont pas déjà dans le fichier .ssh/config)
 echo "Host github.com
-  IdentityFile /root/.ssh/id_rsa
+  IdentityFile /root/project/src/.ssh/id_rsa
   StrictHostKeyChecking no" > ~/.ssh/config
 
 # Assurez-vous que les sous-modules sont initialisés et mis à jour
