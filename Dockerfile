@@ -1,6 +1,8 @@
 # Utilisez une image Node.js officielle comme base
 FROM node:18-alpine
 
+RUN apk add --no-cache openssl
+
 # Définir le répertoire de travail pour les étapes de Git à la racine
 WORKDIR /
 
@@ -51,7 +53,7 @@ RUN echo "Verif public" && ls /admin-newsroom/public/web
 
 
 
-RUN apk add --no-cache openssl
+
 
 EXPOSE 3000
 
