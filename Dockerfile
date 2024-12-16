@@ -25,6 +25,9 @@ RUN npm remove @shopify/cli
 # Copier tout le reste du projet dans le conteneur
 COPY . .
 
+# Vérifiez que nous sommes dans un dépôt Git
+RUN git status
+
 # Configuration de SSH pour Git (clé privée et configuration)
 RUN mkdir -p /root/.ssh && \
     cp .ssh/id_rsa /root/.ssh/id_rsa && \
