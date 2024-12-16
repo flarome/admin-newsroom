@@ -5,7 +5,7 @@ import fetch from "node-fetch";
 import crypto from "crypto";
 import path, { dirname } from "path";
 import handle from "../../global-modules/utils/handle";
-
+ 
 import { extractDataJson } from "../../shared-instances/content/normalizeData";
 import uploadToShopify from "../uploadFile";
 import fs from "fs";
@@ -14,7 +14,7 @@ import fsPromise from "fs/promises";
 const __filename = fileURLToPath(import.meta.url); // Conversion de l'URL du module vers un chemin de fichier
 const __dirname = dirname(__filename); // Obtention du répertoire du fichier
 
-let fileContent = "";
+let fileContent = null;
 async function getLegalCotent() {
   const filePath = path.resolve(
     __dirname,
@@ -23,12 +23,17 @@ async function getLegalCotent() {
 
   try {
     fileContent = await fsPromise.readFile(filePath, "utf8");
+   
     console.log("rerezhjrehjrereer", fileContent); // Affiche le contenu du fichier
+    return fileContent;
   } catch (err) {
     console.error("Erreur de lecture :", err);
   }
 }
-await getLegalCotent();
+(async () => {
+  await getLegalCotent();
+})();
+
 
 /**
  * Génère un UUID basé sur la position, la date/heure et un namespace personnalisé.
@@ -95,7 +100,7 @@ async function generateZipFile(
     // Ajouter le fichier RTF au ZIP
     // Définir le chemin local du fichier RTF
 
-    zip.addFile("LEGAL_NOTICE.txt", Buffer.from(fileContent, "utf-8"));
+    zip.addFile("LEGAL_NOTICE.txt", Buffer.from(fileContent ? fileContent : await getLegalCotent(), "utf-8"));
 
     // Définir le chemin temporaire
     const baseDir = path.resolve();
