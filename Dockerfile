@@ -7,8 +7,7 @@ WORKDIR /
 # Copier tout le contenu, y compris le répertoire .git
 COPY . .
 
-# Vérifier que le répertoire public/web a bien été initialisé
-RUN echo "Verif201" && ls -a
+
 
 
 RUN apk add --no-cache git openssh
@@ -20,17 +19,29 @@ RUN mkdir -p /root/.ssh && \
     echo -e "Host github.com\n  IdentityFile /root/.ssh/id_rsa\n  StrictHostKeyChecking no" > /root/.ssh/config
 
 
+RUN git clone https://github.com/flaromedeveloper/admin-newsroom.git   
+
+
+# Vérifier que le répertoire public/web a bien été initialisé
+RUN echo "Verif201" && ls -a
+
+
+
 # Mettre à jour les sous-modules Git depuis la racine
-RUN git submodule update --init --recursive && git submodule update --remote
+
+
+RUN cd admin-newsroom && \
+git submodule update --init --recursive && \
+git submodule update --remote
 
 # Initialisation du sparse-checkout dans le répertoire /public/web
-RUN cd /public/web && \
+RUN cd /admin-newsroom/public/web && \
     git sparse-checkout init --cone && \
     git sparse-checkout set assets && \
     git submodule update --init --recursive
 
 # Vérifier que le répertoire public/web a bien été initialisé
-RUN echo "Verif public" && ls /public/web
+RUN echo "Verif public" && ls /admin-newsroom/public/web
 
 
 
