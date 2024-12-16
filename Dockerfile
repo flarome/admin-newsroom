@@ -42,7 +42,8 @@ git submodule update --remote
 RUN cd /admin-newsroom/public/web && \
     git sparse-checkout init --cone && \
     git sparse-checkout set assets && \
-    git submodule update --init --recursive
+    git submodule update --init --recursive && \
+    cd /
 
 # Vérifier que le répertoire public/web a bien été initialisé
 RUN echo "Verif public" && ls /admin-newsroom/public/web
@@ -59,14 +60,6 @@ WORKDIR /admin-newsroom/app
 
 ENV NODE_ENV=production
 
-
-
-
-
-
-
-
-
 COPY package.json package-lock.json* ./
 
 RUN npm ci --omit=dev && npm cache clean --force
@@ -75,8 +68,6 @@ RUN npm ci --omit=dev && npm cache clean --force
 RUN npm remove @shopify/cli
 
 COPY . .
-
-
 
 RUN npm run build
 
