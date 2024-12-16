@@ -51,6 +51,22 @@ export default defineConfig({
   ],
 
   build: {
+       // 1. Désactive le splitting du code et force tout à être dans un seul fichier
+       rollupOptions: {
+        output: {
+        
+          // manualChunks: () => null,  // Empêche la génération de plusieurs chunks
+          preserveModules: false,  // Désactive la préservation des modules pour les regrouper tous dans un seul fichier
+          compact: true,  // Active la réduction de taille
+          footer: 'console.log("Flarome Newsroom - Version 1");',  // Ajoute un footer
+
+
+        
+        },
+      },
+
+
     assetsInlineLimit: 0,
+
   },
 });
