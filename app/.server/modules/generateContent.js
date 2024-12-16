@@ -231,6 +231,17 @@ const location = data.location;
     // Nettoyer le contenu HTML pour retirer les éléments avec data-mce-ignore
     const cleanedHtml = cleanHtml(element).trim();
 
+
+    if (cleanedHtml === "") {
+      // Si l'élément est vide, fermer le bodyCopy actuel et en ouvrir un nouveau
+      if (currentBodyCopy.bodyCopy.content.length > 0) {
+        body.push(currentBodyCopy); // Ajouter l'actuel au tableau
+        currentBodyCopy = { bodyCopy: { content: [] } }; // Nouveau bodyCopy
+      }
+      continue; // Passer au prochain élément
+    }
+
+    
     if (type === "text" || element.tagName === "P") {
       // Ajouter un paragraphe au bodyCopy
       currentBodyCopy.bodyCopy.content.push({
