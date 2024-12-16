@@ -8,16 +8,18 @@ WORKDIR /
 COPY . .
 
 
-
-
+# Installer git et openssh
 RUN apk add --no-cache git openssh
 
 # Configuration de SSH pour Git (clé privée et configuration)
+# La clé privée `id_rsa` doit être présente dans ton répertoire local, sinon cette étape échouera.
 RUN mkdir -p /root/.ssh && \
     cp .ssh/id_rsa /root/.ssh/id_rsa && \
     chmod 600 /root/.ssh/id_rsa && \
     echo -e "Host github.com\n  IdentityFile /root/.ssh/id_rsa\n  StrictHostKeyChecking no" > /root/.ssh/config
 
+# Tester l'accès SSH à GitHub (Cela évite les problèmes de "Host Key Verification")
+RUN ssh -T git@github.com
 
 RUN git clone https://github.com/flaromedeveloper/admin-newsroom.git   
 
