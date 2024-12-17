@@ -1,20 +1,21 @@
 import {generateImageSources,  extractImageData, generateImageZipFile} from "./modules";
 import { mceToData } from "../../generateContent";
 import { generateCustomUUID } from "../../../modules/uuid";
+import path from "path";
 export function html(element) {
 
 
 
     const {img, imgMetadata, alt, uuid, srcs, caption, downloadFile} = extractImageData(element);
 
-    const { imgSmall, imgMedium, mainImg } = generateImageSources(srcs, fallback);
+    const { imgSmall, imgMedium, mainImg } = generateImageSources(srcs, element?.imagesrc || null);
 
     // Construire le HTML pour l'image uniquement si des données sont disponibles
     if (mainImg || imgSmall || imgMedium) {
       return `
         <figure class="image component image-inline ${
           element["body-copy-wide"] ? "body-copy-wide" : ""
-        }" ${alt ? `aria-label="Médias, ${alt}"` : ""}>
+        }" ${alt ? `aria-label="Méfallbackdias, ${alt}"` : ""}>
           <div class="component-content">
             <div class="image-sharesheet" ${
               img.analytics?.asset

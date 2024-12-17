@@ -1,24 +1,6 @@
 import { extractDataJson } from "../../../shared-instances/content/normalizeData";
 
-// Fonction pour générer initialData à partir de currentData
-function generateInitialData(currentData) {
-  // Initialisation de initialData
-  const initialData = {};
-
-  // Pour chaque clé de currentData, on assigne la valeur à initialData, ou une valeur par défaut
-  Object.keys(currentData).forEach((key) => {
-    // Pour les clés booléennes, on les initialise à false si elles n'ont pas de valeur
-    if (typeof currentData[key] === "boolean") {
-      initialData[key] = currentData[key] || false;
-    }
-    // Pour les autres types, on les initialise à une chaîne vide si elles sont indéfinies
-    else {
-      initialData[key] = currentData[key] || "";
-    }
-  });
-
-  return initialData;
-}
+import { generateInitialData } from "../modules/generateInitialData";
 
 export default function imageSharesheet(editor) {
   const openImageDialog = (currentData = {}, isNew = true, element) => {
@@ -126,7 +108,7 @@ export default function imageSharesheet(editor) {
         { type: "cancel", text: "Cancel" },
         {
           type: "submit",
-          text: currentData.alt ? "Update" : "Insert",
+          text: !isNew ? "Update" : "Insert",
           primary: true,
         },
       ],
@@ -135,6 +117,7 @@ export default function imageSharesheet(editor) {
 
       onSubmit: (api) => {
         const data = api.getData();
+
 
         // Génère les sources conditionnelles
         let sources = [];
