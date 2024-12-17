@@ -1,0 +1,1 @@
+export { html as generateHtmlLocation } from './location';

@@ -1,3 +1,4 @@
+import { forMceOnlyKey } from "../../shared-instances/content/key";
 import {findClosestParentWithValidTag, findClosestParentWithAttribute} from "./modules/data-json";
 
 export default function location(editor) {
@@ -97,7 +98,7 @@ export default function location(editor) {
                 // Insérer le contenu au début du parent
                 const strongElement = document.createElement("strong");
                 strongElement.setAttribute("data-location", "");
-                strongElement.setAttribute("data-mce-ignore", "");
+                strongElement.setAttribute(forMceOnlyKey, "");
                
                 locationSpan = document.createElement("span");
                 locationSpan.className = "pagebody-location";

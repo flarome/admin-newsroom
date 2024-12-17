@@ -46,7 +46,7 @@ const Extrait = ({ setExtrait, extrait }) => {
                 value={extrait}
                 id={extrait}
                 type="text"
-                multiline={4}
+                multiline={5}
                 clearButton={true}
                 onClearButtonClick={() => setExtrait("")} // Callback pour gérer l'effacement
               />

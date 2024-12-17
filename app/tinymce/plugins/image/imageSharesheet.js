@@ -174,7 +174,7 @@ export default function imageSharesheet(editor) {
 
         // Génère le HTML final pour <picture>
         const pictureHtml = `
-        <figure  data-json='${JSON.stringify({ ...generateInitialData(data), type: "image" }) }' class="${data.imageInline ? "image-inline" : ""} ${data.imageBig ? "image-big" : ""} ${data.imageFullbleed ? "image-fullbleed" : ""}">
+        <figure  data-json='${JSON.stringify({ local: {...generateInitialData(data) }, type: "imageInline" }) }' class="${data.imageInline ? "image-inline" : ""} ${data.imageBig ? "image-big" : ""} ${data.imageFullbleed ? "image-fullbleed" : ""}">
           <picture>
             ${sources
               .map(

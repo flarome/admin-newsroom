@@ -1,0 +1,1 @@
+export const forMceOnlyKey = "data-mce-ignore";

@@ -1,4 +1,4 @@
-import { generateHtml } from "./generateContent";
+import generateHtml from "../content/generateContent";
 
 export async function generateArticle(body, isNewArticle, shopify, cdnUrl) {
   const {
