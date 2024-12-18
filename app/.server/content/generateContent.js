@@ -16,39 +16,26 @@ import {
   generateHtmlQuote,
 } from "./components";
 
+
 export function mceToData(element) {
   const data = extractDataJson(element) || {};
   const type = data.type;
   const location = data.location;
+  const dropcaps = data.dropcaps ? Boolean(data.dropcaps) : false;
+    
 
   return {
     data: data?.local || {},
     type,
     location,
+    dropcaps
   };
 }
-export async function htmlToJson(htmlString, shopify, cdnUrl) {
-  const dom = new JSDOM(htmlString);
-  const elements = Array.from(
-    dom.window.document.body
-      ? dom.window.document.body.children
-      : dom.window.document.children,
-  );
-
-  const bodyCopy = {
-    bodyCopy: { content: [], pagebodysmall: false, dropcaps: false },
-  };
-  const body = [];
-  let currentBodyCopy = bodyCopy;
-  let quoteCounter = 0; // Compteur pour suivre les positions des quotes
-
-  for (const element of elements) {
-    const type = mceToData(element).type;
 
     // Nettoyer le contenu HTML pour retirer les éléments avec data-mce-ignore
-    const cleanedHtml = cleanHtml(element).trim();
+   /* const cleanedHtml = cleanHtml(element).trim();
 
-    /*if (cleanedHtml === "" || cleanedHtml === "&nbsp;") {
+    if (cleanedHtml === "" || cleanedHtml === "&nbsp;") {
       // Si l'élément est vide, fermer le bodyCopy actuel et en ouvrir un nouveau
       if (currentBodyCopy.bodyCopy.content.length > 0) {
         body.push(currentBodyCopy); // Ajouter l'actuel au tableau
@@ -57,73 +44,231 @@ export async function htmlToJson(htmlString, shopify, cdnUrl) {
       continue; // Passer au prochain élément
     }*/
 
-    if (type === "text" || element.tagName === "P") {
-      const data = generateJsonText(element);
+      
+/*
+export async function htmlToJson(htmlString, shopify, cdnUrl) {
+  const dom = new JSDOM(htmlString);
+  const elements = Array.from(
+    dom.window.document.body?.children || dom.window.document.children
+  );
 
-      if (data) {
-        currentBodyCopy.bodyCopy.content.push(data);
+  const bodyCopyTemplate = {
+    bodyCopy: { content: [], pagebodysmall: false, dropcaps: false },
+  };
+  const body = [];
+  let currentBodyCopy = { ...bodyCopyTemplate };
+  let isDropcapsSection = false; // Suivi de la section en cours avec dropcaps
+
+  let quoteCounter = 0;
+
+
+  const addCurrentBodyCopyToBody = () => {
+    
+    if (currentBodyCopy.bodyCopy.content.length > 0) {
+      body.push(currentBodyCopy);
+      currentBodyCopy = { ...bodyCopyTemplate }; // Reset bodyCopy
+    }
+  };
+
+  for (const element of elements) {
+    const { type, dropcaps } = mceToData(element);
+
+    if (dropcaps) {
+      console.log('ifdfdss', element, isDropcapsSection);
+      if (isDropcapsSection) {
+       
+        // Terminer la section précédente si une nouvelle dropcaps est rencontrée
+        addCurrentBodyCopyToBody();
       }
-      // Ajouter un paragraphe au bodyCopy
-    } else if (type === "header") {
-      const data = generateJsonHeader(element);
 
-      // Ajouter un header au bodyCopy
+      isDropcapsSection = true; // Activer une nouvelle section avec dropcaps
+      currentBodyCopy.bodyCopy.dropcaps = true;
+    }
 
-      if (data) {
-        currentBodyCopy.bodyCopy.content.push(data);
+
+    switch (type) {
+      case "text":
+      case "P": {
+        const data = generateJsonText(element);
+        if (data) currentBodyCopy.bodyCopy.content.push(data);
+        break;
       }
-    } else if (type === "header-secondary") {
-      const data = generateJsonHeaderSecondary(element);
-
-      if (data) {
-        currentBodyCopy.bodyCopy.content.push(data);
+      case "header": {
+        const data = generateJsonHeader(element);
+        if (data) currentBodyCopy.bodyCopy.content.push(data);
+        break;
       }
-    } else if (type === "quote") {
-      quoteCounter++;
-      const quoteData = generateJsonQuote(element, quoteCounter);
-
-      if (quoteData) {
-        // Ajouter le bodyCopy en cours au tableau body, s'il n'est pas vide
-        if (currentBodyCopy.bodyCopy.content.length > 0) {
-          body.push(currentBodyCopy);
-          currentBodyCopy = bodyCopy; // Réinitialiser bodyCopy
+      case "header-secondary": {
+        const data = generateJsonHeaderSecondary(element);
+        if (data) currentBodyCopy.bodyCopy.content.push(data);
+        break;
+      }
+      case "quote": {
+        quoteCounter++;
+        const quoteData = generateJsonQuote(element, quoteCounter);
+        if (quoteData) {
+          addCurrentBodyCopyToBody();
+          body.push(quoteData);
         }
-
-        body.push({
-          ...quoteData, // Inclure toutes les données extraites du <figure>
-        });
+        break;
       }
-    } else if (type === "imageInline") {
-      // Extraire les données JSON de la figure
-
-      // Appeler une fonction asynchrone et attendre son résultat
-      const figureData = await generateJsonImageInline(
-        element,
-        shopify,
-        cdnUrl,
-      );
-
-      if (figureData) {
-        // Ajouter le bodyCopy en cours au tableau body, s'il n'est pas vide
-        if (currentBodyCopy.bodyCopy.content.length > 0) {
-          body.push(currentBodyCopy);
-          currentBodyCopy = bodyCopy; // Réinitialiser bodyCopy
+      case "imageInline": {
+        const figureData = await generateJsonImageInline(element, shopify, cdnUrl);
+        if (figureData) {
+          addCurrentBodyCopyToBody();
+          body.push(figureData);
         }
-
-        body.push({
-          ...figureData, // Inclure toutes les données extraites du <figure>
-        });
+        break;
       }
+      default:
+        break;
     }
   }
 
-  // Ajouter le dernier bodyCopy au tableau body, s'il n'est pas vide
-  if (currentBodyCopy.bodyCopy.content.length > 0) {
-    body.push(currentBodyCopy);
-  }
+  // Add the last bodyCopy to the body array if not empty
+  addCurrentBodyCopyToBody();
 
   return body;
+}*/
+export async function htmlToJson(htmlString, shopify, cdnUrl) {
+  const dom = new JSDOM(htmlString);
+  const elements = Array.from(
+    dom.window.document.body?.children || dom.window.document.children
+  );
+
+  const bodyCopyTemplate = {
+    bodyCopy: { content: [], pagebodysmall: false, dropcaps: false },
+  };
+
+  const addCurrentBodyCopyToBody = (body, currentBodyCopy) =>
+    currentBodyCopy.bodyCopy.content.length > 0
+      ? [...body, currentBodyCopy]
+      : body;
+
+  const processElement = async (element, state) => {
+    const { body, currentBodyCopy, quoteCounter } = state;
+    const { type, dropcaps } = mceToData(element);
+
+    if (dropcaps) {
+      // Nouvelle section avec dropcaps
+      const newBody = addCurrentBodyCopyToBody(body, currentBodyCopy);
+      const updatedCurrentBodyCopy = {
+        ...bodyCopyTemplate,
+        bodyCopy: { ...bodyCopyTemplate.bodyCopy, dropcaps: true },
+      };
+      const data = generateJsonText(element);
+      return data
+        ? {
+            body: newBody,
+            currentBodyCopy: {
+              ...updatedCurrentBodyCopy,
+              bodyCopy: {
+                ...updatedCurrentBodyCopy.bodyCopy,
+                content: [data],
+              },
+            },
+            quoteCounter,
+          }
+        : { body: newBody, currentBodyCopy: updatedCurrentBodyCopy, quoteCounter };
+    }
+
+    if (type === "text" || type === "P") {
+      const data = generateJsonText(element);
+      return data
+        ? {
+            body,
+            currentBodyCopy: {
+              ...currentBodyCopy,
+              bodyCopy: {
+                ...currentBodyCopy.bodyCopy,
+                content: [...currentBodyCopy.bodyCopy.content, data],
+              },
+            },
+            quoteCounter,
+          }
+        : state;
+    }
+
+    if (type === "header") {
+      const data = generateJsonHeader(element);
+      return data
+        ? {
+            body,
+            currentBodyCopy: {
+              ...currentBodyCopy,
+              bodyCopy: {
+                ...currentBodyCopy.bodyCopy,
+                content: [...currentBodyCopy.bodyCopy.content, data],
+              },
+            },
+            quoteCounter,
+          }
+        : state;
+    }
+     
+    if (type === "header-secondary") {
+      const data = generateJsonHeaderSecondary(element);
+      return data
+        ? {
+            body,
+            currentBodyCopy: {
+              ...currentBodyCopy,
+              bodyCopy: {
+                ...currentBodyCopy.bodyCopy,
+                content: [...currentBodyCopy.bodyCopy.content, data],
+              },
+            },
+            quoteCounter,
+          }
+        : state;
+    }
+    
+
+    if (type === "quote") {
+      const updatedQuoteCounter = quoteCounter + 1;
+      const quoteData = generateJsonQuote(element, updatedQuoteCounter);
+      return quoteData
+        ? {
+            body: addCurrentBodyCopyToBody(body, currentBodyCopy).concat(quoteData),
+            currentBodyCopy: { ...bodyCopyTemplate },
+            quoteCounter: updatedQuoteCounter,
+          }
+        : state;
+    }
+
+    if (type === "imageInline") {
+      const figureData = await generateJsonImageInline(element, shopify, cdnUrl);
+      return figureData
+        ? {
+            body: addCurrentBodyCopyToBody(body, currentBodyCopy).concat(figureData),
+            currentBodyCopy: { ...bodyCopyTemplate },
+            quoteCounter,
+          }
+        : state;
+    }
+
+    return state;
+  };
+
+  const initialState = {
+    body: [],
+    currentBodyCopy: { ...bodyCopyTemplate },
+    quoteCounter: 0,
+  };
+
+  const finalState = await elements.reduce(
+    async (statePromise, element) =>
+      processElement(element, await statePromise),
+    Promise.resolve(initialState)
+  );
+
+  const finalBody = addCurrentBodyCopyToBody(finalState.body, finalState.currentBodyCopy);
+
+  return finalBody;
 }
+
+
+
 
 export function jsonToHtml(jsonContent) {
   let html = ""; // Contient le HTML généré
@@ -131,19 +276,30 @@ export function jsonToHtml(jsonContent) {
 
   jsonContent.forEach((component) => {
     if (component.bodyCopy) {
-      // Vérifie si on doit ouvrir les div principaux
-      if (!isOpen) {
+    
+      if (isOpen) {
         html += `
-            <div class="pagebody text component">
+              </div>
+            </div>
+          `;
+        isOpen = false;
+      }
+      // Vérifie si on doit ouvrir les div principaux
+
+        html += `
+            <div class="pagebody ${component.bodyCopy.pagebodysmall ? "pagebodysmall" : ""} text component ${component.bodyCopy.dropcaps ? "dropcaps" : ""}">
               <div class="component-content">
           `;
         isOpen = true;
-      }
+      
 
       // Génère les éléments de contenu texte
       html += component.bodyCopy.content
         .map((contentItem) => {
+
+
           if (contentItem.type === "text") {
+
             return generateHtmlText(contentItem || {});
           } else if (contentItem.type === "header-secondary") {
             return generateHtmlHeaderSecondary(contentItem);

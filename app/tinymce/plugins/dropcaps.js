@@ -1,97 +1,74 @@
-import { extractDataJson } from "../../shared-instances/content/normalizeData";
-
-import { generateInitialData } from "./modules/generateInitialData";
+import { forMceOnlyKey } from "../../shared-instances/content/key";
+import { findClosestParentWithValidTag, findClosestParentWithAttribute } from "./modules/data-json";
 
 export const type = "dropcaps";
-const dataElement = "data-" + type;
 
-export default function imageSharesheet(editor) {
-  const openImageDialog = (currentData = {}, isNew = true, element) => {
-    const dialogConfig = {
-      title: !isNew ? "Edit Quote" : "Insert Quote",
-      body: {
-        type: "panel",
-        items: [
-          {
-            type: "input",
-            name: "text",
-            label: "Citation",
-          },
-
-          {
-            type: "input",
-            name: "credit",
-            label: "Crédit de la citation",
-          },
-        ],
-      },
-      buttons: [
-        { type: "cancel", text: "Cancel" },
-        {
-          type: "submit",
-          text: !isNew ? "Update" : "Insert",
-          primary: true,
-        },
-      ],
-
-      initialData: generateInitialData(currentData),
-      onSubmit: (api) => {
-        const data = api.getData();
-
-        // Structure des données à stocker dans data-json
-
-        // Génère le HTML final pour <picture>
-        const pictureHtml = `
-            <div ${dataElement} data-json='${JSON.stringify({ local: { ...generateInitialData(data) }, type: type })}' class="pullquote component">
-          <div class="component-content">
-        <aside class="quote" aria-label="Article Quote 3">
-
-
-                        <p class="pullquote__text">
-            <span>${data.text}</span></p>
-            
-   
-
-            <p class="pullquote__credit">${data.credit}</p>
-
-            
-        </aside>
-    </div>
-            </div>
-          `;
-
-        // Insère ou met à jour le HTML dans l'éditeur
-        if (element) {
-          // Mise à jour de l'image existante
-          element.outerHTML = pictureHtml;
-        } else {
-          // Nouvelle insertion
-          editor.insertContent(pictureHtml);
-        }
-        api.close();
-      },
-    };
-
-    editor.windowManager.open(dialogConfig);
-  };
-
-  // Bouton pour insérer une nouvelle image
-  editor.ui.registry.addButton(type, {
+export default function dropcaps(editor) {
+  editor.ui.registry.addToggleButton(type, {
     icon: "change-case",
-    tooltip: "Insérer/Modifier une lettrine",
-    onAction: () => {
-      const selectedNode = editor.selection.getNode();
-      const pictureElement = selectedNode.closest(`[${dataElement}]`);
+    tooltip: "Insérer/Modifier une lettrine (dropcase)",
 
-      if (pictureElement) {
-        openImageDialog(
-          extractDataJson(pictureElement)?.local || {},
-          false,
-          pictureElement,
+    // Gestion de l'état activé/désactivé
+    onSetup: (api) => {
+      const editorEventCallback = () => {
+        const selectedNode = editor.selection.getNode(); // Obtenir le nœud sélectionné
+        const closestParent = findClosestParentWithAttribute(
+          selectedNode,
+          "data-json"
         );
-      } else {
-        openImageDialog({}, true, null);
+
+        if (closestParent) {
+          const currentJson = JSON.parse(
+            closestParent.getAttribute("data-json") || "{}"
+          );
+          api.setActive(!!currentJson.dropcaps); // Activer si `dropcaps` est vrai
+        } else {
+          api.setActive(false); // Désactiver si aucun parent valide
+        }
+      };
+
+      // Écoute les changements de sélection
+      editor.on("NodeChange", editorEventCallback);
+
+      // Nettoyage de l'écouteur
+      return () => editor.off("NodeChange", editorEventCallback);
+    },
+
+    // Action exécutée lors du clic sur le bouton
+    onAction: () => {
+      const selectedNode = editor.selection.getNode(); // Obtenir le nœud sélectionné
+
+      let closestParent = findClosestParentWithAttribute(
+        selectedNode,
+        "data-json"
+      );
+
+      if (!closestParent) {
+        closestParent = findClosestParentWithValidTag(selectedNode);
       }
+
+      // Ajouter l'attribut `data-json` si il n'existe pas
+      if (!closestParent.hasAttribute("data-json")) {
+        closestParent.setAttribute("data-json", "{}"); // Initialiser avec un objet JSON vide
+      }
+
+      // Lire et mettre à jour le JSON actuel
+      const currentJson = JSON.parse(
+        closestParent.getAttribute("data-json") || "{}"
+      );
+      const isDropcapsActive = !!currentJson.dropcaps;
+
+      currentJson.dropcaps = !isDropcapsActive; // Inverser l'état de `dropcaps`
+      closestParent.setAttribute("data-json", JSON.stringify(currentJson));
+
+      // Ajouter ou supprimer la classe visuelle pour les lettrines
+      if (currentJson.dropcaps) {
+        closestParent.classList.add("dropcaps");
+      } else {
+        closestParent.classList.remove("dropcaps");
+      }
+
+      editor.undoManager.add(); // Enregistrer dans l'historique
     },
   });
 }

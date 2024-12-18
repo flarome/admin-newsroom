@@ -1,4 +1,4 @@
-import { forMceOnlyKey } from "../../shared-instances/content/key";
+import { forMceOnlyKey, forMceWrapOnlyKey } from "../../shared-instances/content/key";
 
 export function cleanHtml(element) {
   const clonedElement = element.cloneNode(true); // Cloner l'élément pour éviter de modifier l'original
@@ -13,6 +13,23 @@ export function cleanHtml(element) {
       }
     }
   }
+
+    // Fonction récursive pour supprimer uniquement les wrappers avec forMceWrapOnlyKey
+    function removeWrapperNodes(node) {
+        if (node.nodeType === 1 && node.hasAttribute(forMceWrapOnlyKey)) {
+          const parent = node.parentNode;
+          while (node.firstChild) {
+            parent.insertBefore(node.firstChild, node); // Déplacer les enfants avant le nœud actuel
+          }
+          node.remove(); // Supprimer le nœud wrapper
+        } else if (node.childNodes.length > 0) {
+          for (let i = node.childNodes.length - 1; i >= 0; i--) {
+            removeWrapperNodes(node.childNodes[i]); // Vérifier les enfants récursivement
+          }
+        }
+      }
+
   removeIgnoredNodes(clonedElement);
+  removeWrapperNodes(clonedElement);
   return clonedElement.innerHTML; // Récupérer le HTML nettoyé
 }

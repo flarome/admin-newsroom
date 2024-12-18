@@ -5,6 +5,10 @@ import toolbar from "./config/toolbar";
 import StyleFormats from "./config/ styleFormats";
 import contentCss from "./config/contentCss";
 import plugins from "./config/plugins";
+
+
+import { forMceOnlyKey, forMceWrapOnlyKey } from "../shared-instances/content/key";
+
 const EditorText = ({ content, setContent, selector }) => {
   return (
     <Tinymce
@@ -25,10 +29,11 @@ const EditorText = ({ content, setContent, selector }) => {
         convert_urls: false, // Empêche la conversion automatique des URLs
         preserve_cdata: true, // Conserve les données CDATA telles quelles
 
+        
          // forced_root_block: 'p',
 
          forced_root_block_attrs: {
-          'data-json': '{}'
+          'data-json': JSON.stringify({type: "text"})
         },
  newline_behavior: 'block',
         autoresize_bottom_margin: 50, // Marge en bas pour éviter le chevauchement
@@ -44,9 +49,13 @@ const EditorText = ({ content, setContent, selector }) => {
 
         setup: (editor) => {
           setup(editor);
+          
         },
 
         style_formats: StyleFormats,
+
+    
+
         contextmenu: "advtemplate",
         exportpdf_converter_options: {
           format: "Letter",
