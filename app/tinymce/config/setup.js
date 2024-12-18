@@ -1,11 +1,11 @@
-import imageSharesheet from "../plugins/media/imageInline";
-import location from "../plugins/location";
-import quote from "../plugins/quote"
+import {imageInline, dropcaps, quote, location} from "../plugins"
+
 export default function setup (editor) {
 
       // Liste des modules à ajouter à l'éditeur
   const modules = [
-    imageSharesheet,
+    imageInline,
+    dropcaps,
     location,
     quote
   ];

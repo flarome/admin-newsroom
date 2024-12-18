@@ -1,9 +1,12 @@
 import { forMceOnlyKey } from "../../shared-instances/content/key";
 import {findClosestParentWithValidTag, findClosestParentWithAttribute} from "./modules/data-json";
 
+export const type = "location";
+const dataElement = "data-" + type;
+
 export default function location(editor) {
     // Ajouter un bouton personnalisé
-    editor.ui.registry.addButton("addLocationButton", {
+    editor.ui.registry.addButton(type, {
 
       icon: "language",
       tooltip: "Ajouter, mettre à jour ou supprimer une localisation",
@@ -72,7 +75,7 @@ export default function location(editor) {
               closestParent.setAttribute("data-json", JSON.stringify(currentJson));
   
               // Supprimer l'élément visuel
-              const locationSpan = closestParent.querySelector("[data-location]");
+              const locationSpan = closestParent.querySelector(`[${dataElement}]`);
               if (locationSpan) {
                 locationSpan.remove();
               }
@@ -89,7 +92,7 @@ export default function location(editor) {
               closestParent.setAttribute("data-json", JSON.stringify(currentJson));
   
               // Mettre à jour ou insérer l'élément visuel
-              let locationSpan = closestParent.querySelector("[data-location-content]");
+              let locationSpan = closestParent.querySelector(`[${dataElement}-content]`);
   
               if (locationSpan) {
                 // Mettre à jour le contenu existant
@@ -97,12 +100,12 @@ export default function location(editor) {
               } else {
                 // Insérer le contenu au début du parent
                 const strongElement = document.createElement("strong");
-                strongElement.setAttribute("data-location", "");
+                strongElement.setAttribute(dataElement, "");
                 strongElement.setAttribute(forMceOnlyKey, "");
                
                 locationSpan = document.createElement("span");
                 locationSpan.className = "pagebody-location";
-                locationSpan.setAttribute("data-location-content", ""); 
+                locationSpan.setAttribute(dataElement + "-content", ""); 
                 locationSpan.textContent = action;
                 strongElement.appendChild(locationSpan);
   

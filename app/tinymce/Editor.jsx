@@ -14,7 +14,7 @@ const EditorText = ({ content, setContent, selector }) => {
       onEditorChange={(newContent) => setContent(newContent)}
       init={{
         language: "fr_FR",
-        forced_root_block: false, // Empêche l'ajout automatique de balises <p>
+  
         verify_html: false, // Désactive la validation du HTML (préserve le contenu tel quel)
         entity_encoding: "raw", // Conserve les entités HTML sans les encoder
         inline: false, // Désactive l'édition inline si activée
@@ -25,6 +25,12 @@ const EditorText = ({ content, setContent, selector }) => {
         convert_urls: false, // Empêche la conversion automatique des URLs
         preserve_cdata: true, // Conserve les données CDATA telles quelles
 
+         // forced_root_block: 'p',
+
+         forced_root_block_attrs: {
+          'data-json': '{}'
+        },
+ newline_behavior: 'block',
         autoresize_bottom_margin: 50, // Marge en bas pour éviter le chevauchement
 
         max_height: 600,

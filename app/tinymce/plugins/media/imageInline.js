@@ -2,6 +2,9 @@ import { extractDataJson } from "../../../shared-instances/content/normalizeData
 
 import { generateInitialData } from "../modules/generateInitialData";
 
+export const type = "imageInline"
+const dataElement = "data-" + type;
+
 export default function imageSharesheet(editor) {
   const openImageDialog = (currentData = {}, isNew = true, element) => {
     editor.windowManager.open({
@@ -157,7 +160,7 @@ export default function imageSharesheet(editor) {
 
         // Génère le HTML final pour <picture>
         const pictureHtml = `
-        <figure  data-json='${JSON.stringify({ local: {...generateInitialData(data) }, type: "imageInline" }) }' class="${data.imageInline ? "image-inline" : ""} ${data.imageBig ? "image-big" : ""} ${data.imageFullbleed ? "image-fullbleed" : ""}">
+        <figure ${dataElement} data-json='${JSON.stringify({ local: {...generateInitialData(data) }, type: type }) }' class="${data.imageInline ? "image-inline" : ""} ${data.imageBig ? "image-big" : ""} ${data.imageFullbleed ? "image-fullbleed" : ""}">
           <picture>
             ${sources
               .map(
@@ -184,16 +187,16 @@ export default function imageSharesheet(editor) {
   };
 
   // Bouton pour insérer une nouvelle image
-  editor.ui.registry.addButton("imageSharesheet", {
+  editor.ui.registry.addButton(type, {
     icon: "image",
     tooltip: "Insérer/Modifier une image",
     onAction: () => {
       const selectedNode = editor.selection.getNode();
-      const pictureElement = selectedNode.closest("figure");
+      const pictureElement = selectedNode.closest(`[${dataElement}]`);
 
       if (pictureElement) {
         openImageDialog(
-          extractDataJson(pictureElement) || {},
+          extractDataJson(pictureElement)?.local || {},
           false,
           pictureElement,
         );

@@ -1,7 +1,8 @@
 import { extractDataJson } from "../../shared-instances/content/normalizeData";
+
 import { generateInitialData } from "./modules/generateInitialData";
 
-export const type = "quote";
+export const type = "dropcaps";
 const dataElement = "data-" + type;
 
 export default function imageSharesheet(editor) {
@@ -76,8 +77,8 @@ export default function imageSharesheet(editor) {
 
   // Bouton pour insérer une nouvelle image
   editor.ui.registry.addButton(type, {
-    icon: "quote",
-    tooltip: "Insérer/Modifier une citation",
+    icon: "change-case",
+    tooltip: "Insérer/Modifier une lettrine",
     onAction: () => {
       const selectedNode = editor.selection.getNode();
       const pictureElement = selectedNode.closest(`[${dataElement}]`);

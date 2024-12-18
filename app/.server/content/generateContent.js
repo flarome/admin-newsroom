@@ -12,6 +12,8 @@ import {
   generateJsonHeader,
   generateHtmlHeaderSecondary,
   generateJsonHeaderSecondary,
+  generateJsonQuote,
+  generateHtmlQuote,
 } from "./components";
 
 export function mceToData(element) {
@@ -33,8 +35,12 @@ export async function htmlToJson(htmlString, shopify, cdnUrl) {
       : dom.window.document.children,
   );
 
+  const bodyCopy = {
+    bodyCopy: { content: [], pagebodysmall: false, dropcaps: false },
+  };
   const body = [];
-  let currentBodyCopy = { bodyCopy: { content: [] } };
+  let currentBodyCopy = bodyCopy;
+  let quoteCounter = 0; // Compteur pour suivre les positions des quotes
 
   for (const element of elements) {
     const type = mceToData(element).type;
@@ -42,26 +48,51 @@ export async function htmlToJson(htmlString, shopify, cdnUrl) {
     // Nettoyer le contenu HTML pour retirer les éléments avec data-mce-ignore
     const cleanedHtml = cleanHtml(element).trim();
 
-    if (cleanedHtml === "") {
+    /*if (cleanedHtml === "" || cleanedHtml === "&nbsp;") {
       // Si l'élément est vide, fermer le bodyCopy actuel et en ouvrir un nouveau
       if (currentBodyCopy.bodyCopy.content.length > 0) {
         body.push(currentBodyCopy); // Ajouter l'actuel au tableau
-        currentBodyCopy = { bodyCopy: { content: [] } }; // Nouveau bodyCopy
+        currentBodyCopy = bodyCopy; // Nouveau bodyCopy
       }
       continue; // Passer au prochain élément
-    }
+    }*/
 
     if (type === "text" || element.tagName === "P") {
+      const data = generateJsonText(element);
+
+      if (data) {
+        currentBodyCopy.bodyCopy.content.push(data);
+      }
       // Ajouter un paragraphe au bodyCopy
-      currentBodyCopy.bodyCopy.content.push(generateJsonText(element));
     } else if (type === "header") {
+      const data = generateJsonHeader(element);
+
       // Ajouter un header au bodyCopy
-      currentBodyCopy.bodyCopy.content.push(generateJsonHeader(element));
+
+      if (data) {
+        currentBodyCopy.bodyCopy.content.push(data);
+      }
     } else if (type === "header-secondary") {
-      // Ajouter un header au bodyCopy
-      currentBodyCopy.bodyCopy.content.push(
-        generateJsonHeaderSecondary(element),
-      );
+      const data = generateJsonHeaderSecondary(element);
+
+      if (data) {
+        currentBodyCopy.bodyCopy.content.push(data);
+      }
+    } else if (type === "quote") {
+      quoteCounter++;
+      const quoteData = generateJsonQuote(element, quoteCounter);
+
+      if (quoteData) {
+        // Ajouter le bodyCopy en cours au tableau body, s'il n'est pas vide
+        if (currentBodyCopy.bodyCopy.content.length > 0) {
+          body.push(currentBodyCopy);
+          currentBodyCopy = bodyCopy; // Réinitialiser bodyCopy
+        }
+
+        body.push({
+          ...quoteData, // Inclure toutes les données extraites du <figure>
+        });
+      }
     } else if (type === "imageInline") {
       // Extraire les données JSON de la figure
 
@@ -76,7 +107,7 @@ export async function htmlToJson(htmlString, shopify, cdnUrl) {
         // Ajouter le bodyCopy en cours au tableau body, s'il n'est pas vide
         if (currentBodyCopy.bodyCopy.content.length > 0) {
           body.push(currentBodyCopy);
-          currentBodyCopy = { bodyCopy: { content: [] } }; // Réinitialiser bodyCopy
+          currentBodyCopy = bodyCopy; // Réinitialiser bodyCopy
         }
 
         body.push({
@@ -121,6 +152,17 @@ export function jsonToHtml(jsonContent) {
           }
         })
         .join("");
+    } else if (component.pullquote) {
+      // Si une image arrive, on ferme les div ouverts
+      if (isOpen) {
+        html += `
+              </div>
+            </div>
+          `;
+        isOpen = false;
+      }
+
+      html += generateHtmlQuote(component.pullquote || {});
     } else if (component.imageInline) {
       // Si une image arrive, on ferme les div ouverts
       if (isOpen) {
