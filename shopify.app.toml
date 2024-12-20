@@ -3,7 +3,7 @@
 client_id = "cee8ee508513d9fd031e6e8a453f8331"
 name = "Newsroom"
 handle = "newsroom"
-application_url = "https://expert-seriously-testing-precipitation.trycloudflare.com"
+application_url = "https://pop-eau-possibilities-deny.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "read_content,read_draft_orders,read_files,read_metaobjects,read_online
 
 [auth]
 redirect_urls = [
-  "https://expert-seriously-testing-precipitation.trycloudflare.com/auth/callback",
-  "https://expert-seriously-testing-precipitation.trycloudflare.com/auth/shopify/callback",
-  "https://expert-seriously-testing-precipitation.trycloudflare.com/api/auth/callback"
+  "https://pop-eau-possibilities-deny.trycloudflare.com/auth/callback",
+  "https://pop-eau-possibilities-deny.trycloudflare.com/auth/shopify/callback",
+  "https://pop-eau-possibilities-deny.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]

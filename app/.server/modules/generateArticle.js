@@ -17,6 +17,7 @@ export async function generateArticle(body, isNewArticle, shopify, cdnUrl) {
     tags,
     template,
     isPublished,
+    layout
   } = body;
   const { originalHtml, rebuiltHtml, jsonContent } = await generateHtml(content, shopify, cdnUrl);
 
@@ -25,6 +26,7 @@ export async function generateArticle(body, isNewArticle, shopify, cdnUrl) {
       namespace: "article",
       key: "data_json",
       value: JSON.stringify({
+        layout,
         subtitle: subTitle || null,
         downloadsAllsMedia: downloadsAllsMedia,
         media: {
@@ -37,7 +39,7 @@ export async function generateArticle(body, isNewArticle, shopify, cdnUrl) {
         },
       }),
     },
-    title: title || "New Article Title",
+    title: title,
     author: {
       name: author || "Flarome Inc",
     },

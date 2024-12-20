@@ -21,6 +21,7 @@ export const formatArticle = (article) => {
       metaDescription,
       author,
       url,
+      layout
     } = getArticleInfo(
       [
         "title",
@@ -39,6 +40,7 @@ export const formatArticle = (article) => {
         "metaDescription",
         "author",
         "url",
+        "layout"
       ],
       article,
       "fr-FR",
@@ -67,6 +69,7 @@ export const formatArticle = (article) => {
         typeof isPublished !== "undefined"
           ? isPublished
           : initialState.isPublished,
+          layout: layout || initialState.layout,    
     };
   } catch (error) {
     console.error("Erreur lors du chargement des articles ou du blog :", error);

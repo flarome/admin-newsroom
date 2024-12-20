@@ -32,21 +32,18 @@ import {
   Bleed,
   Divider,
 } from "@shopify/polaris";
-import { ViewIcon } from "@shopify/polaris-icons";
+import { ViewIcon, EditIcon } from "@shopify/polaris-icons";
 
 import { useToast } from "../../../context/toast";
 // Global components
 import EditorText from "../../../tinymce/Editor";
 
 // Local components
-import Author from "../components/author";
-import Template from "../components/template";
-import Tags from "../components/tags";
-import Banner from "../components/banner";
-import Extrait from "../components/extrait";
-import Seo from "../components/seo";
-import Visible from "../components/visible";
-import MainImage from "../components/MainImage";
+import { Banner, Tags, Template, Author, Extrait, Seo, Visible, MainImage, Layout as LayoutCO } from "../components";
+
+
+
+
 
 // Event
 import { beforeunload } from "../../../modules/EventListener";
@@ -501,6 +498,7 @@ const disabledSubmit = useMemo(() => {
                 </BlockStack>
               </Card>
 
+
               <Extrait
                 extrait={fields.extrait}
                 setExtrait={(content) => handleChangeFields(content, "extrait")}
@@ -542,6 +540,11 @@ const disabledSubmit = useMemo(() => {
                 date={fields.date}
                 setDate={(content) => handleChangeFields(content, "date")}
               />
+
+
+<LayoutCO setLayout={(content) => handleChangeFields(content, "layout")} layout={fields.layout}></LayoutCO>
+
+
               <MainImage
                 mainImage={fields.mainImage}
                 setMainImage={(content) =>

@@ -2,15 +2,15 @@ import { defaultImage } from "../routes/modules/getInfo";
 
 export const layout = {
 
-  modal: null,
-  header: null,
-  header_scrim: null,
-  nav: null,
-  nav_scrim: null,
-  body: null,
-  footer: null,
-  footer_scrim: null,
-  banner_full: null,
+  modal: false,
+  header: "Dark",
+  header_scrim: false,
+  nav: "Light",
+  nav_scrim: false,
+  body: "Light",
+  footer: "Light",
+  footer_scrim: false,
+  banner_full: false
 }
 export const initialArticle = {
   isNewArticle: true,

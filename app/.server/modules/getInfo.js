@@ -116,6 +116,9 @@ export function getArticleInfo(fields, article) {
       case "template":
         info.template = article.templateSuffix || "";
         break;
+        case "layout":
+          info.layout = contentJson?.layout || {};
+          break;
       case "date":
         info.date = article.publishedAt
           ? new Date(article.publishedAt).toISOString().split("T")[0]
