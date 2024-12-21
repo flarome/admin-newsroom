@@ -6,7 +6,7 @@ import { NavMenu } from "@shopify/app-bridge-react";
 import polarisStyles from "@shopify/polaris/build/esm/styles.css?url";
 import { authenticate } from "../shopify.server";
 import polarisTranslations from "@shopify/polaris/locales/fr.json";
-
+ 
 import "../styles/main/AppActionContainer.css";
 import "../styles/main/AppTitleBar.css";
 import "../styles/main/AppTitleBarSkeleton.css";
@@ -58,7 +58,7 @@ import "../styles/theme.css";
 import "../styles/articleDetails.css";
 import ToastNotification from "../components/toastNotification";
 
-import { Frame, FooterHelp } from "@shopify/polaris";
+import { Frame, FooterHelp, Text } from "@shopify/polaris";
 
 import { ToastProvider } from "../context/toast";
 
@@ -93,13 +93,7 @@ export default function App() {
       </ToastProvider>
       </Frame>
 
-      <FooterHelp>
-      Copyright © 2024 
-      <Link url="https://www.flarome.com">
-      Flarome
-      </Link>
-      . Touts droits Réservés.
-    </FooterHelp>
+
 
     </AppProvider>
   );

@@ -7,20 +7,61 @@ import getShop from "./get/shop";
 import getTheme from "./get/theme";
 import getArticleAfter from "./get/articleAfter";
 import getArticlePrevious from "./get/articlePrevious";
+import getMetaobjectDefinition from "./get/metaobjectDefinition"
+import getMetaobjectEntrie from "./get/metaobjectEntrie"
 
 import putArticleCreate from "./put/articleCreate";
 import putArticleUpdate from "./put/articleUpdate";
 import putArticleDelete from "./put/articleDelete";
 
+import goMetaobjectDefinition from "./go/metaobjectDefinition";
 import goArticlesFetch from "./go/articlesFetch";
 import goArticleDetails from "./go/articleDetails";
 import goAuthorAutocomplete from "./go/authorAutocomplete";
 import goArticleDelete from "./go/articleDelete";
 import goArticleCreate from "./go/articleCreate";
 import goAdjacentArticle from "./go/adjacentArticle";
+import goMetaobjectDefinitionAuthor from "./go/metaobjectDefinitionAuthor"
+import goMetaobjectEntrie from "./go/metaobjectEntrie"
 
 
 const actions = {
+  metaobjectEntrie: {
+    get: {
+      metaobject: {
+        mutation: getMetaobjectEntrie,
+      },
+    },
+    builder: {
+      type: "return",
+      build: goMetaobjectEntrie,
+    },
+
+  },
+  metaobjectDefinitionAuthor: {
+    get: {
+      entries: {
+        mutation: getMetaobjectDefinition,
+      },
+    },
+    builder: {
+      type: "return",
+      build: goMetaobjectDefinitionAuthor,
+    },
+
+  },
+  metaobjectDefinition: {
+    get: {
+      entries: {
+        mutation: getMetaobjectDefinition,
+      },
+    },
+    builder: {
+      type: "return",
+      build: goMetaobjectDefinition,
+    },
+
+  },
   authorAutocomplete: {
     get: {
       articles: {

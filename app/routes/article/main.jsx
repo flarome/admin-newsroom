@@ -4,15 +4,33 @@ import { ArticleProvider, useArticle } from "./context/ArticleProvider";
 
 import { useFetcherWithPromise } from "../../utils/useFetcherWithPromise";
 
+import { MetaobjectModalProvider, useMetaobjectModal } from "../metaobjects/context/ModalContext";
+import { MetaobjectModal } from "../metaobjects/main";
+
 // State
 import Loading from "./state/loading";
 import Editor from "./state/editor";
 
 export function Article({ articleId, hasArticle }) {
   return (
-    <ArticleProvider>
+  
+    <MetaobjectModalProvider>
+
+    <ArticleProvider>   
+      
+    
+
       <ArticleContent articleId={articleId} hasArticle={hasArticle} />
-    </ArticleProvider>
+
+
+    
+      
+      </ArticleProvider>
+
+      <MetaobjectModal />
+
+      </MetaobjectModalProvider> 
+   
   );
 }
 

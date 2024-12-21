@@ -2,11 +2,13 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 
 // Remix
 import { useNavigate } from "@remix-run/react"; // Utiliser fetcher pour déclencher l'action
-import { SaveBar, useAppBridge } from "@shopify/app-bridge-react";
+import { SaveBar, useAppBridge, Modal as BModal, TitleBar } from "@shopify/app-bridge-react";
 
 import { useFetcherWithPromise } from "../../../utils/useFetcherWithPromise";
 import { useArticle } from "../context/ArticleProvider";
 
+
+import { v4 as uuid } from "uuid";
 // Backend API
 import { useHref } from "@remix-run/react";
 
@@ -100,7 +102,7 @@ const Editor = ({}) => {
     {
       label: "Url téléchargement médias",
       value: fields.downloadsAllsMedia,
-      onChange: (value) => handleChangeFields(value, "downloadsAllsMedia"), // Ou simplement `handleChange` si pas besoin d'ajuster
+      onChange: (value) => handleChangeFields(value, "downloadsAllsMedia"), 
     },
   ];
 
@@ -238,10 +240,12 @@ const Editor = ({}) => {
   };
 
   // HandleModifiedBanner
+  const modifiedBannerId = "modifiedBanner" + uuid();
   const [active, setActive] = useState(false);
-  const handleChange = useCallback(() => setActive(!active), [active]);
+  const handleChange = useCallback(() => shopify.modal.toggle(modifiedBannerId));
 
 
+  
 
   const [pagination, setPagination] = useState({
     hasPrevious: false,
@@ -368,7 +372,7 @@ const disabledSubmit = useMemo(() => {
                     <div className="XgxFi">
                       <TextField
                         label="Titre"
-                        onChange={(value, id) => handleChangeFields(value, id)} // Ou simplement `handleChange` si pas besoin d'ajuster
+                        onChange={(value, id) => handleChangeFields(value, id)}
                         autoComplete="off"
                         maxLength="255"
                         value={fields.title}
@@ -387,7 +391,7 @@ const disabledSubmit = useMemo(() => {
                     <div className="XgxFi">
                       <TextField
                         label="Sous-Titre"
-                        onChange={(value, id) => handleChangeFields(value, id)} // Ou simplement `handleChange` si pas besoin d'ajuster
+                        onChange={(value, id) => handleChangeFields(value, id)} 
                         autoComplete="off"
                         value={fields.subTitle}
                         error={errors.subTitle || false}
@@ -482,7 +486,7 @@ const disabledSubmit = useMemo(() => {
                                       value={info.value}
                                       onChange={(value, id) =>
                                         info.onChange(value)
-                                      } // Ou simplement `handleChange` si pas besoin d'ajuster
+                                      } 
                                       autoComplete="off"
                                       type="text"
                                     />
@@ -632,29 +636,54 @@ const disabledSubmit = useMemo(() => {
           <p>Cette opération est irréversible.</p>
         </Modal.Section>
       </Modal>
-      <Modal
-        open={active}
-        onClose={handleChange}
-        title="Vous avez des changements non enregistrés"
-        primaryAction={{
-          destructive: true,
-          content: "Quitter la page",
-          onAction: () => handleCloseEditor(null, true),
-        }}
-        secondaryActions={[
-          {
-            content: "Annuler",
-            onAction: handleChange,
-          },
-        ]}
-      >
-        <Modal.Section>
-          <p>
+
+
+     
+          <BModal id={modifiedBannerId}>
+            <TitleBar title="Vous avez des changements non enregistrés">
+              <button
+              tone="critical"
+               
+                variant="primary"
+                
+                onClick={() => {
+                  handleChange();
+                  handleCloseEditor(null, true);
+                }}
+              >
+                Quitter la page
+              </button>
+      
+              <button
+              
+              
+                onClick={() => {
+                  handleChange();
+                }}
+              >
+                Annuler
+              </button>
+            </TitleBar>
+
+<Box
+paddingBlock="400"
+paddingInline="400"
+>
+<p>
             Si vous quittez cette page, toutes les modifications non
             enregistrées seront perdues.
           </p>
-        </Modal.Section>
-      </Modal>
+
+</Box>
+
+
+        
+
+          </BModal>
+   
+           
+   
+
     </div>
   );
 };
