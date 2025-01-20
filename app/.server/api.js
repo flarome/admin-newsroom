@@ -68,9 +68,22 @@ export async function api(
       
       const requirePromises = Object.entries(actionConfig.preValidate.get || {}).map(
         async ([key, getAction]) => {
+
+          let mutationExecute = getAction.mutation;
+
           if (getAction.condition && !getAction.condition(body)) {
             responseValidate[key] = {};
-            return null; // Sauter cette action si la condition échoue
+
+
+            if (getAction.isNoCondition && typeof getAction.iNoCondition === 'function') {
+              mutationExecute = getAction.isNoCondition;
+
+            } else {
+
+              return null; // Sauter cette action si la condition échoue
+            }
+           
+        
           }
 
             const { mutation, variables, mutationName, fetchMode } = typeof getAction.mutation === 'function' && getAction.mutation.constructor.name === 'AsyncFunction' ?

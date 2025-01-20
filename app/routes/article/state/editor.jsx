@@ -44,7 +44,9 @@ import EditorText from "../../../tinymce/Editor";
 import { Banner, Tags, Template, Author, Extrait, Seo, Visible, MainImage, Layout as LayoutCO } from "../components";
 
 
-
+// local state
+const modifiedBannerId = "modifiedBanner" + uuid();
+const saveBarId = "saveBar" + uuid();
 
 
 // Event
@@ -71,12 +73,13 @@ const Editor = ({}) => {
     loadArticle,
   } = useArticle();
 
+
+  // isNewArticle
   const isNewArticle = useMemo(() => {
     return fields.isNewArticle;
   }, [fields]);
 
-
-
+ // errors
   const hasFieldsErrors = useMemo(() => {
     return  Object.keys(errors).length > 0;
   }, [errors]);
@@ -107,21 +110,20 @@ const Editor = ({}) => {
   ];
 
   // SaveBar
+  const handleSaveBar = useCallback(() => shopify.saveBar.toggle(saveBarId));
 
+  // before leave
   useEffect(() => {
+    beforeunload(isModified);
     if (isModified) {
-      shopify.saveBar.show("modifier");
+      shopify.saveBar.show(saveBarId);
     } else if (!isNewArticle) {
-      shopify.saveBar.hide("modifier");
+      shopify.saveBar.hide(saveBarId);
     }
   }, [isModified]); // Déclenche l'effet chaque fois que `isModified` change
 
-  const handleSaveBar = useCallback(() => shopify.saveBar.toggle("modifier"));
 
-  // Beforeunload
-  useEffect(() => {
-    beforeunload(isModified);
-  }, [isModified]); // Déclenche l'effet chaque fois que `isModified` change
+
 
   // Submit
   const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
@@ -149,7 +151,7 @@ const Editor = ({}) => {
       );
 
       if (isNewArticle) {
-        shopify.saveBar.hide("modifier");
+        shopify.saveBar.hide(saveBarId);
         showToast("Article créé");
         return navigate("../" + response.id.split("/").pop(), {
           replace: true,
@@ -176,7 +178,7 @@ const Editor = ({}) => {
     reloadData = false,
   ) => {
     if (force || !isModified) {
-      shopify.saveBar.hide("modifier");
+      shopify.saveBar.hide(saveBarId);
       // Si l'article est modifié, prévenir la navigation
 
       navigate("/articles", {
@@ -189,8 +191,8 @@ const Editor = ({}) => {
         event.preventDefault(); // Empêcher la navigation par défaut
       }
       // Si l'article n'est pas modifié, on peut naviguer normalement
+      handleModifiedBanner();
 
-      handleChange(!active);
     }
   };
 
@@ -226,7 +228,7 @@ const Editor = ({}) => {
 
       showToast("Article supprimé");
 
-      shopify.saveBar.hide("modifier");
+      shopify.saveBar.hide(saveBarId);
 
 
       return handleCloseEditor(null, true, true);
@@ -240,12 +242,11 @@ const Editor = ({}) => {
   };
 
   // HandleModifiedBanner
-  const modifiedBannerId = "modifiedBanner" + uuid();
-  const [active, setActive] = useState(false);
-  const handleChange = useCallback(() => shopify.modal.toggle(modifiedBannerId));
+  const handleModifiedBanner = useCallback(() => shopify.modal.toggle(modifiedBannerId));
 
 
   
+  // adjacents articles
 
   const [pagination, setPagination] = useState({
     hasPrevious: false,
@@ -312,7 +313,7 @@ const disabledSubmit = useMemo(() => {
   return (
     <div>
       {" "}
-      <SaveBar id="modifier" discardConfirmation="" open={isNewArticle}>
+      <SaveBar id={saveBarId} discardConfirmation="" open={isNewArticle}>
         <button
           variant="primary"
           onClick={() => handleSubmit()}
@@ -647,7 +648,7 @@ const disabledSubmit = useMemo(() => {
                 variant="primary"
                 
                 onClick={() => {
-                  handleChange();
+                  handleModifiedBanner();
                   handleCloseEditor(null, true);
                 }}
               >
@@ -658,7 +659,7 @@ const disabledSubmit = useMemo(() => {
               
               
                 onClick={() => {
-                  handleChange();
+                  handleModifiedBanner();
                 }}
               >
                 Annuler

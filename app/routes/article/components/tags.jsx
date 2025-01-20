@@ -71,9 +71,7 @@ const Tags = ({ allTags, tags: selectedOptions, setTags }) => {
             Balises
           </h3>
 
-          <Button variant="plain" size="medium" textAlign="center">
-            <span className="Polaris-Text--root Polaris-Text--bodyMd Polaris-Text--regular">Afficher toutes les balises</span>
-          </Button>
+      
         </InlineStack>
         <div>
           <div>

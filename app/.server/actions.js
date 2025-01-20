@@ -1,4 +1,5 @@
 import validateArticle from "./validate/article";
+import validateMetaobject from "./validate/metaobject";
 
 import getArticles from "./get/articles";
 import getBlog from "./get/blog";
@@ -9,10 +10,12 @@ import getArticleAfter from "./get/articleAfter";
 import getArticlePrevious from "./get/articlePrevious";
 import getMetaobjectDefinition from "./get/metaobjectDefinition"
 import getMetaobjectEntrie from "./get/metaobjectEntrie"
+import getMetaobjects from "./get/metaobjects"
 
 import putArticleCreate from "./put/articleCreate";
 import putArticleUpdate from "./put/articleUpdate";
 import putArticleDelete from "./put/articleDelete";
+import putMetaobjectUpsert from "./put/metaobjectUpsert";
 
 import goMetaobjectDefinition from "./go/metaobjectDefinition";
 import goArticlesFetch from "./go/articlesFetch";
@@ -26,6 +29,25 @@ import goMetaobjectEntrie from "./go/metaobjectEntrie"
 
 
 const actions = {
+  metaobjectUpsert: {
+    /*preValidate: {
+      get: {
+        metaobject: {
+          mutation: getMetaobjectEntrie,
+        },
+      },
+      validate: validateMetaobject,
+    },*/
+    get: {
+      metaobject: {
+        mutation: putMetaobjectUpsert,
+      },
+    },
+    builder: {
+      type: "return",
+      build: goMetaobjectEntrie,
+    },
+  },
   metaobjectEntrie: {
     get: {
       metaobject: {
@@ -86,6 +108,7 @@ const actions = {
       article: {
         mutation: putArticleCreate,
       },
+  
     },
     builder: {
       type: "return",
@@ -121,6 +144,7 @@ const actions = {
       article: {
         mutation: putArticleUpdate,
       },
+  
     },
     builder: {
       type: "rePost",

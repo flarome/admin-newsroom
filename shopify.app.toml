@@ -1,9 +1,9 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
-client_id = "cee8ee508513d9fd031e6e8a453f8331"
-name = "Newsroom"
-handle = "newsroom"
-application_url = "https://restrictions-horizon-responsibilities-mia.trycloudflare.com"
+client_id = "5363397f9f0db456c06921f33dbab54d"
+name = "Newsroom 2025"
+handle = "newsroom-2025"
+application_url = "https://need-opportunities-collective-irrigation.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,17 +17,13 @@ scopes = "read_content,read_draft_orders,read_files,read_metaobject_definitions,
 
 [auth]
 redirect_urls = [
-  "https://restrictions-horizon-responsibilities-mia.trycloudflare.com/auth/callback",
-  "https://restrictions-horizon-responsibilities-mia.trycloudflare.com/auth/shopify/callback",
-  "https://restrictions-horizon-responsibilities-mia.trycloudflare.com/api/auth/callback"
+  "https://need-opportunities-collective-irrigation.trycloudflare.com/auth/callback",
+  "https://need-opportunities-collective-irrigation.trycloudflare.com/auth/shopify/callback",
+  "https://need-opportunities-collective-irrigation.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
-api_version = "2024-10"
-
-  [[webhooks.subscriptions]]
-  topics = [ "app/uninstalled" ]
-  uri = "https://minister-configuring-reproduce-hepatitis.trycloudflare.com/webhooks/app/uninstalled"
+api_version = "2025-01"
 
 [pos]
 embedded = false

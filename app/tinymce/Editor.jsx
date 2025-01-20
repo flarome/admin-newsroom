@@ -13,7 +13,7 @@ const EditorText = ({ content, setContent, selector }) => {
   return (
     <Tinymce
       id={selector}
-      apiKey={"wcr06vyzq85sxcjii3v94cpkkmhw6b25c503p27kw5tcrjzn"}
+      apiKey={"z9lzy7dk3f022c81u9ecjdco7xnnbl5r3gtgofjutyjbm51o"}
       value={content}
       onEditorChange={(newContent) => setContent(newContent)}
       init={{

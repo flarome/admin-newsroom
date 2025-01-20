@@ -9,6 +9,8 @@
 import { formatDate } from "../../global-modules/utils/formatDate";
 import { parseJSONSafe } from "../../global-modules/utils/parseJSONSafe";
 
+import { author } from "../../modules/initialState";
+
 export const defaultImage = {
   downloadUrl: "",
   alt: "",
@@ -48,10 +50,14 @@ export function getImageInfo(img) {
   info.mainImageScare = sizes.scare || sizes.s132_132 || sizes.s300_300 || sizes.s416_416 || sizes.s600_600 || sizes.s832_832 || sizes.s900_900 || sizes.s1040_832 || sizes.s1102_1960;
 
   return info;
-  
+   
 }
 export function getArticleInfo(fields, article, local, trr = 30) {
   const contentJson1 = article.metafields?.edges?.find(edge => edge.node.namespace === "article" && edge.node.key === "data_json")?.node?.value || null;
+  const editor = article.metafields?.edges?.find(edge => edge.node.namespace === "contact" && edge.node.key === "editor")?.node?.value || null;
+
+
+
 
   const contentJson = contentJson1 ? parseJSONSafe(contentJson1) : null;
 
@@ -62,7 +68,7 @@ export function getArticleInfo(fields, article, local, trr = 30) {
         info.title = title;
         break;
         case "author":
-          info.author = article.author?.name;
+          info.author = {...author, name: article.author?.name, id: editor } 
           break;
         case "url":
           info.url = article.url;

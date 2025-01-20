@@ -9,20 +9,20 @@ const ModalContext = createContext();
 // Fournisseur du contexte
 export const MetaobjectModalProvider = ({ children }) => {
     
-  const [modalState, setModalState] = useState({ isOpen: false, id: null });
+  const [modalState, setModalState] = useState({ isOpen: false, id: null, handle: null });
 
   // Fonction pour afficher la modal
-  const showModal = (type, id) => {
-    setModalState({ isOpen: true, id, type });
+  const showModal = (type, id, handle) => {
+    setModalState({ isOpen: true, id: id, type: type , handle: handle });
   };
 
   // Fonction pour fermer la modal
   const closeModal = () => {
-    setModalState({ isOpen: false, id: null, type: null });
+    setModalState({ isOpen: false, id: null, type: null, handle: null });
   };
 
   return (
-    <ModalContext.Provider value={{ modalState, showModal, closeModal }}>
+    <ModalContext.Provider value={{ modalState, setModalState, showModal, closeModal }}>
       {children}
     </ModalContext.Provider>
   );

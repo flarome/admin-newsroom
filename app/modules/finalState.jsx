@@ -12,6 +12,14 @@ export const layout = {
   footer_scrim: false,
   banner_full: false
 }
+
+export const author = {
+
+  type: "press_contacts",
+  id: null,
+  handle: null,
+  name: "Flarome Inc"
+}
 export const initialArticle = {
   isNewArticle: true,
   defaultCursor: "",
@@ -26,7 +34,7 @@ export const initialArticle = {
   handle: "",
   redirectNewHandle: false,
   date: "",
-  author: "",
+  author,
   mainImage: defaultImage,
   content: "",
   tags: [],

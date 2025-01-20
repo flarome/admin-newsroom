@@ -1,174 +1,473 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback, useMemo, useEffect } from "react";
 
-import { Button, Popover, Icon, DatePicker, TextField, Box, LegacyStack, ChoiceList, Text, BlockStack, Card, Autocomplete } from "@shopify/polaris";
-import { CalendarIcon, ClockIcon } from "@shopify/polaris-icons";
+import {
+  Button,
+  Icon,
+  DatePicker,
+  TextField,
+  Box,
+  LegacyStack,
+  ChoiceList,
+  Text,
+  BlockStack,
+  Card,
+  Autocomplete,
+  InlineStack,
+} from "@shopify/polaris";
+import { CalendarIcon, CalendarTimeIcon, ClockIcon, DeleteIcon, EditIcon } from "@shopify/polaris-icons";
 
-const Visible = ({ isPublished, setPublished, date: initalDate, setDate }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const handleChange = useCallback(() => setIsOpen(isOpen => !isOpen), []);
+import { DateTime } from "luxon";
 
-  const [popoverActive, setPopoverActive] = useState(false);
+import { initialArticle } from "../../../modules/initialState";
 
-  const handleBlur = event => {
-    const popoverContent = document.querySelector(".Polaris-Popover");
-    if (popoverContent && !popoverContent.contains(event.relatedTarget)) {
-      setPopoverActive(false);
-    }
-  };
+// uuid
+import { v4 as uuid } from "uuid";
 
-  const isValidDate = useCallback(date => {
-    if (!date) return false; // Vérifie si la date existe
+// app bridge
+import { Modal, TitleBar, useAppBridge } from "@shopify/app-bridge-react";
 
-    // Si la date est une chaîne de caractères, on vérifie si elle est vide après trim
-    if (typeof date === "string") {
-      return date.trim() !== "";
-    }
+function isValidDate(date) {
+  if (!date) return false; // Vérifie si la date existe
 
-    // Si la date est une instance de Date, on vérifie sa validité
-    if (date instanceof Date) {
-      return !isNaN(date.getTime());
-    }
+  // Si la date est une chaîne de caractères, on vérifie si elle est vide après trim
+  if (typeof date === "string") {
+    return date.trim() !== "";
+  }
 
-    return false; // Si ce n'est ni une chaîne, ni une instance de Date valide
-  }, []);
+  // Si la date est une instance de Date, on vérifie sa validité
+  if (date instanceof Date) {
+    return !isNaN(date.getTime());
+  }
 
-  const date = useMemo(() => {
-    const valide = new Date(initalDate);
-    return isValidDate(valide) ? valide : new Date();
-  }, [initalDate]);
+  return false; // Si ce n'est ni une chaîne, ni une instance de Date valide
+}
 
-  // Initialisation de l'heure à partir de la date ou par défaut
-  const initialHours = useMemo(() => {
-    return `${date.getHours().toString().padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}`;
-  }, [date]);
+// Callback pour formater la date au format "jour/mois/année"
+function formatDate(date, option) {
+  if (!date) return "";
+  return new Date(date).toLocaleDateString("fr-FR", option);
+} // Il n'y a pas de dépendances ici, donc la fonction est mémorisée et ne sera recalculée qu'au premier rendu
+
+
+const getUtcOffset = () => {
+  // Crée un objet Date pour la date actuelle
+  const date = new Date();
+
+  // Obtenir le décalage en minutes par rapport à UTC
+  const offsetInMinutes = date.getTimezoneOffset();
+
+  // Convertir en heures, car getTimezoneOffset() retourne le décalage en minutes
+  const offsetInHours = offsetInMinutes / 60;
+
+  // Formater l'offset en UTC+X ou UTC-X
+  const formattedOffset = `UTC${offsetInHours > 0 ? '-' : '+'}${Math.abs(offsetInHours)}`;
+
+  return formattedOffset;
+};
+
+// Exemple d'utilisation
+const utcOffset = getUtcOffset();
+
+
+const modalId = "date-modal" + uuid();
+
+
+
+
+const ModalLayout = ({ setDate, date, setPublished }) => {
+  const shopify = useAppBridge();
+
+  // Synchronisation de fields avec layout via useEffect
+  const [localDate, setLocalDate] = useState(date);
+
+  useEffect(() => {
+    setLocalDate(date); // Met à jour fields chaque fois que layout change
+  }, [date]); // Le tableau de dépendances permet de déclencher l'effet seulement lorsque layout change
+
+
+  const isModified = useMemo(() => {
+    return new Date(date).toISOString() !== new Date(localDate).toISOString();
+  }, [localDate, date]);
+  
+
+
+
+
+
 
   // État pour l'heure
-  const [hours, setHoursValue] = useState(initialHours);
 
-  // Initialisation de selectedDates
-  const initializeSelectedDates = useMemo(() => {
-    return { start: date, end: date };
-  }, [date]);
 
-  // État pour selectedDates
-  const [selectedDates, setSelectedDates] = useState(initializeSelectedDates);
 
-  // Cette fonction est appelée lorsqu'une modification des dates ou des heures est effectuée
-  const handleDateChange = useCallback(() => {
-    const [hoursPart, minutesPart] = hours.split(":").map(num => parseInt(num, 10));
-    const datePart = selectedDates.start;
+  // État pour selectedDates 
 
-    // Vérifie si la date ou les valeurs d'heures sont invalides
-    if (!isValidDate(datePart) || isNaN(hoursPart) || isNaN(minutesPart)) {
-      return;
-    }
 
-    // Crée une nouvelle instance de Date combinée avec les heures et les minutes
-    const combinedDate = new Date(datePart);
-    combinedDate.setHours(hoursPart, minutesPart, 0, 0);
-
-    if (isValidDate(combinedDate)) {
-      // Met à jour la date combinée en ISO
-      setDate(combinedDate.toISOString());
-    }
-  }, [selectedDates, hours]); // Cette fonction est appelée uniquement si selectedDates ou hours changent
 
   // Fonction pour initialiser l'état
   const initializeDate = useMemo(() => {
-    return { month: date.getMonth(), year: date.getFullYear() };
-  }, [date]);
+    return { month: localDate.getMonth(), year: localDate.getFullYear() };
+  }, [localDate]);
 
   // Initialisation de l'état
   const [{ month, year }, setDateCalendar] = useState(initializeDate);
-  const handleMonthChange = useCallback((month, year) => setDateCalendar({ month, year }), []);
-
-  const handleDateChage = useCallback(
-    value =>
-      setSelectedDates({
-        start: new Date(value.start),
-        end: new Date(value.end),
-      }),
-
+  const handleMonthChange = useCallback(
+    (month, year) => setDateCalendar({ month, year }),
     [],
   );
 
-  const deselectedOptions = useMemo(() => {
-    const now = new Date();
-    const currentHour = now.getHours();
-    const currentMinute = now.getMinutes();
+  useEffect(() => {
+    setDateCalendar(initializeDate); // Met à jour fields chaque fois que layout change
+  }, [initializeDate]); // Le tableau de dépendances permet de déclencher l'effet seulement lorsque layout change
 
-    const times = [];
 
-    // Vérifier si la date sélectionnée est aujourd'hui
-    const isToday = selectedDates.start.toDateString() === now.toDateString();
+  const handleDateChage = useCallback(
+    (value) => {
+      // Récupère la date actuelle de localDate
+      const currentLocalDate = new Date(localDate); 
+  
+      // Crée une nouvelle date à partir de value.start
+      const newDate = new Date(value.start);
+  
+      // Met à jour la date tout en conservant l'heure, les minutes et les secondes de localDate
+      newDate.setHours(currentLocalDate.getHours());
+      newDate.setMinutes(currentLocalDate.getMinutes());
+      newDate.setSeconds(currentLocalDate.getSeconds());
+      newDate.setMilliseconds(currentLocalDate.getMilliseconds());
+  
+      // Mets à jour localDate avec la nouvelle date mais la même heure
+      setLocalDate(newDate);
+    },
+    [localDate] // Dépend de localDate, car on en utilise la valeur pour ajuster l'heure
+  );
+
+   
+  const options = useMemo(() => {
+    const times = [
+
+
+    ];
 
     for (let hour = 0; hour < 24; hour++) {
       for (let minute = 0; minute < 60; minute++) {
-        const formattedTime = `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`;
-
-        // Si la date sélectionnée est aujourd'hui, on exclut les horaires futurs
-        if (isToday) {
-          if (hour > currentHour || (hour === currentHour && minute > currentMinute)) {
-            continue; // Exclure cette heure/minute
-          }
-        }
-
-        times.push({ value: formattedTime, label: formattedTime });
+        
+        times.push({ value: `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`, label: `${hour.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")}`});
       }
     }
 
     return times;
-  }, [selectedDates]);
+  }, []);
 
-  const [selectedOptions, setSelectedOptions] = useState([]);
-  const [options, setOptions] = useState(deselectedOptions);
+
+
+
+  const [hours, setHours] = useState(`${localDate.getHours().toString().padStart(2, "0")}:${localDate.getMinutes().toString().padStart(2, "0")}`);
+
+
+
+
+  const [dateText, setDateText] = useState(DateTime.fromJSDate(localDate).toFormat('yyyy-MM-dd'));
+const [dateTextFocused, setDateTextFocued] = useState(false);
+
+  useEffect(() => {
+    setHours(`${localDate.getHours().toString().padStart(2, "0")}:${localDate.getMinutes().toString().padStart(2, "0")}`); // Met à jour fields chaque fois que layout change
+    setDateText(DateTime.fromJSDate(localDate).toFormat('yyyy-MM-dd'));
+  }, [localDate]); // Le tableau de dépendances permet de déclencher l'effet seulement lorsque layout change
+
+
+
+
+  const handleDateChange = useCallback(
+    (event) => {
+     
+
+      const value = event.target.value;
+      // Expression régulière pour valider le format de la date "AAAA-MM-DD"
+      const regex = /^(?:([12]\d{3})-(0?[1-9]|1[0-2])-(0?[1-9]|[12]\d|3[01]))$/;
+      
+  
+      // Vérifie si la valeur correspond au format attendu
+      const match = value.match(regex);
+  
+      if (match) {
+        const [_, year, month, day] = match;
+  
+        // Crée une nouvelle date à partir de value (avec l'année, le mois, et le jour)
+        const newDate = new Date(`${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`);
+  
+        // Récupère l'heure actuelle de localDate
+        const currentLocalDate = new Date(localDate);
+  
+        // Met à jour la nouvelle date avec l'heure actuelle de localDate
+        newDate.setHours(currentLocalDate.getHours());
+        newDate.setMinutes(currentLocalDate.getMinutes());
+        newDate.setSeconds(currentLocalDate.getSeconds());
+        newDate.setMilliseconds(currentLocalDate.getMilliseconds());
+  
+        // Mets à jour localDate avec la nouvelle date (avec heure, minutes, secondes)
+        setLocalDate(newDate);
+  
+        // Mets à jour selectedDates (si nécessaire)
+        setSelectedDates({
+          start: newDate,
+          end: new Date(value.end), // Exemple de mise à jour de `end` si nécessaire
+        });
+      } else {
+
+        // Optionnellement, réinitialiser localDate si la date est invalide
+        setDateText(DateTime.fromJSDate(localDate).toFormat('yyyy-MM-dd')); // Exemple de réinitialisation
+      }
+      setDateTextFocued(false);
+    },
+    [localDate] // Dépend de localDate pour manipuler les heures et minutes actuelles
+  );
+  
 
   const updateText = useCallback(
-    value => {
-      setHoursValue(value);
-      if (value === "") {
-        setOptions(deselectedOptions);
-        return;
+    (event) => {
+      const value = event.target.value;
+      // Vérifie que la valeur est une chaîne qui contient un format valide "HH:mm" ou "H:mm"
+      const regex = /^(?:([01]?\d|2[0-3]):([0-5]?\d))$/; // Permet de valider des heures de 00:00 à 23:59 et des minutes de 00 à 59
+      const match = value.match(regex); // Teste la valeur contre l'expression régulière
+  
+      if (match) {
+        let [_, hours, minutes] = match; // Récupère l'heure et les minutes
+  
+        // Si l'heure a un seul chiffre, on ajoute un zéro devant
+        hours = hours.padStart(2, '0');
+        minutes = minutes.padStart(2, '0');
+  
+        // Crée une nouvelle date en conservant la date actuelle de localDate
+        const newLocalDate = new Date(localDate);
+  
+        // Si localDate est valide, on met à jour l'heure
+        if (!isNaN(newLocalDate)) {
+          newLocalDate.setHours(parseInt(hours), parseInt(minutes), 0, 0); // Mets à jour l'heure avec les nouvelles valeurs
+          setLocalDate(newLocalDate); // Mets à jour localDate avec la nouvelle date et heure
+        }
+      } else {
+        // Si la valeur n'est pas valide, on ne fait rien ou on réinitialise localDate
+        // Optionnellement, réinitialiser localDate à une valeur par défaut si nécessaire
+        setHours(`${localDate.getHours().toString().padStart(2, "0")}:${localDate.getMinutes().toString().padStart(2, "0")}`); // Par exemple, si l'heure est invalide, on réinitialise
       }
-
-      const filterRegex = new RegExp(value, "i");
-      const resultOptions = deselectedOptions.filter(option => option.label.match(filterRegex));
-      setOptions(resultOptions);
     },
-    [deselectedOptions],
+    [localDate] // On dépend de localDate car on l'utilise dans la fonction
   );
+  
 
   const updateSelection = useCallback(
-    selected => {
-      const selectedValue = selected.map(selectedItem => {
-        const matchedOption = options.find(option => {
+    (selected) => {
+      const selectedValue = selected.map((selectedItem) => {
+        const matchedOption = options.find((option) => {
           return option.value.match(selectedItem);
         });
-        return matchedOption && matchedOption.label;
+        return matchedOption && matchedOption.value;
       });
 
-      setSelectedOptions(selected);
-      setHoursValue(selectedValue[0] || "");
+
+      
+           // Ici, on suppose que selectedValue[0] contient l'heure sous forme de chaîne "HH:mm"
+      const [hours, minutes] = selectedValue[0].split(":").map(Number); // Sépare l'heure et les minutes
+
+      // Crée une nouvelle date en conservant la date actuelle de localDate
+      const newLocalDate = new Date(localDate);
+
+      // Si localDate est valide, on met à jour l'heure
+      if (!isNaN(newLocalDate)) {
+        newLocalDate.setHours(hours, minutes, 0, 0); // Mets à jour l'heure avec les nouvelles valeurs
+        setLocalDate(newLocalDate); // Mets à jour localDate avec la nouvelle date et heure
+      }
+          
     },
     [options],
   );
 
-  // Callback pour formater la date au format "jour/mois/année"
-  const formatDate = useCallback(date => {
-    if (!date) return "";
-    return new Date(date).toLocaleDateString("fr-FR", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    });
-  }, []); // Il n'y a pas de dépendances ici, donc la fonction est mémorisée et ne sera recalculée qu'au premier rendu
+
+  const submit =
+    () => {
+   
+      setDate(localDate); // Met à jour le layout avec les champs
+
+      const currentDate = new Date();  // Date et heure actuelles
+      const selectedDate = new Date(localDate);  // Date et heure sélectionnées
+  
+      // Vérifie si la date et l'heure sélectionnées sont dans le futur
+      if (selectedDate > currentDate) {
+        // Si la date est dans le futur, définit `published` à `false`
+        setPublished(false);
+      } else {
+        setPublished(true);
+
+      }
+          
+    }
+
+  ;
+  
+
+
+  return (
+    <Modal id={modalId} variant="base">
+      <TitleBar title="Définir la date de visibilité">
+        <button
+          disabled={!isModified}
+          variant="primary"
+          onClick={() => {
+            shopify.modal.hide(modalId); // Ferme le modal avec l'ID spécifié
+           
+            submit()
+          }}
+        >
+          Valider
+        </button>
+
+        <button
+          disabled={!isModified}
+          onClick={() => {
+            shopify.modal.hide(modalId); // Ferme le modal avec l'ID spécifié
+            setLocalDate(date); // Met à jour le layout avec les champs
+          }}
+        >
+          Annuler
+        </button>
+      </TitleBar>
+
+      <Box
+        as="section"
+        paddingBlock={{ xs: "400" }}
+        paddingInline={{ xs: "400" }}
+      >
+        <LegacyStack vertical>
+          <LegacyStack.Item>
+            <Text tone="subdued" variant="bodyMd">
+              Programmer la publication de article de blog à cette date et heure
+              :
+            </Text>
+          </LegacyStack.Item>
+
+          <LegacyStack.Item>
+            <LegacyStack distribution="fillEvenly" spacing="tight">
+              <LegacyStack.Item>
+                <TextField
+                  prefix={<Icon source={CalendarIcon} tone="neutral" />}
+                  label="Date de visibilité"
+                  labelHidden
+                  autoComplete="off"
+                  value={dateText}
+                  onFocus={() => setDateTextFocued(true)} // Ferme le Popover si le champ perd le focus
+                  
+                  onBlur={handleDateChange} // Ferme le Popover si le champ perd le focus
+                  onChange={(value) => setDateText(value)} // Ou simplement `handleChange` si pas besoin d'ajuster
+                  type="text"
+                  spellCheck={false}
+                  placeholder={dateText}
+                />
+              </LegacyStack.Item>
+              <LegacyStack.Item>
+                <Autocomplete
+                  options={options}
+                  selected={[`${localDate.getHours().toString().padStart(2, "0")}:${localDate.getMinutes().toString().padStart(2, "0")}`]}
+                  onSelect={updateSelection}
+                  textField={
+                    <Autocomplete.TextField
+                      prefix={<Icon source={ClockIcon} tone="neutral" />}
+                      suffix={utcOffset}
+                      label="Heure de visibilité"
+                      labelHidden
+                      autoComplete="off"
+                      
+                      value={hours}
+                      onChange={(value) => setHours(value)}
+                      onBlur={updateText}
+                      type="text"
+                    />
+                  }
+                />
+              </LegacyStack.Item>
+            </LegacyStack>
+          </LegacyStack.Item>
+
+          <LegacyStack.Item>
+            <DatePicker
+              month={month}
+              year={year}
+              multiMonth
+              onChange={handleDateChage}
+              onMonthChange={handleMonthChange}
+              selected={{
+                start: localDate,
+                end: localDate,
+              }}
+            />
+          </LegacyStack.Item>
+        </LegacyStack>
+      </Box>
+    </Modal>
+  );
+};
+
+
+const Visible = ({
+  isPublished,
+  setPublished,
+  date: dateSend,
+  setDate,
+}) => {
+  const shopify = useAppBridge();
+
+
+  const theDateAsSelected = useMemo(() => {
+    return isValidDate(dateSend);
+  }, [dateSend]);
+
+   const date = useMemo(() => {
+      return theDateAsSelected ? new Date(dateSend) : new Date();
+    }, [dateSend, isPublished]);
+
+
+ 
+
 
   return (
     <Card>
-      <BlockStack gap={{ xs: "400", sm: "500" }}>
-        <h2 className="Polaris-Text--root Polaris-Text--headingMd Polaris-Text--semibold" tabIndex="-1">
+      <BlockStack 
+     
+      
+      gap={{ xs: "100" }}>
+
+        <InlineStack
+        wrap
+        align="space-between"
+        direction={{xs:'row'}}
+        
+        >
+  <h2
+          className="Polaris-Text--root Polaris-Text--headingMd Polaris-Text--semibold"
+          tabIndex="-1"
+        >
           Visibilité
         </h2>
+
+        
+{!theDateAsSelected && !isPublished && 
+
+<Box>
+
+<Button
+                            icon={CalendarTimeIcon}
+                            variant="plain"
+                            size="medium"
+                            textAlign="center"
+                            accessibilityLabel="Définir la date de visibilité"
+                            onClick={() => shopify.modal.show(modalId)}
+                          ></Button>
+
+</Box>
+
+
+}
+
+        </InlineStack>
+      
 
         <LegacyStack vertical spacing="loose" alignment="leading">
           <LegacyStack.Item>
@@ -176,85 +475,118 @@ const Visible = ({ isPublished, setPublished, date: initalDate, setDate }) => {
               title="Visibilité"
               titleHidden
               choices={[
-                { label: `Visible ${isPublished ? `(en date du ${formatDate(selectedDates.start)} à ${hours})` : ""}`, value: "visible" },
-                { label: "Masqué", value: "hidden" },
+                {
+                  label: `Visible`,
+                  helpText: isPublished ? (
+                    <Text variant="bodySm" tone="subdued" as="span">
+                      <InlineStack
+                        align="space-between"
+                        blockAlign="start"
+                        gap={{ xs: "200" }}
+                        direction={{ xs: "row" }}
+                      >
+                        <Text variant="bodyMd" tone="subdued" as="span">
+                          À partir du
+                          {` ${formatDate(date, {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  })} à ${date.getHours().toString().padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}`}
+                        </Text>
+                        <Box>
+                          <Button
+                            icon={EditIcon}
+                            variant="plain"
+                            size="medium"
+                            textAlign="center"
+                            accessibilityLabel="Définir la date de visibilité"
+                            onClick={() => shopify.modal.show(modalId)}
+                          ></Button>
+                        </Box>
+                      </InlineStack>
+                    </Text>
+                  ) : undefined,
+                  value: "visible",
+                },
+                ,
+                {
+                  label: "Masqué",
+                  helpText: !isPublished && theDateAsSelected ? (
+                    <Text variant="bodySm" tone="subdued" as="span">
+                      <InlineStack
+                        align="space-between"
+                        blockAlign="start"
+                        gap={{ xs: "200" }}
+                        direction={{ xs: "row" }}
+                      >
+                        <Text variant="bodyMd" tone="subdued" as="span">
+                        Deviendra visible le
+                          {` ${formatDate(date, {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  })} à ${date.getHours().toString().padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}`}
+                        </Text>
+                        <InlineStack
+                        align="space-between"
+                        gap={{xs:'300', sm:'025'}}
+                        direction={{xs:"row"}}
+                        
+                        >
+                        <Box>
+                          <Button
+                            icon={EditIcon}
+                            variant="plain"
+                            size="medium"
+                            textAlign="center"
+                            accessibilityLabel="Modifier la date de visibilité"
+                            onClick={() => shopify.modal.show(modalId)}
+                          ></Button>
+                        </Box>
+                        <Box>
+                          <Button
+                            icon={DeleteIcon}
+                            variant="plain"
+                            size="medium"
+                            textAlign="center"
+                            accessibilityLabel="Supprimer la date de visibilité"
+                            onClick={() => setDate(initialArticle.date)}
+                          ></Button>
+                        </Box>
+
+                        </InlineStack>
+                  
+                      </InlineStack>
+                    </Text>
+                  ) : undefined,
+                  value: "hidden",
+                },
               ]}
               selected={isPublished ? "visible" : "hidden"}
-              onChange={(selected, name) => setPublished(selected.includes("visible"))} // Ou simplement `handleChange` si pas besoin d'ajuster
-            />
-          </LegacyStack.Item>
-
-          {isOpen && (
-            <LegacyStack.Item>
-              <Box paddingBlockEnd={{ xs: "100" }}>
-                <span aria-hidden="true">{isPublished ? "Date de visibilité" : "Date de création"}</span>
-              </Box>
-
-              <LegacyStack distribution="fillEvenly" spacing="tight">
-                <LegacyStack.Item>
-                  <Popover
-                    active={popoverActive}
-                    activator={
-                      <TextField
-                        prefix={<Icon source={CalendarIcon} tone="neutral" />}
-                        label={isPublished ? "Date de visibilité" : "Date de création"}
-                        labelHidden
-                        autoComplete="off"
-                        value={formatDate(selectedDates.start)}
-                        onFocus={() => setPopoverActive(true)} // Ferme le Popover si le champ perd le focus
-                        onBlur={handleBlur} // Ferme le Popover si le champ perd le focus
-                        onChange={(value, id) => setDate(value)} // Ou simplement `handleChange` si pas besoin d'ajuster
-                        type="text"
-                        spellCheck={false}
-                        placeholder={formatDate(new Date())}
-                      />
-                    }
-                    onClose={() => setPopoverActive(false)} // Ferme le Popover
-                    preferredAlignment="center"
-                    preferredPosition="below"
-                    autofocusTarget="none"
-                    preventCloseOnChildOverlayClick={true}
-                  >
-                    <Popover.Section>
-                      <div tabIndex="-1" className="wRuRU">
-                        <DatePicker
-                          month={month}
-                          year={year}
-                          disableDatesAfter={new Date()} // Empêche les dates après la date actuelle
-                          onChange={value => {
-                            handleDateChage(value);
-                            setPopoverActive(false); // Ferme après sélection
-                          }}
-                          onMonthChange={handleMonthChange}
-                          selected={selectedDates}
-                        />
-                      </div>
-                    </Popover.Section>
-                  </Popover>
-                </LegacyStack.Item>
-                <LegacyStack.Item>
-                  <Autocomplete options={options} selected={selectedOptions} onSelect={updateSelection} textField={<Autocomplete.TextField prefix={<Icon source={ClockIcon} tone="neutral" />} suffix="UTC+1" label="Heure de visibilité" labelHidden autoComplete="off" value={hours} onChange={updateText} type="text" />} />
-                </LegacyStack.Item>
-              </LegacyStack>
-            </LegacyStack.Item>
-          )}
-          <LegacyStack.Item>
-            <Button
-              variant="plain"
-              size="medium"
-              textAlign="center"
-              onClick={() => {
-                handleChange();
-                handleDateChange(); // Ferme après sélection
+              onChange={(selected, name) => {
+                const idPB = selected.includes("visible");  // Vérifie si "visible" est sélectionné
+              
+                setPublished(idPB);  // Met à jour l'état `published`
+              
+                const currentDate = new Date();  // Date et heure actuelles
+                const selectedDate = new Date(dateSend);  // Date et heure sélectionnées
+              
+                // Vérifie si la date et l'heure sélectionnées sont dans le futur
+                if (selectedDate > currentDate && idPB) {
+                  // Si la date est dans le futur et si "visible" est sélectionné, met à jour la date
+                  setDate(currentDate);  // Redéfinit la date à la date actuelle
+                } else if (selectedDate < currentDate && !idPB) {
+                  // Si la date est dans le passé et si "visible" n'est pas sélectionné, redéfinit la date initiale
+                  setDate(initialArticle.date);  // Redéfinit la date à la date initiale de l'article
+                }
               }}
-            >
-              <Text variant="bodyMd" fontWeight="regular" as="span">
-                {isOpen ? "Valider" : `${isPublished ? "Définir la date de visibilité" : "Définir la date de création"}`}
-              </Text>
-            </Button>
+              // Ou simplement `handleChange` si pas besoin d'ajuster
+            />
           </LegacyStack.Item>
         </LegacyStack>
       </BlockStack>
+
+      <ModalLayout setDate={setDate} date={date} setPublished={setPublished} />
     </Card>
   );
 };

@@ -6,6 +6,8 @@ export default function builder(response, userErrors, body, params) {
     // Retourne un objet avec les entrées et les informations de pagination
     return {
       entries: response.entries.metaobjects.edges.map(edge => ({
+        id: edge.node.id,
+        handle: edge.node.handle,
         value: edge.node.id,
         label: edge.node.fields.find(field => field.key === "name")?.value || ""
       })),

@@ -10,7 +10,7 @@ export default function applyPromoCode(body, blogId) {
 
 
 query GetMetaobjectEntries($type: String!, $first: Int) {
-  metaobjectDefinitionByType(type: $type) {
+  metaobjects(type: $type) {
 
 
   ${metaobjectDefinition}
@@ -38,7 +38,7 @@ query GetMetaobjectEntries($type: String!, $first: Int) {
         type: String(body.type),
         first: body.first ? parseInt(body.first) : 250
     },
-    mutationName: "metaobjectDefinitionByType",
+    mutationName: "metaobjects",
     fetchMode: "admin",
   };
 }

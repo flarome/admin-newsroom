@@ -6,191 +6,413 @@ import React, {
   useCallback,
 } from "react";
 
+
 import { useFetcherWithPromise } from "../../../utils/useFetcherWithPromise";
 import { useArticle } from "../context/ArticleProvider";
 
 import { useMetaobjectModal } from "../../metaobjects/context/ModalContext";
+
 import {
-  FormLayout,
-  Tooltip,
-  TextField,
-  Popover,
-  Button,
-  Modal,
-  Scrollable,
-  Box,
-  InlineStack,
-  Text,
-  Divider,
   Icon,
   LegacyCard,
+  LegacyStack,
+  FormLayout,
+  Popover,
+  Box,
+  Button,
+  TextField,
   Listbox,
   AutoSelection,
-  Autocomplete,
+  Scrollable,
   EmptySearchResult,
-} from "@shopify/polaris";
-import { PlusCircleIcon, SearchIcon } from "@shopify/polaris-icons";
+  InlineStack,
+} from '@shopify/polaris';
+import { PlusCircleIcon, SearchIcon, EditIcon} from '@shopify/polaris-icons';
 
-const type = "press_contacts"
+import { author } from "../../../modules/initialState";
+const type = author.type;
+const listboxId = 'SearchableListbox' + type;
+const actionValue = '__ACTION__' + type;
+const addItemActionValue = '__ACTIONADDITEM__' + type;
+
+
+
+const interval = 25;
+
 const Author = ({ author, setAuthor }) => {
+
+  // Modal Metaobject Provider
   const { showModal } = useMetaobjectModal();
+
   // Article Provider
   const { loadArticle } = useArticle();
+  const fetcher = useFetcherWithPromise("metaobjectEntries" + type);
 
-  const fetcher = useFetcherWithPromise("metaobjectEntries");
-
+  // first load
   const [isCH, setCH] = useState(false);
 
-  const [deselectedOptions, setDeselectedOptions] = useState([]);
+  // data
+   const [segments, setSegments] = useState([]);
+   const [activeOptionId, setActiveOptionId] = useState(null);
+   
 
-  const [selectedOptions, setSelectedOptions] = useState([]);
-  const [inputValue, setInputValue] = useState("");
+const [showFooterAction, setShowFooterAction] = useState(true);
+const [query, setQuery] = useState(author.name);
+const [lazyLoading, setLazyLoading] = useState(true);
+const [willLoadMoreResults, setWillLoadMoreResults] = useState(true);
+const [visibleOptionIndex, setVisibleOptionIndex] = useState(6);
 
-  const [options, setOptions] = useState(deselectedOptions);
-  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    setOptions(deselectedOptions);
-  }, [deselectedOptions]); // Déclenche l'effet chaque fois que `isModified` change
+const [filteredSegments, setFilteredSegments] = useState([]);
 
-  const handleAuthor = () => {
-    async function loadAuthor() {
-      try {
-        if (!isCH) {
-          setLoading(true);
 
-          const { entries, pageInfo } = await loadArticle(
-            fetcher,
-            null,
-            "metaobjectDefinitionAuthor",
-            { first: 250, type: type },
-            false,
-          );
+// show all
+const handleClickShowAll = () => {
+  setShowFooterAction(false);
+  setVisibleOptionIndex(segments.length);
+};
 
-          // Mise à jour des états
-          setCH(true);
-          setDeselectedOptions(entries);
-        }
-      } catch (error) {
-        console.error("Erreur lors du chargement des auteurs :", error);
-      } finally {
-        setLoading(false);
-      }
+// add entrie
+const handleClickModalShow = (id, handle) => {
+  showModal(type, id, handle);
+  setPopoverActive(false);
+              setCH(false);
+};
+
+const handleFilterSegments = (query) => {
+  const nextFilteredSegments = segments.filter((segment) => {
+    return segment.label
+      .toLocaleLowerCase()
+      .includes(query.toLocaleLowerCase().trim());
+  });
+
+  setFilteredSegments(nextFilteredSegments);
+};
+
+const handleQueryChange = (query) => {
+  setQuery(query);
+
+  if (query.length >= 2) handleFilterSegments(query);
+};
+
+// clear query button
+const handleQueryClear = () => {
+  handleQueryChange('');
+};
+
+const handleSegmentSelect = (segmentIndex) => {
+  if (segmentIndex === actionValue) {
+    return handleClickShowAll();
+  }
+
+  if (segmentIndex === addItemActionValue) {
+      return handleClickModalShow(null, null);
     }
 
-    loadAuthor();
-  };
+    const element = segments.find(item => item.value === segmentIndex);
 
-  const updateText = useCallback(
-    (value) => {
-      setInputValue(value);
-
-      if (!loading) {
-        setLoading(true);
-      }
-
-      setTimeout(() => {
-        if (value === "") {
-          setOptions(deselectedOptions);
-          setLoading(false);
-          return;
-        }
-        const filterRegex = new RegExp(value, "i");
-        const resultOptions = options.filter((option) =>
-          option.label.match(filterRegex),
-        );
-        setOptions(resultOptions);
-        setLoading(false);
-      }, 300);
-    },
-    [deselectedOptions, loading, options],
-  );
-
-  const updateSelection = useCallback(
-    (selected) => {
-      const selectedText = selected.map((selectedItem) => {
-        const matchedOption = options.find((option) => {
-          return option.value.match(selectedItem);
-        });
-        return matchedOption && matchedOption.label;
-      });
-      setSelectedOptions(selected);
-      setInputValue(selectedText[0] || "");
-    },
-    [options],
-  );
-
-  const textField = (
-    <Autocomplete.TextField
-      onChange={updateText}
-      onFocus={handleAuthor}
-      label="Auteur"
-      value={inputValue}
-      prefix={<Icon source={SearchIcon} />}
-      placeholder="Rechercher des entrées"
-      autoComplete="off"
-    />
-  );
-
-  const emptyState = (
-    <Box
-      paddingBlockStart={{ xs: "200" }}
-      paddingBlockEnd={{ xs: "150" }}
-      paddingInline={{ xs: "300" }}
-    >
-      <InlineStack align="center" wrap direction={{ xs: "row" }}>
-        <Box paddingBlock={{ xs: "400" }} paddingInline={{ xs: "400" }}>
-          <Text as="span" variant="bodyMd" tone="subdued">
-            Aucune entrée trouvée pour Mise en page
-          </Text>
-        </Box>
-      </InlineStack>
-    </Box>
-  );
-
-  return (
-    <div>
-      <h2
-        className="Polaris-Text--root Polaris-Text--headingMd Polaris-Text--semibold"
-        tabIndex="-1"
-      >
-        Organisation
-      </h2>
-      <div
-        className="Polaris-BlockStack"
-        style={{
-          "--pc-block-stack-order": "column",
-          "--pc-block-stack-gap-xs": "var(--p-space-400)",
-        }}
-      >
-        <FormLayout>
-          <Autocomplete
-            actionBefore={{
-              accessibilityLabel: "Ajouter une nouvelle entrée",
-
-              content: inputValue
-                ? "Ajouter « " + inputValue + " »"
-                : "Ajouter une nouvelle entrée",
-              icon: PlusCircleIcon,
-              wrapOverflow: true,
-
-              onAction: () => {
-                showModal(type, null)
-              },
-            }}
-            options={options}
-            emptyState={emptyState}
-            selected={selectedOptions}
-            onSelect={updateSelection}
-            loading={loading}
-            textField={textField}
-          />
-
-          
-        </FormLayout>
-      </div>
-    </div>
-  );
+    setAuthor({...author, name: element.label, handle: element.handle, id: element.id})
+    setQuery(element.label);
 };
+
+const handleActiveOptionChange = (_, domId) => {
+  setActiveOptionId(domId);
+};
+
+// This is just to illustrate lazy loading state vs loading state. This is an
+// example, so we aren't fetching from GraphQL. You'd use `pageInfo.hasNextPage`
+// from your GraphQL query data instead of this fake "willLoadMoreResults" state
+// along with setting `first` your GraphQL query's variables to your app's
+// default max edges limit (e.g., 250).
+
+const handleLazyLoadSegments = () => {
+  if (willLoadMoreResults && !showFooterAction) {
+    setLazyLoading(true);
+
+    const options = query ? filteredSegments : segments;
+
+    setTimeout(() => {
+      const remainingOptionCount = options.length - visibleOptionIndex;
+      const nextVisibleOptionIndex =
+        remainingOptionCount >= interval
+          ? visibleOptionIndex + interval
+          : visibleOptionIndex + remainingOptionCount;
+
+      setLazyLoading(false);
+      setVisibleOptionIndex(nextVisibleOptionIndex);
+
+      if (remainingOptionCount <= interval) {
+        setWillLoadMoreResults(false);
+      }
+    }, 1000);
+  }
+};
+
+
+// get data
+const handleAuthor = () => {
+  setPopoverActive(true);
+
+  async function loadAuthor() {
+    try {
+      if (!isCH) {
+          setLazyLoading(true);
+
+
+        const { entries, pageInfo } = await loadArticle(
+          fetcher,
+          null,
+          "metaobjectDefinitionAuthor",
+          { first: 250, type: type },
+          false,
+        );
+
+        // Mise à jour des états
+        setCH(true);
+        setSegments(entries);
+        setActiveOptionId(entries[0]?.id);
+      }
+    } catch (error) {
+      console.error("Erreur lors du chargement des auteurs :", error);
+    } finally {
+
+      setLazyLoading(false);
+    }
+  }
+
+  loadAuthor();
+};
+
+
+
+const textFieldMarkup = (
+    <TextField
+      onFocus={handleAuthor}
+     
+      clearButton
+
+      label="Auteur"
+        placeholder={author.name ? author.name : "Rechercher des entrées"}
+      autoComplete="off"
+      value={query}
+      prefix={<Icon source={SearchIcon} />}
+      ariaActiveDescendant={activeOptionId}
+      ariaControls={listboxId}
+      onChange={handleQueryChange}
+      onClearButtonClick={handleQueryClear}
+    />
+
+);
+
+const segmentOptions = query ? filteredSegments : segments;
+
+
+const ListboxItem = ({ label }) => {
+  return (
+  <Text variant="bodySm" tone="subdued" as="span">
+  <InlineStack
+    align="space-between"
+    blockAlign="start"
+    gap={{ xs: "200" }}
+    direction={{ xs: "row" }}
+  >
+    <Text variant="bodyMd" tone="subdued" as="span">
+    {label}
+    </Text>
+    <Box>
+      <Button
+        icon={EditIcon}
+        variant="plain"
+        size="medium"
+        textAlign="center"
+        accessibilityLabel="Modifier l'entrée"
+        onClick={() => {
+         handleClickModalShow(null, null);
+
+       }}
+      ></Button>
+    </Box>
+  </InlineStack>
+</Text>);
+};
+
+const segmentList =
+  segmentOptions.length > 0
+    ? segmentOptions
+        .slice(0, visibleOptionIndex)
+        .map(({label, id, value}) => {
+          const selected = author.id === value;
+
+          return (
+            <Listbox.Option key={id} value={value} selected={selected}>
+
+<Listbox.TextOption selected={selected}>
+                  
+                
+              <InlineStack
+    align="space-between"
+    blockAlign="start"
+    gap={{ xs: "200" }}
+    direction={{ xs: "row" }}
+  >
+            
+            
+             <Button
+                icon={EditIcon}
+                variant="plain"
+                size="small"
+                accessibilityLabel="Modifier l'entrée"
+                onClick={() => handleClickModalShow(id, value)}
+              />
+             
+           
+             {label}
+             </InlineStack>
+             </Listbox.TextOption>
+            </Listbox.Option>
+          );
+        })
+    : null;
+
+
+    
+
+const showAllMarkup = showFooterAction && segments.length > visibleOptionIndex  ? (
+  <Listbox.Action value={actionValue}>
+    <span style={{color: 'var(--p-color-text-emphasis)'}}>
+      Montrer les {segments.length} entrées
+    </span>
+  </Listbox.Action>
+) : null;
+
+const lazyLoadingMarkup = lazyLoading ? (
+  <Listbox.Loading
+    accessibilityLabel={`${
+      query ? 'Filtering' : 'Loading'
+    } customer segments`}
+  />
+) : null;
+
+const noResultsMarkup =
+  segmentOptions.length === 0 && query?.trim() ? (
+    <EmptySearchResult
+      title=""
+      description={`Aucun résultats trouvé pour "${query}"`}
+    />
+  ) : null;
+
+const listboxMarkup = (
+  <Listbox
+  autoSelection={AutoSelection.FirstSelected}
+
+
+    enableKeyboardControl
+    
+    accessibilityLabel="Rechercher et selectionner une entrée"
+    customListId={listboxId}
+    onSelect={handleSegmentSelect}
+    onActiveOptionChange={handleActiveOptionChange}
+  >
+
+<Listbox.Action value={addItemActionValue}>
+      <LegacyStack spacing="tight">
+        <Icon source={PlusCircleIcon} tone="base" />
+        <div>{query
+              ? "Ajouter « " + query + " »"
+              : "Ajouter une nouvelle entrée"}</div>
+      </LegacyStack>
+    </Listbox.Action>
+
+    {segmentList}
+    {showAllMarkup}
+    {noResultsMarkup}
+    {lazyLoadingMarkup}
+  </Listbox>
+);
+
+
+
+
+
+const [popoverActive, setPopoverActive] = useState(false);
+
+const handleClosePicker = () => {
+  setPopoverActive(false);
+  handleQueryClear();
+};
+
+return (
+<div>
+    <h2
+      className="Polaris-Text--root Polaris-Text--headingMd Polaris-Text--semibold"
+      tabIndex="-1"
+    >
+      Organisation
+    </h2>
+    <div
+      className="Polaris-BlockStack"
+      style={{
+        "--pc-block-stack-order": "column",
+        "--pc-block-stack-gap-xs": "var(--p-space-400)",
+      }}
+    >
+      <FormLayout>
+
+  
+
+
+
+<Popover
+
+
+
+preferInputActivator={false}
+      active={popoverActive}
+      fullWidth
+      activator={textFieldMarkup}
+      
+      ariaHaspopup="listbox"
+      preferredAlignment="center"
+      autofocusTarget="none"
+      preferredPosition="below"
+
+      onClose={handleClosePicker}
+    >
+      <Popover.Pane fixed>
+   
+        
+
+          <Scrollable
+            shadow
+        
+            onScrolledToBottom={handleLazyLoadSegments}
+          >
+
+      <Box
+
+      paddingInline={0}
+      paddingBlock={{xs: '200'}}
+      
+      >
+            {listboxMarkup}
+            </Box>
+
+          </Scrollable>
+
+  
+
+
+       
+      </Popover.Pane>
+    </Popover>
+
+     </FormLayout>
+        </div>
+      </div>
+
+
+ 
+);
+}
 
 export default Author;

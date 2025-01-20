@@ -2,6 +2,8 @@ import React, { createContext, useContext, useState } from "react";
 import { initialArticle, initalBlog } from "../../../modules/initialState";
 import { useLocation } from "@remix-run/react";
 import graphql from "../../../config/actions";
+
+import { useMetaobjectModal } from "./ModalContext";
 // Créez le contexte
 const ArticleContext = createContext();
 
@@ -12,12 +14,30 @@ export function useMetaobject() {
 
 // Provider pour gérer les articles et le chargement
 export function MetaobjectProvider({ children }) {
+
+      const { modalState, setModalState } = useMetaobjectModal();
+
   const location = useLocation();
 
-  const [fields, setFields] = useState(initialArticle);
-  const [originalFields, setOriginalFields] = useState(initialArticle);
+  const [template, setTemplate] = useState({});
+  const [isNew, setIsNew] = useState(false);
+  const [fields, setFields] = useState({});
+  const [originalFields, setOriginalFields] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [errors, setErrors] = useState({});
+  const [handle, setHandle] = useState(null);
+
+    // Fonction pour fermer la modal
+    const resetMetaobject = () => {
+      setTemplate({});
+      setIsNew(false);
+      setFields({});
+      setHandle(null);
+    setOriginalFields({});
+    setIsLoading(true);
+    setErrors({});
+
+    };
 
   // Fonction pour supprimer une erreur spécifique
   const removeError = (key) => {
@@ -54,8 +74,8 @@ export function MetaobjectProvider({ children }) {
     }
 
     const {
-      article,
-      blog,
+      entrie = {},
+      metaobjectDefinition = {},
       errors: fetchedErrors = {},
       banners: fetchedBanners = [],
     } = response;
@@ -63,12 +83,24 @@ export function MetaobjectProvider({ children }) {
     let bannerIds = state.bannerIds || [];
 
     if (!fetchedErrors || Object.keys(fetchedErrors).length === 0) {
-      setFields(article || initialArticle);
-      setOriginalFields(article || initialArticle);
+      const fields1 = entrie?.fields || {};
+
+   
+      
+      setFields(fields1);
+      setTemplate(metaobjectDefinition);
+      setOriginalFields(fields1);
+      setIsNew(entrie?.handle && entrie?.handle !== "" ? false : true);
+
+      
     } else {
       setErrors(fetchedErrors);
     }
 
+    setModalState({...modalState, handle: entrie.handle || modalState.handle, id: entrie.id || modalState.id, type: metaobjectDefinition.type || modalState.type  });
+    
+
+    
     setIsLoading(false);
   };
 
@@ -76,9 +108,13 @@ export function MetaobjectProvider({ children }) {
     <ArticleContext.Provider
       value={{
         errors,
-
+        isNew,
+        handle,
+        resetMetaobject,
         removeError,
         originalFields,
+        setOriginalFields,
+        template, setTemplate,
         fields,
         setFields,
         isLoading,

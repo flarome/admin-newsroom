@@ -3,7 +3,6 @@ import { SkeletonPage, Layout, LegacyCard, SkeletonBodyText, TextContainer, Skel
 
 const Loading = () => {
   return (
-    <div className="_Skeleton_1lmrp_21 _WithTitleBar_1lmrp_27">
 
     <SkeletonPage primaryAction>
       <Layout>
@@ -66,7 +65,6 @@ const Loading = () => {
       </Layout>
     </SkeletonPage>
   
-    </div>
   );
 };
 

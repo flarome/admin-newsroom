@@ -1,6 +1,8 @@
 import { formatDate } from "../../global-modules/utils/formatDate";
 import { parseJSONSafe } from "../../global-modules/utils/parseJSONSafe";
 
+import { author } from "../../modules/initialState";
+
 export const defaultImage = {
     downloadUrl: "",
     alt: "",
@@ -73,6 +75,8 @@ export function getArticleInfo(fields, article) {
     )?.node?.value
   );
 
+  const editor = parseJSONSafe(article?.metafields?.edges?.find(edge => edge.node.namespace === "contact" && edge.node.key === "editor")?.node);
+
   const now = new Date();
 
   return fields.reduce((info, field) => {
@@ -81,7 +85,7 @@ export function getArticleInfo(fields, article) {
         info.title = article.title || "";
         break;
       case "author":
-        info.author = article.author?.name || "";
+           info.author = {...author, name: article.author?.name, id: editor.value } 
         break;
       case "url":
         info.url = article.onlineStoreUrl || article.url || "";
