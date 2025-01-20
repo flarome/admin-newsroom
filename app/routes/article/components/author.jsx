@@ -57,17 +57,13 @@ const Author = ({ author, setAuthor }) => {
    
 
 const [showFooterAction, setShowFooterAction] = useState(true);
-const [query, setQuery] = useState(author.name);
+const [query, setQuery] = useState(String(author.name));
 const [lazyLoading, setLazyLoading] = useState(true);
 const [willLoadMoreResults, setWillLoadMoreResults] = useState(true);
 const [visibleOptionIndex, setVisibleOptionIndex] = useState(6);
 
 
 const [filteredSegments, setFilteredSegments] = useState([]);
-
- useEffect(() => {
-  handleQueryChange(author.name);
-  }, [author.name]); // Déclenche l'effet chaque fois que `isModified` change
 
 
 
@@ -99,7 +95,7 @@ const handleFilterSegments = (query) => {
 const handleQueryChange = (query) => {
   setQuery(query);
 
-  if (query.length >= 2) handleFilterSegments(query);
+  if (query && query.length >= 2) handleFilterSegments(query);
 };
 
 // clear query button
