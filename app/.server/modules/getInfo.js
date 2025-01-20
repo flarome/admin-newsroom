@@ -1,37 +1,8 @@
 import { formatDate } from "../../global-modules/utils/formatDate";
 import { parseJSONSafe } from "../../global-modules/utils/parseJSONSafe";
-
+import { mainImage as defaultImage } from "../../modules/initialState";
 import { author } from "../../modules/initialState";
 
-export const defaultImage = {
-    downloadUrl: "",
-    alt: "",
-    caption: "",
-    sizes: {
-      s551_980: "",
-      s1102_1960: "",
-      s389_692: "",
-      s778_1384: "",
-      s416_416: "",
-      s832_832: "",
-      s207_368: "",
-      s414_736: "",
-      s132_132: "",
-      s264_264: "",
-      s300_300: "",
-      s600_600: "",
-      s369_656: "",
-      s738_1312: "",
-      s900_900: "",
-      s630_1200: "",
-      s520_416: "",
-      s1040_832: "",
-      s603_1072: "",
-      s1206_2144: "",
-      s810_1440: "",
-      s1620_2880: "",
-    },
-  };
 
 /**
  * Extrait les informations d'une image.
