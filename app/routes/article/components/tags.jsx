@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useCallback } from "react";
 
-import { Autocomplete, Icon, Box, BlockStack, InlineStack, Button } from "@shopify/polaris";
+import { Autocomplete, Icon, Box, BlockStack, InlineStack, Button, Tag } from "@shopify/polaris";
 import { XSmallIcon, PlusCircleIcon } from "@shopify/polaris-icons";
 
 const Tags = ({ allTags, tags: selectedOptions, setTags }) => {

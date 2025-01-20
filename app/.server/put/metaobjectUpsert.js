@@ -40,12 +40,13 @@ export default async function applyPromoCode(body, blogId, themeId, client, shop
             type: body.type,
             handle: body.handle || body.type + formatDate()
           },
-    metaobject: {
-        fields: Object.keys(body.fields).map(key => ({
-            key: key,
-            value: body.fields[key]
-          }))
-      },
+          metaobject: {
+            fields: Object.keys(body.fields).map(key => ({
+              key: key,
+              value: (body.fields[key] == null) ? "" : body.fields[key] // Vérifie si la valeur est null ou undefined
+            }))
+          },
+          
     },
     mutationName: "metaobjectUpsert",
     fetchMode: "admin",

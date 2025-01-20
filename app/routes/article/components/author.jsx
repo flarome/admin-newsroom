@@ -65,6 +65,13 @@ const [visibleOptionIndex, setVisibleOptionIndex] = useState(6);
 
 const [filteredSegments, setFilteredSegments] = useState([]);
 
+ useEffect(() => {
+  handleQueryChange(author.name);
+  }, [author.name]); // Déclenche l'effet chaque fois que `isModified` change
+
+
+
+
 
 // show all
 const handleClickShowAll = () => {
@@ -111,8 +118,8 @@ const handleSegmentSelect = (segmentIndex) => {
 
     const element = segments.find(item => item.value === segmentIndex);
 
-    setAuthor({...author, name: element.label, handle: element.handle, id: element.id})
-    setQuery(element.label);
+    setAuthor({...author, name: element.label, handle: element.handle, id: element.id});
+    handleQueryChange(element.label);
 };
 
 const handleActiveOptionChange = (_, domId) => {
@@ -169,8 +176,10 @@ const handleAuthor = () => {
 
         // Mise à jour des états
         setCH(true);
-        setSegments(entries);
-        setActiveOptionId(entries[0]?.id);
+        setSegments(entries || []);
+        setActiveOptionId(entries?.[0]?.id);
+        const element = entries.find(item => item.value === author.value);
+        setAuthor({...author, name: element.label, handle: element.handle, id: element.id});
       }
     } catch (error) {
       console.error("Erreur lors du chargement des auteurs :", error);
