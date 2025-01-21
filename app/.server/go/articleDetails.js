@@ -23,7 +23,7 @@ export function extractArticleTemplates(files) {
     });
 }
 
-  export default function builder(response, userErrors, body, errors) {
+  export default async function builder(response, userErrors, body, errors, shopify) {
 
     if (errors && Object.keys(errors).length > 0) {
 return {
@@ -39,10 +39,10 @@ return {
   
     // Construction de la réponse finale
     return {
-      article: body.hasArticle ? formatArticle({  
+      article: body.hasArticle ? await formatArticle({  
         ...response.article,
         url: `${baseUrl}${response.blog.handle}/${response.article.handle}`,
-      }) : {...initialArticle},
+      }, shopify) : {...initialArticle},
     
       shop: response.shop,
       blog: {

@@ -9,7 +9,7 @@
 import { formatDate } from "../../global-modules/utils/formatDate";
 import { parseJSONSafe } from "../../global-modules/utils/parseJSONSafe";
 
-import { author } from "../../modules/initialState";
+
 
 import { mainImage as defaultImage } from "../../modules/initialState";
 
@@ -41,7 +41,7 @@ export function getArticleInfo(fields, article, local, trr = 30) {
         info.title = title;
         break;
         case "author":
-          info.author = {...author, name: article.author?.name, id: editor } 
+          info.author = article.author?.name;
           break;
         case "url":
           info.url = article.url;

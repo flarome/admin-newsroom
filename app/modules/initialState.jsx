@@ -43,13 +43,7 @@ export const layout = {
   banner_full: null,
 }
 
-export const author = {
 
-  type: "press_contacts",
-  id: null,
-  handle: null,
-  name: null
-}
 export const initialArticle = {
   isNewArticle: true,
   defaultCursor: "",
@@ -64,7 +58,8 @@ export const initialArticle = {
   handle: "",
   redirectNewHandle: false,
   date: "",
-  author,
+  author: "",
+  contactPresse: [],
   mainImage,
   content: "",
   tags: [],

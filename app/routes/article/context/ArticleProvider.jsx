@@ -156,6 +156,7 @@ export function ArticleProvider({ children }) {
     }
 
     const {
+      success = true,
       article,
       blog,
       errors: fetchedErrors = {},
@@ -164,7 +165,7 @@ export function ArticleProvider({ children }) {
     const state = location.state || {};
     let bannerIds = state.bannerIds || [];
 
-    if (!fetchedErrors || Object.keys(fetchedErrors).length === 0) {
+    if ((!fetchedErrors && success) || (Object.keys(fetchedErrors).length === 0 && success)) {
       setFields(article || initialArticle);
       setOriginalFields(article || initialArticle);
       setBlog(blog || initalBlog);

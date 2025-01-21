@@ -41,6 +41,11 @@ export default async function applyPromoCode(body, blogId, themeId, client, shop
             handle: body.handle || body.type + formatDate()
           },
           metaobject: {
+            capabilities: {
+              publishable: {
+                status: "ACTIVE" // Fournir "ACTIVE" comme une chaîne
+              }
+            },
             fields: Object.keys(body.fields).map(key => ({
               key: key,
               value: (body.fields[key] == null) ? "" : body.fields[key] // Vérifie si la valeur est null ou undefined

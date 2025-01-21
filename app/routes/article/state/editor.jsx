@@ -564,6 +564,10 @@ const disabledSubmit = useMemo(() => {
                     setAuthor={(content) =>
                       handleChangeFields(content, "author")
                     }
+                    contactPresse={fields.contactPresse}
+                    setContactPresse={(content) =>
+                      handleChangeFields(content, "contactPresse")
+                    }
                   />
 
                   <Bleed

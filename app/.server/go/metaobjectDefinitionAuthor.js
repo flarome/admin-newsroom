@@ -10,7 +10,7 @@ export default function builder(response, userErrors, body, params) {
 
     // Vérification de la présence des propriétés nécessaires
     const node = edge.node;
-    const labelField = node.fields?.find(field => field.key === "name");
+    const labelField = node.fields?.find(field => field.key === "name") || node.fields?.find(field => field.key === "email");
 
     return {
       id: node.id || null,

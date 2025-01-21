@@ -1,7 +1,7 @@
 import { formatDate } from "../../global-modules/utils/formatDate";
 import { parseJSONSafe } from "../../global-modules/utils/parseJSONSafe";
 import { mainImage as defaultImage } from "../../modules/initialState";
-import { author } from "../../modules/initialState";
+import {getMetaobjectById} from "../modules/getMetaobjectById"
 
 
 /**
@@ -39,14 +39,34 @@ export function getContent(data = {}) {
  * @param {Object} article - L'objet article à traiter.
  * @returns {Object} Un objet contenant uniquement les champs demandés.
  */
-export function getArticleInfo(fields, article) {
+export async function getArticleInfo(fields, article, local, shopify) {
   const contentJson = parseJSONSafe(
     article?.metafields?.edges?.find(
       (edge) => edge.node.namespace === "article" && edge.node.key === "data_json"
     )?.node?.value
   );
 
-  const editor = parseJSONSafe(article?.metafields?.edges?.find(edge => edge.node.namespace === "contact" && edge.node.key === "editor")?.node);
+  const editor = parseJSONSafe(article?.metafields?.edges?.find(edge => edge.node.namespace === "contact" && edge.node.key === "editor")?.node?.value);
+
+
+  console.log('reuieeditor', editor);
+/*
+  let authorArray = [];
+  if (editor && editor.length > 0 && fields.includes("contact-presse")) {
+     authorArray = await Promise.all(
+      editor.map(async (entrie) => {
+        const metaobject = await getMetaobjectById(shopify, entrie);
+        const label = metaobject?.fields?.find(field => field.key === "name")?.value;
+        
+        return {
+          value: entrie,
+          label: label || ""  // Si `label` n'est pas trouvé, retourne une chaîne vide
+        };
+      })
+    ) || [];
+  }*/
+  
+
 
   const now = new Date();
 
@@ -55,8 +75,11 @@ export function getArticleInfo(fields, article) {
       case "title":
         info.title = article.title || "";
         break;
-      case "author":
-           info.author = {...author, name: article.author?.name, id: editor.value } 
+        case "author":
+          info.author = article.author?.name || "";
+          case "contact-presse":
+            info.contactPresse = editor || [];
+          
         break;
       case "url":
         info.url = article.onlineStoreUrl || article.url || "";

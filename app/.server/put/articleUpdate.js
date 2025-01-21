@@ -21,6 +21,9 @@ id
 
 export default async function applyPromoCode(body, blogId, themeId, client, shopify, cdnUrl) {
   console.log('body.id1Y282I3YU3', body.id)
+
+
+  
   return {
     mutation: `
 

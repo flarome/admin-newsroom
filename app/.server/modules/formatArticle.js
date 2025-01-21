@@ -1,7 +1,7 @@
 import { getArticleInfo } from "./getInfo";
 import { initialArticle as initialState } from "../../modules/initialState";
 
-export const formatArticle = (article) => {
+export async function formatArticle(article, shopify) {
   try {
     if (!article || !article.id) return initialState; // Si `article` est null, réinitialisation.
     const {
@@ -20,9 +20,10 @@ export const formatArticle = (article) => {
       handle,
       metaDescription,
       author,
+      contactPresse,
       url,
       layout
-    } = getArticleInfo(
+    } = await getArticleInfo(
       [
         "title",
         "subTitle",
@@ -40,10 +41,12 @@ export const formatArticle = (article) => {
         "metaDescription",
         "author",
         "url",
-        "layout"
+        "layout",
+        "contact-presse"
       ],
       article,
       "fr-FR",
+      shopify
     );
 
     return {
@@ -59,7 +62,9 @@ export const formatArticle = (article) => {
       handle: handle || initialState.handle,
       redirectNewHandle: initialState.redirectNewHandle,
       date: date || initialState.date,
+     
       author: author || initialState.author,
+      contactPresse: contactPresse || initialState.contactPresse,
       downloadsAllsMedia: downloadsAllsMedia || initialState.downloadsAllsMedia,
       mainImage: mainImage || initialState.mainImage,
       content: originalHtml || initialState.content,

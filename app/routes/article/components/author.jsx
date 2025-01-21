@@ -15,6 +15,8 @@ import { useMetaobjectModal } from "../../metaobjects/context/ModalContext";
 import {
   Icon,
   LegacyCard,
+  Autocomplete,
+  Tag,
   LegacyStack,
   FormLayout,
   Popover,
@@ -23,23 +25,16 @@ import {
   TextField,
   Listbox,
   AutoSelection,
-  Scrollable,
+
   EmptySearchResult,
   InlineStack,
 } from '@shopify/polaris';
-import { PlusCircleIcon, SearchIcon, EditIcon} from '@shopify/polaris-icons';
+import { PlusCircleIcon, SearchIcon } from '@shopify/polaris-icons';
 
-import { author } from "../../../modules/initialState";
-const type = author.type;
-const listboxId = 'SearchableListbox' + type;
-const actionValue = '__ACTION__' + type;
-const addItemActionValue = '__ACTIONADDITEM__' + type;
+const type = "press_contacts";
 
 
-
-const interval = 25;
-
-const Author = ({ author, setAuthor }) => {
+const Author = ({ author, setAuthor, contactPresse: selectedOptions, setContactPresse: setSelectedOptions }) => {
 
   // Modal Metaobject Provider
   const { showModal } = useMetaobjectModal();
@@ -51,118 +46,26 @@ const Author = ({ author, setAuthor }) => {
   // first load
   const [isCH, setCH] = useState(false);
 
+  
   // data
-   const [segments, setSegments] = useState([]);
-   const [activeOptionId, setActiveOptionId] = useState(null);
-   
-
-const [showFooterAction, setShowFooterAction] = useState(true);
-const [query, setQuery] = useState(String(author.name));
-const [lazyLoading, setLazyLoading] = useState(true);
-const [willLoadMoreResults, setWillLoadMoreResults] = useState(true);
-const [visibleOptionIndex, setVisibleOptionIndex] = useState(6);
 
 
-const [filteredSegments, setFilteredSegments] = useState([]);
-
-
-
-
-
-// show all
-const handleClickShowAll = () => {
-  setShowFooterAction(false);
-  setVisibleOptionIndex(segments.length);
-};
-
-// add entrie
-const handleClickModalShow = (id, handle) => {
-  showModal(type, id, handle);
-  setPopoverActive(false);
-              setCH(false);
-};
-
-const handleFilterSegments = (query) => {
-  const nextFilteredSegments = segments.filter((segment) => {
-    return segment.label
-      .toLocaleLowerCase()
-      .includes(query.toLocaleLowerCase().trim());
-  });
-
-  setFilteredSegments(nextFilteredSegments);
-};
-
-const handleQueryChange = (query) => {
-  setQuery(query);
-
-  if (query && query.length >= 2) handleFilterSegments(query);
-};
-
-// clear query button
-const handleQueryClear = () => {
-  handleQueryChange('');
-};
-
-const handleSegmentSelect = (segmentIndex) => {
-  if (segmentIndex === actionValue) {
-    return handleClickShowAll();
-  }
-
-  if (segmentIndex === addItemActionValue) {
-      return handleClickModalShow(null, null);
-    }
-
-    const element = segments.find(item => item.value === segmentIndex);
-
-    setAuthor({...author, name: element.label, handle: element.handle, id: element.id});
-    handleQueryChange(element.label);
-};
-
-const handleActiveOptionChange = (_, domId) => {
-  setActiveOptionId(domId);
-};
-
-// This is just to illustrate lazy loading state vs loading state. This is an
-// example, so we aren't fetching from GraphQL. You'd use `pageInfo.hasNextPage`
-// from your GraphQL query data instead of this fake "willLoadMoreResults" state
-// along with setting `first` your GraphQL query's variables to your app's
-// default max edges limit (e.g., 250).
-
-const handleLazyLoadSegments = () => {
-  if (willLoadMoreResults && !showFooterAction) {
-    setLazyLoading(true);
-
-    const options = query ? filteredSegments : segments;
-
-    setTimeout(() => {
-      const remainingOptionCount = options.length - visibleOptionIndex;
-      const nextVisibleOptionIndex =
-        remainingOptionCount >= interval
-          ? visibleOptionIndex + interval
-          : visibleOptionIndex + remainingOptionCount;
-
-      setLazyLoading(false);
-      setVisibleOptionIndex(nextVisibleOptionIndex);
-
-      if (remainingOptionCount <= interval) {
-        setWillLoadMoreResults(false);
-      }
-    }, 1000);
-  }
-};
-
+   const [deselectedOptions, setDeselectedOptions] = useState([]);
+   const [inputValue, setInputValue] = useState('');
+   const [options, setOptions] = useState([]);
+   const [loading, setLoading] = useState(true);
+ 
 
 // get data
 const handleAuthor = () => {
-  setPopoverActive(true);
 
   async function loadAuthor() {
     try {
       if (!isCH) {
-          setLazyLoading(true);
+        setLoading(true);
 
 
-        const { entries, pageInfo } = await loadArticle(
+        const { entries } = await loadArticle(
           fetcher,
           null,
           "metaobjectDefinitionAuthor",
@@ -172,179 +75,102 @@ const handleAuthor = () => {
 
         // Mise à jour des états
         setCH(true);
-        setSegments(entries || []);
-        setActiveOptionId(entries?.[0]?.id);
-        const element = entries.find(item => item.value === author.value);
-        setAuthor({...author, name: element.label, handle: element.handle, id: element.id});
+         setOptions(entries || []);
+        setDeselectedOptions(entries || []);
       }
     } catch (error) {
       console.error("Erreur lors du chargement des auteurs :", error);
     } finally {
-
-      setLazyLoading(false);
+      setLoading(false);
     }
   }
 
   loadAuthor();
 };
 
+   // add entrie
 
-
-const textFieldMarkup = (
-    <TextField
-      onFocus={handleAuthor}
-     
-      clearButton
-
-      label="Auteur"
-        placeholder={author.name ? author.name : "Rechercher des entrées"}
-      autoComplete="off"
-      value={query}
-      prefix={<Icon source={SearchIcon} />}
-      ariaActiveDescendant={activeOptionId}
-      ariaControls={listboxId}
-      onChange={handleQueryChange}
-      onClearButtonClick={handleQueryClear}
-    />
-
-);
-
-const segmentOptions = query ? filteredSegments : segments;
-
-
-const ListboxItem = ({ label }) => {
-  return (
-  <Text variant="bodySm" tone="subdued" as="span">
-  <InlineStack
-    align="space-between"
-    blockAlign="start"
-    gap={{ xs: "200" }}
-    direction={{ xs: "row" }}
-  >
-    <Text variant="bodyMd" tone="subdued" as="span">
-    {label}
-    </Text>
-    <Box>
-      <Button
-        icon={EditIcon}
-        variant="plain"
-        size="medium"
-        textAlign="center"
-        accessibilityLabel="Modifier l'entrée"
-        onClick={() => {
-         handleClickModalShow(null, null);
-
-       }}
-      ></Button>
-    </Box>
-  </InlineStack>
-</Text>);
+const handleClickModalShow = (id, handle) => {
+  showModal(type, id, handle);
+              setCH(false);
 };
 
-const segmentList =
-  segmentOptions.length > 0
-    ? segmentOptions
-        .slice(0, visibleOptionIndex)
-        .map(({label, id, value}) => {
-          const selected = author.id === value;
+   const updateText = useCallback(
+    (value) => {
+      setInputValue(value);
+
+      if (value === '') {
+        setOptions(deselectedOptions);
+        return;
+      }
+
+      const filterRegex = new RegExp(value, 'i');
+      const resultOptions = deselectedOptions.filter((option) =>
+        option.label.match(filterRegex),
+      );
+
+      setOptions(resultOptions);
+    },
+    [deselectedOptions],
+  );
+
+  const removeTag = useCallback(
+    (tag) => () => {
+      const options = [...selectedOptions];
+      options.splice(options.indexOf(tag), 1);
+      setSelectedOptions(options);
+    },
+    [selectedOptions],
+  );
+
+
+
+  const verticalContentMarkup =
+    selectedOptions.length > 0 ? (
+      <LegacyStack spacing="extraTight" alignment="center">
+        {selectedOptions.map((option) => {
+        
+       // Rechercher l'élément correspondant dans deselectedOptions
+  const label = deselectedOptions.find((edge) => edge.value === option)?.label;
 
           return (
-            <Listbox.Option key={id} value={value} selected={selected}>
+            <Tag key={`option${option}`} onRemove={removeTag(option)} 
 
-<Listbox.TextOption selected={selected}>
-                  
-                
-              <InlineStack
-    align="space-between"
-    blockAlign="start"
-    gap={{ xs: "200" }}
-    direction={{ xs: "row" }}
-  >
+            onClick={() =>
+              handleClickModalShow(option, null)
+            }
             
-            
-             <Button
-                icon={EditIcon}
-                variant="plain"
-                size="small"
-                accessibilityLabel="Modifier l'entrée"
-                onClick={() => handleClickModalShow(id, value)}
-              />
-             
-           
-             {label}
-             </InlineStack>
-             </Listbox.TextOption>
-            </Listbox.Option>
+           >
+              {label || option}
+            </Tag>
           );
-        })
-    : null;
-
-
-    
-
-const showAllMarkup = showFooterAction && segments.length > visibleOptionIndex  ? (
-  <Listbox.Action value={actionValue}>
-    <span style={{color: 'var(--p-color-text-emphasis)'}}>
-      Montrer les {segments.length} entrées
-    </span>
-  </Listbox.Action>
-) : null;
-
-const lazyLoadingMarkup = lazyLoading ? (
-  <Listbox.Loading
-    accessibilityLabel={`${
-      query ? 'Filtering' : 'Loading'
-    } customer segments`}
-  />
-) : null;
-
-const noResultsMarkup =
-  segmentOptions.length === 0 && query?.trim() ? (
-    <EmptySearchResult
-      title=""
-      description={`Aucun résultats trouvé pour "${query}"`}
-    />
-  ) : null;
-
-const listboxMarkup = (
-  <Listbox
-  autoSelection={AutoSelection.FirstSelected}
-
-
-    enableKeyboardControl
-    
-    accessibilityLabel="Rechercher et selectionner une entrée"
-    customListId={listboxId}
-    onSelect={handleSegmentSelect}
-    onActiveOptionChange={handleActiveOptionChange}
-  >
-
-<Listbox.Action value={addItemActionValue}>
-      <LegacyStack spacing="tight">
-        <Icon source={PlusCircleIcon} tone="base" />
-        <div>{query
-              ? "Ajouter « " + query + " »"
-              : "Ajouter une nouvelle entrée"}</div>
+        })}
       </LegacyStack>
-    </Listbox.Action>
+    ) : null;
 
-    {segmentList}
-    {showAllMarkup}
-    {noResultsMarkup}
-    {lazyLoadingMarkup}
-  </Listbox>
-);
+  const textField = (
+    <Autocomplete.TextField
+     prefix={<Icon source={SearchIcon} />}
+      onChange={updateText}
+      value={inputValue}
+
+      onFocus={handleAuthor}
+
+      label="Auteur"
+        placeholder={"Rechercher des entrées"}
+      verticalContent={verticalContentMarkup}
+      autoComplete="off"
+  
+    />
+  );
+
+   
 
 
 
 
 
-const [popoverActive, setPopoverActive] = useState(false);
-
-const handleClosePicker = () => {
-  setPopoverActive(false);
-  handleQueryClear();
-};
+   
 
 return (
 <div>
@@ -364,52 +190,27 @@ return (
       <FormLayout>
 
   
-
-
-
-<Popover
-
-
-
-preferInputActivator={false}
-      active={popoverActive}
-      fullWidth
-      activator={textFieldMarkup}
+      <Autocomplete
+       actionBefore={{
+        accessibilityLabel: 'Ajouter une nouvelle entrée pour le metaobject, press_contacts',
       
-      ariaHaspopup="listbox"
-      preferredAlignment="center"
-      autofocusTarget="none"
-      preferredPosition="below"
+        content: 'Ajouter une nouvelle entrée',
+        helpText: inputValue,
+        icon: PlusCircleIcon,
+        onAction: () => {
+          handleClickModalShow(null, null);
+        },
+      }}
+        allowMultiple
+        options={options}
+        loading={loading}
+        selected={selectedOptions}
+        textField={textField}
+        onSelect={setSelectedOptions}
 
-      onClose={handleClosePicker}
-    >
-      <Popover.Pane fixed>
-   
-        
-
-          <Scrollable
-            shadow
-        
-            onScrolledToBottom={handleLazyLoadSegments}
-          >
-
-      <Box
-
-      paddingInline={0}
-      paddingBlock={{xs: '200'}}
-      
-      >
-            {listboxMarkup}
-            </Box>
-
-          </Scrollable>
-
-  
+      />
 
 
-       
-      </Popover.Pane>
-    </Popover>
 
      </FormLayout>
         </div>
@@ -418,6 +219,8 @@ preferInputActivator={false}
 
  
 );
+
 }
+
 
 export default Author;

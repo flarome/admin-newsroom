@@ -21,6 +21,7 @@ export async function storefront(mutation, variables, acces, client) {
 
 export async function admin(mutation, variables, acces, shopify) {
 
+ 
 
   console.log('mutation', mutation);
   console.log('variables', variables);
@@ -42,6 +43,7 @@ export async function admin(mutation, variables, acces, shopify) {
       }
     } catch (error) {
       console.error(`Erreur lors de l’exécution de la mutation :`, error);
+      throw error;
     }
 }
 

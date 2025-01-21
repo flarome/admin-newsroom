@@ -4,6 +4,7 @@ import { getThemeId } from "./modules/utils/getThemeId";
 import { admin, storefront } from "./modules/utils/executeWithRetry";
 import validateAction from "./modules/midelware/validateAction";
 import { getCdnUrl } from "./modules/utils/getCdnUrl";
+import { CheckCircleIcon } from "@shopify/polaris-icons";
 export async function api(
   client,
   shopify,
@@ -169,8 +170,9 @@ export async function api(
     const { type, build } = actionConfig.builder || {};
 
     if (type === "return") {
-      // Construction de la réponse finale via le builder configuré
-      return build(response, userErrors, body, errors);
+      return typeof build === 'function' && build.constructor.name === 'AsyncFunction' ?
+            await build(response, userErrors, body, errors, shopify) : build(response, userErrors, body, errors, shopify);
+
     } else if (type === "rePost") {
       // Récupérer la nouvelle action et le nouveau body
       const nextAction = build.action;
@@ -200,6 +202,25 @@ export async function api(
     };
   } catch (err) {
     console.log(err.stack); // Affiche la stack trace
-    throw new Error(err.message);
+
+    return  {
+      success: false,
+      banners: [
+
+       {
+              id: "GraphqlQueryError",
+              title: `Internal error`,
+              content: `
+       
+      ${err.message}
+               
+              `,
+              tone: "critical",
+              icon: CheckCircleIcon,
+              removable: false,
+            }
+
+          ]
+        }
   }
 }
