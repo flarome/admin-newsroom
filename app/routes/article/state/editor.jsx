@@ -2,11 +2,15 @@ import React, { useState, useEffect, useMemo, useCallback } from "react";
 
 // Remix
 import { useNavigate } from "@remix-run/react"; // Utiliser fetcher pour déclencher l'action
-import { SaveBar, useAppBridge, Modal as BModal, TitleBar } from "@shopify/app-bridge-react";
+import {
+  SaveBar,
+  useAppBridge,
+  Modal as BModal,
+  TitleBar,
+} from "@shopify/app-bridge-react";
 
 import { useFetcherWithPromise } from "../../../utils/useFetcherWithPromise";
 import { useArticle } from "../context/ArticleProvider";
-
 
 import { v4 as uuid } from "uuid";
 // Backend API
@@ -28,9 +32,6 @@ import {
   Card,
   Box,
   BlockStack,
-  InlineStack,
-  Text,
-  Button,
   Bleed,
   Divider,
 } from "@shopify/polaris";
@@ -41,13 +42,21 @@ import { useToast } from "../../../context/toast";
 import EditorText from "../../../tinymce/Editor";
 
 // Local components
-import { Banner, Tags, Template, Author, Extrait, Seo, Visible, MainImage, Layout as LayoutCO } from "../components";
-
+import {
+  Banner,
+  Tags,
+  Template,
+  Author,
+  Extrait,
+  Seo,
+  Visible,
+  MainImage,
+  Layout as LayoutCO,
+} from "../components";
 
 // local state
 const modifiedBannerId = "modifiedBanner" + uuid();
 const saveBarId = "saveBar" + uuid();
-
 
 // Event
 import { beforeunload } from "../../../modules/EventListener";
@@ -70,23 +79,19 @@ const Editor = ({}) => {
     originalFields,
     errors,
     setIsLoading: setIsLoadingGlobal,
-    removeError : handleRemoveError,
+    removeError: handleRemoveError,
     loadArticle,
   } = useArticle();
-
 
   // isNewArticle
   const isNewArticle = useMemo(() => {
     return fields.isNewArticle;
   }, [fields]);
 
- // errors
+  // errors
   const hasFieldsErrors = useMemo(() => {
-    return  Object.keys(errors).length > 0;
+    return Object.keys(errors).length > 0;
   }, [errors]);
-
-
-  
 
   // Form
 
@@ -102,8 +107,6 @@ const Editor = ({}) => {
     return !isEqual(fields, originalFields);
   }, [fields, originalFields]);
 
-
-
   // SaveBar
   const handleSaveBar = useCallback(() => shopify.saveBar.toggle(saveBarId));
 
@@ -116,9 +119,6 @@ const Editor = ({}) => {
       shopify.saveBar.hide(saveBarId);
     }
   }, [isModified]); // Déclenche l'effet chaque fois que `isModified` change
-
-
-
 
   // Submit
   const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
@@ -187,7 +187,6 @@ const Editor = ({}) => {
       }
       // Si l'article n'est pas modifié, on peut naviguer normalement
       handleModifiedBanner();
-
     }
   };
 
@@ -206,12 +205,10 @@ const Editor = ({}) => {
 
   const [isLoadingDelete, setIsLoadingDelete] = useState(false);
 
-
   const handleDelete = async () => {
     setIsLoadingDelete(true);
 
     try {
-
       await loadArticle(
         fetcherArticleDelete,
         null,
@@ -220,11 +217,9 @@ const Editor = ({}) => {
         false,
       );
 
-
       showToast("Article supprimé");
 
       shopify.saveBar.hide(saveBarId);
-
 
       return handleCloseEditor(null, true, true);
     } catch (error) {
@@ -237,10 +232,10 @@ const Editor = ({}) => {
   };
 
   // HandleModifiedBanner
-  const handleModifiedBanner = useCallback(() => shopify.modal.toggle(modifiedBannerId));
+  const handleModifiedBanner = useCallback(() =>
+    shopify.modal.toggle(modifiedBannerId),
+  );
 
-
-  
   // adjacents articles
 
   const [pagination, setPagination] = useState({
@@ -248,64 +243,64 @@ const Editor = ({}) => {
     hasNext: false,
     onPrevious: null,
     onNext: null,
-  })
-
+  });
 
   const fetcherAdjacentArticle = useFetcherWithPromise(
     "adjacentArticle" + originalFields.id + originalFields.defaultCursor,
   );
 
-   // Fetch des articles adjacents
-useEffect(() => {
-  const fetchAdjacentArticles = async () => {
-    try {
-      const response = await loadArticle(
-        fetcherAdjacentArticle,
-        null,
-        "adjacentArticle",
-        { defaultCursor: originalFields.defaultCursor },
-        false
-      );
+  // Fetch des articles adjacents
+  useEffect(() => {
+    const fetchAdjacentArticles = async () => {
+      try {
+        const response = await loadArticle(
+          fetcherAdjacentArticle,
+          null,
+          "adjacentArticle",
+          { defaultCursor: originalFields.defaultCursor },
+          false,
+        );
 
-      const { articleBefore: previous, articleAfter: next } = response;
+        const { articleBefore: previous, articleAfter: next } = response;
 
-      setPagination({
-        hasPrevious: !!(previous && previous.id),
-        hasNext: !!(next && next.id),
-        onPrevious: previous
-          ? () => {
-            setIsLoadingGlobal(true);
-              const previousId = previous.id.split("/").pop();
-              navigate(`../${previousId}`, {
-                replace: false,
-                relative: "path",
-              });
-            }
-          : null,
-        onNext: next
-          ? () => {
-            setIsLoadingGlobal(true);
-              const nextId = next.id.split("/").pop();
-              navigate(`../${nextId}`, {
-                replace: false,
-                relative: "path",
-              });
-            }
-          : null,
-      });
-    } catch (error) {
-      console.error("Erreur lors du chargement des articles adjacents :", error);
-    }
-  };
+        setPagination({
+          hasPrevious: !!(previous && previous.id),
+          hasNext: !!(next && next.id),
+          onPrevious: previous
+            ? () => {
+                setIsLoadingGlobal(true);
+                const previousId = previous.id.split("/").pop();
+                navigate(`../${previousId}`, {
+                  replace: false,
+                  relative: "path",
+                });
+              }
+            : null,
+          onNext: next
+            ? () => {
+                setIsLoadingGlobal(true);
+                const nextId = next.id.split("/").pop();
+                navigate(`../${nextId}`, {
+                  replace: false,
+                  relative: "path",
+                });
+              }
+            : null,
+        });
+      } catch (error) {
+        console.error(
+          "Erreur lors du chargement des articles adjacents :",
+          error,
+        );
+      }
+    };
 
-  fetchAdjacentArticles();
-}, [originalFields.defaultCursor]);
+    fetchAdjacentArticles();
+  }, [originalFields.defaultCursor]);
 
-
-const disabledSubmit = useMemo(() => {
-  return !isModified || hasFieldsErrors;
-}, [hasFieldsErrors, isModified]);
-
+  const disabledSubmit = useMemo(() => {
+    return !isModified || hasFieldsErrors;
+  }, [hasFieldsErrors, isModified]);
 
   return (
     <div>
@@ -343,15 +338,16 @@ const disabledSubmit = useMemo(() => {
           !originalFields.isPublished && <Badge tone="info">Masqué</Badge>
         }
         compactTitle
-        secondaryActions={originalFields.isPublished &&[
-          
-          {
-            content: "Aperçu",
-            icon: ViewIcon,
-            url: originalFields.url,
-            target: "_blank"
-          },
-        ]}
+        secondaryActions={
+          originalFields.isPublished && [
+            {
+              content: "Aperçu",
+              icon: ViewIcon,
+              url: originalFields.url,
+              target: "_blank",
+            },
+          ]
+        }
         pagination={{
           hasPrevious: pagination.hasPrevious,
           hasNext: pagination.hasNext,
@@ -390,7 +386,7 @@ const disabledSubmit = useMemo(() => {
                     <div className="XgxFi">
                       <TextField
                         label="Sous-Titre"
-                        onChange={(value, id) => handleChangeFields(value, id)} 
+                        onChange={(value, id) => handleChangeFields(value, id)}
                         autoComplete="off"
                         value={fields.subTitle}
                         error={errors.subTitle || false}
@@ -435,18 +431,15 @@ const disabledSubmit = useMemo(() => {
                 </BlockStack>
               </Card>
 
-              
-
-
               <Extrait
                 extrait={fields.extrait}
                 setExtrait={(content) => handleChangeFields(content, "extrait")}
               />
 
               <Seo
-              isNewArticle={isNewArticle}
-              errorHandle={errors.handle || false}
-              initialHandle={originalFields.handle}
+                isNewArticle={isNewArticle}
+                errorHandle={errors.handle || false}
+                initialHandle={originalFields.handle}
                 blogUrl={blog?.url + "/"}
                 metaDescription={fields.metaDescription}
                 setMetaDescription={(content) =>
@@ -480,9 +473,10 @@ const disabledSubmit = useMemo(() => {
                 setDate={(content) => handleChangeFields(content, "date")}
               />
 
-
-<LayoutCO setLayout={(content) => handleChangeFields(content, "layout")} layout={fields.layout}></LayoutCO>
-
+              <LayoutCO
+                setLayout={(content) => handleChangeFields(content, "layout")}
+                layout={fields.layout}
+              ></LayoutCO>
 
               <MainImage
                 mainImage={fields.mainImage}
@@ -494,8 +488,7 @@ const disabledSubmit = useMemo(() => {
               <Card>
                 <BlockStack gap={{ xs: "400", sm: "500" }}>
                   <Author
-                   allAuthor={blog?.authors}
-                
+                    allAuthor={blog?.authors}
                     contactPresse={fields.contactPresse}
                     setContactPresse={(content) =>
                       handleChangeFields(content, "contactPresse")
@@ -573,54 +566,35 @@ const disabledSubmit = useMemo(() => {
           <p>Cette opération est irréversible.</p>
         </Modal.Section>
       </Modal>
+      <BModal id={modifiedBannerId}>
+        <TitleBar title="Vous avez des changements non enregistrés">
+          <button
+            tone="critical"
+            variant="primary"
+            onClick={() => {
+              handleModifiedBanner();
+              handleCloseEditor(null, true);
+            }}
+          >
+            Quitter la page
+          </button>
 
+          <button
+            onClick={() => {
+              handleModifiedBanner();
+            }}
+          >
+            Annuler
+          </button>
+        </TitleBar>
 
-     
-          <BModal id={modifiedBannerId}>
-            <TitleBar title="Vous avez des changements non enregistrés">
-              <button
-              tone="critical"
-               
-                variant="primary"
-                
-                onClick={() => {
-                  handleModifiedBanner();
-                  handleCloseEditor(null, true);
-                }}
-              >
-                Quitter la page
-              </button>
-      
-              <button
-              
-              
-                onClick={() => {
-                  handleModifiedBanner();
-                }}
-              >
-                Annuler
-              </button>
-            </TitleBar>
-
-<Box
-paddingBlock="400"
-paddingInline="400"
->
-<p>
+        <Box paddingBlock="400" paddingInline="400">
+          <p>
             Si vous quittez cette page, toutes les modifications non
             enregistrées seront perdues.
           </p>
-
-</Box>
-
-
-        
-
-          </BModal>
-   
-           
-   
-
+        </Box>
+      </BModal>
     </div>
   );
 };
