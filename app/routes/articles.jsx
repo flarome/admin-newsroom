@@ -77,9 +77,9 @@ export default function App() {
     <AppProvider i18n={polarisTranslations} theme="light" isEmbeddedApp apiKey={apiKey}>
       <NavMenu>
         <Link to="/articles" rel="home" reloadDocument>
-          Home
+          Articles
         </Link>
-        <Link to="/articles/rss" reloadDocument>Flux RSS</Link>
+        <Link to="/articles/new" reloadDocument>Nouveau</Link>
       </NavMenu>
 
       <Frame>
