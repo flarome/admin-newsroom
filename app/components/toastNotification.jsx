@@ -1,4 +1,4 @@
-import React, {useCallback} from "react";
+import React from "react";
 import { Toast } from "@shopify/polaris";
 import { useToast } from "../context/toast";
 

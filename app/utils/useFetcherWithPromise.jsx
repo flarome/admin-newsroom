@@ -1,4 +1,4 @@
-import React, { useRef, useCallback, useEffect } from "react";
+import { useRef, useCallback, useEffect } from "react";
 import { useFetcher } from "@remix-run/react";
 
 export function useFetcherWithPromise(key = null) {
