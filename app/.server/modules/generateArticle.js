@@ -163,7 +163,7 @@ export async function generateArticle(body, isNewArticle, shopify, cdnUrl) {
         value: JSON.stringify({
           layout,
           subtitle: subTitle || null,
-          downloadsAllsMedia: await generateAllsMediaUrl(allsMediaUrl, shopify, cdnUrl),
+          downloadsAllsMedia: allsMediaUrl && allsMediaUrl.lenght > 0 ? await generateAllsMediaUrl(allsMediaUrl, shopify, cdnUrl) : null,
           media: {
             mainImage: mainImage,
           },
