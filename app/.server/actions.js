@@ -178,6 +178,13 @@ const actions = {
       blog: {
         mutation: getBlog,
       },
+      authors: {
+        type: 'rePost',
+        get: {
+          action: "metaobjectDefinitionAuthor", // Action à réexécuter
+          body: { first: 250, type: "press_contacts" },
+        },
+      },
       theme: {
         mutation: getTheme,
       },

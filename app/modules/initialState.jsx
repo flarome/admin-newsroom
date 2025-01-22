@@ -1,10 +1,10 @@
 
 
 export const mainImage = {
-  downloadUrl: "",
   alt: "",
   caption: "",
   sizes: {
+    imagesrc: "",
     s551_980: "",
     s1102_1960: "",
     s389_692: "",
@@ -32,15 +32,15 @@ export const mainImage = {
 
 export const layout = {
 
+  latest: null,
   modal: null,
   header: null,
-  header_scrim: null,
+  header_scrim: null, 
   nav: null,
   nav_scrim: null,
   body: null,
   footer: null,
   footer_scrim: null,
-  banner_full: null,
 }
 
 
@@ -71,4 +71,5 @@ export const initialArticle = {
 export const initalBlog = {
   tags: [],
   url: null,
+  authors: []
 };

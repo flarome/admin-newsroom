@@ -83,7 +83,10 @@ import handle from "../../../../../global-modules/utils/handle"
     cdnUrl,
   ) {
     try {
-      const imgName = path.basename(img);
+
+
+      const cleanPath = img.split("?")[0]; // Supprime tout ce qui est après '?'
+      const imgName = path.basename(cleanPath);
   
       // Étape 1 : Télécharger l'image
       const response = await fetch(img);
@@ -101,7 +104,7 @@ import handle from "../../../../../global-modules/utils/handle"
       zip.addFile(imgName, imageBuffer);
   
       // Ajouter le fichier LEGAL_NOTICE.txt au ZIP
-      const legalContent = fileContent || (await getLegalContent());
+      const legalContent = (await getLegalContent());
       zip.addFile("LEGAL_NOTICE.txt", Buffer.from(legalContent, "utf-8"));
   
       // Définir le chemin temporaire
@@ -130,6 +133,7 @@ import handle from "../../../../../global-modules/utils/handle"
       return uploadedFileUrl;
     } catch (error) {
       console.error("Erre1ur :", error.message);
+      throw error;
       return null;
     }
   }

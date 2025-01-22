@@ -1,10 +1,10 @@
-import {imageInline, dropcaps, quote, location} from "../plugins"
+import {image, dropcaps, quote, location} from "../plugins"
 
 export default function setup (editor) {
 
       // Liste des modules à ajouter à l'éditeur
   const modules = [
-    imageInline,
+    image,
     dropcaps,
     location,
     quote

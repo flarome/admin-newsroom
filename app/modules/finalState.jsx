@@ -1,8 +1,8 @@
 export const mainImage = {
-  downloadUrl: "",
   alt: "",
   caption: "",
   sizes: {
+  imagesrc: "",
     s551_980: "",
     s1102_1960: "",
     s389_692: "",
@@ -27,20 +27,18 @@ export const mainImage = {
     s1620_2880: "",
   },
 };
-
+ 
 export const layout = {
-
-  modal: false,
+  latest: 'blog',
+  modal: true,
   header: "Dark",
   header_scrim: false,
   nav: "Light",
   nav_scrim: false,
   body: "Light",
   footer: "Light",
-  footer_scrim: false,
-  banner_full: false
+  footer_scrim: false
 }
-
 
 export const initialArticle = {
   isNewArticle: true,
@@ -63,10 +61,12 @@ export const initialArticle = {
   tags: [],
   template: "",
   isPublished: false,
-  layout
+  layout,
+
 };
 
 export const initalBlog = {
   tags: [],
   url: null,
+  authors: []
 };

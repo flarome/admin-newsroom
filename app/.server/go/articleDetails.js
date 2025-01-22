@@ -48,6 +48,7 @@ return {
       blog: {
         ...response.blog,
         url: `${baseUrl}${response.blog.handle}`,
+        authors: response.authors?.entries || [],
         templates: extractArticleTemplates(response.theme.files.edges),
       },
       theme: response.theme

@@ -133,10 +133,12 @@ export async function api(
             return null; // Sauter cette action si la condition échoue
           }
 
+          const type = getAction.type || "return";
+
+          if (type === "return") {
 
 
-
-          const { mutation, variables, mutationName, fetchMode } = typeof getAction.mutation === 'function' && getAction.mutation.constructor.name === 'AsyncFunction' ?
+            const { mutation, variables, mutationName, fetchMode } = typeof getAction.mutation === 'function' && getAction.mutation.constructor.name === 'AsyncFunction' ?
             await getAction.mutation(body, blogId, themeId, client, shopify, cdnUrl) : getAction.mutation(body, blogId, themeId, client, shopify, cdnUrl);
 
           console.log("---------------------");
@@ -160,6 +162,37 @@ export async function api(
           if (fetchedUserErrors?.length) {
             userErrors = [...userErrors, ...fetchedUserErrors];
           }
+
+
+          } else if (type === "rePost") {
+
+  // Récupérer la nouvelle action et le nouveau body
+  const nextAction = getAction.get;
+
+  const nextBody =
+    typeof nextAction.body === "function"
+        ? nextAction.body(req)
+        : nextAction.body
+
+  // Réexécuter l'API avec les nouveaux paramètres
+  const responseRepost = await api(
+    client,
+    shopify,
+    { body: nextBody, action: nextAction.action },
+    errors,
+    make,
+  );
+
+        // Mise à jour de la réponse globale
+        response[key] = responseRepost;
+
+
+          }
+
+
+         
+
+
         },
       );
 

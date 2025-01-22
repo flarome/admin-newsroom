@@ -17,6 +17,10 @@ export function ArticleProvider({ children }) {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const resetState = () => {
+    navigate("", { replace: true }); // Navigation vers la page courante sans `state`
+  };
+
   const [fields, setFields] = useState(initialArticle);
   const [originalFields, setOriginalFields] = useState(initialArticle);
   const [blog, setBlog] = useState(initalBlog);
@@ -180,6 +184,7 @@ export function ArticleProvider({ children }) {
     );
 
     bannerIds = [];
+    resetState();
     setIsLoading(false);
 
   };

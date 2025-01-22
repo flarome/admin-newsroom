@@ -34,7 +34,7 @@ import { PlusCircleIcon, SearchIcon } from '@shopify/polaris-icons';
 const type = "press_contacts";
 
 
-const Author = ({ author, setAuthor, contactPresse: selectedOptions, setContactPresse: setSelectedOptions }) => {
+const Author = ({ allAuthor, author, setAuthor, contactPresse: selectedOptions, setContactPresse: setSelectedOptions }) => {
 
   // Modal Metaobject Provider
   const { showModal } = useMetaobjectModal();
@@ -44,15 +44,15 @@ const Author = ({ author, setAuthor, contactPresse: selectedOptions, setContactP
   const fetcher = useFetcherWithPromise("metaobjectEntries" + type);
 
   // first load
-  const [isCH, setCH] = useState(false);
+  const [isCH, setCH] = useState(allAuthor && allAuthor.length > 0 ? true : false);
 
   
   // data
 
 
-   const [deselectedOptions, setDeselectedOptions] = useState([]);
+   const [deselectedOptions, setDeselectedOptions] = useState(allAuthor);
    const [inputValue, setInputValue] = useState('');
-   const [options, setOptions] = useState([]);
+   const [options, setOptions] = useState(deselectedOptions);
    const [loading, setLoading] = useState(true);
  
 
@@ -75,7 +75,7 @@ const handleAuthor = () => {
 
         // Mise à jour des états
         setCH(true);
-         setOptions(entries || []);
+        setOptions(entries || []);
         setDeselectedOptions(entries || []);
       }
     } catch (error) {
@@ -93,6 +93,7 @@ const handleAuthor = () => {
 const handleClickModalShow = (id, handle) => {
   showModal(type, id, handle);
               setCH(false);
+              setInputValue('');
 };
 
    const updateText = useCallback(

@@ -9,13 +9,14 @@ export function html(element) {
     const {img, imgMetadata, alt, uuid, srcs, caption, downloadFile} = extractImageData(element);
 
     const { imgSmall, imgMedium, mainImg } = generateImageSources(srcs, element?.imagesrc || null);
-
+    
     // Construire le HTML pour l'image uniquement si des données sont disponibles
     if (mainImg || imgSmall || imgMedium) {
       return `
-        <figure class="image component image-inline ${
-          element["body-copy-wide"] ? "body-copy-wide" : ""
-        }" ${alt ? `aria-label="Média, ${alt}"` : ""}>
+        <figure class="image component image-big ${
+          element["body-copy-wide"] ? "body-copy-wide" : ""} ${
+          element["image-fullbleed"] ? "image-fullbleed" : ""}" 
+          ${alt ? `aria-label="Média, ${alt}"` : ""}>
           <div class="component-content">
             <div class="image-sharesheet" ${
               img.analytics?.asset
@@ -85,9 +86,11 @@ export async function json(element, shopify, cdnUrl, dataJson, img) {
   const imgName = img ? path.basename(img.split("?")[0]) : "";
   const uuid = generateCustomUUID(img);
 
+  console.log('dataJsonrer', dataJson);
   return {
     [dataJson.imageLayout]: {
       "body-copy-wide": true,
+      "image-fullbleed": dataJson.imageFullbleed && Boolean(dataJson.imageFullbleed) === true,
       imagesrc: img,
       caption: dataJson.caption,
       downloadFile:

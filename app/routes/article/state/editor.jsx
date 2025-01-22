@@ -346,12 +346,13 @@ const disabledSubmit = useMemo(() => {
           !originalFields.isPublished && <Badge tone="info">Masqué</Badge>
         }
         compactTitle
-        secondaryActions={[
+        secondaryActions={originalFields.isPublished &&[
+          
           {
             content: "Aperçu",
             icon: ViewIcon,
-            url: "https://www.facebook.com/business/learn/facebook-page-build-audience",
-            onAction: () => alert("View on your store action"),
+            url: originalFields.url,
+            target: "_blank"
           },
         ]}
         pagination={{
@@ -560,6 +561,7 @@ const disabledSubmit = useMemo(() => {
               <Card>
                 <BlockStack gap={{ xs: "400", sm: "500" }}>
                   <Author
+                   allAuthor={blog?.authors}
                     author={fields.author}
                     setAuthor={(content) =>
                       handleChangeFields(content, "author")

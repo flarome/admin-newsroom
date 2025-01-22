@@ -8,6 +8,8 @@ import {
   generateJsonText,
   generateHtmlImageInline,
   generateJsonImageInline,
+  generateJsonImageBig, 
+  generateHtmlImageBig,
   generateHtmlHeader,
   generateJsonHeader,
   generateHtmlHeaderSecondary,
@@ -140,6 +142,8 @@ export async function htmlToJson(htmlString, shopify, cdnUrl) {
     bodyCopy: { content: [], pagebodysmall: false, dropcaps: false },
   };
 
+  const allImages = [];
+
   const addCurrentBodyCopyToBody = (body, currentBodyCopy) =>
     currentBodyCopy.bodyCopy.content.length > 0
       ? [...body, currentBodyCopy]
@@ -236,16 +240,40 @@ export async function htmlToJson(htmlString, shopify, cdnUrl) {
         : state;
     }
 
-    if (type === "imageInline") {
-      const figureData = await generateJsonImageInline(element, shopify, cdnUrl);
-      return figureData
+    if (type === "image") {
+      const dataJson = mceToData(element)?.data || {};
+      const layout = dataJson.imageLayout || "imageInline";
+      const img = dataJson.imagesrc ||  dataJson.large2x ||  dataJson.large || dataJson.medium2x || dataJson.medium || dataJson.small2x || dataJson.small ;
+  
+      if (img && img.trim() !== "") {
+        allImages.push(img)
+      } 
+
+      if (layout === "imageInline") {
+        const figureData = await generateJsonImageInline(element, shopify, cdnUrl, dataJson, img);
+        return figureData
         ? {
             body: addCurrentBodyCopyToBody(body, currentBodyCopy).concat(figureData),
             currentBodyCopy: { ...bodyCopyTemplate },
             quoteCounter,
           }
         : state;
+      } else if  (layout === "imageBig") {
+        const figureData = await generateJsonImageBig(element, shopify, cdnUrl, dataJson, img);
+        return figureData
+          ? {
+              body: addCurrentBodyCopyToBody(body, currentBodyCopy).concat(figureData),
+              currentBodyCopy: { ...bodyCopyTemplate },
+              quoteCounter,
+            }
+          : state;
+      }
+
+
+
+    
     }
+
 
     return state;
   };
@@ -264,7 +292,12 @@ export async function htmlToJson(htmlString, shopify, cdnUrl) {
 
   const finalBody = addCurrentBodyCopyToBody(finalState.body, finalState.currentBodyCopy);
 
-  return finalBody;
+  return {
+    
+    jsonContent: finalBody,
+    allMedias: allImages
+    
+  };
 }
 
 
@@ -330,6 +363,17 @@ export function jsonToHtml(jsonContent) {
       }
 
       html += generateHtmlImageInline(component.imageInline || {});
+    } else if (component.imageBig) {
+      // Si une image arrive, on ferme les div ouverts
+      if (isOpen) {
+        html += `
+              </div>
+            </div>
+          `;
+        isOpen = false;
+      }
+
+      html += generateHtmlImageBig(component.imageBig || {});
     }
   });
 
@@ -344,20 +388,86 @@ export function jsonToHtml(jsonContent) {
   return html;
 }
 
+export function generateCopyContent(inputHtml) {
+  // Charger le contenu HTML dans JSDOM
+  const dom = new JSDOM(inputHtml);
+  const document = dom.window.document;
+
+  // Liste des éléments à supprimer complètement
+  const elementsToRemove = ["div", "video", "img", "figure", "picture"];
+
+  // Supprimer les éléments non souhaités
+  elementsToRemove.forEach((selector) => {
+    document.querySelectorAll(selector).forEach((el) => el.remove());
+  });
+
+  // Supprimer les attributs indésirables des éléments restants
+  document.querySelectorAll("*").forEach((el) => {
+    [...el.attributes].forEach((attr) => {
+      if (
+        attr.name === "class" ||
+        attr.name === "style" ||
+        attr.name === "id" ||
+        attr.name.startsWith("data-")
+      ) {
+        el.removeAttribute(attr.name); // Supprime les attributs indésirables
+      }
+    });
+  });
+
+  // Convertir les nœuds restants en paragraphes propres
+  const paragraphs = [];
+  document.body.childNodes.forEach((node) => {
+    if (node.nodeType === dom.window.Node.TEXT_NODE) {
+      const trimmedText = node.textContent.trim();
+      if (trimmedText) {
+        paragraphs.push(`<p>${trimmedText}</p>`);
+      }
+    } else if (
+      node.nodeType === dom.window.Node.ELEMENT_NODE &&
+      node.textContent.trim()
+    ) {
+      const cleanedContent = node.innerHTML.trim();
+      paragraphs.push(`<p>${cleanedContent}</p>`);
+    }
+  });
+
+  // Ajouter l'en-tête au début
+  const headerContent = `
+
+`;
+
+  // Générer le contenu final avec l'en-tête et les paragraphes
+  const finalContent = `${headerContent}\n${paragraphs.join("\n")}`;
+
+  // Minimiser le contenu final
+  const minimizedContent = finalContent
+    .replace(/\s+/g, " ") // Remplace plusieurs espaces par un seul espace
+    .replace(/>\s+</g, "><") // Supprime les espaces inutiles entre les balises
+    .trim(); // Supprime les espaces en début et fin
+
+  return minimizedContent;
+}
+
+
+
 export default async function generateHtml(inputHtml, shopify, cdnUrl) {
   console.log("inputHtml", inputHtml);
 
   // Conversion HTML → JSON
-  const jsonContent = await htmlToJson(inputHtml, shopify, cdnUrl);
+  const { jsonContent, allMedias } = await htmlToJson(inputHtml, shopify, cdnUrl);
   console.log("JSON généré :", JSON.stringify(jsonContent, null, 2));
 
+const copyContent = generateCopyContent(inputHtml);
   // Conversion JSON → HTML
   const rebuiltHtml = jsonToHtml(jsonContent);
   console.log("HTML reconstruit :", rebuiltHtml);
 
   return {
+    copyContent,
     originalHtml: inputHtml,
     rebuiltHtml,
     jsonContent,
+    allsArticleMediaUrl: allMedias
   };
 }

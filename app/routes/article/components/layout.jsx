@@ -55,6 +55,9 @@ const optionNavScrimName = "nav_scrim";
 const optionFooterName = "footer";
 const optionFooterScrimName = "footer_scrim";
 
+const optionBodyName = "body";
+const optionLatestName = "latest";
+
 const themePlaceholder = "Sélectionner un thème";
 const modalId = "layout-modal" + uuid();
 
@@ -181,7 +184,7 @@ const ModalLayout = ({ setLayout, layout }) => {
 
       <Page>
         <LayoutPolaris>
-          <LayoutPolaris.Section variant="oneHalf">
+          <LayoutPolaris.Section variant="oneThird">
             <LegacyCard title="Présentation Générale">
               <LegacyCard.Section>
                 <Option
@@ -196,18 +199,45 @@ const ModalLayout = ({ setLayout, layout }) => {
               </LegacyCard.Section>
             </LegacyCard>
           </LayoutPolaris.Section>
-          <LayoutPolaris.Section variant="oneHalf">
-            <LegacyCard title="Bannière">
+          <LayoutPolaris.Section variant="oneThird">
+          <LegacyCard title="Page">
               <LegacyCard.Section>
-                <Option
-                  setValue={(content) =>
-                    handleChangeFields(content, optionBannerName)
-                  }
-                  value={fields[optionBannerName]}
-                  initialValue={initialLayoutContent?.[optionBannerName]}
-                  choices={booleanOptions}
-                  title="Bannière full with ?"
-                />
+                <BlockStack gap={{ xs: "400" }}>
+                  <SelectOption
+                    setValue={(content) =>
+                      handleChangeFields(content, optionBodyName)
+                    }
+                    value={fields[optionBodyName]}
+                    label="Arrière plan de la page"
+                    options={themeOptions}
+                    helpText={
+                      "Default: " + finalLayoutContent[optionBodyName]
+                    }
+                    placeholder={themePlaceholder}
+                  />
+                </BlockStack>
+              </LegacyCard.Section>
+            </LegacyCard>
+          </LayoutPolaris.Section>
+          <LayoutPolaris.Section variant="oneThird">
+            <LegacyCard title="Disposition des articles mis en avant">
+              <LegacyCard.Section>
+              <SelectOption
+                    setValue={(content) =>
+                      handleChangeFields(content, optionLatestName)
+                    }
+                    value={fields[optionLatestName]}
+                    label="Dispoition des articles mis en avant"
+                    options={[
+                      { label: "Le même blog", value: "blog" },
+                      { label: "Le même tag", value: "tag" },
+                    ]}
+                    helpText={
+                      "Default: " + finalLayoutContent[optionLatestName]
+                    }
+                    placeholder={'Sélectionner une catégorie'}
+                  />
+            
               </LegacyCard.Section>
             </LegacyCard>
           </LayoutPolaris.Section>
@@ -296,6 +326,7 @@ const ModalLayout = ({ setLayout, layout }) => {
               </LegacyCard.Section>
             </LegacyCard>
           </LayoutPolaris.Section>
+    
         </LayoutPolaris>
       </Page>
     </Modal>

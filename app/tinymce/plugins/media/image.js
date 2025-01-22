@@ -2,7 +2,7 @@ import { extractDataJson } from "../../../shared-instances/content/normalizeData
 
 import { generateInitialData } from "../modules/generateInitialData";
 
-export const type = "imageInline"
+export const type = "image"
 const dataElement = "data-" + type;
 
 export default function imageSharesheet(editor) {

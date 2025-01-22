@@ -16,36 +16,7 @@ const ImageModal = ({ localImage, handleChangeImageUrl, handleChangeImage }) => 
           <div className="_ResourceListWrapper_qvkap_281">
             <div className="_ResourceListItemsWrapper_qvkap_26">
               <ul className="_ResourceList_qvkap_25 Polaris-ResourceList" aria-live="polite">
-                  <li
-                    className="Polaris-Box Polaris-ResourceItem__ListItem"
-                    style={{
-                      "--pc-box-padding-block-start-xs": "var(--p-space-300)",
-                    }}
-                  >
-                    <div className="_ActivatorWrapper_1ivxc_74">
-                      <div className="_LegacyRowWrapper_1ivxc_4">
-                        <div className="_FormFieldLabelLegacy_1ivxc_38">
-                          <p className="Polaris-Text--root Polaris-Text--bodyMd">Url de téléchargement</p>
-                        </div>
-
-                        <div className="_EditField_1ivxc_318">
-                          <div style={{ display: "contents" }}>
-                            <TextField
-                              label="Url de téléchargement de l'image principale"
-                              labelHidden
-                              onChange={(value, id) => handleChangeImage(id, value)} // Ou simplement `handleChange` si pas besoin d'ajuster
-                              autoComplete="off"
-                              value={localImage?.downloadUrl}
-                              id="mainImageDownloadUrl"
-                              type="text"
-                              clearButton={true}
-                              onClearButtonClick={id => handleChangeImage(id, "")} // Callback pour gérer l'effacement
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
+                  
 
                   <li
                     className="Polaris-Box Polaris-ResourceItem__ListItem"
