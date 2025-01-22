@@ -193,6 +193,11 @@ export async function generateArticle(body, isNewArticle, shopify, cdnUrl) {
   
       }
     ],
+    image: {
+altText: mainImage.alt || null,
+url: mainImageUrlValid
+
+    },
       title: title,
       author: {
         name: author && author.trim() !== "" ? author  :  "Flarome Inc",

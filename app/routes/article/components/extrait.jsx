@@ -11,7 +11,7 @@ import {
 
 import { v4 as uuid } from "uuid";
 
-import { ViewIcon, EditIcon } from "@shopify/polaris-icons";
+import { EditIcon } from "@shopify/polaris-icons";
 
 const id = "extrait-collapsible" + uuid();
 const Extrait = ({ setExtrait, extrait }) => {

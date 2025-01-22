@@ -1,8 +1,5 @@
 import React, {
   useState,
-  useEffect,
-  useMemo,
-  useRef,
   useCallback,
 } from "react";
 
@@ -14,27 +11,17 @@ import { useMetaobjectModal } from "../../metaobjects/context/ModalContext";
 
 import {
   Icon,
-  LegacyCard,
   Autocomplete,
   Tag,
   LegacyStack,
   FormLayout,
-  Popover,
-  Box,
-  Button,
-  TextField,
-  Listbox,
-  AutoSelection,
-
-  EmptySearchResult,
-  InlineStack,
 } from '@shopify/polaris';
 import { PlusCircleIcon, SearchIcon } from '@shopify/polaris-icons';
 
 const type = "press_contacts";
 
 
-const Author = ({ allAuthor, author, setAuthor, contactPresse: selectedOptions, setContactPresse: setSelectedOptions }) => {
+const Author = ({ allAuthor, contactPresse: selectedOptions, setContactPresse: setSelectedOptions }) => {
 
   // Modal Metaobject Provider
   const { showModal } = useMetaobjectModal();

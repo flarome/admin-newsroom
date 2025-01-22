@@ -3,7 +3,7 @@ import * as lodash from 'lodash';
 const { isEqual } = lodash;
 
 import ImageModal from "./ImageModal";
-import { Button, Frame, Modal, TextContainer, Icon  } from "@shopify/polaris";
+import {  Modal, Icon  } from "@shopify/polaris";
 import { ChevronDownIcon  } from "@shopify/polaris-icons";
 
 import { getImageInfo } from "../../modules/getInfo";

@@ -34,7 +34,7 @@ import {
   Bleed,
   Divider,
 } from "@shopify/polaris";
-import { ViewIcon, EditIcon } from "@shopify/polaris-icons";
+import { ViewIcon } from "@shopify/polaris-icons";
 
 import { useToast } from "../../../context/toast";
 // Global components
@@ -101,13 +101,7 @@ const Editor = ({}) => {
     return !isEqual(fields, originalFields);
   }, [fields, originalFields]);
 
-  const otherInfo = [
-    {
-      label: "Url téléchargement médias",
-      value: fields.downloadsAllsMedia,
-      onChange: (value) => handleChangeFields(value, "downloadsAllsMedia"), 
-    },
-  ];
+
 
   // SaveBar
   const handleSaveBar = useCallback(() => shopify.saveBar.toggle(saveBarId));
@@ -438,71 +432,7 @@ const disabledSubmit = useMemo(() => {
                 </BlockStack>
               </Card>
 
-              <Card>
-                <BlockStack>
-                  <InlineStack
-                    align="space-between"
-                    wrap
-                    direction={{ xs: "row" }}
-                  >
-                    <Box paddingInlineEnd={{ xs: "400" }}>
-                      <h2
-                        className="Polaris-Text--root Polaris-Text--headingMd Polaris-Text--semibold"
-                        tabIndex="-1"
-                      >
-                        Informations Supplémentaires
-                      </h2>
-                    </Box>
-                  </InlineStack>
-
-                  <Box paddingBlock={{ xs: 400 }}>
-                    {otherInfo.map((info, index) => (
-                      <Box key={index} paddingBlockEnd={{ xs: "200" }}>
-                        <div className="_ActivatorWrapper_1ivxc_74">
-                          <div>
-                            <div
-                              role="button"
-                              tabIndex={0}
-                              aria-label={`Modifier le champ méta ${info.label}`}
-                              className="_ActivatorButton_1ivxc_78"
-                            >
-                              <div
-                                className="_LegacyRowWrapper_1ivxc_4"
-                                style={{
-                                  paddingLeft: 0,
-                                  gridTemplateColumns: "30% minmax(0, 70%)",
-                                }}
-                              >
-                                <div className="_FormFieldLabelLegacy_1ivxc_38">
-                                  <p className="Polaris-Text--root Polaris-Text--bodyMd">
-                                    {info.label}
-                                  </p>
-                                </div>
-
-                                <div className="_EditField_1ivxc_318">
-                                  <div style={{ display: "contents" }}>
-                                    <TextField
-                                      id={`meta-field-${index}`}
-                                      label={info.label}
-                                      labelHidden
-                                      value={info.value}
-                                      onChange={(value, id) =>
-                                        info.onChange(value)
-                                      } 
-                                      autoComplete="off"
-                                      type="text"
-                                    />
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </Box>
-                    ))}
-                  </Box>
-                </BlockStack>
-              </Card>
+              
 
 
               <Extrait
@@ -562,10 +492,7 @@ const disabledSubmit = useMemo(() => {
                 <BlockStack gap={{ xs: "400", sm: "500" }}>
                   <Author
                    allAuthor={blog?.authors}
-                    author={fields.author}
-                    setAuthor={(content) =>
-                      handleChangeFields(content, "author")
-                    }
+                
                     contactPresse={fields.contactPresse}
                     setContactPresse={(content) =>
                       handleChangeFields(content, "contactPresse")
