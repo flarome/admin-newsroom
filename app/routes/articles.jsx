@@ -58,7 +58,7 @@ import "../styles/theme.css";
 import "../styles/articleDetails.css";
 import ToastNotification from "../components/toastNotification";
 
-import { Frame, FooterHelp, Text } from "@shopify/polaris";
+import { Frame } from "@shopify/polaris";
 
 import { ToastProvider } from "../context/toast";
 
