@@ -69,6 +69,7 @@ const Editor = ({}) => {
     blog,
     originalFields,
     errors,
+    setIsLoading: setIsLoadingGlobal,
     removeError : handleRemoveError,
     loadArticle,
   } = useArticle();
@@ -273,6 +274,7 @@ useEffect(() => {
         hasNext: !!(next && next.id),
         onPrevious: previous
           ? () => {
+            setIsLoadingGlobal(true);
               const previousId = previous.id.split("/").pop();
               navigate(`../${previousId}`, {
                 replace: false,
@@ -282,6 +284,7 @@ useEffect(() => {
           : null,
         onNext: next
           ? () => {
+            setIsLoadingGlobal(true);
               const nextId = next.id.split("/").pop();
               navigate(`../${nextId}`, {
                 replace: false,
