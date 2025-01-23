@@ -152,7 +152,7 @@ const Editor = ({}) => {
         fetcher,
         null,
         action,
-        fields,
+        processedForm,
         !isNewArticle,
       );
 

@@ -10,11 +10,13 @@ export const ImageUploader = ({ file, setFile }) => {
     [],
   );
 
-  const validImageTypes = ['image/jpeg', 'image/png'];
+  const validImageTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/pjpeg', 'image/pjpg', 'image/jpg'];
 
   const fileUpload = !file && <DropZone.FileUpload />;
 
-  const uploadedFile = file && (
+
+
+  const uploadedFile = file && file instanceof File ? (
 
       <Thumbnail
         size="small"
@@ -27,7 +29,17 @@ export const ImageUploader = ({ file, setFile }) => {
       />
       
 
-  );
+  ) : (
+
+    <Thumbnail
+    size="small"
+    alt={""}
+    source={file}
+  />
+
+  )
+
+  ;
 
 
   return (

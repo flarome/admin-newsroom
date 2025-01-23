@@ -139,8 +139,6 @@ export function ArticleProvider({ children }) {
 
 
 
-
-
   const processFields = async (fields) => {
     console.log("START PROCESS FILE");
     const processedFields = { ...fields };
@@ -159,10 +157,7 @@ export function ArticleProvider({ children }) {
         });
   
         const result = await response.json();
-  
-        console.log('resulffft', result);
-        console.log('processedFields', processedFields);
-        console.log('processedFieldskey', key);
+
         console.log('j2', result);
         if (result) {
           processedFields[key] = result;
