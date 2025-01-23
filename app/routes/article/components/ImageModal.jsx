@@ -8,7 +8,7 @@ import {
   Page,
 } from "@shopify/polaris";
 import { ImageUploader } from "../modules/uploader";
-
+import EditorText from "../../../tinymce/LegendEditor";
 const ImageModal = ({
   localImage,
   handleChangeImageUrl,
@@ -30,7 +30,8 @@ const ImageModal = ({
                   onClearButtonClick={() => handleChangeImage("alt", "")}
                 />
 
-                {/* Légende */}
+             
+
                 <TextField
                   label="Légende"
                   onChange={(value) => handleChangeImage("caption", value)}

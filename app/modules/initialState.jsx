@@ -34,11 +34,9 @@ export const mainImage = {
   alt: "",
   caption: "",
   sizes: {
-    imagesrc: "",
+    landscape: "",
     scare: "",
-    big: "",
-    regular: "",
-    landing: ""
+    portrait: ""
 
     
   },
