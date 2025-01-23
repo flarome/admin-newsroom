@@ -163,6 +163,7 @@ export function ArticleProvider({ children }) {
         console.log('resulffft', result);
         console.log('processedFields', processedFields);
         console.log('processedFieldskey', key);
+        console.log('j2', result);
         if (result) {
           processedFields[key] = result;
         }
