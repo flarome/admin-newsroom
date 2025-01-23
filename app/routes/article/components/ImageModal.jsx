@@ -1,138 +1,66 @@
 import React from "react";
-import { TextField, Box } from "@shopify/polaris";
+import { TextField, Box, LegacyStack, Card, Layout } from "@shopify/polaris";
+import { ImageUploader } from "../modules/uploader";
 
 const ImageModal = ({ localImage, handleChangeImageUrl, handleChangeImage }) => {
+  const sizes = Object.keys(localImage?.sizes || {}) || {};
+
   return (
-    <div className="lInLk">
-      <Box paddingBlock={{ xs: "600" }}>
+    <div>
+      <Box
 
-      <Box>
-          <Box paddingBlockStart={{ xs: "400" }} paddingInline={{ xs: "400" }}>
-            <h2 className="Polaris-Text--root Polaris-Text--headingXs" tabIndex="-1">
-              Informations
-            </h2>
+      padding={{xs: '300'}}
+      
+      >
+          <LegacyStack  vertical spacing="tight">
+            {/* Texte alternatif */}
+            <TextField
+              label="Texte alternatif"
+              onChange={(value) => handleChangeImage("alt", value)}
+              autoComplete="off"
+              value={localImage?.alt || ""}
+              clearButton
+              onClearButtonClick={() => handleChangeImage("alt", "")}
+            />
+
+            {/* Légende */}
+            <TextField
+              label="Légende"
+              onChange={(value) => handleChangeImage("caption", value)}
+              autoComplete="off"
+              value={localImage?.caption || ""}
+              clearButton
+              onClearButtonClick={() => handleChangeImage("caption", "")}
+            />
+          </LegacyStack>
+    
+          <LegacyStack vertical spacing="tight">
+            {sizes.map((size) => (
+              <LegacyStack key={size} alignment="center">
+                <TextField
+               
+                  label={`URL pour ${size}`}
+                 
+                  onChange={(value) => handleChangeImageUrl(size, value)}
+                  autoComplete="off"
+                  value={localImage.sizes?.[size] || ""}
+                  clearButton
+                  onClearButtonClick={() => handleChangeImageUrl(size, "")}
+
+                  suffix={    <div style={{width: 40, height: 40}}><ImageUploader
+                    file={localImage.sizes?.[size]}
+                    setFile={(file) => handleChangeImageUrl(size, file)}
+                  />
+                
+                  </div>}
+                />
+             
+              </LegacyStack>
+            ))}
+          </LegacyStack>
           </Box>
+</div>
 
-          <div className="_ResourceListWrapper_qvkap_281">
-            <div className="_ResourceListItemsWrapper_qvkap_26">
-              <ul className="_ResourceList_qvkap_25 Polaris-ResourceList" aria-live="polite">
-                  
-
-                  <li
-                    className="Polaris-Box Polaris-ResourceItem__ListItem"
-                    style={{
-                      "--pc-box-padding-block-start-xs": "var(--p-space-300)",
-                    }}
-                  >
-                    <div className="_ActivatorWrapper_1ivxc_74">
-                      <div className="_LegacyRowWrapper_1ivxc_4">
-                        <div className="_FormFieldLabelLegacy_1ivxc_38">
-                          <p className="Polaris-Text--root Polaris-Text--bodyMd">Texte alternatif</p>
-                        </div>
-
-                        <div className="_EditField_1ivxc_318">
-                          <div style={{ display: "contents" }}>
-                            <TextField
-                              label="Texte alternatif de l'image principale"
-                              labelHidden
-                              onChange={(value, id) => handleChangeImage(id, value)} // Ou simplement `handleChange` si pas besoin d'ajuster
-                              autoComplete="off"
-                              value={localImage?.alt}
-                              id="mainImageAlt"
-                              type="text"
-                              clearButton={true}
-                              onClearButtonClick={id => handleChangeImage(id, "")} // Callback pour gérer l'effacement
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-
-                  <li
-                    className="Polaris-Box Polaris-ResourceItem__ListItem"
-                    style={{
-                      "--pc-box-padding-block-start-xs": "var(--p-space-300)",
-                    }}
-                  >
-                    <div className="_ActivatorWrapper_1ivxc_74">
-                      <div className="_LegacyRowWrapper_1ivxc_4">
-                        <div className="_FormFieldLabelLegacy_1ivxc_38">
-                          <p className="Polaris-Text--root Polaris-Text--bodyMd">Légende</p>
-                        </div>
-
-                        <div className="_EditField_1ivxc_318">
-                          <div style={{ display: "contents" }}>
-                            <TextField
-                              label="Légende de l'image principale"
-                              labelHidden
-                              onChange={(value, id) => handleChangeImage(id, value)} // Ou simplement `handleChange` si pas besoin d'ajuster
-                              autoComplete="off"
-                              value={localImage?.caption}
-                              id="mainImageCaption"
-                              type="text"
-                              clearButton={true}
-                              onClearButtonClick={id => handleChangeImage(id, "")} // Callback pour gérer l'effacement
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-
-              </ul>
-            </div>
-          </div>
-        </Box>
-        <Box>
-          <Box paddingBlockStart={{ xs: "400" }} paddingInline={{ xs: "400" }}>
-            <h2 className="Polaris-Text--root Polaris-Text--headingXs" tabIndex="-1">
-              Tailles
-            </h2>
-          </Box>
-
-          <div className="_ResourceListWrapper_qvkap_281">
-            <div className="_ResourceListItemsWrapper_qvkap_26">
-              <ul className="_ResourceList_qvkap_25 Polaris-ResourceList" aria-live="polite">
-                {Object.keys(localImage?.sizes || {}).map((size, index) => (
-                  <li
-                    className="Polaris-Box Polaris-ResourceItem__ListItem"
-                    key={size}
-                    style={{
-                      "--pc-box-padding-block-start-xs": "var(--p-space-300)",
-                    }}
-                  >
-                    <div className="_ActivatorWrapper_1ivxc_74">
-                      <div className="_LegacyRowWrapper_1ivxc_4">
-                        <div className="_FormFieldLabelLegacy_1ivxc_38">
-                          <p className="Polaris-Text--root Polaris-Text--bodyMd">{size}</p>
-                        </div>
-
-                        <div className="_EditField_1ivxc_318">
-                          <div style={{ display: "contents" }}>
-                            <TextField
-                              label={size}
-                              labelHidden
-                              onChange={(value, id) => handleChangeImageUrl(size, value)} // Ou simplement `handleChange` si pas besoin d'ajuster
-                              autoComplete="off"
-                              value={localImage.sizes[size]}
-                              id={`mainImageSizes-${index}`}
-                              type="text"
-                              clearButton={true}
-                              onClearButtonClick={id => handleChangeImageUrl(size, "")} // Callback pour gérer l'effacement
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </Box>
-      </Box>
-    </div>
   );
 };
 

@@ -10,7 +10,7 @@ import Loading from "./dashboard/state/Loading";
 import Dashboard from "./dashboard/state/dashboard";
 
 
-import graphql from "../config/actions";
+import { graphql } from "../config/actions";
 // Nombre d'articles par page
 const articlesPerPage = 20;
 

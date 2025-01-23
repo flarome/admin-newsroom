@@ -12,7 +12,7 @@ import { admin } from "../modules/utils/executeWithRetry";
  * @param {string} mimeType - Le type MIME du fichier.
  * @returns {Promise<Object>} - Contient l'URL de téléchargement et les paramètres.
  */
-export async function getStagedUploadTarget(shopify, filePath, mimeType, name) {
+export async function getStagedUploadTarget(shopify, mimeType, name, size) {
     const mutation = `
       mutation stagedUploadsCreate($input: [StagedUploadInput!]!) {
         stagedUploadsCreate(input: $input) {
@@ -31,8 +31,7 @@ export async function getStagedUploadTarget(shopify, filePath, mimeType, name) {
         }
       }
     `;
-  
-    const fileStats = fs.statSync(filePath);
+
   
     const variables = {
       input: [
@@ -41,7 +40,7 @@ export async function getStagedUploadTarget(shopify, filePath, mimeType, name) {
           filename: name,
           mimeType,
           httpMethod: "POST",
-          fileSize: fileStats.size.toString(),
+          fileSize: size && size.toString()
         },
       ],
     };
@@ -63,13 +62,13 @@ export async function getStagedUploadTarget(shopify, filePath, mimeType, name) {
    * @param {string} filePath - Le chemin local du fichier.
    * @returns {Promise<void>} - Indique si le téléchargement a réussi.
    */
-  export async function uploadFile(stagedTarget, filePath) {
+  export async function uploadFile(stagedTarget, content, name) {
     const { url, parameters } = stagedTarget;
   
     console.log('u18293rl', url);
     const formData = new FormData();
     parameters.forEach((param) => formData.append(param.name, param.value));
-    formData.append("file", fs.createReadStream(filePath));
+    formData.append("file", content, name);
   
     const response = await fetch(url, {
       method: "POST",

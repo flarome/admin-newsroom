@@ -1,8 +1,10 @@
 import React, { createContext, useContext, useState } from "react";
 import { initialArticle, initalBlog } from "../../../modules/initialState";
 import { useLocation, useNavigate } from "@remix-run/react";
-import graphql from "../../../config/actions";
+import { graphql, fileUpload } from "../../../config/actions";
 import { Link } from "@shopify/polaris";
+import { v4 as uuid } from "uuid";
+import { useFetcherWithPromise } from "../../../utils/useFetcherWithPromise";
 import { CheckCircleIcon, AlertCircleIcon } from "@shopify/polaris-icons";
 // Créez le contexte
 const ArticleContext = createContext();
@@ -135,6 +137,46 @@ export function ArticleProvider({ children }) {
     return dynamicBanners;
   };
 
+
+
+
+
+  const processFields = async (fields) => {
+    console.log("START PROCESS FILE");
+    const processedFields = { ...fields };
+  
+    for (const key in processedFields) {
+      const value = processedFields[key];
+  
+      if (value instanceof File) {
+        const fileFormData = new FormData();
+        fileFormData.append("file", value);
+  
+        // Faire une requête POST directement à l'API Shopify
+        const response = await fetch('/upload', {
+          method: 'POST',
+          body: fileFormData,
+        });
+  
+        const result = await response.json();
+  
+        console.log('resulffft', result);
+        console.log('processedFields', processedFields);
+        console.log('processedFieldskey', key);
+        if (result) {
+          processedFields[key] = result;
+        }
+      } else if (typeof value === "object" && value !== null) {
+        processedFields[key] = await processFields(value);
+      }
+    }
+  
+    return processedFields;
+  };
+
+
+
+
   // Fonction pour charger un article
   const loadArticle = async (
     fetcher,
@@ -202,8 +244,10 @@ export function ArticleProvider({ children }) {
         setFields,
 isLoading,
 setIsLoading,
+
         blog,
         loadArticle,
+        processFields,
       }}
     >
       {children}

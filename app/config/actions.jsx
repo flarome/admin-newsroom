@@ -1,4 +1,4 @@
-const loader = {
+export const graphql = {
     action: "/graphql",
     method: "post",
     encType: "application/x-www-form-urlencoded",
@@ -7,4 +7,11 @@ const loader = {
     relative: "route",
   };
 
-  export default loader;
+  export const fileUpload = {
+    action: "/upload",
+    method: "post",
+    encType: "multipart/form-data",
+    preventScrollReset: false,
+    replace: false,
+    relative: "route",
+  };

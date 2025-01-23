@@ -23,9 +23,10 @@ async function fileExists(shopify, filename) {
     : { hasFile: false, id: null };
 }
 
-async function getFile(shopify, id) {
+export async function getFile(shopify, id) {
   const query = `
     query GetFileById {
+
       node(id: "${id}") {
         id
         ... on GenericFile {
@@ -34,6 +35,15 @@ async function getFile(shopify, id) {
           fileStatus
           url
         }
+            ... on MediaImage {
+            fileStatus
+            status
+      image {
+        url
+         
+      }
+}
+
       }
     }
   `;

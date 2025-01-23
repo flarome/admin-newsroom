@@ -81,6 +81,7 @@ const Editor = ({}) => {
     setIsLoading: setIsLoadingGlobal,
     removeError: handleRemoveError,
     loadArticle,
+    processFields
   } = useArticle();
 
   // isNewArticle
@@ -130,11 +131,21 @@ const Editor = ({}) => {
     "articleUpdate" + originalFields.id,
   );
 
+ 
+
   const handleSubmit = async () => {
     setIsLoadingSubmit(true);
     // Détermine la fonction à appeler en fonction de l'état (nouvel article ou modification existante)
     const fetcher = isNewArticle ? fetcherArticleCreate : fetcherArticleUpdate;
     const action = isNewArticle ? "articleCreate" : "articleUpdate";
+
+    console.log('BEFORE PROCESS FILE', fields);
+
+   
+
+    const processedForm = await processFields(fields);
+
+    console.log('AFTER PROCESS FILE', processedForm);
 
     try {
       const response = await loadArticle(

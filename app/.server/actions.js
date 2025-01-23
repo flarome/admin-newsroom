@@ -8,14 +8,15 @@ import getShop from "./get/shop";
 import getTheme from "./get/theme";
 import getArticleAfter from "./get/articleAfter";
 import getArticlePrevious from "./get/articlePrevious";
-import getMetaobjectDefinition from "./get/metaobjectDefinition"
-import getMetaobjectEntrie from "./get/metaobjectEntrie"
-import getMetaobjects from "./get/metaobjects"
+import getMetaobjectDefinition from "./get/metaobjectDefinition";
+import getMetaobjectEntrie from "./get/metaobjectEntrie";
+import getMetaobjects from "./get/metaobjects";
 
 import putArticleCreate from "./put/articleCreate";
 import putArticleUpdate from "./put/articleUpdate";
 import putArticleDelete from "./put/articleDelete";
 import putMetaobjectUpsert from "./put/metaobjectUpsert";
+
 
 import goMetaobjectDefinition from "./go/metaobjectDefinition";
 import goArticlesFetch from "./go/articlesFetch";
@@ -26,7 +27,7 @@ import goArticleCreate from "./go/articleCreate";
 import goAdjacentArticle from "./go/adjacentArticle";
 import goMetaobjectDefinitionAuthor from "./go/metaobjectDefinitionAuthor"
 import goMetaobjectEntrie from "./go/metaobjectEntrie"
-
+import goFileUpload from "./go/fileUpload"
 
 const actions = {
   metaobjectUpsert: {
@@ -47,6 +48,13 @@ const actions = {
       type: "return",
       build: goMetaobjectEntrie,
     },
+  },
+  upload: {
+    builder: {
+      type: "return",
+      build: goFileUpload,
+    },
+
   },
   metaobjectEntrie: {
     get: {

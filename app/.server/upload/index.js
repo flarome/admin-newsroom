@@ -13,20 +13,24 @@ import { getStagedUploadTarget, uploadFile } from "./StagedUpload";
 export default async function uploadToShopify(
   shopify,
   name,
-  filePath,
+  content,
   mimeType,
   altText,
-  ecrase
+  ecrase,
+  size
 ) {
   try {
+
    
     const stagedTarget = await getStagedUploadTarget(
       shopify,
-      filePath,
       mimeType,
       name,
+      size
     );
-    await uploadFile(stagedTarget, filePath);
+
+
+    await uploadFile(stagedTarget, content, name);
     return await checkAndUpdateFiles(shopify, stagedTarget.resourceUrl, altText, name, ecrase);
   } catch (err) {
     console.error("Erreur lors de uploadToShopify :", err.message);

@@ -12,15 +12,17 @@ export async function uploadZipFile(
   ) {
     try {
      
+      const size =  fs.statSync(zipPath).size.toString();
   
       // Étape 3 : Envoyer le fichier ZIP à Shopify
       const uploadedFileUrl = await uploadToShopify(
         shopify,
         zipName,
-        zipPath,
+        fs.createReadStream(zipPath),
         "application/zip",
         altText,
         force,
+       size
       );
   
       // Gestion des réponses de Shopify

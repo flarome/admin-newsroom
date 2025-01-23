@@ -3,7 +3,7 @@
 client_id = "5363397f9f0db456c06921f33dbab54d"
 name = "Newsroom 2025"
 handle = "newsroom-2025"
-application_url = "https://issued-surgeon-donate-ridge.trycloudflare.com"
+application_url = "https://parade-dis-noon-banner.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "read_content,read_draft_orders,read_files,read_metaobject_definitions,
 
 [auth]
 redirect_urls = [
-  "https://issued-surgeon-donate-ridge.trycloudflare.com/auth/callback",
-  "https://issued-surgeon-donate-ridge.trycloudflare.com/auth/shopify/callback",
-  "https://issued-surgeon-donate-ridge.trycloudflare.com/api/auth/callback"
+  "https://parade-dis-noon-banner.trycloudflare.com/auth/callback",
+  "https://parade-dis-noon-banner.trycloudflare.com/auth/shopify/callback",
+  "https://parade-dis-noon-banner.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]

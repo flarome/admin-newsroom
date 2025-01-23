@@ -204,7 +204,7 @@ export async function api(
 
     if (type === "return") {
       return typeof build === 'function' && build.constructor.name === 'AsyncFunction' ?
-            await build(response, userErrors, body, errors, shopify) : build(response, userErrors, body, errors, shopify);
+            await build(response, userErrors, body, errors, shopify, cdnUrl) : build(response, userErrors, body, errors, shopify, cdnUrl);
 
     } else if (type === "rePost") {
       // Récupérer la nouvelle action et le nouveau body

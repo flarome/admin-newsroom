@@ -8,16 +8,29 @@ import handle from "../../global-modules/utils/handle";
 import { uploadZipFile } from "../upload/zip";
 import { getLegalContent } from "../content/include/media/legal";
 import { generateCustomUUID } from "./uuid";
+import axios from "axios";
 
-function findBestImageSource(initialImage) {
+async function findBestImageSource(initialImage) {
   if (!initialImage || !initialImage.sizes) {
     console.log("L'objet initialImage ou ses tailles sont invalides");
   }
 
-  // Priorité pour `imagesrc` si définie
-  if (initialImage.sizes.imagesrc) {
-    return initialImage.sizes.imagesrc;
-  }
+    // Fonction pour vérifier la disponibilité d'une URL
+    const checkUrlAvailability = async (url) => {
+      try {
+        const response = await axios.head(url); // Vérifie la disponibilité avec une requête HEAD
+        return response.status >= 200 && response.status < 400; // URL valide si le statut est dans cette plage
+      } catch (error) {
+        console.log(`URL invalide : ${url}`);
+        return false;
+      }
+    };
+
+
+    // Priorité pour `imagesrc` si définie et disponible
+    if (initialImage.sizes.imagesrc && await checkUrlAvailability(initialImage.sizes.imagesrc)) {
+      return initialImage.sizes.imagesrc;
+    }
 
   // Triez les clés par résolution (du plus grand au plus petit)
   const sortedKeys = Object.keys(initialImage.sizes)
@@ -30,10 +43,13 @@ function findBestImageSource(initialImage) {
       return widthB * heightB - widthA * heightA; // Tri décroissant par surface
     });
 
-  // Trouver la première valeur non vide dans l'ordre trié
+
+
+  // Vérifiez chaque URL triée et retournez la première disponible
   for (const key of sortedKeys) {
-    if (initialImage.sizes[key]) {
-      return initialImage.sizes[key];
+    const url = initialImage.sizes[key];
+    if (url && await checkUrlAvailability(url)) {
+      return url;
     }
   }
 
@@ -144,7 +160,8 @@ export async function generateArticle(body, isNewArticle, shopify, cdnUrl) {
     } = body;
     const { originalHtml, rebuiltHtml, jsonContent, allsArticleMediaUrl, copyContent } = await generateHtml(content, shopify, cdnUrl);
     
-    const mainImageUrlValid = findBestImageSource(mainImage);
+    console.log('mainImage9', mainImage);
+    const mainImageUrlValid = await findBestImageSource(mainImage);
 
     // Initialisation de allsArticleMediaUrl si ce n'est pas déjà un tableau
     const allsMediaUrl = allsArticleMediaUrl || [];
@@ -193,11 +210,12 @@ export async function generateArticle(body, isNewArticle, shopify, cdnUrl) {
   
       }
     ],
-    image: {
+    ...mainImageUrlValid && {image: {
 altText: mainImage.alt || null,
-url: mainImageUrlValid
+url: String(mainImageUrlValid)
 
     },
+  },
       title: title,
       author: {
         name: author && author.trim() !== "" ? author  :  "Flarome Inc",
