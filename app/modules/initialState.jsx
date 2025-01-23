@@ -1,6 +1,6 @@
 
 
-export const mainImage = {
+export const oldmainImage = {
   alt: "",
   caption: "",
   sizes: {
@@ -27,6 +27,20 @@ export const mainImage = {
     s1206_2144: "",
     s810_1440: "",
     s1620_2880: "",
+  },
+};
+
+export const mainImage = {
+  alt: "",
+  caption: "",
+  sizes: {
+    imagesrc: "",
+    scare: "",
+    big: "",
+    regular: "",
+    landing: ""
+
+    
   },
 };
 

@@ -8,16 +8,21 @@ const ModalContext = createContext();
 
 // Fournisseur du contexte
 export const MetaobjectModalProvider = ({ children }) => {
+   const shopify = useAppBridge();
+
+
     
   const [modalState, setModalState] = useState({ isOpen: false, id: null, handle: null });
 
   // Fonction pour afficher la modal
   const showModal = (type, id, handle) => {
     setModalState({ isOpen: true, id: id, type: type , handle: handle });
+
   };
 
   // Fonction pour fermer la modal
   const closeModal = () => {
+
     setModalState({ isOpen: false, id: null, type: null, handle: null });
   };
 

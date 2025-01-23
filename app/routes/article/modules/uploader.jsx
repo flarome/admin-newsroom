@@ -29,15 +29,21 @@ export const ImageUploader = ({ file, setFile }) => {
       />
       
 
-  ) : (
+  ) :  file && (
 
-    <Thumbnail
-    size="small"
-    alt={""}
-    source={file}
-  />
 
-  )
+
+      <Thumbnail
+      size="small"
+      alt={""}
+      source={file}
+    />
+
+    
+
+  
+
+  ) 
 
   ;
 

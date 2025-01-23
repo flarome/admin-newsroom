@@ -4,7 +4,7 @@ import {
   LegacyStack,
   LegacyCard,
   BlockStack,
-  Layout, 
+  Layout,
   Page,
 } from "@shopify/polaris";
 import { ImageUploader } from "../modules/uploader";
@@ -14,21 +14,19 @@ const ImageModal = ({
   handleChangeImageUrl,
   handleChangeImage,
 }) => {
-  const sizes = Object.keys(localImage?.sizes || {}) || {};
-
   return (
     <div>
       <Page>
         <Layout>
-          <Layout.Section variant="oneThird">
-            <LegacyCard title="Informations générales">
+          <Layout.Section variant="fullWidth">
+            <LegacyCard title="Informations générales" subdued>
               <LegacyCard.Section>
                 <TextField
                   label="Texte alternatif"
                   onChange={(value) => handleChangeImage("alt", value)}
                   autoComplete="off"
                   value={localImage?.alt || ""}
-                  clearButton
+                  clearButton={true}
                   onClearButtonClick={() => handleChangeImage("alt", "")}
                 />
 
@@ -38,39 +36,38 @@ const ImageModal = ({
                   onChange={(value) => handleChangeImage("caption", value)}
                   autoComplete="off"
                   value={localImage?.caption || ""}
-                  clearButton
+                  clearButton={true}
                   onClearButtonClick={() => handleChangeImage("caption", "")}
                 />
               </LegacyCard.Section>
             </LegacyCard>
           </Layout.Section>
-          <Layout.Section variant="oneThird">
+          <Layout.Section variant="fullWidth">
             <LegacyCard title="Sources des Images">
               <LegacyCard.Section>
                 <BlockStack gap={{ xs: "400" }}>
-                  {sizes.map((size) => (
-                    <LegacyStack key={size} alignment="center">
-                      <TextField
-                        label={`URL pour ${size}`}
-                        onChange={(value) => handleChangeImageUrl(size, value)}
-                        autoComplete="off"
-                        value={localImage.sizes?.[size] || ""}
-                        clearButton
-                        onClearButtonClick={() =>
-                          handleChangeImageUrl(size, "")
-                        }
-                        suffix={
-                          <div style={{ width: 40, height: 40 }}>
-                            <ImageUploader
-                              file={localImage.sizes?.[size]}
-                              setFile={(file) =>
-                                handleChangeImageUrl(size, file)
-                              }
-                            />
-                          </div>
-                        }
-                      />
-                    </LegacyStack>
+                  {Object.keys(localImage?.sizes || []).map((size) => (
+                    <TextField
+                      label={`URL pour ${size}`}
+                      onChange={(value) => handleChangeImageUrl(size, value)}
+                      autoComplete="off"
+                      value={
+                        localImage.sizes?.[size] &&
+                        localImage.sizes?.[size] instanceof File
+                          ? localImage.sizes?.[size].name
+                          : localImage.sizes?.[size] || ""
+                      }
+                      clearButton
+                      onClearButtonClick={() => handleChangeImageUrl(size, "")}
+                      suffix={
+                        <div style={{ width: 40, height: 40 }}>
+                          <ImageUploader
+                            file={localImage.sizes?.[size]}
+                            setFile={(file) => handleChangeImageUrl(size, file)}
+                          />
+                        </div>
+                      }
+                    />
                   ))}
                 </BlockStack>
               </LegacyCard.Section>

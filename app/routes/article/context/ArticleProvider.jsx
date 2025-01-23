@@ -137,15 +137,10 @@ export function ArticleProvider({ children }) {
     return dynamicBanners;
   };
 
-
-
   const processFields = async (fields) => {
     console.log("START PROCESS FILE");
-    const processedFields = { ...fields };
   
-    for (const key in processedFields) {
-      const value = processedFields[key];
-  
+    const processKey = async ([key, value]) => {
       if (value instanceof File) {
         const fileFormData = new FormData();
         fileFormData.append("file", value);
@@ -157,19 +152,31 @@ export function ArticleProvider({ children }) {
         });
   
         const result = await response.json();
-
         console.log('j2', result);
-        if (result) {
-          processedFields[key] = result;
-        }
-      } else if (typeof value === "object" && value !== null) {
-        processedFields[key] = await processFields(value);
-      }
-    }
   
-    return processedFields;
+        return [key, result || value];
+      } else if (Array.isArray(value)) {
+        // Si la valeur est un tableau, traiter chaque élément de manière récursive
+        const processedArray = await Promise.all(value.map((item) => processFields(item)));
+        return [key, processedArray];
+      } else if (typeof value === "object" && value !== null) {
+        // Si la valeur est un objet, traiter les champs de manière récursive
+        const processedObject = await processFields(value);
+        return [key, processedObject];
+      } else {
+        // Si ce n'est pas un fichier ou un objet, retourner la valeur telle quelle
+        return [key, value];
+      }
+    };
+  
+    // Transformer l'objet en une liste de promesses pour chaque clé
+    const entries = Object.entries(fields);
+    const processedEntries = await Promise.all(entries.map(processKey));
+  
+    // Reconstruire l'objet à partir des entrées traitées
+    return Object.fromEntries(processedEntries);
   };
-
+  
 
 
 
