@@ -1,0 +1,57 @@
+{
+    "location": "Lieu de rédaction",
+    "date": "2020-07-20",
+    "titleHtml": "Titre avec balise br par exemple",
+    "subtitle": "Le Sous titre de l'article (facultatif)",
+    "downloadsAllsMedia": "",
+    "downloadsDocuments": [
+        {
+            "text": "",
+            "url": "",
+            "buttonText": ""
+        },
+        {
+            "text": "",
+            "url": "",
+            "buttonText": ""
+        }
+    ],
+    "legal": [
+        "Legal 1",
+        "Légal2"
+    ],
+    "media": {
+        "mainImage": {
+            "downloadUrl": "",
+            "caption": "Légende de du media",
+            "alt": "Aria-Label du media",
+            "sizes": {
+                "s551_980": "Sur la bannière large 1x",
+                "s1102_1960": "Sur la bannière large 2x",
+                "s389_692": "Medium sur la bannière 1x",
+                "s778_1384": "Medium 2x sur la bannière",
+                "s416_416": "Small sur la bannière 1x",
+                "s832_832": "Small sur la bannière 2x",
+                "s207_368": "Large sur en lire plus 1x et Medium et small 1x pour page blog position BIG et large 1x position REGULAR et external WIDE SMALL et small, medium about",
+                "s414_736": "Large sur en lire plus 2x et Medium et small 2x pour page blog position BIG et large 2x position REGULAR et small2x medium2x about",
+                "s132_132": "Small sur en lire plus 1x",
+                "s264_264": "Small sur en lire plus 2x",
+                "s300_300": "Image 1x pour quickread et présentation",
+                "s600_600": "Image 2x pour quickread et présentation ",
+                "s369_656": "Large 1x pour page blog position BIG et large about",
+                "s738_1312": "Large 2x pour page blog position BIG et pour le schema org",
+                "s900_900": "Scare pour schema org",
+                "s630_1200": "OG",
+
+                "s520_416": "about highlight small",
+                "s1040_832": "about highlight small 2x",
+
+                "s603_1072": "about highlight medium",
+                "s1206_2144": "about highlight medium2x",
+
+                "s810_1440": "about highlight large",
+                "s1620_2880": "about highlight large2x"
+            }
+        }
+    }
+}

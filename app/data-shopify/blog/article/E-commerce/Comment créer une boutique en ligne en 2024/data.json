@@ -1,0 +1,48 @@
+{
+    "date": "2020-08-10",
+    "subtitle": "Ce guide vous explique pas à pas comment créer un site e-commerce et construire une boutique en ligne rentable.",
+    "legal": [],
+    "media": {
+        "mainImage": {
+            "downloadUrl": "https://www.flarome.com/cdn/shop/files/e-commerce_htcaos_main.jpg",
+            "caption": "",
+            "alt": "Illustration de l'achat d'un pull bleu en ligne sur un ordinateur portable",
+            "sizes": {
+                
+                "s551_980": "https://www.flarome.com/cdn/shop/files/e-commerce_htcaos_main_hl89gh1lpmzd_1102_1960.jpg?format=pjpg&crop=center&height=551&width=980&pad_color=fff",
+                "s1102_1960": "https://www.flarome.com/cdn/shop/files/e-commerce_htcaos_main_hl89gh1lpmzd_1102_1960.jpg?format=pjpg",
+
+                "s389_692": "https://www.flarome.com/cdn/shop/files/e-commerce_htcaos_main_hl89gh1lpmzd_1102_1960.jpg?format=pjpg&crop=center&height=389&width=692&pad_color=fff",
+                "s778_1384": "https://www.flarome.com/cdn/shop/files/e-commerce_htcaos_main_hl89gh1lpmzd_778_1384.jpg?format=pjpg",
+
+                "s416_416":"https://www.flarome.com/cdn/shop/files/e-commerce_htcaos_main_hl89gh1lpmzd_scare.jpg?format=pjpg&crop=center&height=416&width=416&pad_color=fff",
+                "s832_832":"https://www.flarome.com/cdn/shop/files/e-commerce_htcaos_main_hl89gh1lpmzd_scare.jpg?format=pjpg&crop=center&height=832&width=832&pad_color=fff",
+
+                "s207_368": "https://www.flarome.com/cdn/shop/files/e-commerce_htcaos_main_hl89gh1lpmzd_414_736.jpg?format=pjpg&crop=center&height=207&width=368&pad_color=fff",
+                "s414_736": "https://www.flarome.com/cdn/shop/files/e-commerce_htcaos_main_hl89gh1lpmzd_414_736.jpg?format=pjpg",
+                
+                "s132_132": "https://www.flarome.com/cdn/shop/files/e-commerce_htcaos_main_hl89gh1lpmzd_scare.jpg?format=pjpg&crop=center&height=132&width=132&pad_color=fff",
+                "s264_264": "https://www.flarome.com/cdn/shop/files/e-commerce_htcaos_main_hl89gh1lpmzd_scare.jpg?format=pjpg&crop=center&height=264&width=264&pad_color=fff",
+
+                "s300_300": "https://www.flarome.com/cdn/shop/files/e-commerce_htcaos_main_hl89gh1lpmzd_scare.jpg?format=pjpg&crop=center&height=300&width=300&pad_color=fff",
+                "s600_600": "https://www.flarome.com/cdn/shop/files/e-commerce_htcaos_main_hl89gh1lpmzd_scare.jpg?format=pjpg&crop=center&height=600&width=600&pad_color=fff",
+
+                "s369_656": "https://www.flarome.com/cdn/shop/files/e-commerce_htcaos_main_hl89gh1lpmzd_738_1312.jpg?format=pjpg&crop=center&height=369&width=656&pad_color=fff",
+                "s738_1312": "https://www.flarome.com/cdn/shop/files/e-commerce_htcaos_main_hl89gh1lpmzd_738_1312.jpg",
+
+                "s900_900": "https://www.flarome.com/cdn/shop/files/e-commerce_htcaos_main_hl89gh1lpmzd_scare.jpg?format=pjpg&crop=center&height=900&width=900&pad_color=fff",
+
+                "s630_1200": "https://www.flarome.com/cdn/shop/files/e-commerce_htcaos_main_hl89gh1lpmzd_630_1200.jpg",
+
+                "s520_416": "https://www.flarome.com/cdn/shop/files/e-commerce_htcaos_main_hl89gh1lpmzd_1040_832.jpg?format=pjpg&crop=center&height=520&width=416&pad_color=fff",
+                "s1040_832": "https://www.flarome.com/cdn/shop/files/e-commerce_htcaos_main_hl89gh1lpmzd_1040_832.jpg?format=pjpg",
+
+                "s603_1072": "https://www.flarome.com/cdn/shop/files/e-commerce_htcaos_main_hl89gh1lpmzd_1206_2144.jpg?format=pjpg&crop=center&height=602&width=1072&pad_color=fff",
+                "s1206_2144": "https://www.flarome.com/cdn/shop/files/e-commerce_htcaos_main_hl89gh1lpmzd_1206_2144.jpg?format=pjpg",
+
+                "s810_1440": "https://www.flarome.com/cdn/shop/files/e-commerce_htcaos_main_hl89gh1lpmzd_1620_2880.jpg?format=pjpg&crop=center&height=810&width=1440&pad_color=fff",
+                "s1620_2880": "https://www.flarome.com/cdn/shop/files/e-commerce_htcaos_main_hl89gh1lpmzd_1620_2880.jpg?format=pjpg"
+            }
+        }
+    }
+}
