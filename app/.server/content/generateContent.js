@@ -132,7 +132,7 @@ export async function htmlToJson(htmlString, shopify, cdnUrl) {
 
   return body;
 }*/
-export async function htmlToJson(htmlString, shopify, cdnUrl) {
+export async function htmlToJson(htmlString, shopify, cdnUrl, handle) {
   const dom = new JSDOM(htmlString);
   const elements = Array.from(
     dom.window.document.body?.children || dom.window.document.children
@@ -250,7 +250,7 @@ export async function htmlToJson(htmlString, shopify, cdnUrl) {
       } 
 
       if (layout === "imageInline") {
-        const figureData = await generateJsonImageInline(element, shopify, cdnUrl, dataJson, img);
+        const figureData = await generateJsonImageInline(element, shopify, cdnUrl, dataJson, img, handle);
         return figureData
         ? {
             body: addCurrentBodyCopyToBody(body, currentBodyCopy).concat(figureData),
@@ -259,7 +259,7 @@ export async function htmlToJson(htmlString, shopify, cdnUrl) {
           }
         : state;
       } else if  (layout === "imageBig") {
-        const figureData = await generateJsonImageBig(element, shopify, cdnUrl, dataJson, img);
+        const figureData = await generateJsonImageBig(element, shopify, cdnUrl, dataJson, img, handle);
         return figureData
           ? {
               body: addCurrentBodyCopyToBody(body, currentBodyCopy).concat(figureData),
@@ -451,11 +451,11 @@ export function generateCopyContent(inputHtml) {
 
 
 
-export default async function generateHtml(inputHtml, shopify, cdnUrl) {
+export default async function generateHtml(inputHtml, shopify, cdnUrl, handle) {
   console.log("inputHtml", inputHtml);
 
   // Conversion HTML → JSON
-  const { jsonContent, allMedias } = await htmlToJson(inputHtml, shopify, cdnUrl);
+  const { jsonContent, allMedias } = await htmlToJson(inputHtml, shopify, cdnUrl, handle);
   console.log("JSON généré :", JSON.stringify(jsonContent, null, 2));
 
 const copyContent = generateCopyContent(inputHtml);

@@ -77,7 +77,7 @@ export function html(element) {
 
 
 
-export async function json(element, shopify, cdnUrl, dataJson, img) {
+export async function json(element, shopify, cdnUrl, dataJson, img, handle) {
   // Remplir les informations supplémentaires
   // const dataJson = mceToData(element)?.data || {};
 
@@ -86,6 +86,7 @@ export async function json(element, shopify, cdnUrl, dataJson, img) {
   const imgName = img ? path.basename(img.split("?")[0]) : "";
   const uuid = generateCustomUUID(img);
 
+
   return {
     [dataJson.imageLayout]: {
       "body-copy-wide": true,
@@ -93,7 +94,7 @@ export async function json(element, shopify, cdnUrl, dataJson, img) {
       imagesrc: img,
       caption: dataJson.caption,
       downloadFile:
-        (await generateImageZipFile(uuid, img, dataJson.alt, shopify, cdnUrl)) ||
+        (await generateImageZipFile(img, dataJson.alt, shopify, cdnUrl, `newsroom_${handle}_media_${uuid}.zip`)) ||
         null,
       dropcap: false, // Définir selon vos besoins
       modal: false, // Définir selon vos besoins

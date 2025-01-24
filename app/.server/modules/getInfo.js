@@ -94,10 +94,10 @@ export async function getArticleInfo(fields, article, local, shopify) {
         info.tags = article.tags?.length ? article.tags : [];
         break;
       case "metaTitle":
-        info.metaTitle = "";
+        info.metaTitle = article?.metafields?.edges?.find(edge => edge.node.namespace === "seo" && edge.node.key === "title")?.value || "";
         break;
       case "metaDescription":
-        info.metaDescription = "";
+        info.metaDescription = article?.metafields?.edges?.find(edge => edge.node.namespace === "seo" && edge.node.key === "description")?.value || "";
         break;
       case "handle":
         info.handle = article.handle || "";

@@ -1,24 +1,26 @@
 
 import uploadToShopify from ".";
+import fs from "fs"; 
 
 export async function uploadZipFile(
     cdnUrl,
     shopify,
     zipName,
-    zipPath,
     altText,
     force,
+    size,
+    flux,
     retry = false,
   ) {
     try {
      
-      const size =  fs.statSync(zipPath).size.toString();
+
   
       // Étape 3 : Envoyer le fichier ZIP à Shopify
       const uploadedFileUrl = await uploadToShopify(
         shopify,
         zipName,
-        fs.createReadStream(zipPath),
+        flux,
         "application/zip",
         altText,
         force,
@@ -40,9 +42,8 @@ export async function uploadZipFile(
         return await uploadZipFile(cdnUrl,
             shopify,
             zipName,
-            zipPath,
             altText,
-            force, true);
+            force, size, flux, true);
       } else {
         return null;
       }

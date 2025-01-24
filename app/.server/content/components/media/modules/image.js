@@ -71,16 +71,16 @@ import fetch from "node-fetch";
 import fs from "fs";
 
 import path from "path";
-import handle from "../../../../../global-modules/utils/handle"
-
+//import handle from "../../../../../global-modules/utils/handle"
+//import { Readable } from "stream";
 
 
   export async function generateZipFile(
-    uuid,
     img,
     altText,
     shopify,
     cdnUrl,
+    zipName
   ) {
     try {
 
@@ -108,32 +108,36 @@ import handle from "../../../../../global-modules/utils/handle"
       zip.addFile("LEGAL_NOTICE.txt", Buffer.from(legalContent, "utf-8"));
   
       // Définir le chemin temporaire
-      const baseDir = path.resolve();
-      const tempDir = path.join(
-        baseDir,
-        "tmp",
-        handle(process.cwd()),
-        handle(Date.now().toString()),
-      );
-      if (!fs.existsSync(tempDir)) {
-        fs.mkdirSync(tempDir, { recursive: true });
-      }
+ 
   
-      let zipName = `newsroom_article_media_${uuid}.zip`;
-      const zipPath = path.join(tempDir, zipName);
+
+  // Étape 4 : Générer un Buffer à partir du ZIP
+  const zipBuffer = zip.toBuffer();
+
+  // Taille du ZIP
+  const zipSize = zipBuffer.length;
+  /*
+
+    // Étape 5 : Créer un flux lisible (Readable) à partir du Buffer
+    const zipStream = new Readable({
+      read() {
+        this.push(zipBuffer);
+        this.push(null); // Fin du flux
+      },
+    });
+  */
+
   
-      // Écriture du ZIP sur le disque
-      zip.writeZip(zipPath);
+      const uploadedFileUrl = await uploadZipFile(cdnUrl, shopify, zipName, altText, true, zipSize, zipBuffer);
   
-      const uploadedFileUrl = await uploadZipFile(cdnUrl, shopify, zipName, zipPath, altText, true);
-  
-      // Nettoyer le fichier temporaire
-      fs.unlinkSync(zipPath);
+
   
       return uploadedFileUrl;
     } catch (error) {
       console.error("Erre1ur :", error.message);
-      throw error;
+      console.error("Erre1ur :", error.stack);
       return null;
+      throw error;
+     
     }
   }

@@ -8,11 +8,13 @@ import handle from "../../global-modules/utils/handle";
 import { uploadZipFile } from "../upload/zip";
 import { getLegalContent } from "../content/include/media/legal";
 import { generateCustomUUID } from "./uuid";
+import { generateImageZipFile } from "../content/components/media/modules";
 import axios from "axios";
 
 async function findBestImageSource(initialImage) {
   if (!initialImage || !initialImage.sizes) {
     console.log("L'objet initialImage ou ses tailles sont invalides");
+    return null;
   }
 
   // Fonction pour vérifier la disponibilité d'une URL
@@ -28,22 +30,14 @@ async function findBestImageSource(initialImage) {
 
   // Priorité pour `imagesrc` si définie et disponible
   if (
-    initialImage.sizes.imagesrc &&
-    (await checkUrlAvailability(initialImage.sizes.imagesrc))
+    initialImage.sizes.landscape &&
+    (await checkUrlAvailability(initialImage.sizes.landscape))
   ) {
-    return initialImage.sizes.imagesrc;
+    return initialImage.sizes.landscape;
   }
 
   // Triez les clés par résolution (du plus grand au plus petit)
-  const sortedKeys = Object.keys(initialImage.sizes)
-    .filter((key) => key !== "imagesrc") // Exclure `imagesrc` pour ne pas doubler
-    .sort((a, b) => {
-      // Extraire les résolutions (par exemple, "1620_2880" devient 1620 * 2880)
-      const [widthA, heightA] = a.slice(1).split("_").map(Number);
-      const [widthB, heightB] = b.slice(1).split("_").map(Number);
-
-      return widthB * heightB - widthA * heightA; // Tri décroissant par surface
-    });
+  const sortedKeys = Object.keys(initialImage.sizes);
 
   // Vérifiez chaque URL triée et retournez la première disponible
   for (const key of sortedKeys) {
@@ -57,11 +51,17 @@ async function findBestImageSource(initialImage) {
   return null;
 }
 
-export async function generateAllsMediaUrl(mediaUrls, shopify, cdnUrl) {
+export async function generateAllsMediaUrl(mediaUrls, shopify, cdnUrl, handle1) {
   try {
-    const uuid = generateCustomUUID(
+
+ 
+    if (!mediaUrls || mediaUrls.length < 1) {
+      return null;
+    }
+    
+   /* const uuid = generateCustomUUID(
       mediaUrls.map((url) => url.replace(/\s/g, "")).toString(),
-    );
+    );*/
     const zip = new AdmZip();
     const fileNameTracker = {}; // Objet pour suivre les noms de fichiers déjà ajoutés
 
@@ -103,25 +103,15 @@ export async function generateAllsMediaUrl(mediaUrls, shopify, cdnUrl) {
     zip.addFile("LEGAL_NOTICE.txt", Buffer.from(legalContent, "utf-8"));
 
     // Définir le répertoire temporaire pour enregistrer le ZIP
-    const baseDir = path.resolve();
-    const tempDir = path.join(
-      baseDir,
-      "tmp",
-      handle(process.cwd()), // Normaliser le chemin courant
-      handle(Date.now().toString()), // Identifier le répertoire avec un timestamp
-    );
 
-    // Créer le répertoire temporaire s'il n'existe pas
-    if (!fs.existsSync(tempDir)) {
-      fs.mkdirSync(tempDir, { recursive: true });
-    }
 
     // Nommer et définir le chemin du fichier ZIP
-    const zipName = `newsroom_article_medias_${uuid}.zip`;
-    const zipPath = path.join(tempDir, zipName);
+    const zipName = `newsroom_${handle1}_medias.zip`;
 
-    // Écrire le fichier ZIP sur le disque
-    zip.writeZip(zipPath);
+
+    const zipBuffer = zip.toBuffer();
+
+    const zipSize = zipBuffer.length;
 
     // Télécharger le fichier ZIP vers le CDN
     const altText = ""; // Texte alternatif (peut être ajusté selon les besoins)
@@ -129,13 +119,12 @@ export async function generateAllsMediaUrl(mediaUrls, shopify, cdnUrl) {
       cdnUrl,
       shopify,
       zipName,
-      zipPath,
       altText,
       true,
+      zipSize,
+      zipBuffer
     );
 
-    // Nettoyer le fichier temporaire après l'envoi
-    fs.unlinkSync(zipPath);
 
     // Retourner l'URL du fichier téléchargé
     return uploadedFileUrl;
@@ -172,16 +161,9 @@ export async function processFields1(
     return new File([file], newName, { type: file.type });
   }
   async function processFields(fields) {
-
-
     const processKey = async ([key, value]) => {
-
-
       if (value && typeof value === "string" && value.startsWith("__file_")) {
-
-
         const file = files[value];
-
 
         const value1 =
           file & (file instanceof File) || isFileLike(file)
@@ -192,8 +174,6 @@ export async function processFields1(
                 true,
               )
             : value;
-
-  
 
         return [key, value1 || value];
       } else if (Array.isArray(value)) {
@@ -250,24 +230,25 @@ export async function generateArticle(
       layout,
     } = body;
 
-    
-      const [
-        { 
-          originalHtml, 
-          rebuiltHtml, 
-          jsonContent, 
-          allsArticleMediaUrl, 
-          copyContent 
-        },
-        mainImage
-      ] = await Promise.all([
-        generateHtml(content, shopify, cdnUrl),
-        processFields1(oldMainImage, files, shopify, handle, cdnUrl)
-      ]);
-    
+    const [
+      {
+        originalHtml,
+        rebuiltHtml,
+        jsonContent,
+        allsArticleMediaUrl,
+        copyContent,
+      },
+      mainImage,
+    ] = await Promise.all([
+      generateHtml(content, shopify, cdnUrl, handle),
+      processFields1(oldMainImage, files, shopify, handle, cdnUrl),
+    ]);
+
 
 
     const mainImageUrlValid = await findBestImageSource(mainImage);
+
+
 
     // Initialisation de allsArticleMediaUrl si ce n'est pas déjà un tableau
     const allsMediaUrl = allsArticleMediaUrl || [];
@@ -276,20 +257,37 @@ export async function generateArticle(
       allsMediaUrl.push(mainImageUrlValid);
     }
 
+    const [
+      mainImagedownloadUrl,
+      downloadsAllsMediaValue
+    ] = await Promise.all([
+      generateImageZipFile(
+        mainImageUrlValid,
+        mainImage.alt,
+        shopify,
+        cdnUrl,
+         `newsroom_${handle}_media_hero.zip`
+      
+      ),
+      generateAllsMediaUrl(allsMediaUrl, shopify, cdnUrl, handle)
+    ]);
+
+
+
+
+
     return {
       metafields: [
         {
           namespace: "article",
           key: "data_json",
+         /* type: "json",*/
           value: JSON.stringify({
             layout,
             subtitle: subTitle || null,
-            downloadsAllsMedia:
-              allsMediaUrl && allsMediaUrl.lenght > 0
-                ? await generateAllsMediaUrl(allsMediaUrl, shopify, cdnUrl)
-                : null,
+            downloadsAllsMedia: downloadsAllsMediaValue,
             media: {
-              mainImage: mainImage,
+              mainImage: { ...mainImage, downloadUrl: mainImagedownloadUrl },
             },
             content: {
               originalHtml: originalHtml,
@@ -303,9 +301,29 @@ export async function generateArticle(
         {
           namespace: "contact",
           key: "editor",
+          /*type: "metaobject_reference",*/
 
           value: `[${contactPresse.map((item) => `"${item}"`).join(",")}]`,
         },
+/*
+        {
+          namespace: "seo",
+          key: "title",
+          type: "single_line_text_field",
+          
+
+          value: metaTitle,
+        },
+
+        {
+          namespace: "seo",
+          key: "description",
+          type: "single_line_text_field",
+          
+
+          value: metaDescription,
+        },*/
+
       ],
       ...(mainImageUrlValid && {
         image: {
