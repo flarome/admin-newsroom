@@ -78,6 +78,7 @@ const Editor = ({}) => {
     blog,
     originalFields,
     errors,
+    submit: submitProvider,
     setIsLoading: setIsLoadingGlobal,
     removeError: handleRemoveError,
     loadArticle,
@@ -139,23 +140,32 @@ const Editor = ({}) => {
     const fetcher = isNewArticle ? fetcherArticleCreate : fetcherArticleUpdate;
     const action = isNewArticle ? "articleCreate" : "articleUpdate";
 
-    console.log('BEFORE PROCESS FILE', fields);
+    // console.log('BEFORE PROCESS FILE', fields);
 
    
 
-    const processedForm = await processFields(fields);
+   // const processedForm = await processFields(fields);
 
-    console.log('AFTER PROCESS FILE', processedForm);
+    // console.log('AFTER PROCESS FILE', processedForm);
 
     try {
-      const response = await loadArticle(
+      /*const response = await loadArticle(
         fetcher,
         null,
         action,
         processedForm,
         !isNewArticle,
+      );*/
+
+      const response = await submitProvider(
+        null,
+        action,
+        fields,
+        !isNewArticle,
       );
 
+
+      
       if (isNewArticle) {
         shopify.saveBar.hide(saveBarId);
         showToast("Article créé");

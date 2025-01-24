@@ -10,7 +10,7 @@ import Loading from "./dashboard/state/Loading";
 import Dashboard from "./dashboard/state/dashboard";
 
 
-import { graphql } from "../config/actions";
+import { graphql, oldgraphql } from "../config/actions";
 // Nombre d'articles par page
 const articlesPerPage = 20;
 
@@ -41,12 +41,14 @@ export default function Index() {
     const loadArticle = async () => {
       setIsLoading(true);
   
-      const response = await fetcher.submit(
-        {
-          action: "articlesFetch",
-          body: JSON.stringify({ first: 250 }),
-        },
-        graphql
+      const response = await fetcher.submit( {
+        action: "articlesFetch",
+body: JSON.stringify({ first: 250 })
+
+      }
+        ,
+        oldgraphql
+    
       );
       setArticles(response?.articles);
       setIsLoading(false);

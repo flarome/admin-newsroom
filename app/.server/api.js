@@ -19,7 +19,9 @@ export async function api(
       throw new Error(message);
     }
 
-    const { body, action } = req;
+    const { body, action, files } = req;
+
+
 
     console.log("bodyrere", body);
 
@@ -139,7 +141,7 @@ export async function api(
 
 
             const { mutation, variables, mutationName, fetchMode } = typeof getAction.mutation === 'function' && getAction.mutation.constructor.name === 'AsyncFunction' ?
-            await getAction.mutation(body, blogId, themeId, client, shopify, cdnUrl) : getAction.mutation(body, blogId, themeId, client, shopify, cdnUrl);
+            await getAction.mutation(body, blogId, themeId, client, shopify, cdnUrl, files) : getAction.mutation(body, blogId, themeId, client, shopify, cdnUrl, files);
 
           console.log("---------------------");
           console.log("MUTATION", mutationName);
@@ -178,7 +180,7 @@ export async function api(
   const responseRepost = await api(
     client,
     shopify,
-    { body: nextBody, action: nextAction.action },
+    { body: nextBody, action: nextAction.action, files: files },
     errors,
     make,
   );
@@ -221,7 +223,7 @@ export async function api(
       return await api(
         client,
         shopify,
-        { body: nextBody, action: nextAction },
+        { body: nextBody, action: nextAction, files: files },
         errors,
         make,
       );

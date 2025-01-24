@@ -1,4 +1,4 @@
-export const graphql = {
+export const oldgraphql = {
     action: "/graphql",
     method: "post",
     encType: "application/x-www-form-urlencoded",
@@ -6,7 +6,7 @@ export const graphql = {
     replace: false,
     relative: "route",
   };
-
+/*
   export const fileUpload = {
     action: "/upload",
     method: "post",
@@ -14,4 +14,16 @@ export const graphql = {
     preventScrollReset: false,
     replace: false,
     relative: "route",
+  };*/
+
+
+  export const graphql = {
+    endpoint: "/graphql",
+    method: "POST",
+  };
+
+  export const fileUpload = {
+    endpoint: "/upload",
+    method: "POST",
+
   };

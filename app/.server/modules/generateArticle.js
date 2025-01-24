@@ -1,5 +1,5 @@
 import generateHtml from "../content/generateContent";
-
+import upload from "../../fileUpload";
 import AdmZip from "adm-zip";
 import fetch from "node-fetch";
 import fs from "fs";
@@ -137,7 +137,82 @@ export async function generateAllsMediaUrl(mediaUrls, shopify, cdnUrl) {
   }
 }
 
-export async function generateArticle(body, isNewArticle, shopify, cdnUrl) {
+export async function processFields1(fields, files = {}, shopify, handle, cdnUrl) {
+
+  function isFileLike(obj) {
+    return obj &&
+        typeof obj === 'object' &&
+        typeof obj.size === 'number' &&
+        typeof obj.name === 'string' &&
+        typeof obj.type === 'string';
+}
+
+function renameFile(file, newNameWithoutExtension) {
+  // Extraire l'extension à partir du nom original
+  const extension = file.name.split('.').pop(); // Récupère tout après le dernier point
+  const newName = `${newNameWithoutExtension}.${extension}`; // Nouveau nom avec extension
+
+  // Créer un nouveau fichier avec le même contenu, mais un nouveau nom
+  return new File([file], newName, { type: file.type });
+}
+  async function processFields(fields) {
+
+
+    console.log("START PROCESS FILE");
+
+    console.log('ffreer', files);
+  
+    const processKey = async ([key, value]) => {
+      console.log('val1ue', value);
+
+      if (value && typeof value === 'string' && value.startsWith("__file_")) {
+  
+     
+        console.log('VALID', value);
+        
+
+        const file = files[value];
+
+        console.log('FILE VALID', file);
+        console.log('FILE VALID TYPEOF', typeof file);
+
+
+        const value1 = file & file instanceof File || isFileLike(file) ? await upload(renameFile(file, "newsroom_" + handle + "_hero_" + key), shopify, cdnUrl, true) : value;
+
+        console.log('VALUE 1', value1);
+
+        return [key, value1 || value];
+      } else if (Array.isArray(value)) {
+        // Si la valeur est un tableau, traiter chaque élément de manière récursive
+        const processedArray = await Promise.all(value.map((item) => processFields(item)));
+        return [key, processedArray];
+      } else if (typeof value === "object" && value !== null) {
+        // Si la valeur est un objet, traiter les champs de manière récursive
+        const processedObject = await processFields(value);
+        return [key, processedObject];
+      } else {
+        // Si ce n'est pas un fichier ou un objet, retourner la valeur telle quelle
+        return [key, value];
+      }
+    };
+  
+    // Transformer l'objet en une liste de promesses pour chaque clé
+    const entries = Object.entries(fields);
+    const processedEntries = await Promise.all(entries.map(processKey));
+  
+    // Reconstruire l'objet à partir des entrées traitées
+    return Object.fromEntries(processedEntries);
+
+
+
+  }
+
+  return await processFields(fields);
+    
+  };
+
+
+export async function generateArticle(body, isNewArticle, shopify, cdnUrl, files) {
 
   try {
     const {
@@ -151,7 +226,7 @@ export async function generateArticle(body, isNewArticle, shopify, cdnUrl) {
       date,
       author,
       contactPresse,
-      mainImage,
+      mainImage: oldMainImage,
       content, 
       tags,
       template,
@@ -160,7 +235,11 @@ export async function generateArticle(body, isNewArticle, shopify, cdnUrl) {
     } = body;
     const { originalHtml, rebuiltHtml, jsonContent, allsArticleMediaUrl, copyContent } = await generateHtml(content, shopify, cdnUrl);
     
+    console.log('fileserre', files);
+    const mainImage = await processFields1(oldMainImage, files, shopify, handle, cdnUrl);
+
     console.log('mainImage9', mainImage);
+
     const mainImageUrlValid = await findBestImageSource(mainImage);
 
     // Initialisation de allsArticleMediaUrl si ce n'est pas déjà un tableau
@@ -170,6 +249,7 @@ export async function generateArticle(body, isNewArticle, shopify, cdnUrl) {
       allsMediaUrl.push(mainImageUrlValid);
     }
     
+   
 
     return {
       metafields: [

@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState } from "react";
 import { initialArticle, initalBlog } from "../../../modules/initialState";
 import { useLocation, useNavigate } from "@remix-run/react";
-import { graphql, fileUpload } from "../../../config/actions";
+import { graphql, fileUpload, oldgraphql } from "../../../config/actions";
 import { Link } from "@shopify/polaris";
 import { v4 as uuid } from "uuid";
 import { useFetcherWithPromise } from "../../../utils/useFetcherWithPromise";
@@ -146,7 +146,7 @@ export function ArticleProvider({ children }) {
         fileFormData.append("file", value);
   
         // Faire une requête POST directement à l'API Shopify
-        const response = await fetch('/upload', {
+        const response = await fetch(fileUpload.endpoint, {
           method: 'POST',
           body: fileFormData,
         });
@@ -176,7 +176,132 @@ export function ArticleProvider({ children }) {
     // Reconstruire l'objet à partir des entrées traitées
     return Object.fromEntries(processedEntries);
   };
+
+  /**
+ * Transforme un objet avec des fichiers et des champs texte en FormData
+ * tout en conservant la structure imbriquée de l'objet pour les clés autres que les fichiers.
+ *
+ * @param {Object} fields - Les données à envoyer (peut inclure des fichiers, objets et tableaux imbriqués).
+ * @returns {FormData} - Les données préparées pour un envoi via `fetch`.
+ */
+
+  const prepareFormData = async (fields) => {
+    const form = new FormData();
+    
+    // Fonction pour traiter chaque clé/valeur
+    const processKey = async ([key, value]) => {
+      if (value instanceof File) {
+        // Générer une référence unique pour le fichier
+        const fileRef = `__file_${Math.random().toString(36).substring(2, 15)}__`;
+        form.append(fileRef, value); // Ajouter le fichier au FormData avec la référence
+        return [key, fileRef]; // Retourner la référence du fichier dans le body JSON
+      } else if (Array.isArray(value)) {
+        // Si la valeur est un tableau, traiter chaque élément de manière récursive
+        const processedArray = await Promise.all(value.map((item) => processKey([key, item])));
+        return [key, processedArray.map(item => item[1])]; // Map pour ne garder que les valeurs traitées
+      } else if (typeof value === "object" && value !== null) {
+        // Si la valeur est un objet, traiter les champs de manière récursive
+        const processedObject = await processFields(value);
+        return [key, processedObject];
+      } else {
+        // Si ce n'est pas un fichier ou un objet, retourner la valeur telle quelle
+        return [key, value];
+      }
+    };
   
+    // Fonction récursive pour traiter tous les champs de l'objet
+    const processFields = async (fields) => {
+      const entries = Object.entries(fields);
+      const processedEntries = await Promise.all(entries.map(processKey));
+      return Object.fromEntries(processedEntries); // Reconstruire l'objet après traitement
+    };
+  
+    // Traiter les champs et ajouter le JSON au FormData
+    const processedBody = await processFields(fields);
+    form.append("body", JSON.stringify(processedBody)); // Ajouter le corps JSON structuré
+    
+    return form;
+  };
+  
+
+
+
+  // Fonction pour charger un article
+  const submit = async (
+    load,
+    action,
+    body = {},
+    assign = true,
+  ) => {
+    if (load === "initial") {
+      setIsLoading(true);
+    }
+
+
+    try {
+      const formData = await prepareFormData(body);
+
+      formData.append("action", action);
+  
+      const responseG = await fetch(graphql.endpoint, {
+        method: "POST",
+        body: formData,
+      });
+
+
+  
+      if (!responseG.ok) {
+        throw new Error(`Erreur HTTP : ${responseG.status}`);
+      }
+  
+      const response = await responseG.json();
+
+
+      if (!assign) {
+        return response;
+      }
+
+
+   
+
+
+
+
+    const {
+      success = true,
+      article,
+      blog,
+      errors: fetchedErrors = {},
+      banners: fetchedBanners = [],
+    } = response;
+    const state = location.state || {};
+    let bannerIds = state.bannerIds || [];
+
+    if ((!fetchedErrors && success) || (Object.keys(fetchedErrors).length === 0 && success)) {
+      setFields(article || initialArticle);
+      setOriginalFields(article || initialArticle);
+      setBlog(blog || initalBlog);
+    } else {
+      setErrors(fetchedErrors);
+    }
+    
+  
+  
+    setBanners(
+      generateBanners(article, fetchedErrors, fetchedBanners, bannerIds),
+    );
+
+    bannerIds = [];
+    resetState();
+    setIsLoading(false);
+
+  } catch (error) {
+    console.error("Erreur lors de la soumission :", error);
+    throw error;
+  }
+
+
+  };
 
 
 
@@ -192,12 +317,12 @@ export function ArticleProvider({ children }) {
       setIsLoading(true);
     }
 
-    const response = await fetcher.submit(
-      {
-        action: action,
-        body: JSON.stringify(body),
-      },
-      graphql,
+    const response = await fetcher.submit( {
+action: action, body: JSON.stringify(body)
+
+    }
+      ,
+        oldgraphql
     );
 
     if (!assign) {
@@ -247,7 +372,7 @@ export function ArticleProvider({ children }) {
         setFields,
 isLoading,
 setIsLoading,
-
+submit,
         blog,
         loadArticle,
         processFields,
