@@ -15,22 +15,24 @@ async function findBestImageSource(initialImage) {
     console.log("L'objet initialImage ou ses tailles sont invalides");
   }
 
-    // Fonction pour vérifier la disponibilité d'une URL
-    const checkUrlAvailability = async (url) => {
-      try {
-        const response = await axios.head(url); // Vérifie la disponibilité avec une requête HEAD
-        return response.status >= 200 && response.status < 400; // URL valide si le statut est dans cette plage
-      } catch (error) {
-        console.log(`URL invalide : ${url}`);
-        return false;
-      }
-    };
-
-
-    // Priorité pour `imagesrc` si définie et disponible
-    if (initialImage.sizes.imagesrc && await checkUrlAvailability(initialImage.sizes.imagesrc)) {
-      return initialImage.sizes.imagesrc;
+  // Fonction pour vérifier la disponibilité d'une URL
+  const checkUrlAvailability = async (url) => {
+    try {
+      const response = await axios.head(url); // Vérifie la disponibilité avec une requête HEAD
+      return response.status >= 200 && response.status < 400; // URL valide si le statut est dans cette plage
+    } catch (error) {
+      console.log(`URL invalide : ${url}`);
+      return false;
     }
+  };
+
+  // Priorité pour `imagesrc` si définie et disponible
+  if (
+    initialImage.sizes.imagesrc &&
+    (await checkUrlAvailability(initialImage.sizes.imagesrc))
+  ) {
+    return initialImage.sizes.imagesrc;
+  }
 
   // Triez les clés par résolution (du plus grand au plus petit)
   const sortedKeys = Object.keys(initialImage.sizes)
@@ -43,12 +45,10 @@ async function findBestImageSource(initialImage) {
       return widthB * heightB - widthA * heightA; // Tri décroissant par surface
     });
 
-
-
   // Vérifiez chaque URL triée et retournez la première disponible
   for (const key of sortedKeys) {
     const url = initialImage.sizes[key];
-    if (url && await checkUrlAvailability(url)) {
+    if (url && (await checkUrlAvailability(url))) {
       return url;
     }
   }
@@ -57,10 +57,11 @@ async function findBestImageSource(initialImage) {
   return null;
 }
 
-
 export async function generateAllsMediaUrl(mediaUrls, shopify, cdnUrl) {
   try {
-    const uuid = generateCustomUUID(mediaUrls.map((url) => url.replace(/\s/g, "")).toString());
+    const uuid = generateCustomUUID(
+      mediaUrls.map((url) => url.replace(/\s/g, "")).toString(),
+    );
     const zip = new AdmZip();
     const fileNameTracker = {}; // Objet pour suivre les noms de fichiers déjà ajoutés
 
@@ -85,7 +86,9 @@ export async function generateAllsMediaUrl(mediaUrls, shopify, cdnUrl) {
       // Étape 1 : Télécharger l'image
       const response = await fetch(img);
       if (!response.ok) {
-        throw new Error(`Erreur lors du téléchargement de l'image : ${response.statusText}`);
+        throw new Error(
+          `Erreur lors du téléchargement de l'image : ${response.statusText}`,
+        );
       }
 
       // Étape 2 : Lire l'image sous forme de buffer
@@ -105,7 +108,7 @@ export async function generateAllsMediaUrl(mediaUrls, shopify, cdnUrl) {
       baseDir,
       "tmp",
       handle(process.cwd()), // Normaliser le chemin courant
-      handle(Date.now().toString()) // Identifier le répertoire avec un timestamp
+      handle(Date.now().toString()), // Identifier le répertoire avec un timestamp
     );
 
     // Créer le répertoire temporaire s'il n'existe pas
@@ -122,14 +125,20 @@ export async function generateAllsMediaUrl(mediaUrls, shopify, cdnUrl) {
 
     // Télécharger le fichier ZIP vers le CDN
     const altText = ""; // Texte alternatif (peut être ajusté selon les besoins)
-    const uploadedFileUrl = await uploadZipFile(cdnUrl, shopify, zipName, zipPath, altText, true);
+    const uploadedFileUrl = await uploadZipFile(
+      cdnUrl,
+      shopify,
+      zipName,
+      zipPath,
+      altText,
+      true,
+    );
 
     // Nettoyer le fichier temporaire après l'envoi
     fs.unlinkSync(zipPath);
 
     // Retourner l'URL du fichier téléchargé
     return uploadedFileUrl;
-
   } catch (error) {
     // Gérer et afficher les erreurs
     console.error("Erreur :", error.message);
@@ -137,54 +146,65 @@ export async function generateAllsMediaUrl(mediaUrls, shopify, cdnUrl) {
   }
 }
 
-export async function processFields1(fields, files = {}, shopify, handle, cdnUrl) {
-
+export async function processFields1(
+  fields,
+  files = {},
+  shopify,
+  handle,
+  cdnUrl,
+) {
   function isFileLike(obj) {
-    return obj &&
-        typeof obj === 'object' &&
-        typeof obj.size === 'number' &&
-        typeof obj.name === 'string' &&
-        typeof obj.type === 'string';
-}
+    return (
+      obj &&
+      typeof obj === "object" &&
+      typeof obj.size === "number" &&
+      typeof obj.name === "string" &&
+      typeof obj.type === "string"
+    );
+  }
 
-function renameFile(file, newNameWithoutExtension) {
-  // Extraire l'extension à partir du nom original
-  const extension = file.name.split('.').pop(); // Récupère tout après le dernier point
-  const newName = `${newNameWithoutExtension}.${extension}`; // Nouveau nom avec extension
+  function renameFile(file, newNameWithoutExtension) {
+    // Extraire l'extension à partir du nom original
+    const extension = file.name.split(".").pop(); // Récupère tout après le dernier point
+    const newName = `${newNameWithoutExtension}.${extension}`; // Nouveau nom avec extension
 
-  // Créer un nouveau fichier avec le même contenu, mais un nouveau nom
-  return new File([file], newName, { type: file.type });
-}
+    // Créer un nouveau fichier avec le même contenu, mais un nouveau nom
+    return new File([file], newName, { type: file.type });
+  }
   async function processFields(fields) {
-
-
     console.log("START PROCESS FILE");
 
-    console.log('ffreer', files);
-  
-    const processKey = async ([key, value]) => {
-      console.log('val1ue', value);
+    console.log("ffreer", files);
 
-      if (value && typeof value === 'string' && value.startsWith("__file_")) {
-  
-     
-        console.log('VALID', value);
-        
+    const processKey = async ([key, value]) => {
+      console.log("val1ue", value);
+
+      if (value && typeof value === "string" && value.startsWith("__file_")) {
+        console.log("VALID", value);
 
         const file = files[value];
 
-        console.log('FILE VALID', file);
-        console.log('FILE VALID TYPEOF', typeof file);
+        console.log("FILE VALID", file);
+        console.log("FILE VALID TYPEOF", typeof file);
 
+        const value1 =
+          file & (file instanceof File) || isFileLike(file)
+            ? await upload(
+                renameFile(file, "newsroom_" + handle + "_hero_" + key),
+                shopify,
+                cdnUrl,
+                true,
+              )
+            : value;
 
-        const value1 = file & file instanceof File || isFileLike(file) ? await upload(renameFile(file, "newsroom_" + handle + "_hero_" + key), shopify, cdnUrl, true) : value;
-
-        console.log('VALUE 1', value1);
+        console.log("VALUE 1", value1);
 
         return [key, value1 || value];
       } else if (Array.isArray(value)) {
         // Si la valeur est un tableau, traiter chaque élément de manière récursive
-        const processedArray = await Promise.all(value.map((item) => processFields(item)));
+        const processedArray = await Promise.all(
+          value.map((item) => processFields(item)),
+        );
         return [key, processedArray];
       } else if (typeof value === "object" && value !== null) {
         // Si la valeur est un objet, traiter les champs de manière récursive
@@ -195,25 +215,25 @@ function renameFile(file, newNameWithoutExtension) {
         return [key, value];
       }
     };
-  
+
     // Transformer l'objet en une liste de promesses pour chaque clé
     const entries = Object.entries(fields);
     const processedEntries = await Promise.all(entries.map(processKey));
-  
+
     // Reconstruire l'objet à partir des entrées traitées
     return Object.fromEntries(processedEntries);
-
-
-
   }
 
   return await processFields(fields);
-    
-  };
+}
 
-
-export async function generateArticle(body, isNewArticle, shopify, cdnUrl, files) {
-
+export async function generateArticle(
+  body,
+  isNewArticle,
+  shopify,
+  cdnUrl,
+  files,
+) {
   try {
     const {
       title,
@@ -227,78 +247,79 @@ export async function generateArticle(body, isNewArticle, shopify, cdnUrl, files
       author,
       contactPresse,
       mainImage: oldMainImage,
-      content, 
+      content,
       tags,
       template,
       isPublished,
-      layout
+      layout,
     } = body;
-    const { originalHtml, rebuiltHtml, jsonContent, allsArticleMediaUrl, copyContent } = await generateHtml(content, shopify, cdnUrl);
-    
-    console.log('fileserre', files);
-    const mainImage = await processFields1(oldMainImage, files, shopify, handle, cdnUrl);
 
-    console.log('mainImage9', mainImage);
+    
+      const [
+        { 
+          originalHtml, 
+          rebuiltHtml, 
+          jsonContent, 
+          allsArticleMediaUrl, 
+          copyContent 
+        },
+        mainImage
+      ] = await Promise.all([
+        generateHtml(content, shopify, cdnUrl),
+        processFields1(oldMainImage, files, shopify, handle, cdnUrl)
+      ]);
+    
+
 
     const mainImageUrlValid = await findBestImageSource(mainImage);
 
     // Initialisation de allsArticleMediaUrl si ce n'est pas déjà un tableau
     const allsMediaUrl = allsArticleMediaUrl || [];
-    
+
     if (mainImageUrlValid) {
       allsMediaUrl.push(mainImageUrlValid);
     }
-    
-   
 
     return {
       metafields: [
-        
         {
-        namespace: "article",
-        key: "data_json",
-        value: JSON.stringify({
-          layout,
-          subtitle: subTitle || null,
-          downloadsAllsMedia: allsMediaUrl && allsMediaUrl.lenght > 0 ? await generateAllsMediaUrl(allsMediaUrl, shopify, cdnUrl) : null,
-          media: {
-            mainImage: mainImage,
-          },
-          content: {
-            originalHtml: originalHtml,
-            rebuiltHtml: rebuiltHtml,
-            json: jsonContent,
-            copy: copyContent
-          },
+          namespace: "article",
+          key: "data_json",
+          value: JSON.stringify({
+            layout,
+            subtitle: subTitle || null,
+            downloadsAllsMedia:
+              allsMediaUrl && allsMediaUrl.lenght > 0
+                ? await generateAllsMediaUrl(allsMediaUrl, shopify, cdnUrl)
+                : null,
+            media: {
+              mainImage: mainImage,
+            },
+            content: {
+              originalHtml: originalHtml,
+              rebuiltHtml: rebuiltHtml,
+              json: jsonContent,
+              copy: copyContent,
+            },
+          }),
         },
-      
-      
-      ),
-      },
-    
-      {
-        namespace: "contact",
-        key: "editor",
-  
-        value: `[${contactPresse.map((item) => `"${item}"`).join(',')}]`
-        
-    
-  
-     
-      
-      
-  
-      }
-    ],
-    ...mainImageUrlValid && {image: {
-altText: mainImage.alt || null,
-url: String(mainImageUrlValid)
 
-    },
-  },
+        {
+          namespace: "contact",
+          key: "editor",
+
+          value: `[${contactPresse.map((item) => `"${item}"`).join(",")}]`,
+        },
+      ],
+      ...(mainImageUrlValid && {
+        image: {
+          altText: mainImage.alt || null,
+          url: String(mainImageUrlValid),
+        },
+      }),
       title: title,
       author: {
-        name: author && author.trim() !== "" ? author  :  "Flarome Inc",
+        name: author && author.trim() !== "" ? author : "Flarome Inc",
       },
       handle: handle || null,
       body: originalHtml,
@@ -306,16 +327,15 @@ url: String(mainImageUrlValid)
       ...(!isNewArticle && { redirectNewHandle }),
       isPublished: typeof isPublished != undefined ? isPublished : false,
       templateSuffix: template || null,
-  
-      publishDate: date ? new Date(date).toISOString() : new Date().toISOString(), // La date et l'heure (format ISO 8601) auxquelles l'article doit devenir visible.
-  
-  
+
+      publishDate: date
+        ? new Date(date).toISOString()
+        : new Date().toISOString(), // La date et l'heure (format ISO 8601) auxquelles l'article doit devenir visible.
+
       tags: tags || [],
     };
-
   } catch (error) {
     console.error(`Erreur lors de l’exécution de la mutation :`, error);
     throw error;
   }
-  
 }
