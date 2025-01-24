@@ -2,7 +2,7 @@
 import { getFile } from "../.server/upload/cdn";
 import uploadToShopify from "../.server/upload";
 
-export default function handle(str) {
+export function handle(str) {
   if (!str) return;
   return str
       .normalize('NFD') // Décompose les caractères accentués en caractères de base + accents
@@ -14,7 +14,7 @@ export default function handle(str) {
       .replace(/--+/g, '-'); // Remplacer les tirets consécutifs par un seul tiret
 }
 
-export default function formatUrl(url, cdnUrl) {
+export function formatUrl(url, cdnUrl) {
   if (!url) return;
   const [baseUrl, query] = url.split("?");
   const version = query?.includes('v=') ? query.split('v=')[1] : "";

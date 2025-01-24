@@ -3,7 +3,7 @@
 client_id = "5363397f9f0db456c06921f33dbab54d"
 name = "Newsroom 2025"
 handle = "newsroom-2025"
-application_url = "https://complex-nl-developers-vii.trycloudflare.com"
+application_url = "https://antiques-click-helps-pci.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "read_content,read_draft_orders,read_files,read_metaobject_definitions,
 
 [auth]
 redirect_urls = [
-  "https://complex-nl-developers-vii.trycloudflare.com/auth/callback",
-  "https://complex-nl-developers-vii.trycloudflare.com/auth/shopify/callback",
-  "https://complex-nl-developers-vii.trycloudflare.com/api/auth/callback"
+  "https://antiques-click-helps-pci.trycloudflare.com/auth/callback",
+  "https://antiques-click-helps-pci.trycloudflare.com/auth/shopify/callback",
+  "https://antiques-click-helps-pci.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
