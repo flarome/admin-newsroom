@@ -50,7 +50,11 @@ RUN cd /admin-newsroom/public/web && \
 # Vérifier que le répertoire public/web a bien été initialisé
 RUN echo "Verif public" && ls /admin-newsroom/public/web
 
-
+RUN cd /admin-newsroom/app/data-shopify && \
+    git sparse-checkout init --cone && \
+    git sparse-checkout set blog && \
+    git submodule update --init --recursive && \
+    cd /
 
 
 
@@ -82,3 +86,4 @@ COPY . .
 RUN npm run build
 
 CMD ["npm", "run", "docker-start"]
+
