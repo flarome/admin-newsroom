@@ -3,8 +3,6 @@ import { initialArticle, initalBlog } from "../../../modules/initialState";
 import { useLocation, useNavigate } from "@remix-run/react";
 import { graphql, fileUpload, oldgraphql } from "../../../config/actions";
 import { Link } from "@shopify/polaris";
-import { v4 as uuid } from "uuid";
-import { useFetcherWithPromise } from "../../../utils/useFetcherWithPromise";
 import { CheckCircleIcon, AlertCircleIcon } from "@shopify/polaris-icons";
 // Créez le contexte
 const ArticleContext = createContext();
