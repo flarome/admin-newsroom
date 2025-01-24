@@ -4,7 +4,7 @@ import metaobjectDefinition from "./query/metaobjectDefinition";
 
 export default function applyPromoCode(body, blogId) {
 
-  console.log('body182', body);
+
   return {
     mutation: `
 

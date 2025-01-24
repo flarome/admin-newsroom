@@ -20,7 +20,6 @@ if (fileContent !== null) return fileContent; // Si déjà lu, retourner le cont
 
   try {
     fileContent = await fsPromise.readFile(filePath, "utf8");
-    console.log("Contenu de media.txt chargé :", fileContent);
     return fileContent;
   } catch (err) {
     console.error(

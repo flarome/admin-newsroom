@@ -22,9 +22,6 @@ export async function api(
     const { body, action, files } = req;
 
 
-
-    console.log("bodyrere", body);
-
     // Vérification de l'action spécifiée
     const actionConfig = actions[action] || {};
 
@@ -153,10 +150,6 @@ export async function api(
               ? await admin(mutation, variables, mutationName, shopify)
               : await storefront(mutation, variables, mutationName, client);
 
-          console.log(
-            "await admin(mutation, variables, mutationName, shopify)",
-            await admin(mutation, variables, mutationName, shopify),
-          );
           // Mise à jour de la réponse globale
           response[key] = fetchedResponse;
 
@@ -211,7 +204,6 @@ export async function api(
     } else if (type === "rePost") {
       // Récupérer la nouvelle action et le nouveau body
       const nextAction = build.action;
-      console.log("respreurieueriueionse", response);
       const nextBody =
         !errors || !Object.keys(errors).length > 0
           ? typeof build.body === "function"

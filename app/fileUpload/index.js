@@ -54,9 +54,6 @@ export default async function upload(uploadedFile, shopify, cdnUrl, force = fals
       };
     
       if (uploadedFile instanceof File) {
-        console.log("Nom du fichier :", uploadedFile.name);
-        console.log("Type MIME :", uploadedFile.type);
-        console.log("Taille du fichier :", uploadedFile.size);
     
         // Convertir le fichier en flux pour l'envoi
         const arrayBuffer = await uploadedFile.arrayBuffer();
@@ -67,7 +64,6 @@ export default async function upload(uploadedFile, shopify, cdnUrl, force = fals
           retry ? `${uploadedFile.name}_${Date.now()}` : uploadedFile.name
         );
     
-        console.log("Fichier converti en buffer :", fileBuffer);
     
         try {
           // Envoyer le fichier à Shopify

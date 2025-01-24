@@ -1,6 +1,6 @@
 export default async function applyPromoCode(blogId, themeId, body, response) {
     // Initialisation de l'objet promoCode avec le code de réduction
-    console.log('trhjtghjr', response);
+
     
     const newErrors = {}; 
   

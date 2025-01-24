@@ -172,20 +172,16 @@ export async function processFields1(
     return new File([file], newName, { type: file.type });
   }
   async function processFields(fields) {
-    console.log("START PROCESS FILE");
 
-    console.log("ffreer", files);
 
     const processKey = async ([key, value]) => {
-      console.log("val1ue", value);
+
 
       if (value && typeof value === "string" && value.startsWith("__file_")) {
-        console.log("VALID", value);
+
 
         const file = files[value];
 
-        console.log("FILE VALID", file);
-        console.log("FILE VALID TYPEOF", typeof file);
 
         const value1 =
           file & (file instanceof File) || isFileLike(file)
@@ -197,7 +193,7 @@ export async function processFields1(
               )
             : value;
 
-        console.log("VALUE 1", value1);
+  
 
         return [key, value1 || value];
       } else if (Array.isArray(value)) {

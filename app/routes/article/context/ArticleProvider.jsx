@@ -138,7 +138,6 @@ export function ArticleProvider({ children }) {
   };
 
   const processFields = async (fields) => {
-    console.log("START PROCESS FILE");
   
     const processKey = async ([key, value]) => {
       if (value instanceof File) {
@@ -152,7 +151,6 @@ export function ArticleProvider({ children }) {
         });
   
         const result = await response.json();
-        console.log('j2', result);
   
         return [key, result || value];
       } else if (Array.isArray(value)) {

@@ -19,7 +19,7 @@ export async function action({ request }) {
         files[key] = value; // Ajoute chaque fichier avec sa référence
       }
     }
-    console.log('filesjfkdjfd', files);
+
   
   try {
     const data = await api(storefront.graphql, admin.graphql, {
@@ -28,7 +28,6 @@ export async function action({ request }) {
       files: files
     });
  
-    console.log("datejkrjkea", data);
 
     return json(data); // Renvoie les données sous forme de JSON
   } catch (error) {

@@ -35,7 +35,7 @@ return {
     // Génération des URLs des articles et des blogs
     const baseUrl = response.shop.url + "/blogs/";
 
-    console.log('re8192', response);
+
   
     // Construction de la réponse finale
     return {

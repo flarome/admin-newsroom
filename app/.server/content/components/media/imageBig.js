@@ -86,7 +86,6 @@ export async function json(element, shopify, cdnUrl, dataJson, img) {
   const imgName = img ? path.basename(img.split("?")[0]) : "";
   const uuid = generateCustomUUID(img);
 
-  console.log('dataJsonrer', dataJson);
   return {
     [dataJson.imageLayout]: {
       "body-copy-wide": true,

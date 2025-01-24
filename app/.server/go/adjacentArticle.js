@@ -1,5 +1,5 @@
 export default function builder(response, userErrors, body, errors) {
-  console.log("responsererrere", response);
+
 
   // Fonction utilitaire pour extraire articleBefore ou articleAfter
   const extractArticleData = (article) => {

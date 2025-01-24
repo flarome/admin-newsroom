@@ -49,7 +49,7 @@ export async function getArticleInfo(fields, article, local, shopify) {
   const editor = parseJSONSafe(article?.metafields?.edges?.find(edge => edge.node.namespace === "contact" && edge.node.key === "editor")?.node?.value);
 
 
-  console.log('reuieeditor', editor);
+
 /*
   let authorArray = [];
   if (editor && editor.length > 0 && fields.includes("contact-presse")) {

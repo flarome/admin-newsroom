@@ -11,7 +11,6 @@ const Tags = ({ allTags, tags: selectedOptions, setTags }) => {
 
   const updateText = useCallback(
     value => {
-      console.log("value", value);
       setInputValue(value);
 
       if (value === "") {

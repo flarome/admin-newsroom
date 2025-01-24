@@ -18,7 +18,7 @@ query {
     // Exécuter la requête
     const { response } = await admin(query, variables, 'shop', shopify);
   
-    console.log('responserererezsd1 ', response )
+
     return response.url + "/cdn/shop/files/";
   } catch (err) {
     console.error("Error in getBlogId:", err.message);

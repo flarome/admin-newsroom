@@ -10,7 +10,7 @@ export async function action({ request }) {
 
   const formData = await request.formData();
 
-  console.log('formDataerree', formData);
+
 
   try {
     const data = await api(storefront.graphql, admin.graphql, {
@@ -18,7 +18,7 @@ export async function action({ request }) {
       body: formData.get("file"),
     });
  
-    console.log("datejkrjkea", data);
+
 
     return json(data); // Renvoie les données sous forme de JSON
   } catch (error) {

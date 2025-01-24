@@ -31,7 +31,7 @@ export async function getThemeId(shopify) {
         if (!mainTheme) {
           throw new Error('Thème principal non trouvé.');
         }
-        console.log(`Thème principal trouvé : ${mainTheme.name}`);
+     
   
     return mainTheme.id;
   } catch (err) {

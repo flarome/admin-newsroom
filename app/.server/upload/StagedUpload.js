@@ -65,7 +65,7 @@ export async function getStagedUploadTarget(shopify, mimeType, name, size) {
   export async function uploadFile(stagedTarget, content, name) {
     const { url, parameters } = stagedTarget;
   
-    console.log('u18293rl', url);
+
     const formData = new FormData();
     parameters.forEach((param) => formData.append(param.name, param.value));
     formData.append("file", content, name);

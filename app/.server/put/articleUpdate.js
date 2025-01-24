@@ -20,7 +20,7 @@ id
 `;
 
 export default async function applyPromoCode(body, blogId, themeId, client, shopify, cdnUrl, files) {
-  console.log('body.id1Y282I3YU3', body.id)
+
 
 
   
