@@ -51,15 +51,18 @@ async function findBestImageSource(initialImage) {
   return null;
 }
 
-export async function generateAllsMediaUrl(mediaUrls, shopify, cdnUrl, handle1) {
+export async function generateAllsMediaUrl(
+  mediaUrls,
+  shopify,
+  cdnUrl,
+  handle1,
+) {
   try {
-
- 
     if (!mediaUrls || mediaUrls.length < 1) {
       return null;
     }
-    
-   /* const uuid = generateCustomUUID(
+
+    /* const uuid = generateCustomUUID(
       mediaUrls.map((url) => url.replace(/\s/g, "")).toString(),
     );*/
     const zip = new AdmZip();
@@ -104,10 +107,8 @@ export async function generateAllsMediaUrl(mediaUrls, shopify, cdnUrl, handle1) 
 
     // Définir le répertoire temporaire pour enregistrer le ZIP
 
-
     // Nommer et définir le chemin du fichier ZIP
     const zipName = `newsroom_${handle1}_medias.zip`;
-
 
     const zipBuffer = zip.toBuffer();
 
@@ -122,9 +123,8 @@ export async function generateAllsMediaUrl(mediaUrls, shopify, cdnUrl, handle1) 
       altText,
       true,
       zipSize,
-      zipBuffer
+      zipBuffer,
     );
-
 
     // Retourner l'URL du fichier téléchargé
     return uploadedFileUrl;
@@ -244,11 +244,7 @@ export async function generateArticle(
       processFields1(oldMainImage, files, shopify, handle, cdnUrl),
     ]);
 
-
-
     const mainImageUrlValid = await findBestImageSource(mainImage);
-
-
 
     // Initialisation de allsArticleMediaUrl si ce n'est pas déjà un tableau
     const allsMediaUrl = allsArticleMediaUrl || [];
@@ -257,37 +253,46 @@ export async function generateArticle(
       allsMediaUrl.push(mainImageUrlValid);
     }
 
-    const [
-      mainImagedownloadUrl,
-      downloadsAllsMediaValue
-    ] = await Promise.all([
+    const [mainImagedownloadUrl, downloadsAllsMediaValue] = await Promise.all([
       generateImageZipFile(
         mainImageUrlValid,
         mainImage.alt,
         shopify,
         cdnUrl,
-         `newsroom_${handle}_media_hero.zip`
-      
+        `newsroom_${handle}_media_hero.zip`,
       ),
-      generateAllsMediaUrl(allsMediaUrl, shopify, cdnUrl, handle)
+      generateAllsMediaUrl(allsMediaUrl, shopify, cdnUrl, handle),
     ]);
-
-
-
-
 
     return {
       metafields: [
         {
           namespace: "article",
           key: "data_json",
-         /* type: "json",*/
+          /* type: "json",*/
           value: JSON.stringify({
             layout,
             subtitle: subTitle || null,
             downloadsAllsMedia: downloadsAllsMediaValue,
             media: {
-              mainImage: { ...mainImage, downloadUrl: mainImagedownloadUrl },
+              type: "image",
+              caption: mainImage.caption,
+              downloadFile: mainImagedownloadUrl,
+              analytics: {
+                asset: mainImageUrlValid
+                  ? path.basename(mainImageUrlValid.split("?")[0])
+                  : "",
+              },
+
+              image: {
+                metadata: {
+                  alt: mainImage.alt,
+                  uuid: 'hero',
+                  srcs: {
+                    ...mainImage.sizes,
+                  },
+                },
+              },
             },
             content: {
               originalHtml: originalHtml,
@@ -305,7 +310,7 @@ export async function generateArticle(
 
           value: `[${contactPresse.map((item) => `"${item}"`).join(",")}]`,
         },
-/*
+        /*
         {
           namespace: "seo",
           key: "title",
@@ -323,7 +328,6 @@ export async function generateArticle(
 
           value: metaDescription,
         },*/
-
       ],
       ...(mainImageUrlValid && {
         image: {
