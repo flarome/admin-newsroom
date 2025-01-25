@@ -2,166 +2,100 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
-import { simpleGit } from "simple-git";
+import { simpleGit } from 'simple-git';
 
-// Obtenir le chemin du fichier actuel (remplace __dirname pour ES Modules)
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+    // Obtenir le chemin du fichier actuel (remplace __dirname pour ES Modules)
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
 
+// Gestion des locks en mémoire pour les handles
+const locks = new Set();
 
+let locksGit = true;
 
-// File d'attente pour gérer les opérations Git en série
-const pendingOperations = new Map();
-let globalGitLock = false; // Verrou global pour empêcher plusieurs opérations Git simultanées
+const locksFile = new Set();
+import simpleGit from 'simple-git';
+import path from 'path';
 
+// Fonction pour pousser les modifications sur GitHub avec réessai en cas d'erreur
 export async function pushToGit(handle, where, maxRetries = 5) {
-  const repoPath = path.resolve(__dirname, "../../data-shopify");
-  const parentRepoPath = path.resolve(repoPath, "../..");
+  const repoPath = path.resolve(__dirname, '../../data-shopify');
+  const git = simpleGit(repoPath); // Initialise le client Git
+
   let attempts = 0;
 
-  // Fonction pour vérifier et supprimer le fichier de verrouillage Git
-  const cleanupLockFile = (repo) => {
-    const lockFilePath = path.join(repo, ".git/index.lock");
-    if (fs.existsSync(lockFilePath)) {
-      console.warn(`Fichier de verrouillage détecté : ${lockFilePath}. Suppression en cours...`);
-      fs.unlinkSync(lockFilePath);
-      console.log("Fichier de verrouillage supprimé.");
-    }
-  };
-
-  // Fonction récursive pour gérer les tentatives
-  const retryPush = async () => {
+  const retry = async () => {
     try {
-      // Nettoyer les fichiers de verrouillage pour le sous-module et le dépôt parent
-      cleanupLockFile(repoPath);
-      cleanupLockFile(parentRepoPath);
-
-      const git = simpleGit(repoPath); // Initialise le client Git pour le sous-module
-      const parentGit = simpleGit(parentRepoPath); // Initialise le client Git pour le dépôt parent
-
-      // Vérifier si le répertoire est un sous-module valide
+      // Vérifie si le répertoire est un dépôt Git
       const isRepo = await git.checkIsRepo();
       if (!isRepo) {
-        throw new Error("Le répertoire spécifié n'est pas un sous-module Git valide.");
+        throw new Error("Le répertoire n'est pas un dépôt Git.");
       }
 
-      // Gérer les opérations Git dans le sous-module
-      await git.add("./*");
+      // Ajouter tous les fichiers, effectuer un commit, et pousser vers le dépôt
+      await git.add('./*');
       await git.commit(`Mise à jour - ${handle} - admin-newsroom (${where})`);
-      await git.push("origin", "main");
+      await git.push('origin', 'main');
+      console.log(`Les modifications pour ${handle} ont été poussées avec succès.`);
 
-      console.log(`Push Git réussi pour le sous-module "${handle}".`);
-
-      // Gérer les opérations dans le dépôt parent
-      await parentGit.add("data-shopify");
-      await parentGit.commit(`Mise à jour du sous-module - ${handle}`);
-      await parentGit.push("origin", "main");
-
-      console.log("Push Git réussi pour le dépôt parent.");
     } catch (error) {
       attempts++;
-      console.error(
-        `Erreur lors du push GitHub (tentative ${attempts}/${maxRetries}) :`,
-        error.message
-      );
-
+      console.error(`Erreur lors du push GitHub (tentative ${attempts}/${maxRetries}) :`, error.message);
+      
       if (attempts < maxRetries) {
-        console.log(`Réessai après une pause... (${attempts + 1}/${maxRetries})`);
-        await new Promise((resolve) => setTimeout(resolve, 1000)); // Pause d'une seconde
-        return retryPush(); // Relancer
+        // Attendre 1 seconde avant de réessayer
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        console.log(`Réessai ${attempts + 1}...`);
+        await retry(); // Appel récursif pour réessayer
       } else {
-        throw new Error(`Echec après ${maxRetries} tentatives : ${error.message}`);
+        console.error("Le maximum de tentatives a été atteint. Impossible de pousser les modifications.");
+        throw error; // Lancer l'erreur si le maximum de tentatives est atteint
       }
-    }
-  };
-
-  // Attendre que le verrou soit libéré si nécessaire
-  const waitForUnlock = async () => {
-    while (globalGitLock) {
-      console.log("Une autre opération Git est en cours. Attente...");
-      await new Promise((resolve) => setTimeout(resolve, 500)); // Pause de 500 ms
-    }
-    globalGitLock = true; // Acquérir le verrou
-  };
-
-  // Libérer le verrou global
-  const releaseLock = () => {
-    globalGitLock = false;
-  };
-
-  // Fonction principale
-  const operation = (async () => {
-    try {
-      await waitForUnlock(); // Attendre si une autre opération est en cours
-      await retryPush(); // Effectuer le push
-    } catch (error) {
-      console.error(`Erreur critique lors du push pour "${handle}":`, error.message);
-      throw error;
     } finally {
-      releaseLock(); // Libérer le verrou global une fois terminé
-      pendingOperations.delete(handle); // Retirer l'opération en cours
+      
     }
-  })();
+  };
 
-  // Ajouter l'opération dans la file d'attente pour ce handle
-  pendingOperations.set(handle, operation);
-
-  // Retourner l'opération pour attendre sa fin si nécessaire
-  return operation;
+  // Démarrer le processus de réessai
+  await retry();
 }
 
 
-
-
-
-// File d'attente globale pour gérer les accès concurrents
-const pendingFileOperations = new Map();
-
-/**
- * Sauvegarde un fichier localement à partir d'un Buffer, d'une instance de File, ou d'une URL.
- * @param {Buffer|File|string} file - Contenu du fichier (Buffer, instance de File, ou URL).
- * @param {string} handle - Identifiant unique pour le traitement (ex : "tmp").
- * @param {string} part - Sous-dossier où stocker le fichier.
- * @param {string} name - Nom du fichier à enregistrer.
- */
-export async function saveFile(file, handle = "tmp", part, name) {
-  const operationKey = `${handle}-${part}-${name}`; // Générer une clé unique pour cette opération
-
-  // Si une opération est déjà en cours pour ce fichier, attendre qu'elle se termine
-  if (pendingFileOperations.has(operationKey)) {
-    console.log(`Une opération pour "${operationKey}" est déjà en cours. Attente...`);
-    await pendingFileOperations.get(operationKey); // Attendre que l'opération en cours se termine
-    return; // Laisser la précédente opération gérer l'enregistrement
-  }
-
-  // Ajouter une nouvelle promesse dans la file d'attente
-  const operation = (async () => {
+  /**
+   * Sauvegarde un fichier localement à partir d'un Buffer, d'une instance de File, ou d'une URL.
+   * @param {Buffer|File|string} file - Contenu du fichier (Buffer, instance de File, ou URL).
+   * @param {string} handle - Identifiant unique pour le traitement (ex : "tmp").
+   * @param {string} part - Sous-dossier où stocker le fichier.
+   * @param {string} name - Nom du fichier à enregistrer.
+   */
+  export async function saveFile(file, handle = "tmp", part, name) {
     try {
-      // 1. Vérification des paramètres
+      // Vérification des paramètres
       if (!file || !handle || !part || !name) {
         throw new Error("Paramètres manquants : 'file', 'handle', 'part' ou 'name'.");
       }
-
-      // 2. Préparer le répertoire
-      const dirPath = path.resolve(
-        __dirname,
-        "../../data-shopify/blog/articles/",
-        handle,
-        part
-      );
+  
+      // Gestion des accès concurrents via un verrou
+      while (locksFile.has(handle)) {
+        console.log(`En attente : un autre processus traite le handle "${handle}".`);
+        await new Promise((resolve) => setTimeout(resolve, 50)); // Attendre avant de réessayer
+      }
+      locksFile.add(handle); // Verrouiller le traitement du handle
+  
+      // 1. Préparer le répertoire
+      const dirPath = path.resolve(__dirname, "../../data-shopify/blog/articles/", handle, part);
       if (!fs.existsSync(dirPath)) {
         fs.mkdirSync(dirPath, { recursive: true }); // Créer le répertoire s'il n'existe pas
       }
-
-      // 3. Déterminer le chemin complet du fichier
+  
+      // 2. Déterminer le chemin complet du fichier
       const filePath = path.join(dirPath, name);
-
-      // 4. Vérifier si le fichier existe déjà
-      if (fs.existsSync(filePath)) {
-        console.log(`Le fichier ${filePath} existe déjà et sera remplacé.`);
-      }
-
-      // 5. Gérer l'écriture selon le type de fichier
+  
+        // 3. Vérifier si le fichier existe déjà
+    if (fs.existsSync(filePath)) {
+      console.log(`Le fichier ${filePath} existe déjà et sera remplacé.`);
+    }
+      // 4. Déterminer le type de fichier et gérer l'écriture
       if (typeof file === "string" && file.startsWith("http")) {
         // Téléchargement si c'est une URL
         console.log(`Téléchargement du fichier depuis l'URL : ${file}`);
@@ -183,99 +117,78 @@ export async function saveFile(file, handle = "tmp", part, name) {
         fs.writeFileSync(filePath, buffer);
         console.log(`Fichier File enregistré avec succès : ${filePath}`);
       } else {
-        throw new Error(
-          "Type de fichier non pris en charge. Utilisez un Buffer, une instance de File, ou une URL."
-        );
+        throw new Error("Type de fichier non pris en charge. Utilisez un Buffer, une instance de File, ou une URL.");
       }
-
-      // 6. Pousser les mises à jour vers GitHub
+  
+      // 5. Pousser les mises à jour vers GitHub
       console.log("Pousser les modifications vers GitHub...");
-      //await pushToGit(handle, "saveFile");
+
+      await pushToGit(handle, 'saveFile');
+      
       console.log("Mises à jour poussées sur GitHub avec succès.");
     } catch (error) {
       console.error("Une erreur s'est produite :", error.message);
       throw error; // Relancer l'erreur pour un éventuel traitement en amont
+    } finally {
+      locksFile.delete(handle); // Libérer le verrou
     }
-  })();
-
-  // Ajouter la promesse dans la file d'attente
-  pendingFileOperations.set(operationKey, operation);
-
-  // Nettoyer la file d'attente une fois l'opération terminée
-  operation.finally(() => {
-    pendingFileOperations.delete(operationKey);
-  });
-
-  // Attendre que l'opération soit terminée avant de retourner
-  await operation;
-}
-
-// File d'attente globale pour gérer les accès concurrents
-const pendingArticleOperations = new Map();
-
-/**
- * Sauvegarde un article localement sous forme de fichier JSON.
- * @param {Object} articleData - Données de l'article à enregistrer.
- * @param {string} handle - Identifiant unique pour le traitement (par défaut : "tmp").
- */
-export async function saveArticle(articleData, handle = "tmp") {
-  const operationKey = handle; // Utiliser le handle comme clé unique pour cette opération
-
-  // Si une opération est déjà en cours pour ce handle, attendre qu'elle se termine
-  if (pendingArticleOperations.has(operationKey)) {
-    console.log(`Une opération pour le handle "${handle}" est déjà en cours. Attente...`);
-    await pendingArticleOperations.get(operationKey); // Attendre la fin de l'opération en cours
-    return; // Laisser la précédente opération gérer l'enregistrement
   }
+  
 
-  // Ajouter une nouvelle promesse dans la file d'attente
-  const operation = (async () => {
-    try {
-      // 1. Vérifier les données de l'article
-      if (!articleData || typeof articleData !== "object") {
-        throw new Error("Les données de l'article sont invalides ou manquantes.");
-      }
+export async function saveArticle(articleData, handle = "tmp") {
 
-      // 2. Préparer le répertoire
-      const dirPath = path.resolve(
-        __dirname,
-        "../../data-shopify/blog/articles/",
-        handle
-      );
-      if (!fs.existsSync(dirPath)) {
-        fs.mkdirSync(dirPath, { recursive: true }); // Créer le répertoire s'il n'existe pas
-      }
+  try {
 
-      // 3. Déterminer le chemin complet du fichier
-      const filePath = path.join(dirPath, "article.json");
-
-      // 4. Vérifier si le fichier existe déjà
-      if (fs.existsSync(filePath)) {
-        console.log(`Le fichier ${filePath} existe déjà et sera remplacé.`);
-      }
-
-      // 5. Écrire ou remplacer le fichier JSON
-      fs.writeFileSync(filePath, JSON.stringify(articleData, null, 2), "utf-8");
-      console.log(`Fichier JSON enregistré (ou remplacé) avec succès : ${filePath}`);
-
-      // 6. Pousser les mises à jour vers GitHub
-      console.log("Pousser les modifications vers GitHub...");
-      await pushToGit(handle, "saveArticle");
-      console.log("Mises à jour poussées sur GitHub avec succès.");
-    } catch (error) {
-      console.error("Une erreur s'est produite :", error.message);
-      throw error; // Relancer l'erreur pour un éventuel traitement en amont
+    // Vérifier si le handle est déjà en cours de traitement
+    while (locks.has(handle)) {
+      console.log(`En attente : un autre processus traite le handle "${handle}".`);
+      await new Promise((resolve) => setTimeout(resolve, 50)); // Attendre avant de vérifier à nouveau
     }
-  })();
 
-  // Ajouter la promesse dans la file d'attente
-  pendingArticleOperations.set(operationKey, operation);
+   
+    // Ajouter un lock pour ce handle
+    locks.add(handle);
 
-  // Nettoyer la file d'attente une fois l'opération terminée
-  operation.finally(() => {
-    pendingArticleOperations.delete(operationKey);
-  });
+    // 1. Préparer le répertoire
+    const dirPath = path.resolve(
+      __dirname,
+      "../../data-shopify/blog/articles/",
+      handle,
+    );
+    if (!fs.existsSync(dirPath)) {
+      fs.mkdirSync(dirPath, { recursive: true }); // Créer le répertoire s'il n'existe pas
+    }
 
-  // Attendre que l'opération soit terminée avant de retourner
-  await operation;
+    // 2. Chemin complet du fichier
+    const filePath = path.join(dirPath, "article.json");
+
+    // 3. Vérifier si le fichier existe déjà
+    if (fs.existsSync(filePath)) {
+      console.log(`Le fichier ${filePath} existe déjà et sera remplacé.`);
+    }
+
+    // 4. Vérifier les données avant d'écrire
+    if (!articleData || typeof articleData !== "object") {
+      throw new Error("Les données de l'article sont invalides ou manquantes.");
+    }
+
+    // 5. Écrire ou remplacer le fichier JSON
+    fs.writeFileSync(filePath, JSON.stringify(articleData, null, 2), "utf-8");
+    console.log(
+      `Fichier JSON enregistré (ou remplacé) avec succès : ${filePath}`,
+    );
+
+    console.log('4');
+
+    await pushToGit(handle, 'saveArticle');
+
+      console.log('5');
+      
+  } catch (error) {
+    console.error("Une erreur s'est produite :", error.message);
+    throw error;
+  } finally {
+    // Supprimer le lock pour ce handle
+    locks.delete(handle);
+  }
 }
