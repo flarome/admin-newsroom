@@ -11,11 +11,7 @@ import { simpleGit } from 'simple-git';
 // Gestion des locks en mémoire pour les handles
 const locks = new Set();
 
-let locksGit = true;
-
 const locksFile = new Set();
-import simpleGit from 'simple-git';
-import path from 'path';
 
 // Fonction pour pousser les modifications sur GitHub avec réessai en cas d'erreur
 export async function pushToGit(handle, where, maxRetries = 5) {
