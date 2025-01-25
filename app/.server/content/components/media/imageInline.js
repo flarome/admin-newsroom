@@ -91,7 +91,7 @@ export async function json(element, shopify, cdnUrl, dataJson, img, handle) {
       imagesrc: img,
       caption: dataJson.caption,
       downloadFile:
-        (await generateImageZipFile(img, dataJson.alt, shopify, cdnUrl, `newsroom_${handle}_media_${uuid}.zip`)) ||
+        (await generateImageZipFile(img, dataJson.alt, shopify, cdnUrl, `newsroom_${handle}_media_${uuid}.zip`), handle) ||
         null,
       dropcap: false, // Définir selon vos besoins
       modal: false, // Définir selon vos besoins

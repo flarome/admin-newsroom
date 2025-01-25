@@ -1,7 +1,8 @@
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { execSync } from "child_process";
+
+import { simpleGit, SimpleGit } from 'simple-git';
 
     // Obtenir le chemin du fichier actuel (remplace __dirname pour ES Modules)
     const __filename = fileURLToPath(import.meta.url);
@@ -13,26 +14,25 @@ const locks = new Set();
 const locksFile = new Set();
 
 // Fonction pour pousser les modifications sur GitHub
-async function pushToGit(handle, where) {
-    try {
-      const repoPath = path.resolve(__dirname, "../../data-shopify");
+export async function pushToGit(handle, where) {
+    const repoPath = path.resolve(__dirname, '../../data-shopify');
+    const git = simpleGit(repoPath); // Initialise le client Git
   
-      // Vérifie si le répertoire est un dépôt Git
-      if (!fs.existsSync(path.join(repoPath, '.git'))) {
+    try {
+      // Vérifiez si le répertoire est un dépôt Git
+      const isRepo = await git.checkIsRepo();
+      if (!isRepo) {
         throw new Error("Le répertoire n'est pas un dépôt Git.");
       }
   
-      // Change de répertoire pour le répertoire data-shopify
-      process.chdir(repoPath);
+      // Ajouter tous les fichiers, effectuer un commit et pousser vers le dépôt
+      await git.add('./*');
+      await git.commit(`Mise à jour - ${handle} - admin-newsroom (${where})`);
+      await git.push('origin', 'main');
   
-      // Ajouter les changements, faire un commit, et pousser vers le dépôt distant
-      execSync('git add .');
-      execSync(`git commit -m "Mise à jour - ${handle} - admin-newsroom (${where})"`);
-      execSync('git push origin main');
-  
-      console.log('Les changements ont été poussés avec succès vers GitHub.');
+      console.log(`Les modifications pour ${handle} ont été poussées avec succès.`);
     } catch (error) {
-      console.error('Erreur lors de la mise à jour du dépôt GitHub :', error.message);
+      console.error('Erreur lors du push GitHub :', error.message); 
       throw error;
     }
   }
@@ -101,7 +101,12 @@ async function pushToGit(handle, where) {
   
       // 5. Pousser les mises à jour vers GitHub
       console.log("Pousser les modifications vers GitHub...");
-      await pushToGit(handle, "saveFile");
+      setTimeout(() => {
+        pushToGit('handle-name', 'saveFile')
+          .then(() => console.log('Push Git terminé en arrière-plan.'))
+          .catch((error) => console.error('Erreur push Git en arrière-plan :', error.message));
+      }, 0);
+      
       console.log("Mises à jour poussées sur GitHub avec succès.");
     } catch (error) {
       console.error("Une erreur s'est produite :", error.message);
@@ -151,8 +156,13 @@ export async function saveArticle(articleData, handle = "tmp") {
     console.log(
       `Fichier JSON enregistré (ou remplacé) avec succès : ${filePath}`,
     );
-        // 6. Pousser les mises à jour vers GitHub
-        await pushToGit(handle, "saveArticle");
+
+    setTimeout(() => {
+        pushToGit(handle, 'saveArticle')
+          .then(() => console.log('Push Git terminé en arrière-plan.'))
+          .catch((error) => console.error('Erreur push Git en arrière-plan :', error.message));
+      }, 0);
+      
   } catch (error) {
     console.error("Une erreur s'est produite :", error.message);
     throw error;

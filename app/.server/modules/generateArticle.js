@@ -137,17 +137,21 @@ export async function generateAllsMediaUrl(
       zipBuffer,
     );
 
-    (async () => {
-      try { 
-        if (uploadedFileUrl) {
 
-          await saveFile(zipBuffer, handle1, 'medias', path.basename(uploadedFileUrl.split("?")[0]));
-        }
-     
-      } catch (error) {
-        console.error("Erreur lors de la sauvegarde du zip de tous les articles :", error);
-      }
-    })();
+     setTimeout(() => {
+              if (uploadedFileUrl) {
+      
+                saveFile(zipBuffer, handle1, 'medias', path.basename(uploadedFileUrl.split("?")[0]))
+                .then(() => console.log('Save File terminé en arrière-plan.'))
+                .catch((error) => console.error('Erreur lors de la sauvegarde du zip de tous les articles :', error.message));
+    
+              }
+          
+          }, 0);
+          
+          
+    
+
 
 
     // Retourner l'URL du fichier téléchargé
@@ -380,13 +384,20 @@ export async function generateArticle(
       tags: tags || [],
     };
 
-    (async () => {
-      try {
-        await saveArticle(input, handle);
-      } catch (error) {
-        console.error("Erreur lors de la sauvegarde de l'article :", error);
+
+
+    setTimeout(() => {
+      if (uploadedFileUrl) {
+
+        saveArticle(input, handle)
+        .then(() => console.log('Save Article terminé en arrière-plan.'))
+        .catch((error) => console.error('Erreur lors de la sauvegarde de article :', error.message));
+
       }
-    })();
+  
+  }, 0);
+  
+
 
     return input;
   } catch (error) {
