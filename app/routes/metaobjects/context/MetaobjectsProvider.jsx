@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState } from "react";
 import { initialArticle, initalBlog } from "../../../modules/initialState";
 import { useLocation } from "@remix-run/react";
-import { graphql } from "../../../config/actions";
+import { graphql, oldgraphql } from "../../../config/actions";
 
 import { useMetaobjectModal } from "./ModalContext";
 // Créez le contexte
@@ -66,7 +66,7 @@ export function MetaobjectProvider({ children }) {
         action: action,
         body: JSON.stringify(body),
       },
-      graphql,
+      oldgraphql
     );
 
     if (!assign) {

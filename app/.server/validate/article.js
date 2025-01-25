@@ -1,11 +1,13 @@
-export default async function applyPromoCode(blogId, themeId, body, response) {
+export default async function applyPromoCode(blogId, themeId, body, blog) {
   // Initialisation de l'objet promoCode avec le code de réduction
+
+
 
   
   const newErrors = {}; 
 
   // Vérification de l'existence de body.id et exclusion de l'article avec cet ID
-  const handles = response.blog.articles?.edges
+  const handles = blog?.articles?.edges
     ?.filter((edge) => body.id ? edge.node.id !== body.id : true) // Filtrer si body.id existe
     .map((edge) => edge.node.handle); // Extraire uniquement les handles
 
@@ -18,6 +20,10 @@ export default async function applyPromoCode(blogId, themeId, body, response) {
 
   if (!body.title.trim()) {
     newErrors.title = "Titre à renseigner"; 
+  }
+
+  if (!body.contactPresse || body.contactPresse.length < 1 ) {
+    newErrors.contactPresse = "Un auteur minimum est requis"; 
   }
 
   // Si le code est déjà appliqué, définir l'erreur

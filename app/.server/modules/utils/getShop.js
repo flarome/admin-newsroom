@@ -1,26 +1,26 @@
 
 
 
-import { storefront } from './executeWithRetry';
+import { admin } from './executeWithRetry';
 
-export async function getBlog(client) {
+import shop  from '../../get/query/shop'
+
+export async function getShop(shopify) {
   try {
     // Définir la requête GraphQL pour récupérer l'ID du blog
     const query = `
-      query GetArticlesFromBlog {
-        blog(handle: "newsroom") {
-          id
-          onlineStoreUrl
-
-          
-        }
-      }
+query {
+  shop {
+  ${shop}
+  }
+}
     `;
     const variables = {};
 
     // Exécuter la requête
-    const { response } = await storefront(query, variables, 'blog', client);
+    const { response } = await admin(query, variables, 'shop', shopify);
   
+
     return response;
   } catch (err) {
     console.error("Error in getBlogId:", err.message);

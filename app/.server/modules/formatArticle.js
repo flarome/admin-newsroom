@@ -1,6 +1,6 @@
 import { getArticleInfo } from "./getInfo";
 import { initialArticle as initialState } from "../../modules/initialState";
-
+import { mergeAndValidate } from "./compare";
 export async function formatArticle(article, shopify) {
   try {
     if (!article || !article.id) return initialState; // Si `article` est null, réinitialisation.
@@ -49,7 +49,7 @@ export async function formatArticle(article, shopify) {
       shopify
     );
 
-    return {
+    const input = {
       isNewArticle: false,
       defaultCursor: article.defaultCursor || initialState.defaultCursor,
       id: id,
@@ -76,6 +76,8 @@ export async function formatArticle(article, shopify) {
           : initialState.isPublished,
           layout: layout || initialState.layout,    
     };
+
+    return mergeAndValidate(initialState, input);
   } catch (error) {
     console.error("Erreur lors du chargement des articles ou du blog :", error);
   }

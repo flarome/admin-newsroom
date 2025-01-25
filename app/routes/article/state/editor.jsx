@@ -166,7 +166,7 @@ const Editor = ({}) => {
 
 
       
-      if (isNewArticle) {
+      if (isNewArticle && response?.id) {
         shopify.saveBar.hide(saveBarId);
         showToast("Article créé");
         return navigate("../" + response.id.split("/").pop(), {
@@ -509,6 +509,7 @@ const Editor = ({}) => {
               <Card>
                 <BlockStack gap={{ xs: "400", sm: "500" }}>
                   <Author
+                   error={errors.contactPresse || false}
                     allAuthor={blog?.authors}
                     contactPresse={fields.contactPresse}
                     setContactPresse={(content) =>

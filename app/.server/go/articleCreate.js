@@ -1,6 +1,12 @@
 export default function builder(response, userErrors, body, errors) {
   
 
+  if (errors && Object.keys(errors).length > 0) {
+    return {
+      errors
+    
+    };
+  }
 
     // Construction de la réponse finale
     return {
@@ -9,5 +15,5 @@ export default function builder(response, userErrors, body, errors) {
     };
   }
   
-
+ 
 

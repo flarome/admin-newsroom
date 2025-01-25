@@ -21,7 +21,7 @@ import { PlusCircleIcon, SearchIcon } from '@shopify/polaris-icons';
 const type = "press_contacts";
 
 
-const Author = ({ allAuthor, contactPresse: selectedOptions, setContactPresse: setSelectedOptions }) => {
+const Author = ({error,  allAuthor, contactPresse: selectedOptions, setContactPresse: setSelectedOptions }) => {
 
   // Modal Metaobject Provider
   const { showModal } = useMetaobjectModal();
@@ -52,6 +52,8 @@ const handleAuthor = () => {
         setLoading(true);
 
 
+
+        
         const { entries } = await loadArticle(
           fetcher,
           null,
@@ -141,7 +143,7 @@ const handleClickModalShow = (id, handle) => {
      prefix={<Icon source={SearchIcon} />}
       onChange={updateText}
       value={inputValue}
-
+      error={error}
       onFocus={handleAuthor}
 
       label="Auteur"

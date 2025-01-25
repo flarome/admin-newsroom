@@ -1,9 +1,10 @@
 
 
 import { admin } from "./executeWithRetry";
+import theme from "../../get/query/theme"
 
 
-export async function getThemeId(shopify) {
+export async function getTheme(shopify) {
     try {
         // Étape 1 : Obtenir le thème principal
         const themesQuery = 
@@ -12,9 +13,7 @@ export async function getThemeId(shopify) {
               themes(first: 10) {
                 edges {
                   node {
-                    id
-                    name
-                    role
+                   ${theme}
                   }
                 }
               }
@@ -33,7 +32,7 @@ export async function getThemeId(shopify) {
         }
      
   
-    return mainTheme.id;
+    return mainTheme;
   } catch (err) {
     console.error("Error in getBlogId:", err.message);
     throw err;

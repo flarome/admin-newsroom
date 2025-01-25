@@ -253,11 +253,6 @@ export function ArticleProvider({ children }) {
       const response = await responseG.json();
 
 
-      if (!assign) {
-        return response;
-      }
-
-
    
 
 
@@ -274,6 +269,12 @@ export function ArticleProvider({ children }) {
     let bannerIds = state.bannerIds || [];
 
     if ((!fetchedErrors && success) || (Object.keys(fetchedErrors).length === 0 && success)) {
+
+
+      if (!assign) {
+        return response;
+      }
+
       setFields(article || initialArticle);
       setOriginalFields(article || initialArticle);
       setBlog(blog || initalBlog);
@@ -321,9 +322,10 @@ action: action, body: JSON.stringify(body)
         oldgraphql
     );
 
-    if (!assign) {
-      return response;
-    }
+
+ 
+
+
 
     const {
       success = true,
@@ -335,10 +337,21 @@ action: action, body: JSON.stringify(body)
     const state = location.state || {};
     let bannerIds = state.bannerIds || [];
 
+
+ 
+    
     if ((!fetchedErrors && success) || (Object.keys(fetchedErrors).length === 0 && success)) {
+      if (!assign) {
+
+        return response;
+      }
+
       setFields(article || initialArticle);
       setOriginalFields(article || initialArticle);
       setBlog(blog || initalBlog);
+
+    
+
     } else {
       setErrors(fetchedErrors);
     }
@@ -352,6 +365,8 @@ action: action, body: JSON.stringify(body)
     bannerIds = [];
     resetState();
     setIsLoading(false);
+
+    return;
 
   };
 

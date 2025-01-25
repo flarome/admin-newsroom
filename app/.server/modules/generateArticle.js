@@ -3,16 +3,23 @@ import upload from "../../fileUpload";
 import AdmZip from "adm-zip";
 import fetch from "node-fetch";
 import fs from "fs";
-import path from "path";
 import handle from "../../global-modules/utils/handle";
+import { saveArticle } from "./save";
 import { uploadZipFile } from "../upload/zip";
 import { getLegalContent } from "../content/include/media/legal";
 import { generateCustomUUID } from "./uuid";
 import { generateImageZipFile } from "../content/components/media/modules";
 import axios from "axios";
 
+import fsPromise from "fs/promises";
+import path, { dirname } from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url); // Conversion de l'URL du module vers un chemin de fichier
+const __dirname = dirname(__filename); // Obtention du répertoire du fichier
+
 async function findBestImageSource(initialImage) {
-  if (!initialImage || !initialImage.sizes) {
+  if (!initialImage || !initialImage?.image?.metadata?.srcs) {
     console.log("L'objet initialImage ou ses tailles sont invalides");
     return null;
   }
@@ -30,18 +37,18 @@ async function findBestImageSource(initialImage) {
 
   // Priorité pour `imagesrc` si définie et disponible
   if (
-    initialImage.sizes.landscape &&
-    (await checkUrlAvailability(initialImage.sizes.landscape))
+    initialImage.image.metadata.srcs.landscape &&
+    (await checkUrlAvailability(initialImage.image.metadata.srcs.landscape))
   ) {
-    return initialImage.sizes.landscape;
+    return initialImage.image.metadata.srcs.landscape;
   }
 
   // Triez les clés par résolution (du plus grand au plus petit)
-  const sortedKeys = Object.keys(initialImage.sizes);
+  const sortedKeys = Object.keys(initialImage.image.metadata.srcs);
 
   // Vérifiez chaque URL triée et retournez la première disponible
   for (const key of sortedKeys) {
-    const url = initialImage.sizes[key];
+    const url = initialImage.image.metadata.srcs[key];
     if (url && (await checkUrlAvailability(url))) {
       return url;
     }
@@ -264,13 +271,15 @@ export async function generateArticle(
       generateAllsMediaUrl(allsMediaUrl, shopify, cdnUrl, handle),
     ]);
 
-    return {
+    const input = {
       metafields: [
         {
           namespace: "article",
           key: "data_json",
           /* type: "json",*/
           value: JSON.stringify({
+            version: "1.0.0",
+            lastUpdate: new Date().toISOString(),
             layout,
             subtitle: subTitle || null,
             downloadsAllsMedia: downloadsAllsMediaValue,
@@ -286,10 +295,10 @@ export async function generateArticle(
 
               image: {
                 metadata: {
-                  alt: mainImage.alt,
-                  uuid: 'hero',
+                  alt: mainImage.image.metadata.alt,
+                  uuid: "hero",
                   srcs: {
-                    ...mainImage.sizes,
+                    ... mainImage.image.metadata.srcs,
                   },
                 },
               },
@@ -352,6 +361,16 @@ export async function generateArticle(
 
       tags: tags || [],
     };
+
+    (async () => {
+      try {
+        await saveArticle(input, handle);
+      } catch (error) {
+        console.error("Erreur lors de la sauvegarde de l'article :", error);
+      }
+    })();
+
+    return input;
   } catch (error) {
     console.error(`Erreur lors de l’exécution de la mutation :`, error);
     throw error;

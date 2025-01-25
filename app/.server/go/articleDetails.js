@@ -23,7 +23,7 @@ export function extractArticleTemplates(files) {
     });
 }
 
-  export default async function builder(response, userErrors, body, errors, shopify) {
+  export default async function builder(response, userErrors, body, errors, shopify, cdnUrl, blogUrl, theme, blog) {
 
     if (errors && Object.keys(errors).length > 0) {
 return {
@@ -33,7 +33,7 @@ return {
 
     }
     // Génération des URLs des articles et des blogs
-    const baseUrl = response.shop.url + "/blogs/";
+
 
 
   
@@ -41,17 +41,17 @@ return {
     return {
       article: body.hasArticle ? await formatArticle({  
         ...response.article,
-        url: `${baseUrl}${response.blog.handle}/${response.article.handle}`,
+        url: `${blogUrl}/${response.article.handle}`,
       }, shopify) : {...initialArticle},
     
-      shop: response.shop,
+     /* shop: response.shop,*/
       blog: {
-        ...response.blog,
-        url: `${baseUrl}${response.blog.handle}`,
+        ...blog,
+        url: blogUrl,
         authors: response.authors?.entries || [],
-        templates: extractArticleTemplates(response.theme.files.edges),
+        templates: extractArticleTemplates(theme.files.edges),
       },
-      theme: response.theme
+      theme: theme
     };
   }
   

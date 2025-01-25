@@ -10,11 +10,11 @@ import {getMetaobjectById} from "../modules/getMetaobjectById"
  * @returns {Object} Les informations principales de l'image.
  */
 export function getImageInfo(img = defaultImage) {
-  const sizes = img.sizes || {};
+  const sizes = img?.image?.metadata?.srcs || {};
   return {
     mainImage: img,
     mainImageSizes: sizes,
-    mainImageAlt: img.alt || "",
+    mainImageAlt: img?.image?.metadata?.alt || "",
     mainImageScare: sizes.scare || sizes.s132_132 || sizes.s300_300 || sizes.s416_416 || sizes.s600_600,
   };
 }
@@ -103,7 +103,7 @@ export async function getArticleInfo(fields, article, local, shopify) {
         info.handle = article.handle || "";
         break;
       case "mainImage":
-        Object.assign(info, getImageInfo(contentJson?.media?.mainImage));
+        Object.assign(info, getImageInfo(contentJson?.media));
         break;
       case "downloadsAllsMedia":
         info.downloadsAllsMedia = contentJson?.downloadsAllsMedia || "";

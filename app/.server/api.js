@@ -1,19 +1,27 @@
 import actions from "./actions";
-import { getBlog } from "./modules/utils/getBlogId";
-import { getThemeId } from "./modules/utils/getThemeId";
+import { getBlogStorefront, getBlogAdmin } from "./modules/utils/getBlog";
+import { getTheme } from "./modules/utils/getTheme";
 import { admin, storefront } from "./modules/utils/executeWithRetry";
 import validateAction from "./modules/midelware/validateAction";
-import { getCdnUrl } from "./modules/utils/getCdnUrl";
+import { getShop } from "./modules/utils/getShop";
 import { CheckCircleIcon } from "@shopify/polaris-icons";
+
+let blogStorefront = null; 
+let blogId = null;
+let blogUrl = null;
+
 export async function api(
   client,
   shopify,
   req,
   transmiseErrors = null,
   transmiseMake = null,
+  transmiseBlogAdmin = null,
+  transmiseShop = null,
+  transmiseTheme = null,
 ) {
   try {
-    const { success, message, requireBlog, requireTheme } = validateAction(req);
+    const { success, message, requireBlog, requireTheme, requireShop } = validateAction(req);
 
     if (!success) {
       throw new Error(message);
@@ -25,21 +33,43 @@ export async function api(
     // Vérification de l'action spécifiée
     const actionConfig = actions[action] || {};
 
-    let blog = null; 
-    let themeId = null;
-    let cdnUrl = null;
 
-    cdnUrl = await getCdnUrl(shopify);
-    // Récupération de l'ID du blog
-    if (requireBlog) {
-      blog = await getBlog(client);
-    }
-    if(requireTheme) {
-      themeId = await getThemeId(shopify);
-    }
+    let blogAdmin = transmiseBlogAdmin || null; 
+    let theme = transmiseTheme || null;
+    let shop = transmiseShop || null;
+
+ 
     
-    const { id: blogId  } = blog ? blog : {};
 
+
+    if (requireShop && !shop) {
+      shop = await getShop(shopify);
+    }
+
+    if(requireTheme && !theme) {
+      theme = await getTheme(shopify);
+    }
+
+    // Récupération de l'ID du blog
+    
+    if (requireBlog) {
+
+      if(!blogStorefront) {
+        blogStorefront = await getBlogStorefront(client);
+        blogId = blogStorefront?.id;
+        blogUrl = blogStorefront?.onlineStoreUrl;
+      }
+      if(!blogAdmin) {
+
+        blogAdmin = await getBlogAdmin(shopify, blogId);
+      }
+     
+    }
+
+
+    const blog = blogAdmin;
+    const cdnUrl = shop ? shop.url + "/cdn/shop/files/" : null;
+    const themeId = theme ? theme.id : null;
 
     let response = {};
     let userErrors = [];
@@ -54,7 +84,7 @@ export async function api(
 
       if (typeof actionConfig.preValidate === "function") {
         const { make: fetchedMake, errors: fetchedErrors } =
-        await actionConfig.preValidate(blogId, themeId, body);
+        await actionConfig.preValidate(blogId, themeId, body, blog);
         errors = fetchedErrors || {};
         make = fetchedMake !== undefined ? fetchedMake : true;
       } else {
@@ -111,7 +141,7 @@ export async function api(
 
 
       const { make: fetchedMake, errors: fetchedErrors } =
-      await actionConfig.preValidate.validate(blogId, themeId, body, responseValidate);
+      await actionConfig.preValidate.validate(blogId, themeId, body, responseValidate, blog);
       errors = fetchedErrors || {};
       make = fetchedMake !== undefined ? fetchedMake : true;
 
@@ -122,6 +152,8 @@ export async function api(
 
     }
 
+
+ 
     // Si l'action passe la pré-validation
     if (make) {
       // Parcours des sous-actions dans la configuration
@@ -176,6 +208,9 @@ export async function api(
     { body: nextBody, action: nextAction.action, files: files },
     errors,
     make,
+    blogAdmin,
+    shop,
+    theme,
   );
 
         // Mise à jour de la réponse globale
@@ -199,7 +234,7 @@ export async function api(
 
     if (type === "return") {
       return typeof build === 'function' && build.constructor.name === 'AsyncFunction' ?
-            await build(response, userErrors, body, errors, shopify, cdnUrl) : build(response, userErrors, body, errors, shopify, cdnUrl);
+            await build(response, userErrors, body, errors, shopify, cdnUrl, blogUrl, theme, blog) : build(response, userErrors, body, errors, shopify, cdnUrl, blogUrl, theme, blog);
 
     } else if (type === "rePost") {
       // Récupérer la nouvelle action et le nouveau body
@@ -218,6 +253,9 @@ export async function api(
         { body: nextBody, action: nextAction, files: files },
         errors,
         make,
+        blogAdmin,
+        shop,
+        theme,
       );
     }
 

@@ -21,8 +21,6 @@ const MainImage = ({ mainImage, setMainImage }) => {
   // Shopify Provider
   const shopify = useAppBridge();
 
-  const [isModalOpen, setIsModalOpen] = useState(false); // Etat pour ouvrir/fermer le modal pour l'image principale
-
   const { mainImageScare, mainImageAlt } = useMemo(() => {
     return getImageInfo(mainImage);
   }, [mainImage]);
@@ -50,23 +48,7 @@ const MainImage = ({ mainImage, setMainImage }) => {
     setLocalImage(mainImage);
   };
 
-  // Fonction pour mettre à jour l'URL d'une taille spécifique
-  const handleChangeImageUrl = (size, value) => {
-    setLocalImage((prevState) => ({
-      ...prevState,
-      sizes: {
-        ...prevState.sizes,
-        [size]: value,
-      },
-    }));
-  };
 
-  const handleChangeImage = (id, value) => {
-    setLocalImage((prevState) => ({
-      ...prevState,
-      [id]: value,
-    }));
-  };
 
   return (
     <Card>
@@ -186,8 +168,7 @@ const MainImage = ({ mainImage, setMainImage }) => {
 
         <ImageModal
           localImage={localImage}
-          handleChangeImageUrl={handleChangeImageUrl}
-          handleChangeImage={handleChangeImage}
+          setLocalImage={setLocalImage}
         />
       </BModal>
     </Card>

@@ -3,7 +3,7 @@ import actions from "../../actions";
 export default function validateAction(req) {
   const { action } = req;
 
-  let requireBlog = false, requireTheme = false;
+  let requireBlog = false, requireTheme = false, requireShop = false;
 
   // Vérification si l'action est valide
   if (!actions[action]) {
@@ -17,7 +17,14 @@ export default function validateAction(req) {
       case "articlesFetch":
       case "articleUpdate":
       requireBlog = true;
-      
+    
+
+      case "articleDetails":
+      case "articleUpdate":
+      case "articleCreate":
+
+      requireShop = true;
+
 
     case "articleDetails":
       requireTheme = true;
@@ -33,5 +40,5 @@ export default function validateAction(req) {
   console.info(`Requiert un blog: ${requireBlog}, Requiert un thème: ${requireTheme}`);
 
   // Retourner les résultats de validation
-  return { success: true, message: "", requireBlog, requireTheme };
+  return { success: true, message: "", requireBlog, requireTheme, requireShop };
 }

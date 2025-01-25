@@ -104,14 +104,7 @@ const actions = {
     },
   },
   articleCreate: {
-    preValidate: {
-      get: {
-        blog: {
-          mutation: getBlog,
-        },
-      },
-      validate: validateArticle,
-    },
+    preValidate: validateArticle,
     get: {
       article: {
         mutation: putArticleCreate,
@@ -140,14 +133,7 @@ const actions = {
     },
   },
   articleUpdate: {
-    preValidate: {
-      get: {
-        blog: {
-          mutation: getBlog,
-        },
-      },
-      validate: validateArticle,
-    },
+    preValidate: validateArticle,
     get: {
       article: {
         mutation: putArticleUpdate,
@@ -183,9 +169,7 @@ const actions = {
         condition: (body) => !!body.hasArticle,
         mutation: getArticle,
       },
-      blog: {
-        mutation: getBlog,
-      },
+    
       authors: {
         type: 'rePost',
         get: {
@@ -193,12 +177,8 @@ const actions = {
           body: { first: 250, type: "press_contacts" },
         },
       },
-      theme: {
-        mutation: getTheme,
-      },
-      shop: {
-        mutation: getShop,
-      },
+   
+  
     },
     builder: {
       type: "return",
@@ -210,10 +190,7 @@ const actions = {
     get: {
       articles: {
         mutation: getArticles,
-      },
-      blog: {
-        mutation: getBlog,
-      },
+      }
     },
     builder: {
       type: "return",
