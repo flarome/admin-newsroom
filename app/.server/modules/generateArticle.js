@@ -4,7 +4,7 @@ import AdmZip from "adm-zip";
 import fetch from "node-fetch";
 import fs from "fs";
 import handle from "../../global-modules/utils/handle";
-import { saveArticle } from "./save";
+import { saveArticle, saveFile } from "./save";
 import { uploadZipFile } from "../upload/zip";
 import { getLegalContent } from "../content/include/media/legal";
 import { generateCustomUUID } from "./uuid";
@@ -119,6 +119,10 @@ export async function generateAllsMediaUrl(
 
     const zipBuffer = zip.toBuffer();
 
+
+   
+  
+
     const zipSize = zipBuffer.length;
 
     // Télécharger le fichier ZIP vers le CDN
@@ -132,6 +136,19 @@ export async function generateAllsMediaUrl(
       zipSize,
       zipBuffer,
     );
+
+    (async () => {
+      try { 
+        if (uploadedFileUrl) {
+
+          await saveFile(zipBuffer, handle1, 'medias', path.basename(uploadedFileUrl.split("?")[0]));
+        }
+     
+      } catch (error) {
+        console.error("Erreur lors de la sauvegarde du zip de tous les articles :", error);
+      }
+    })();
+
 
     // Retourner l'URL du fichier téléchargé
     return uploadedFileUrl;
@@ -297,6 +314,7 @@ export async function generateArticle(
                 metadata: {
                   alt: mainImage.image.metadata.alt,
                   uuid: "hero",
+                  format: mainImage.image.metadata.format,
                   srcs: {
                     ... mainImage.image.metadata.srcs,
                   },

@@ -3,7 +3,7 @@
 client_id = "5363397f9f0db456c06921f33dbab54d"
 name = "Newsroom 2025"
 handle = "newsroom-2025"
-application_url = "https://salary-yr-adaptive-os.trycloudflare.com"
+application_url = "https://keen-usual-junction-moderate.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "read_content,read_draft_orders,read_files,read_metaobject_definitions,
 
 [auth]
 redirect_urls = [
-  "https://salary-yr-adaptive-os.trycloudflare.com/auth/callback",
-  "https://salary-yr-adaptive-os.trycloudflare.com/auth/shopify/callback",
-  "https://salary-yr-adaptive-os.trycloudflare.com/api/auth/callback"
+  "https://keen-usual-junction-moderate.trycloudflare.com/auth/callback",
+  "https://keen-usual-junction-moderate.trycloudflare.com/auth/shopify/callback",
+  "https://keen-usual-junction-moderate.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]

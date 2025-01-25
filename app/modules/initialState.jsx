@@ -6,7 +6,14 @@ export const mainImage = {
   image: {
     metadata: {
       alt: "",
-      uuid: "hero",
+      format: {
+
+       
+        crop: "",
+        padColor: ""
+
+
+      },
       srcs: {
         landscape: "",
         scare: "",

@@ -176,7 +176,7 @@ export async function htmlToJson(htmlString, shopify, cdnUrl, handle) {
         : { body: newBody, currentBodyCopy: updatedCurrentBodyCopy, quoteCounter };
     }
 
-    if (type === "text" || type === "P") {
+    if (type === "text" || type === "P" || element.tagName === "P") {
       const data = generateJsonText(element);
       return data
         ? {

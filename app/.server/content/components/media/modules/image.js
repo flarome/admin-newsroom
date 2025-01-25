@@ -71,6 +71,7 @@ import fetch from "node-fetch";
 import fs from "fs";
 
 import path from "path";
+import { saveFile } from "../../../../modules/save";
 //import handle from "../../../../../global-modules/utils/handle"
 //import { Readable } from "stream";
 
@@ -85,7 +86,12 @@ import path from "path";
     try {
 
 
-      const cleanPath = img.split("?")[0]; // Supprime tout ce qui est après '?'
+      if (!img) throw new Error(
+        `Pas d'image`,
+      );
+
+
+      const cleanPath =  img.split("?")[0]; // Supprime tout ce qui est après '?'
       const imgName = path.basename(cleanPath);
   
       // Étape 1 : Télécharger l'image
@@ -131,6 +137,17 @@ import path from "path";
       const uploadedFileUrl = await uploadZipFile(cdnUrl, shopify, zipName, altText, true, zipSize, zipBuffer);
   
 
+         (async () => {
+            try { 
+              if (uploadedFileUrl) {
+      
+                await saveFile(zipBuffer, handle1, 'medias/content/' + imgName, path.basename(uploadedFileUrl.split("?")[0]));
+              }
+           
+            } catch (error) {
+              console.error("Erreur lors de la sauvegarde du zip de tous les articles :", error);
+            }
+          })();
   
       return uploadedFileUrl;
     } catch (error) {
