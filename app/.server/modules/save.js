@@ -25,8 +25,23 @@ export async function pushToGit(handle, where, maxRetries = 5) {
 
   let attempts = 0;
 
+    // Fonction pour vérifier et supprimer le fichier index.lock
+    const cleanupLockFile = () => {
+      const lockFilePath = path.join(repoPath, "../../../.git/modules/app/data-shopify/index.lock");
+      if (fs.existsSync(lockFilePath)) {
+        console.warn(`Fichier de verrouillage détecté : ${lockFilePath}. Suppression en cours...`);
+        fs.unlinkSync(lockFilePath);
+        console.log("Fichier de verrouillage supprimé.");
+      }
+    };
+
   const retryPush = async () => {
     try {
+
+
+      // Nettoyer le fichier de verrouillage avant chaque tentative
+      cleanupLockFile();
+      
       // Vérifie si le répertoire est un dépôt Git
       const isRepo = await git.checkIsRepo();
       if (!isRepo) {
