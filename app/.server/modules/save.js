@@ -10,18 +10,18 @@ const __dirname = path.dirname(__filename);
 
 
 
-
 // File d'attente pour gérer les opérations Git en série
 const pendingOperations = new Map();
 let globalGitLock = false; // Verrou global pour empêcher plusieurs opérations Git simultanées
 
 export async function pushToGit(handle, where, maxRetries = 5) {
   const repoPath = path.resolve(__dirname, "../../data-shopify");
+  const parentRepoPath = path.resolve(repoPath, "../..");
   let attempts = 0;
 
   // Fonction pour vérifier et supprimer le fichier de verrouillage Git
-  const cleanupLockFile = () => {
-    const lockFilePath = path.join(repoPath, ".git/modules/app/data-shopify/index.lock");
+  const cleanupLockFile = (repo) => {
+    const lockFilePath = path.join(repo, ".git/index.lock");
     if (fs.existsSync(lockFilePath)) {
       console.warn(`Fichier de verrouillage détecté : ${lockFilePath}. Suppression en cours...`);
       fs.unlinkSync(lockFilePath);
@@ -32,23 +32,32 @@ export async function pushToGit(handle, where, maxRetries = 5) {
   // Fonction récursive pour gérer les tentatives
   const retryPush = async () => {
     try {
-      // Nettoyer le fichier de verrouillage Git avant chaque tentative
-      cleanupLockFile();
+      // Nettoyer les fichiers de verrouillage pour le sous-module et le dépôt parent
+      cleanupLockFile(repoPath);
+      cleanupLockFile(parentRepoPath);
 
-      const git = simpleGit(repoPath); // Initialise le client Git
+      const git = simpleGit(repoPath); // Initialise le client Git pour le sous-module
+      const parentGit = simpleGit(parentRepoPath); // Initialise le client Git pour le dépôt parent
 
-      // Vérifier si le répertoire est un dépôt Git
+      // Vérifier si le répertoire est un sous-module valide
       const isRepo = await git.checkIsRepo();
       if (!isRepo) {
-        throw new Error("Le répertoire spécifié n'est pas un dépôt Git valide.");
+        throw new Error("Le répertoire spécifié n'est pas un sous-module Git valide.");
       }
 
-      // Ajouter les fichiers, effectuer le commit et pousser
+      // Gérer les opérations Git dans le sous-module
       await git.add("./*");
       await git.commit(`Mise à jour - ${handle} - admin-newsroom (${where})`);
       await git.push("origin", "main");
 
-      console.log(`Push Git réussi pour le handle "${handle}".`);
+      console.log(`Push Git réussi pour le sous-module "${handle}".`);
+
+      // Gérer les opérations dans le dépôt parent
+      await parentGit.add("data-shopify");
+      await parentGit.commit(`Mise à jour du sous-module - ${handle}`);
+      await parentGit.push("origin", "main");
+
+      console.log("Push Git réussi pour le dépôt parent.");
     } catch (error) {
       attempts++;
       console.error(
