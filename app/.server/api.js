@@ -41,6 +41,36 @@ export async function api(
  
     
 
+// Définir les promesses à exécuter en parallèle
+const promises = [];
+
+if (requireShop && !shop) {
+  promises.push(getShop(shopify).then(data => shop = data));
+}
+
+if (requireTheme && !theme) {
+  promises.push(getTheme(shopify).then(data => theme = data));
+}
+
+if (requireBlog) {
+  // On récupère d'abord le blog storefront
+  if (!blogStorefront) {
+    promises.push(getBlogStorefront(client).then(data => {
+      blogStorefront = data;
+      blogId = data?.id;
+      blogUrl = data?.onlineStoreUrl;
+    }));
+  }
+
+  // On attend que blogStorefront soit disponible avant de récupérer blogAdmin
+  if (!blogAdmin && blogStorefront) {
+    promises.push(getBlogAdmin(shopify, blogId).then(data => blogAdmin = data));
+  }
+}
+
+// Attendre que toutes les promesses soient résolues
+await Promise.all(promises);
+
 
     if (requireShop && !shop) {
       shop = await getShop(shopify);

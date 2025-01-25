@@ -137,17 +137,17 @@ import { saveFile } from "../../../../modules/save";
   
       const uploadedFileUrl = await uploadZipFile(cdnUrl, shopify, zipName, altText, true, zipSize, zipBuffer);
   
-      setTimeout(() => {
-          if (uploadedFileUrl) {
-  
-            saveFile(zipBuffer, handle1, 'medias/content/' + path.basename(uploadedFileUrl.split("?")[0]), path.basename(uploadedFileUrl.split("?")[0]))
-            .then(() => console.log('Save File terminé en arrière-plan.'))
-            .catch((error) => console.error('Erreur lors de la sauvegarde du zip de tous les articles :', error.message));
 
-          }
+            // Exécution de `saveArticle` en tâche de fond
+            (async () => {
+              try {
+                await saveFile(zipBuffer, handle1, 'medias/content/' + path.basename(uploadedFileUrl.split("?")[0]), path.basename(uploadedFileUrl.split("?")[0]));
+              } catch (error) {
+                console.error("Erreur lors de la sauvegarde du zip d'une image :", error);
+              }
+            })();
       
-      }, 0);
-      
+                
       
 
 

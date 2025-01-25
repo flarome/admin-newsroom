@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
-import { simpleGit, SimpleGit } from 'simple-git';
+import { simpleGit } from 'simple-git';
 
     // Obtenir le chemin du fichier actuel (remplace __dirname pour ES Modules)
     const __filename = fileURLToPath(import.meta.url);
@@ -15,9 +15,11 @@ const locksFile = new Set();
 
 // Fonction pour pousser les modifications sur GitHub
 export async function pushToGit(handle, where) {
+
     const repoPath = path.resolve(__dirname, '../../data-shopify');
     const git = simpleGit(repoPath); // Initialise le client Git
   
+
     try {
       // Vérifiez si le répertoire est un dépôt Git
       const isRepo = await git.checkIsRepo();
@@ -25,10 +27,12 @@ export async function pushToGit(handle, where) {
         throw new Error("Le répertoire n'est pas un dépôt Git.");
       }
   
+
       // Ajouter tous les fichiers, effectuer un commit et pousser vers le dépôt
       await git.add('./*');
       await git.commit(`Mise à jour - ${handle} - admin-newsroom (${where})`);
       await git.push('origin', 'main');
+
   
       console.log(`Les modifications pour ${handle} ont été poussées avec succès.`);
     } catch (error) {
@@ -101,11 +105,8 @@ export async function pushToGit(handle, where) {
   
       // 5. Pousser les mises à jour vers GitHub
       console.log("Pousser les modifications vers GitHub...");
-      setTimeout(() => {
-        pushToGit('handle-name', 'saveFile')
-          .then(() => console.log('Push Git terminé en arrière-plan.'))
-          .catch((error) => console.error('Erreur push Git en arrière-plan :', error.message));
-      }, 0);
+
+      await pushToGit(handle, 'saveFile');
       
       console.log("Mises à jour poussées sur GitHub avec succès.");
     } catch (error) {
@@ -118,13 +119,16 @@ export async function pushToGit(handle, where) {
   
 
 export async function saveArticle(articleData, handle = "tmp") {
+
   try {
+
     // Vérifier si le handle est déjà en cours de traitement
     while (locks.has(handle)) {
       console.log(`En attente : un autre processus traite le handle "${handle}".`);
       await new Promise((resolve) => setTimeout(resolve, 50)); // Attendre avant de vérifier à nouveau
     }
 
+   
     // Ajouter un lock pour ce handle
     locks.add(handle);
 
@@ -157,11 +161,11 @@ export async function saveArticle(articleData, handle = "tmp") {
       `Fichier JSON enregistré (ou remplacé) avec succès : ${filePath}`,
     );
 
-    setTimeout(() => {
-        pushToGit(handle, 'saveArticle')
-          .then(() => console.log('Push Git terminé en arrière-plan.'))
-          .catch((error) => console.error('Erreur push Git en arrière-plan :', error.message));
-      }, 0);
+    console.log('4');
+
+    await pushToGit(handle, 'saveArticle');
+
+      console.log('5');
       
   } catch (error) {
     console.error("Une erreur s'est produite :", error.message);

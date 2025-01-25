@@ -137,18 +137,15 @@ export async function generateAllsMediaUrl(
       zipBuffer,
     );
 
+      // Exécution de `saveArticle` en tâche de fond
+      (async () => {
+        try {
+          await saveFile(zipBuffer, handle1, 'medias', path.basename(uploadedFileUrl.split("?")[0]));
+        } catch (error) {
+          console.error("Erreur lors de la sauvegarde du zip de tous les articles :", error);
+        }
+      })();
 
-     setTimeout(() => {
-              if (uploadedFileUrl) {
-      
-                saveFile(zipBuffer, handle1, 'medias', path.basename(uploadedFileUrl.split("?")[0]))
-                .then(() => console.log('Save File terminé en arrière-plan.'))
-                .catch((error) => console.error('Erreur lors de la sauvegarde du zip de tous les articles :', error.message));
-    
-              }
-          
-          }, 0);
-          
           
     
 
@@ -386,18 +383,18 @@ export async function generateArticle(
 
 
 
-    setTimeout(() => {
-      if (uploadedFileUrl) {
 
-        saveArticle(input, handle)
-        .then(() => console.log('Save Article terminé en arrière-plan.'))
-        .catch((error) => console.error('Erreur lors de la sauvegarde de article :', error.message));
 
-      }
-  
-  }, 0);
-  
 
+        // Exécution de `saveArticle` en tâche de fond
+        (async () => {
+          try {
+            await saveArticle(input, handle); // Lancement en tâche de fond
+          } catch (error) {
+            console.error("Erreur lors de l'exécution de saveArticle :", error);
+          }
+        })();
+    
 
     return input;
   } catch (error) {

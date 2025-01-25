@@ -3,7 +3,7 @@
 client_id = "5363397f9f0db456c06921f33dbab54d"
 name = "Newsroom 2025"
 handle = "newsroom-2025"
-application_url = "https://helping-repeat-em-following.trycloudflare.com"
+application_url = "https://bigger-agents-violations-membrane.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "read_content,read_draft_orders,read_files,read_metaobject_definitions,
 
 [auth]
 redirect_urls = [
-  "https://helping-repeat-em-following.trycloudflare.com/auth/callback",
-  "https://helping-repeat-em-following.trycloudflare.com/auth/shopify/callback",
-  "https://helping-repeat-em-following.trycloudflare.com/api/auth/callback"
+  "https://bigger-agents-violations-membrane.trycloudflare.com/auth/callback",
+  "https://bigger-agents-violations-membrane.trycloudflare.com/auth/shopify/callback",
+  "https://bigger-agents-violations-membrane.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
