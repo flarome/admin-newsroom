@@ -8,54 +8,47 @@ import { simpleGit } from "simple-git";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Gestion des locks en mémoire pour les handles
-const locks = new Set();
 
 
-const locksFile = new Set();
-import simpleGit from "simple-git";
-import path from "path";
 
-const pendingOperations = []; // File d'attente pour gérer les accès concurrents
+// File d'attente pour gérer les opérations Git en série
+const pendingOperations = new Map();
+let globalGitLock = false; // Verrou global pour empêcher plusieurs opérations Git simultanées
 
-// Fonction pour pousser les modifications sur GitHub
 export async function pushToGit(handle, where, maxRetries = 5) {
   const repoPath = path.resolve(__dirname, "../../data-shopify");
-  const git = simpleGit(repoPath); // Initialise le client Git
-
   let attempts = 0;
 
-    // Fonction pour vérifier et supprimer le fichier index.lock
-    const cleanupLockFile = () => {
-      const lockFilePath = path.join(repoPath, "../../../.git/modules/app/data-shopify/index.lock");
-      if (fs.existsSync(lockFilePath)) {
-        console.warn(`Fichier de verrouillage détecté : ${lockFilePath}. Suppression en cours...`);
-        fs.unlinkSync(lockFilePath);
-        console.log("Fichier de verrouillage supprimé.");
-      }
-    };
+  // Fonction pour vérifier et supprimer le fichier de verrouillage Git
+  const cleanupLockFile = () => {
+    const lockFilePath = path.join(repoPath, ".git/modules/app/data-shopify/index.lock");
+    if (fs.existsSync(lockFilePath)) {
+      console.warn(`Fichier de verrouillage détecté : ${lockFilePath}. Suppression en cours...`);
+      fs.unlinkSync(lockFilePath);
+      console.log("Fichier de verrouillage supprimé.");
+    }
+  };
 
+  // Fonction récursive pour gérer les tentatives
   const retryPush = async () => {
     try {
-
-
-      // Nettoyer le fichier de verrouillage avant chaque tentative
+      // Nettoyer le fichier de verrouillage Git avant chaque tentative
       cleanupLockFile();
-      
-      // Vérifie si le répertoire est un dépôt Git
+
+      const git = simpleGit(repoPath); // Initialise le client Git
+
+      // Vérifier si le répertoire est un dépôt Git
       const isRepo = await git.checkIsRepo();
       if (!isRepo) {
-        throw new Error("Le répertoire n'est pas un dépôt Git.");
+        throw new Error("Le répertoire spécifié n'est pas un dépôt Git valide.");
       }
 
-      // Ajouter tous les fichiers, effectuer un commit, et pousser vers le dépôt
+      // Ajouter les fichiers, effectuer le commit et pousser
       await git.add("./*");
       await git.commit(`Mise à jour - ${handle} - admin-newsroom (${where})`);
       await git.push("origin", "main");
 
-      console.log(
-        `Les modifications pour ${handle} ont été poussées avec succès.`
-      );
+      console.log(`Push Git réussi pour le handle "${handle}".`);
     } catch (error) {
       attempts++;
       console.error(
@@ -64,53 +57,52 @@ export async function pushToGit(handle, where, maxRetries = 5) {
       );
 
       if (attempts < maxRetries) {
-        // Attendre 1 seconde avant de réessayer
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        console.log(`Réessai ${attempts + 1}...`);
-        return retryPush(); // Appel récursif pour réessayer
+        console.log(`Réessai après une pause... (${attempts + 1}/${maxRetries})`);
+        await new Promise((resolve) => setTimeout(resolve, 1000)); // Pause d'une seconde
+        return retryPush(); // Relancer
       } else {
-        console.error(
-          "Le maximum de tentatives a été atteint. Impossible de pousser les modifications."
-        );
-        throw error; // Lancer l'erreur si le maximum de tentatives est atteint
+        throw new Error(`Echec après ${maxRetries} tentatives : ${error.message}`);
       }
     }
   };
 
-  // Gestion de la file d'attente pour éviter les conflits
-  const operation = new Promise(async (resolve, reject) => {
-    try {
-      // Exécuter le push avec les réessais
-      await retryPush();
-      resolve();
-    } catch (error) {
-      reject(error);
+  // Attendre que le verrou soit libéré si nécessaire
+  const waitForUnlock = async () => {
+    while (globalGitLock) {
+      console.log("Une autre opération Git est en cours. Attente...");
+      await new Promise((resolve) => setTimeout(resolve, 500)); // Pause de 500 ms
     }
-  });
+    globalGitLock = true; // Acquérir le verrou
+  };
 
-  // Ajouter l'opération à la file d'attente
-  pendingOperations.push(operation);
+  // Libérer le verrou global
+  const releaseLock = () => {
+    globalGitLock = false;
+  };
 
-  // Assurer le nettoyage une fois l'opération terminée
-  operation
-    .then(() => {
-      // Retirer l'opération terminée de la file d'attente
-      const index = pendingOperations.indexOf(operation);
-      if (index > -1) {
-        pendingOperations.splice(index, 1);
-      }
-    })
-    .catch(() => {
-      // Retirer également en cas d'échec
-      const index = pendingOperations.indexOf(operation);
-      if (index > -1) {
-        pendingOperations.splice(index, 1);
-      }
-    });
+  // Fonction principale
+  const operation = (async () => {
+    try {
+      await waitForUnlock(); // Attendre si une autre opération est en cours
+      await retryPush(); // Effectuer le push
+    } catch (error) {
+      console.error(`Erreur critique lors du push pour "${handle}":`, error.message);
+      throw error;
+    } finally {
+      releaseLock(); // Libérer le verrou global une fois terminé
+      pendingOperations.delete(handle); // Retirer l'opération en cours
+    }
+  })();
 
-  // Retourner l'opération pour attendre si nécessaire
+  // Ajouter l'opération dans la file d'attente pour ce handle
+  pendingOperations.set(handle, operation);
+
+  // Retourner l'opération pour attendre sa fin si nécessaire
   return operation;
 }
+
+
+
 
 
 // File d'attente globale pour gérer les accès concurrents
@@ -189,7 +181,7 @@ export async function saveFile(file, handle = "tmp", part, name) {
 
       // 6. Pousser les mises à jour vers GitHub
       console.log("Pousser les modifications vers GitHub...");
-      await pushToGit(handle, "saveFile");
+      //await pushToGit(handle, "saveFile");
       console.log("Mises à jour poussées sur GitHub avec succès.");
     } catch (error) {
       console.error("Une erreur s'est produite :", error.message);
