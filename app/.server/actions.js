@@ -1,16 +1,18 @@
 import validateArticle from "./validate/article";
-import validateMetaobject from "./validate/metaobject";
+// import validateMetaobject from "./validate/metaobject";
+
+import autom from "./afterValidate/autom";
 
 import getArticles from "./get/articles";
-import getBlog from "./get/blog";
+// import getBlog from "./get/blog";
 import getArticle from "./get/article";
-import getShop from "./get/shop";
-import getTheme from "./get/theme";
+// import getShop from "./get/shop";
+// import getTheme from "./get/theme";
 import getArticleAfter from "./get/articleAfter";
 import getArticlePrevious from "./get/articlePrevious";
 import getMetaobjectDefinition from "./get/metaobjectDefinition";
 import getMetaobjectEntrie from "./get/metaobjectEntrie";
-import getMetaobjects from "./get/metaobjects";
+// import getMetaobjects from "./get/metaobjects";
 
 import putArticleCreate from "./put/articleCreate";
 import putArticleUpdate from "./put/articleUpdate";
@@ -25,9 +27,10 @@ import goAuthorAutocomplete from "./go/authorAutocomplete";
 import goArticleDelete from "./go/articleDelete";
 import goArticleCreate from "./go/articleCreate";
 import goAdjacentArticle from "./go/adjacentArticle";
-import goMetaobjectDefinitionAuthor from "./go/metaobjectDefinitionAuthor"
-import goMetaobjectEntrie from "./go/metaobjectEntrie"
-import goFileUpload from "./go/fileUpload"
+import goMetaobjectDefinitionAuthor from "./go/metaobjectDefinitionAuthor";
+import goMetaobjectEntrie from "./go/metaobjectEntrie";
+import goFileUpload from "./go/fileUpload";
+
 
 const actions = {
   metaobjectUpsert: {
@@ -111,6 +114,15 @@ const actions = {
       },
   
     },
+    afterValidate: {
+      action: autom,
+      body: (response) => ({
+        action: "articleCreate",
+        articleId: response.article.article.id // Exemple de données dynamiques
+
+      }), 
+
+    },
     builder: {
       type: "return",
       build: goArticleCreate,
@@ -140,6 +152,17 @@ const actions = {
       },
   
     },
+
+   afterValidate: {
+      action: autom,
+      body: (response) => ({
+        action: "articleUpdate",
+        articleId: response.article.article.id, // Exemple de données dynamiques
+
+      }), 
+
+    },
+
     builder: {
       type: "rePost",
       build: {
@@ -156,6 +179,15 @@ const actions = {
       article: {
         mutation: putArticleDelete,
       },
+    },
+    afterValidate: {
+      action: autom,
+      body: (response) => ({
+        action: "articleDelete",
+        articleId: response.article.deletedArticleId // Exemple de données dynamiques
+
+      }), 
+
     },
     builder: {
       type: "return",
