@@ -338,10 +338,9 @@ export async function generateArticle(
 
           value: `[${contactPresse.map((item) => `"${item}"`).join(",")}]`,
         },
-        /*
-        {
-          namespace: "seo",
-          key: "title",
+           {
+          namespace: "global",
+          key: "title_tag",
           type: "single_line_text_field",
           
 
@@ -349,13 +348,13 @@ export async function generateArticle(
         },
 
         {
-          namespace: "seo",
-          key: "description",
+          namespace: "global",
+          key: "description_tag",
           type: "single_line_text_field",
           
 
           value: metaDescription,
-        },*/
+        },
       ],
       ...(mainImageUrlValid && {
         image: {
