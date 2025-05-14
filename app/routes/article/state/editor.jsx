@@ -39,7 +39,7 @@ import { ViewIcon } from "@shopify/polaris-icons";
 
 import { useToast } from "../../../context/toast";
 // Global components
-import EditorText from "../../../tinymce/Editor";
+//import EditorText from "../../../tinymce/Editor";
 
 // Local components
 import {
@@ -51,7 +51,9 @@ import {
   Seo,
   Visible,
   MainImage,
+  Blog as BlogA,
   Layout as LayoutCO,
+  Editor as EditorText,
 } from "../components";
 
 // local state
@@ -75,15 +77,17 @@ const Editor = ({}) => {
   const {
     fields,
     setFields,
-    blog,
-    originalFields,
+    staticData,
     errors,
     submit: submitProvider,
     setIsLoading: setIsLoadingGlobal,
     removeError: handleRemoveError,
     loadArticle,
-    processFields
   } = useArticle();
+
+
+const blog = staticData.blogs.find(blog => blog.id === fields.blogId);
+
 
   // isNewArticle
   const isNewArticle = useMemo(() => {
@@ -106,8 +110,8 @@ const Editor = ({}) => {
   };
 
   const isModified = useMemo(() => {
-    return !isEqual(fields, originalFields);
-  }, [fields, originalFields]);
+    return !isEqual(fields, staticData?.article);
+  }, [fields, staticData?.article]);
 
   // SaveBar
   const handleSaveBar = useCallback(() => shopify.saveBar.toggle(saveBarId));
@@ -126,36 +130,21 @@ const Editor = ({}) => {
   const [isLoadingSubmit, setIsLoadingSubmit] = useState(false);
 
   const fetcherArticleCreate = useFetcherWithPromise(
-    "articleCreate" + originalFields.id,
+    "articleCreate" + staticData?.article.id,
   );
   const fetcherArticleUpdate = useFetcherWithPromise(
-    "articleUpdate" + originalFields.id,
+    "articleUpdate" + staticData?.article.id,
   );
 
  
 
   const handleSubmit = async () => {
     setIsLoadingSubmit(true);
-    // Détermine la fonction à appeler en fonction de l'état (nouvel article ou modification existante)
-    const fetcher = isNewArticle ? fetcherArticleCreate : fetcherArticleUpdate;
+
     const action = isNewArticle ? "articleCreate" : "articleUpdate";
 
-    // console.log('BEFORE PROCESS FILE', fields);
-
-   
-
-   // const processedForm = await processFields(fields);
-
-    // console.log('AFTER PROCESS FILE', processedForm);
-
     try {
-      /*const response = await loadArticle(
-        fetcher,
-        null,
-        action,
-        processedForm,
-        !isNewArticle,
-      );*/
+ 
 
       const response = await submitProvider(
         null,
@@ -221,7 +210,7 @@ const Editor = ({}) => {
   );
 
   const fetcherArticleDelete = useFetcherWithPromise(
-    "articleDelete" + originalFields.id,
+    "articleDelete" + staticData?.article.id,
   );
 
   const [isLoadingDelete, setIsLoadingDelete] = useState(false);
@@ -234,7 +223,7 @@ const Editor = ({}) => {
         fetcherArticleDelete,
         null,
         "articleDelete",
-        { articleId: originalFields.id },
+        { articleId: staticData?.article.id },
         false,
       );
 
@@ -267,7 +256,7 @@ const Editor = ({}) => {
   });
 
   const fetcherAdjacentArticle = useFetcherWithPromise(
-    "adjacentArticle" + originalFields.id + originalFields.defaultCursor,
+    "adjacentArticle" + staticData?.article.id + staticData?.article.defaultCursor,
   );
 
   // Fetch des articles adjacents
@@ -278,7 +267,7 @@ const Editor = ({}) => {
           fetcherAdjacentArticle,
           null,
           "adjacentArticle",
-          { defaultCursor: originalFields.defaultCursor },
+          { defaultCursor: staticData?.article.defaultCursor },
           false,
         );
 
@@ -317,7 +306,7 @@ const Editor = ({}) => {
     };
 
     fetchAdjacentArticles();
-  }, [originalFields.defaultCursor]);
+  }, [staticData?.article.defaultCursor]);
 
   const disabledSubmit = useMemo(() => {
     return !isModified || hasFieldsErrors;
@@ -336,7 +325,7 @@ const Editor = ({}) => {
         <button
           onClick={() => {
             if (isModified) {
-              setFields(originalFields); // Appel de la fonction si isModified est vrai
+              setFields(staticData?.article); // Appel de la fonction si isModified est vrai
             } else {
               handleSaveBar(); // Appel de handleSaveBar si isModified est faux
               handleCloseEditor(null, true, false); // Appel de handleCloseEditor dans tous les cas
@@ -353,18 +342,18 @@ const Editor = ({}) => {
           url: useHref("/articles", { relative: "route" }),
           onAction: (event) => handleCloseEditor(event, false, false),
         }}
-        title={originalFields.title || `Ajouter un article de blog`}
+        title={staticData?.article.title || `Ajouter un article de blog`}
         titleMetadata={
           !isNewArticle &&
-          !originalFields.isPublished && <Badge tone="info">Masqué</Badge>
+          !staticData?.article.isPublished && <Badge tone="info">Masqué</Badge>
         }
         compactTitle
         secondaryActions={
-          originalFields.isPublished && [
+          staticData?.article.isPublished && [
             {
               content: "Aperçu",
               icon: ViewIcon,
-              url: originalFields.url,
+              url: staticData?.article.url,
               target: "_blank",
             },
           ]
@@ -439,11 +428,12 @@ const Editor = ({}) => {
                       <div className="Polaris-Connected">
                         <div className="Polaris-Connected__Item Polaris-Connected__Item--primary">
                           <EditorText
-                            content={fields.content}
-                            setContent={(content) =>
-                              handleChangeFields(content, "content")
+                           // value={fields.content}
+                           value={fields.body}
+                            onChange={(content) =>
+                              handleChangeFields(content, "body")
                             }
-                            selector="content"
+                
                           />
                         </div>
                       </div>
@@ -460,8 +450,8 @@ const Editor = ({}) => {
               <Seo
                 isNewArticle={isNewArticle}
                 errorHandle={errors.handle || false}
-                initialHandle={originalFields.handle}
-                blogUrl={blog?.url + "/"}
+                initialHandle={staticData?.article.handle}
+                blog={blog}
                 metaDescription={fields.metaDescription}
                 setMetaDescription={(content) =>
                   handleChangeFields(content, "metaDescription")
@@ -510,12 +500,14 @@ const Editor = ({}) => {
                 <BlockStack gap={{ xs: "400", sm: "500" }}>
                   <Author
                    error={errors.contactPresse || false}
-                    allAuthor={blog?.authors}
+                    allAuthor={staticData?.libs?.authors}
                     contactPresse={fields.contactPresse}
                     setContactPresse={(content) =>
                       handleChangeFields(content, "contactPresse")
                     }
                   />
+
+
 
                   <Bleed
                     marginBlockEnd={{ xs: "400", sm: "500" }}
@@ -525,8 +517,18 @@ const Editor = ({}) => {
                     <Divider />
                   </Bleed>
 
+                  
+     <BlogA
+        error={errors.blogId || false}
+             blogs={staticData?.blogs}
+                 blogID={fields.blogId}
+                   setBlogID={(content) =>
+                      handleChangeFields(content, "blogId")
+                    }
+                  />
+
                   <Tags
-                    allTags={blog?.tags}
+                    allTags={staticData?.libs?.tags}
                     tags={fields.tags}
                     setTags={(content) => handleChangeFields(content, "tags")}
                   />
@@ -534,13 +536,13 @@ const Editor = ({}) => {
               </Card>
 
               <Template
-                templates={blog?.templates}
+                templates={staticData?.libs?.templates}
                 template={fields.template}
                 setTemplate={(content) =>
                   handleChangeFields(content, "template")
                 }
-                url={originalFields.url}
-                isPublished={originalFields.isPublished}
+                url={staticData?.article.url}
+                isPublished={staticData?.article.isPublished}
               />
             </BlockStack>
           </Layout.Section>
@@ -570,7 +572,7 @@ const Editor = ({}) => {
       <Modal
         open={isModalOpen}
         onClose={toggleModal}
-        title={`Supprimer ${originalFields.title} ?`}
+        title={`Supprimer ${staticData?.article.title} ?`}
         primaryAction={{
           destructive: true,
           loading: isLoadingDelete,

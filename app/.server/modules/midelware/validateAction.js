@@ -3,7 +3,7 @@ import actions from "../../actions";
 export default function validateAction(req) {
   const { action } = req;
 
-  let requireBlog = false, requireTheme = false, requireShop = false;
+  let requireTheme = false, requireShop = false, requireBlogs = false;
 
   // Vérification si l'action est valide
   if (!actions[action]) {
@@ -12,12 +12,7 @@ export default function validateAction(req) {
   }
 
   switch (action.trim()) {
-    case "articleDetails":
-    case "articleCreate":
-      case "articlesFetch":
-      case "articleUpdate":
-      requireBlog = true;
-    
+  
 
       case "articleDetails":
       case "articleUpdate":
@@ -28,6 +23,7 @@ export default function validateAction(req) {
 
     case "articleDetails":
       requireTheme = true;
+      requireBlogs = true;
     
 
     default:
@@ -37,8 +33,7 @@ export default function validateAction(req) {
 
   // Log de l'action
   console.info(`Action demandée: ${action}`);
-  console.info(`Requiert un blog: ${requireBlog}, Requiert un thème: ${requireTheme}`);
 
   // Retourner les résultats de validation
-  return { success: true, message: "", requireBlog, requireTheme, requireShop };
+  return { success: true, message: "", requireTheme, requireShop, requireBlogs };
 }

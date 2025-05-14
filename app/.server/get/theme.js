@@ -10,7 +10,7 @@ query getArticleTemplates($themeId: ID!) {
 
 `;
 
-export default function applyPromoCode(body, blogId, themeId) {
+export default function applyPromoCode(body, themeId) {
 
   return {
     mutation, 

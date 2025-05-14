@@ -46,15 +46,11 @@ export const initialArticle = {
   contactPresse: [],
   mainImage,
   content: "",
+    body: [],
   tags: [],
   template: "",
   isPublished: false,
   layout,
 
 };
-
-export const initalBlog = {
-  tags: [],
-  url: null,
-  authors: []
-};
+export const initalBlogs = []

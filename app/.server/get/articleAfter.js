@@ -1,5 +1,5 @@
 
-export default function getArticleAfter(body, blogId) {
+export default function getArticleAfter(body) {
 
     return {
       mutation: `

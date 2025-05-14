@@ -3,7 +3,7 @@ import striptags from "striptags";
 import { truncateWords } from "../../../global-modules/utils/truncateWords";
 import { TextField, FormLayout, Card, BlockStack, InlineStack, Bleed, Divider, Checkbox } from "@shopify/polaris";
 
-const Seo = ({ isNewArticle, errorHandle, blogUrl, metaDescription,  redirectNewHandle, setRedirectNewHandle, initialHandle, setMetaDescription, metaTitle, setMetaTitle, handle, setMetaHandle, title, content: c1 }) => {
+const Seo = ({ isNewArticle, errorHandle, blog, metaDescription,  redirectNewHandle, setRedirectNewHandle, initialHandle, setMetaDescription, metaTitle, setMetaTitle, handle, setMetaHandle, title, content: c1 }) => {
   const [isModified, setIsModified] = useState(false); // Tracks if handle is modified
 
   // Update isModified whenever handle changes
@@ -23,6 +23,7 @@ const Seo = ({ isNewArticle, errorHandle, blogUrl, metaDescription,  redirectNew
   }, [c1]);
 
 
+  const blogUrl = blog?.handle;
 
   return (
     <Card>

@@ -39,7 +39,7 @@ export function getContent(data = {}) {
  * @param {Object} article - L'objet article à traiter.
  * @returns {Object} Un objet contenant uniquement les champs demandés.
  */
-export async function getArticleInfo(fields, article, local, shopify) {
+export function getArticleInfo(fields, article) {
   const contentJson = parseJSONSafe(
     article?.metafields?.edges?.find(
       (edge) => edge.node.namespace === "article" && edge.node.key === "data_json"
@@ -49,23 +49,6 @@ export async function getArticleInfo(fields, article, local, shopify) {
   const editor = parseJSONSafe(article?.metafields?.edges?.find(edge => edge.node.namespace === "contact" && edge.node.key === "editor")?.node?.value);
 
 
-
-/*
-  let authorArray = [];
-  if (editor && editor.length > 0 && fields.includes("contact-presse")) {
-     authorArray = await Promise.all(
-      editor.map(async (entrie) => {
-        const metaobject = await getMetaobjectById(shopify, entrie);
-        const label = metaobject?.fields?.find(field => field.key === "name")?.value;
-        
-        return {
-          value: entrie,
-          label: label || ""  // Si `label` n'est pas trouvé, retourne une chaîne vide
-        };
-      })
-    ) || [];
-  }*/
-  
 
 
   const now = new Date();

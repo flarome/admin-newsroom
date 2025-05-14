@@ -3,7 +3,7 @@
 client_id = "5363397f9f0db456c06921f33dbab54d"
 name = "Newsroom 2025"
 handle = "newsroom-2025"
-application_url = "https://citysearch-watts-academic-incorrect.trycloudflare.com"
+application_url = "https://fares-delivery-mineral-fastest.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "read_content,read_draft_orders,read_files,read_metaobject_definitions,
 
 [auth]
 redirect_urls = [
-  "https://citysearch-watts-academic-incorrect.trycloudflare.com/auth/callback",
-  "https://citysearch-watts-academic-incorrect.trycloudflare.com/auth/shopify/callback",
-  "https://citysearch-watts-academic-incorrect.trycloudflare.com/api/auth/callback"
+  "https://fares-delivery-mineral-fastest.trycloudflare.com/auth/callback",
+  "https://fares-delivery-mineral-fastest.trycloudflare.com/auth/shopify/callback",
+  "https://fares-delivery-mineral-fastest.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]

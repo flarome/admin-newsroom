@@ -36,6 +36,7 @@ export const layout = {
 };
 
 export const initialArticle = {
+  blogId: null,
   isNewArticle: true,
   defaultCursor: "",
   id: null,
@@ -53,14 +54,17 @@ export const initialArticle = {
   contactPresse: [],
   mainImage,
   content: "",
+  body: [],
   tags: [],
   template: "",
   isPublished: false,
   layout,
 };
 
-export const initalBlog = {
-  tags: [],
-  url: null,
+export const initalBlogs = []
+
+export const initalLibs = {
   authors: [],
-};
+  templates: [],
+  tags: [],
+}

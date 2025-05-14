@@ -253,6 +253,7 @@ export async function generateArticle(
       template,
       isPublished,
       layout,
+      blogId
     } = body;
 
     const [
@@ -290,6 +291,7 @@ export async function generateArticle(
     ]);
 
     const input = {
+      blogId,
       metafields: [
         {
           namespace: "article",
@@ -382,7 +384,7 @@ export async function generateArticle(
 
 
 
-
+ 
 
 
         // Exécution de `saveArticle` en tâche de fond

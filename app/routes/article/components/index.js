@@ -10,3 +10,8 @@ export { default as Seo } from './seo';
 export { default as Visible } from './visible';
 export { default as MainImage } from './MainImage';
 export { default as Layout } from './layout';
+
+
+export { default as Blog } from './blog';
+
+export { default as Editor } from './editor';

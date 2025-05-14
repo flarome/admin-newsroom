@@ -1,3 +1,5 @@
+import blog from "./blog"
+
 const mutation = `
 
 
@@ -16,8 +18,7 @@ id
 
       blog {
 
-      id
-      handle
+    ${blog}
       
 
       }

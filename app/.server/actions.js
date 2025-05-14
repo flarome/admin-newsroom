@@ -1,11 +1,12 @@
 import validateArticle from "./validate/article";
-// import validateMetaobject from "./validate/metaobject";
+
 
 import autom from "./afterValidate/autom";
 
 import getArticles from "./get/articles";
-// import getBlog from "./get/blog";
 import getArticle from "./get/article";
+import getBlogs from "./get/blogs";
+import getBlog from "./get/blog"
 // import getShop from "./get/shop";
 // import getTheme from "./get/theme";
 import getArticleAfter from "./get/articleAfter";
@@ -34,14 +35,7 @@ import goFileUpload from "./go/fileUpload";
 
 const actions = {
   metaobjectUpsert: {
-    /*preValidate: {
-      get: {
-        metaobject: {
-          mutation: getMetaobjectEntrie,
-        },
-      },
-      validate: validateMetaobject,
-    },*/
+
     get: {
       metaobject: {
         mutation: putMetaobjectUpsert,
@@ -107,7 +101,18 @@ const actions = {
     },
   },
   articleCreate: {
-    preValidate: validateArticle,
+    preValidate: {
+      get: {
+        blog: {
+                   body: (body) => ({
+      id: body.blogId
+      }),
+          condition: (body) => !!body.blogId,
+          mutation: getBlog,
+        },
+      },
+      validate: validateArticle,
+    },
     get: {
       article: {
         mutation: putArticleCreate,
@@ -145,7 +150,18 @@ const actions = {
     },
   },
   articleUpdate: {
-    preValidate: validateArticle,
+       preValidate: {
+      get: {
+        blog: {
+             body: (body) => ({
+      id: body.blogId
+      }), 
+               condition: (body) => !!body.blogId,
+          mutation: getBlog,
+        },
+      },
+      validate: validateArticle,
+    },
     get: {
       article: {
         mutation: putArticleUpdate,
@@ -200,6 +216,9 @@ const actions = {
       article: {
         condition: (body) => !!body.hasArticle,
         mutation: getArticle,
+      },
+      blogs: {
+       mutation: getBlogs,
       },
     
       authors: {

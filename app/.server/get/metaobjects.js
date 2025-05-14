@@ -2,7 +2,7 @@ import metaobject from "./query/metaobjectEntrie";
 
 import metaobjectDefinition from "./query/metaobjectDefinition";
 
-export default function applyPromoCode(body, blogId) {
+export default function applyPromoCode(body) {
 
 
   return {

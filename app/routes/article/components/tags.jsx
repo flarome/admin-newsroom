@@ -4,6 +4,7 @@ import { Autocomplete, Icon, Box, BlockStack, InlineStack } from "@shopify/polar
 import { XSmallIcon, PlusCircleIcon } from "@shopify/polaris-icons";
 
 const Tags = ({ allTags, tags: selectedOptions, setTags }) => {
+ 
   const deselectedOptions = useMemo(() => allTags.map(tag => ({ value: tag, label: tag })), [allTags]);
 
   const [inputValue, setInputValue] = useState("");

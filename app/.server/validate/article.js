@@ -1,10 +1,18 @@
-export default async function applyPromoCode(blogId, themeId, body, blog) {
+export default async function applyPromoCode(body, reponse) {
+    const newErrors = {}; 
   // Initialisation de l'objet promoCode avec le code de réduction
+  if (!body.blogId) {
+    newErrors.blogId = "Veuillez choisir un blog"; 
+  }
+
+const blog = reponse.blog;
+
+
+console.log('reponse', reponse)
 
 
 
-  
-  const newErrors = {}; 
+
 
   // Vérification de l'existence de body.id et exclusion de l'article avec cet ID
   const handles = blog?.articles?.edges

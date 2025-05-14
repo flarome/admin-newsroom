@@ -1,9 +1,19 @@
 import { getArticleInfo } from "./getInfo";
 import { initialArticle as initialState } from "../../modules/initialState";
 import { mergeAndValidate } from "./compare";
-export async function formatArticle(article, shopify) {
+
+
+function dynamicInitalState(article, blogs) {
+return {
+  blogId: blogs[0]?.id || initialState.blogId
+}
+}
+export function formatArticle(article, blogs) {
   try {
-    if (!article || !article.id) return initialState; // Si `article` est null, réinitialisation.
+    if (!article || !article.id) return {
+      ...initialState,
+      ...dynamicInitalState(article, blogs)
+    }; // Si `article` est null, réinitialisation.
     const {
       title,
       subTitle,
@@ -23,7 +33,7 @@ export async function formatArticle(article, shopify) {
       contactPresse,
       url,
       layout
-    } = await getArticleInfo(
+    } = getArticleInfo(
       [
         "title",
         "subTitle",
@@ -45,15 +55,16 @@ export async function formatArticle(article, shopify) {
         "contact-presse"
       ],
       article,
-      "fr-FR",
-      shopify
+
     );
+
+     const blogData = article.blog || {};
+
 
     const input = {
       isNewArticle: false,
       defaultCursor: article.defaultCursor || initialState.defaultCursor,
       id: id,
-      url: url || initialState.url,
       title: title || initialState.title,
       subTitle: subTitle || initialState.subTitle,
       extrait: extrait || initialState.extrait,
@@ -61,13 +72,17 @@ export async function formatArticle(article, shopify) {
       metaTitle: metaTitle || initialState.metaTitle,
       handle: handle || initialState.handle,
       redirectNewHandle: initialState.redirectNewHandle,
-      date: date || initialState.date,
-     
+      date: date || initialState.date,  
+      blogId: blogData.id || blogs[0]?.id || initialState.blogId,
+      url: `https://www.flarome.com/blogs/${blogData.handle}/${article.handle}`,
       author: author || initialState.author,
       contactPresse: contactPresse || initialState.contactPresse,
       downloadsAllsMedia: downloadsAllsMedia || initialState.downloadsAllsMedia,
       mainImage: mainImage || initialState.mainImage,
       content: originalHtml || initialState.content,
+
+      body: [],
+
       tags: tags || initialState.tags,
       template: template || initialState.template,
       isPublished:

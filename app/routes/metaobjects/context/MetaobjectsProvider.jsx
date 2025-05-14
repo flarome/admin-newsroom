@@ -1,5 +1,4 @@
 import React, { createContext, useContext, useState } from "react";
-import { initialArticle, initalBlog } from "../../../modules/initialState";
 import { useLocation } from "@remix-run/react";
 import { graphql, oldgraphql } from "../../../config/actions";
 

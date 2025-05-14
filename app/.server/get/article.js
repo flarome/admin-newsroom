@@ -7,12 +7,12 @@ const mutation = `
         ${article}
 
          }
- 
+  
    }
 
 `;
 
-export default function applyPromoCode(body, blogId) {
+export default function applyPromoCode(body) {
 
   return {
     mutation,
