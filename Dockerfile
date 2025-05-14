@@ -8,7 +8,7 @@ WORKDIR /
 # Copier tout le contenu, y compris le répertoire .git
 COPY . .
 
-
+ 
 # Mettre à jour les sous-modules Git depuis la racine
 
 
