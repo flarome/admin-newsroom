@@ -53,21 +53,6 @@ export default defineConfig({
 
 
 
-        {
-      name: 'set-global-for-draft-js',
-      transform(code, id) {
-        // Vérifie si le fichier provient de draft-js
-        if (id.includes('draft-js')) {
-          // Ajoute global = window uniquement dans les fichiers draft-js
-          return {
-            code: `var global = window;\n${code}`,
-            map: null,
-          };
-        }
-        return code;
-      },
-    },
-
 
 
 
