@@ -3,11 +3,12 @@
 client_id = "25b576b6195a60cc4c60bd6abe2aa133"
 name = "newsroom-otp"
 handle = "newsroom-otp"
-application_url = "https://example.com/"
+application_url = "https://link-mtv-southwest-basin.trycloudflare.com"
 embedded = true
 
 [build]
 include_config_on_deploy = true
+automatically_update_urls_on_dev = true
 
 [webhooks]
 api_version = "2025-04"
@@ -25,7 +26,11 @@ api_version = "2025-04"
 scopes = "read_content,read_draft_orders,read_files,read_metaobject_definitions,read_metaobjects,read_online_store_pages,read_orders,read_themes,unauthenticated_read_content,write_content,write_files,write_metaobjects,write_products,write_themes"
 
 [auth]
-redirect_urls = [ "https://example.com/api/auth" ]
+redirect_urls = [
+  "https://link-mtv-southwest-basin.trycloudflare.com/auth/callback",
+  "https://link-mtv-southwest-basin.trycloudflare.com/auth/shopify/callback",
+  "https://link-mtv-southwest-basin.trycloudflare.com/api/auth/callback"
+]
 
 [pos]
 embedded = false
