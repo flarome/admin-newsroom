@@ -1,12 +1,10 @@
-# Flarome Newsroom App - Remix
+# Shopify App Template - Remix
 
-This is the official app used by Flarome to write blog articles.
+This is a template for building a [Shopify app](https://shopify.dev/docs/apps/getting-started) using the [Remix](https://remix.run) framework.
 
-Rather than cloning this repo, you can use this code to create your own project or integrate it into your store. However, please note that this code is specifically developed for Flarome’s infrastructure, and its features are designed to integrate with Flarome’s services, infrastructure, methods, tools, and private CMS. Since this CMS is private and not public, the code provided will not be useful to you without modifications to adapt it to your own infrastructure.
+Rather than cloning this repo, you can use your preferred package manager and the Shopify CLI with [these steps](https://shopify.dev/docs/apps/getting-started/create).
 
-Flarome has scaled extensively with its own caches, modules, servers, templates, and code. In this repository, you will find all the necessary resources for our private CMS, including the backend server for generating blog articles, but not the public part of the code, which is available on our website www.flarome.com (/blogs/newsroom).
-
-
+Visit the [`shopify.dev` documentation](https://shopify.dev/docs/api/shopify-app-remix) for more details on the Remix app package.
 
 ## Quick start
 
@@ -88,7 +86,7 @@ export async function loader({ request }) {
     },
   } = await response.json();
 
-  return json(nodes);
+  return nodes;
 }
 ```
 
@@ -114,10 +112,10 @@ Here’s a short list of databases providers that provide a free tier to get sta
 
 | Database   | Type             | Hosters                                                                                                                                                                                                                               |
 | ---------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| MySQL      | SQL              | [Digital Ocean](https://www.digitalocean.com/try/managed-databases-mysql), [Planet Scale](https://planetscale.com/), [Amazon Aurora](https://aws.amazon.com/rds/aurora/), [Google Cloud SQL](https://cloud.google.com/sql/docs/mysql) |
-| PostgreSQL | SQL              | [Digital Ocean](https://www.digitalocean.com/try/managed-databases-postgresql), [Amazon Aurora](https://aws.amazon.com/rds/aurora/), [Google Cloud SQL](https://cloud.google.com/sql/docs/postgres)                                   |
-| Redis      | Key-value        | [Digital Ocean](https://www.digitalocean.com/try/managed-databases-redis), [Amazon MemoryDB](https://aws.amazon.com/memorydb/)                                                                                                        |
-| MongoDB    | NoSQL / Document | [Digital Ocean](https://www.digitalocean.com/try/managed-databases-mongodb), [MongoDB Atlas](https://www.mongodb.com/atlas/database)                                                                                                  |
+| MySQL      | SQL              | [Digital Ocean](https://www.digitalocean.com/products/managed-databases-mysql), [Planet Scale](https://planetscale.com/), [Amazon Aurora](https://aws.amazon.com/rds/aurora/), [Google Cloud SQL](https://cloud.google.com/sql/docs/mysql) |
+| PostgreSQL | SQL              | [Digital Ocean](https://www.digitalocean.com/products/managed-databases-postgresql), [Amazon Aurora](https://aws.amazon.com/rds/aurora/), [Google Cloud SQL](https://cloud.google.com/sql/docs/postgres)                                   |
+| Redis      | Key-value        | [Digital Ocean](https://www.digitalocean.com/products/managed-databases-redis), [Amazon MemoryDB](https://aws.amazon.com/memorydb/)                                                                                                        |
+| MongoDB    | NoSQL / Document | [Digital Ocean](https://www.digitalocean.com/products/managed-databases-mongodb), [MongoDB Atlas](https://www.mongodb.com/atlas/database)                                                                                                  |
 
 To use one of these, you can use a different [datasource provider](https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#datasource) in your `schema.prisma` file, or a different [SessionStorage adapter package](https://github.com/Shopify/shopify-api-js/blob/main/packages/shopify-api/docs/guides/session-storage.md).
 
@@ -173,7 +171,7 @@ export default defineConfig({
 });
 ```
 
-## Gotchas / Troubleshooting
+## Troubleshooting
 
 ### Database tables don't exist
 
@@ -193,15 +191,17 @@ Embedded Shopify apps must maintain the user session, which can be tricky inside
 2. Use the `redirect` helper returned from `authenticate.admin`. Do not use `redirect` from `@remix-run/node`
 3. Use `useSubmit` or `<Form/>` from `@remix-run/react`. Do not use a lowercase `<form/>`.
 
-This only applies if you app is embedded, which it will be by default.
+This only applies if your app is embedded, which it will be by default.
 
 ### Non Embedded
 
-Shopify apps are best when they are embedded into the Shopify Admin. This template is configured that way. If you have a reason to not embed your please make 2 changes:
+Shopify apps are best when they are embedded in the Shopify Admin, which is how this template is configured. If you have a reason to not embed your app please make the following changes:
 
-1. Change the `isEmbeddedApp` prop to false for the `AppProvider` in `/app/routes/app.jsx`
-2. Remove any use of App Bridge APIs (`window.shopify`) from your code
-3. Update the config for shopifyApp in `app/shopify.server.js`. Pass `isEmbeddedApp: false`
+1. Ensure `embedded = false` is set in [shopify.app.toml`](./shopify.app.toml). [Docs here](https://shopify.dev/docs/apps/build/cli-for-apps/app-configuration#global).
+2. Pass `isEmbeddedApp: false` to `shopifyApp()` in `./app/shopify.server.js|ts`.
+3. Change the `isEmbeddedApp` prop to `isEmbeddedApp={false}` for the `AppProvider` in `/app/routes/app.jsx|tsx`.
+4. Remove the `@shopify/app-bridge-react` dependency from [package.json](./package.json) and `vite.config.ts|js`.
+5. Remove anything imported from `@shopify/app-bridge-react`.  For example: `NavMenu`, `TitleBar` and `useAppBridge`.
 
 ### OAuth goes into a loop when I change my app's scopes
 
@@ -327,6 +327,13 @@ You don't have to make any changes to the code in order to be able to upgrade Po
 - Upgrade your node version to v20.10 or higher.
 - Update your `Dockerfile` to pull `FROM node:20-alpine` instead of `node:18-alpine`
 
+### "nbf" claim timestamp check failed
+
+This error will occur of the `nbf` claim timestamp check failed. This is because the JWT token is expired.
+If you  are consistently getting this error, it could be that the clock on your machine is not in sync with the server.
+
+To fix this ensure you have enabled `Set time and date automatically` in the `Date and Time` settings on your computer.
+
 ## Benefits
 
 Shopify apps are built on a variety of Shopify tools to create a great merchant experience.
@@ -338,7 +345,6 @@ The Remix app template comes with the following out-of-the-box functionality:
 
 - [OAuth](https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-remix#authenticating-admin-requests): Installing the app and granting permissions
 - [GraphQL Admin API](https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-remix#using-the-shopify-admin-graphql-api): Querying or mutating Shopify admin data
-- [REST Admin API](https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-remix#using-the-shopify-admin-rest-api): Resource classes to interact with the API
 - [Webhooks](https://github.com/Shopify/shopify-app-js/tree/main/packages/shopify-app-remix#authenticating-webhook-requests): Callbacks sent by Shopify when certain events occur
 - [AppBridge](https://shopify.dev/docs/api/app-bridge): This template uses the next generation of the Shopify App Bridge library which works in unison with previous versions.
 - [Polaris](https://polaris.shopify.com/): Design system that enables apps to create Shopify-like experiences

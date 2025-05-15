@@ -1,29 +1,31 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
-client_id = "2441329655ea5191d88c327cec5a984e"
-name = "newsroom-0325"
-handle = "newsroom-0325"
-application_url = "https://textbooks-location-bedford-pork.trycloudflare.com"
+client_id = "25b576b6195a60cc4c60bd6abe2aa133"
+name = "newsroom-otp"
+handle = "newsroom-otp"
+application_url = "https://example.com/"
 embedded = true
 
 [build]
-automatically_update_urls_on_dev = true
-dev_store_url = "flarome-api.myshopify.com"
 include_config_on_deploy = true
+
+[webhooks]
+api_version = "2025-04"
+
+  [[webhooks.subscriptions]]
+  topics = [ "app/uninstalled" ]
+  uri = "/webhooks/app/uninstalled"
+
+  [[webhooks.subscriptions]]
+  topics = [ "app/scopes_update" ]
+  uri = "/webhooks/app/scopes_update"
 
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
 scopes = "read_content,read_draft_orders,read_files,read_metaobject_definitions,read_metaobjects,read_online_store_pages,read_orders,read_themes,unauthenticated_read_content,write_content,write_files,write_metaobjects,write_products,write_themes"
 
 [auth]
-redirect_urls = [
-  "https://textbooks-location-bedford-pork.trycloudflare.com/auth/callback",
-  "https://textbooks-location-bedford-pork.trycloudflare.com/auth/shopify/callback",
-  "https://textbooks-location-bedford-pork.trycloudflare.com/api/auth/callback"
-]
-
-[webhooks]
-api_version = "2025-01"
+redirect_urls = [ "https://example.com/api/auth" ]
 
 [pos]
 embedded = false
