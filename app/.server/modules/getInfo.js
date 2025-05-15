@@ -25,11 +25,11 @@ export function getImageInfo(img = defaultImage) {
  * @returns {Object} Les informations principales du contenu.
  */
 export function getContent(data = {}) {
-  const content = data.content || {};
+  const content = data?.content || {};
   return {
-    contentJson: content.json || null,
-    rebuiltHtml: content.rebuiltHtml || null,
-    originalHtml: content.originalHtml || null,
+    contentJson: content?.json || null,
+    rebuiltHtml: content?.rebuiltHtml || null,
+    originalHtml: content?.originalHtml || null,
   };
 }
 

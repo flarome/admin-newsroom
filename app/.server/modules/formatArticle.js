@@ -10,10 +10,13 @@ return {
 }
 export function formatArticle(article, blogs) {
   try {
+        console.log('12278378373738')
     if (!article || !article.id) return {
       ...initialState,
       ...dynamicInitalState(article, blogs)
     }; // Si `article` est null, réinitialisation.
+
+    console.log('278378373738')
     const {
       title,
       subTitle,

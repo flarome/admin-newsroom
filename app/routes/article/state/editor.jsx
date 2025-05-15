@@ -86,7 +86,7 @@ const Editor = ({}) => {
   } = useArticle();
 
 
-const blog = staticData.blogs.find(blog => blog.id === fields.blogId);
+const blog = staticData.blogs.find(blog => blog.id === fields?.blogId);
 
 
   // isNewArticle
@@ -519,9 +519,9 @@ const blog = staticData.blogs.find(blog => blog.id === fields.blogId);
 
                   
      <BlogA
-        error={errors.blogId || false}
+        error={errors?.blogId || false}
              blogs={staticData?.blogs}
-                 blogID={fields.blogId}
+                 blogID={fields?.blogId}
                    setBlogID={(content) =>
                       handleChangeFields(content, "blogId")
                     }
