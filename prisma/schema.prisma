@@ -10,8 +10,10 @@ generator client {
 // See https://www.prisma.io/docs/orm/reference/prisma-schema-reference#string for more information
 datasource db {
   provider = "sqlite"
-  url      = "file:dev.sqlite"
+  url = "file:/mnt/data/dev.sqlite"
 }
+
+ // url      = "file:dev.sqlite"
 
 model Session {
   id            String    @id
