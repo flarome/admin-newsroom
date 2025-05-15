@@ -3,7 +3,7 @@
 client_id = "2441329655ea5191d88c327cec5a984e"
 name = "newsroom-0325"
 handle = "newsroom-0325"
-application_url = "https://pushed-source-colour-barrier.trycloudflare.com"
+application_url = "https://sprint-replacing-cj-departure.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "read_content,read_draft_orders,read_files,read_metaobject_definitions,
 
 [auth]
 redirect_urls = [
-  "https://pushed-source-colour-barrier.trycloudflare.com/auth/callback",
-  "https://pushed-source-colour-barrier.trycloudflare.com/auth/shopify/callback",
-  "https://pushed-source-colour-barrier.trycloudflare.com/api/auth/callback"
+  "https://sprint-replacing-cj-departure.trycloudflare.com/auth/callback",
+  "https://sprint-replacing-cj-departure.trycloudflare.com/auth/shopify/callback",
+  "https://sprint-replacing-cj-departure.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
