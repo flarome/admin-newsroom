@@ -1,9 +1,9 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
-client_id = "5363397f9f0db456c06921f33dbab54d"
-name = "Newsroom 2025"
-handle = "newsroom-2025"
-application_url = "https://fares-delivery-mineral-fastest.trycloudflare.com"
+client_id = "2441329655ea5191d88c327cec5a984e"
+name = "newsroom-0325"
+handle = "newsroom-0325"
+application_url = "https://nurses-hc-artists-bigger.trycloudflare.com"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = "read_content,read_draft_orders,read_files,read_metaobject_definitions,
 
 [auth]
 redirect_urls = [
-  "https://fares-delivery-mineral-fastest.trycloudflare.com/auth/callback",
-  "https://fares-delivery-mineral-fastest.trycloudflare.com/auth/shopify/callback",
-  "https://fares-delivery-mineral-fastest.trycloudflare.com/api/auth/callback"
+  "https://nurses-hc-artists-bigger.trycloudflare.com/auth/callback",
+  "https://nurses-hc-artists-bigger.trycloudflare.com/auth/shopify/callback",
+  "https://nurses-hc-artists-bigger.trycloudflare.com/api/auth/callback"
 ]
 
 [webhooks]
