@@ -2,6 +2,8 @@
 FROM node:18-alpine
 
 
+RUN apk add --no-cache openssl
+
 # Définir le répertoire de travail pour les étapes de Git à la racine
 WORKDIR /
 
