@@ -19,7 +19,7 @@
     "prisma": "prisma",
     "graphql-codegen": "graphql-codegen",
     "vite": "vite",
-    "start:prod": "dotenv -e .env -- npm run build && dotenv -e .env -- npm run start"
+    "start:prod": "dotenv -e env.prod -- npm run build && dotenv -e env.prod -- npm run start"
   },
   "type": "module",
   "engines": {
