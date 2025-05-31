@@ -14,6 +14,8 @@ COPY . .
 # Mettre à jour les sous-modules Git depuis la racine
 
 
+   # "docker-start": "npm run setup && npm run start",
+
 
 EXPOSE 3000
 
