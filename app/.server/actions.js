@@ -37,6 +37,8 @@ import previewArticle from "./go/previewArticle";
 
 import ADMIN_theme from "./get/admin/theme";
 
+import crypto from "node:crypto";
+
 const actions = {
   previewArticle: {
     dependantsGET: { creat: "blog", update: "blog" },

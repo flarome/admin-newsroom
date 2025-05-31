@@ -6,6 +6,7 @@ import React, {
   useMemo,
   useRef,
 } from "react";
+import crypto from "node:crypto";
 import { formatBlockId, useSections, isGroupProps } from "./SectionsContext";
 
 export const SectionGroupContext = createContext();

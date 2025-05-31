@@ -9,7 +9,7 @@ import React, {
 import { Modal as OverflowModal } from "../managers/overflow";
 import { useDesignSystem } from "./DesignSystemContext";
 import { z } from "zod";
-
+import crypto from "node:crypto";
 // --- Définition Zod ---
 const PropSchema = z.object({
   name: z.string(),

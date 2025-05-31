@@ -10,7 +10,7 @@ import { Modal as OverflowModal } from "../managers/overflow";
 import { useDesignSystem } from "./DesignSystemContext";
 
 
-
+import crypto from "node:crypto";
 import { z } from "zod";
 
 // --- Définition récursive Zod ---

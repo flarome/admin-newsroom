@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useMemo, useState } from "react";
 import { usePreview } from "../context/PreviewContext";
 import Frame from "react-frame-component";
-
+import crypto from "node:crypto";
 import { apiRequest } from "../../utils/request";
 import { useArticle } from "../../editors/article/context/articleContext";
 import { useDesignSystem } from "../context/DesignSystemContext";

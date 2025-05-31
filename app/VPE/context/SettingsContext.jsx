@@ -7,7 +7,7 @@ import React, {
   useEffect,
 } from "react";
 import { useDesignSystem } from "./DesignSystemContext";
-
+import crypto from "node:crypto";
 // ===== AJOUT FONCTION DE NORMALISATION DES PROPS EN GROUPES =====
 export const GENERAL_GROUP_NAME = crypto.randomUUID();
 
