@@ -14,7 +14,7 @@ const mutation = `
 
 `;
 
-export default function applyPromoCode(body, blogId) {
+export default function applyPromoCode(body) {
 
 
   return {

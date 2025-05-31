@@ -16,6 +16,16 @@ export const oldgraphql = {
     relative: "route",
   };*/
 
+  export const api = {
+    endpoint: "/api",
+    method: "POST",
+  };
+
+
+  export const validateImageUrl = {
+    endpoint: "/api/validate-image-url",
+    method: "GET",
+  };
 
   export const graphql = {
     endpoint: "/graphql",

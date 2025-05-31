@@ -19,7 +19,7 @@ export async function getTheme(shopify) {
               }
     }
             
-          `
+          ` 
         ;
     
         const { response } = await admin(themesQuery, {}, "themes", shopify);
@@ -27,6 +27,7 @@ export async function getTheme(shopify) {
         const themes = response.edges.map(edge => edge.node);
         const mainTheme = themes.find(theme => theme.role === 'MAIN');
     
+      
         if (!mainTheme) {
           throw new Error('Thème principal non trouvé.');
         }

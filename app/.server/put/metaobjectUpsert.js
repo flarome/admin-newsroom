@@ -18,7 +18,7 @@ mutation UpsertMetaobject($handle: MetaobjectHandleInput!, $metaobject: Metaobje
 
 `;
 
-export default async function applyPromoCode(body, blogId, themeId, client, shopify, cdnUrl) {
+export default async function applyPromoCode(body) {
     const formatDate = () => {
         const now = new Date(); // Obtenir l'heure actuelle
         const year = now.getFullYear(); // Année

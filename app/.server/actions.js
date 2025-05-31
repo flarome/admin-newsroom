@@ -1,13 +1,15 @@
 import validateArticle from "./validate/article";
 
-
 import autom from "./afterValidate/autom";
 
 import getArticles from "./get/articles";
 import getArticle from "./get/article";
 import getBlogs from "./get/blogs";
-import getBlog from "./get/blog"
-// import getShop from "./get/shop";
+import getBlog from "./get/blog";
+
+import getBlogStorefront from "./get/blogStorefront";
+import getShopStorefront from "./get/storefront/shop";
+import getShop from "./get/shop";
 // import getTheme from "./get/theme";
 import getArticleAfter from "./get/articleAfter";
 import getArticlePrevious from "./get/articlePrevious";
@@ -20,7 +22,6 @@ import putArticleUpdate from "./put/articleUpdate";
 import putArticleDelete from "./put/articleDelete";
 import putMetaobjectUpsert from "./put/metaobjectUpsert";
 
-
 import goMetaobjectDefinition from "./go/metaobjectDefinition";
 import goArticlesFetch from "./go/articlesFetch";
 import goArticleDetails from "./go/articleDetails";
@@ -31,11 +32,52 @@ import goAdjacentArticle from "./go/adjacentArticle";
 import goMetaobjectDefinitionAuthor from "./go/metaobjectDefinitionAuthor";
 import goMetaobjectEntrie from "./go/metaobjectEntrie";
 import goFileUpload from "./go/fileUpload";
+import previewArticle from "./go/previewArticle";
 
+
+import ADMIN_theme from "./get/admin/theme";
 
 const actions = {
+  previewArticle: {
+    dependantsGET: { creat: "blog", update: "blog" },
+    get: {
+     
+      blog: {
+        body: () => ({
+          handle: "cms",
+        }),
+        mutation: getBlogStorefront,
+      },
+      creat: {
+        condition: (body) => !body?.id || body?.id === "",
+        body: (body, prev) => ({
+          ...body.data,
+          handle: crypto.randomUUID(),
+          blogId: prev.blog.id,
+          isPublished: true,
+        }),
+        mutation: putArticleCreate,
+      },
+      update: {
+        condition: (body) => body?.id && body?.id !== "",
+        body: (body, prev) => ({
+          ...body.data,
+          ...(body.handle && body.handle !== ""
+            ? { handle: body.handle }
+            : {}),
+            id: body.id,
+          blogId: prev.blog.id,
+          isPublished: true,
+        }),
+        mutation: putArticleUpdate,
+      },
+    },
+    builder: {
+      type: "return",
+      build: previewArticle,
+    },
+  },
   metaobjectUpsert: {
-
     get: {
       metaobject: {
         mutation: putMetaobjectUpsert,
@@ -51,7 +93,6 @@ const actions = {
       type: "return",
       build: goFileUpload,
     },
-
   },
   metaobjectEntrie: {
     get: {
@@ -63,7 +104,6 @@ const actions = {
       type: "return",
       build: goMetaobjectEntrie,
     },
-
   },
   metaobjectDefinitionAuthor: {
     get: {
@@ -75,7 +115,6 @@ const actions = {
       type: "return",
       build: goMetaobjectDefinitionAuthor,
     },
-
   },
   metaobjectDefinition: {
     get: {
@@ -87,7 +126,6 @@ const actions = {
       type: "return",
       build: goMetaobjectDefinition,
     },
-
   },
   authorAutocomplete: {
     get: {
@@ -104,9 +142,9 @@ const actions = {
     preValidate: {
       get: {
         blog: {
-                   body: (body) => ({
-      id: body.blogId
-      }),
+          body: (body) => ({
+            id: body.blogId,
+          }),
           condition: (body) => !!body.blogId,
           mutation: getBlog,
         },
@@ -117,16 +155,13 @@ const actions = {
       article: {
         mutation: putArticleCreate,
       },
-  
     },
     afterValidate: {
       action: autom,
       body: (response) => ({
         action: "articleCreate",
-        articleId: response.article.article.id // Exemple de données dynamiques
-
-      }), 
-
+        articleId: response.article.article.id, // Exemple de données dynamiques
+      }),
     },
     builder: {
       type: "return",
@@ -150,13 +185,13 @@ const actions = {
     },
   },
   articleUpdate: {
-       preValidate: {
+    preValidate: {
       get: {
         blog: {
-             body: (body) => ({
-      id: body.blogId
-      }), 
-               condition: (body) => !!body.blogId,
+          body: (body) => ({
+            id: body.blogId,
+          }),
+          condition: (body) => !!body.blogId,
           mutation: getBlog,
         },
       },
@@ -166,17 +201,14 @@ const actions = {
       article: {
         mutation: putArticleUpdate,
       },
-  
     },
 
-   afterValidate: {
+    afterValidate: {
       action: autom,
       body: (response) => ({
         action: "articleUpdate",
         articleId: response.article.article.id, // Exemple de données dynamiques
-
-      }), 
-
+      }),
     },
 
     builder: {
@@ -200,10 +232,8 @@ const actions = {
       action: autom,
       body: (response) => ({
         action: "articleDelete",
-        articleId: response.article.deletedArticleId // Exemple de données dynamiques
-
-      }), 
-
+        articleId: response.article.deletedArticleId, // Exemple de données dynamiques
+      }),
     },
     builder: {
       type: "return",
@@ -214,22 +244,33 @@ const actions = {
   articleDetails: {
     get: {
       article: {
-        condition: (body) => !!body.hasArticle,
+        condition: (body) => !!body.id,
         mutation: getArticle,
       },
       blogs: {
-       mutation: getBlogs,
+        mutation: getBlogs,
       },
-    
+
+
+ 
+
+         themes: {
+        mutation: ADMIN_theme,
+      },
+
+
+         shop: {
+        mutation: getShopStorefront,
+      },
+
+
       authors: {
-        type: 'rePost',
+        type: "rePost",
         get: {
           action: "metaobjectDefinitionAuthor", // Action à réexécuter
           body: { first: 250, type: "press_contacts" },
         },
       },
-   
-  
     },
     builder: {
       type: "return",
@@ -241,7 +282,7 @@ const actions = {
     get: {
       articles: {
         mutation: getArticles,
-      }
+      },
     },
     builder: {
       type: "return",

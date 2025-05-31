@@ -1,0 +1,1 @@
+export const osVersion = "2.0.0";

@@ -53,7 +53,6 @@ export const initialArticle = {
   author: "",
   contactPresse: [],
   mainImage,
-  content: "",
   body: [],
   tags: [],
   template: "",

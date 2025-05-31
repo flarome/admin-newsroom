@@ -10,7 +10,7 @@ const ActionsModal = ({ isModalOpen, onRequestClose, actions, targetRef, offset 
   
         setPosition({
           top: targetRect.bottom + offset.bottom, // Bas de l'élément + décalage
-          right: window.innerWidth - targetRect.right + offset.right, // Distance par rapport à la droite de l'écran
+          right: window?.innerWidth - targetRect.right + offset.right, // Distance par rapport à la droite de l'écran
         });
       }
     }, [isModalOpen, targetRef, offset]);

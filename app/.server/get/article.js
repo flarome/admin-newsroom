@@ -17,7 +17,7 @@ export default function applyPromoCode(body) {
   return {
     mutation,
     variables: {
-      id: "gid://shopify/Article/" + body.articleId
+      id: "gid://shopify/Article/" + body.id
     },
     mutationName: "article",
     fetchMode: "admin",

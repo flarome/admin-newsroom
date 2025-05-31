@@ -27,6 +27,7 @@ export function getImageInfo(img = defaultImage) {
 export function getContent(data = {}) {
   const content = data?.content || {};
   return {
+    body: content?.body || [],
     contentJson: content?.json || null,
     rebuiltHtml: content?.rebuiltHtml || null,
     originalHtml: content?.originalHtml || null,

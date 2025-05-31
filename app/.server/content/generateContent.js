@@ -6,7 +6,7 @@ import { extractDataJson } from "../../shared-instances/content/normalizeData";
 import {
   generateHtmlText,
   generateJsonText,
-  generateHtmlImageInline,
+  generateHtmlImageInline, 
   generateJsonImageInline,
   generateJsonImageBig, 
   generateHtmlImageBig,

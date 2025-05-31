@@ -1,0 +1,78 @@
+query ArticleDetails(
+  $articleId: ID!
+  $hasArticleId: Boolean!
+  $blogsFirst: Int!
+) {
+  shop {
+    url
+    __typename
+  }
+
+  blogs(first: $blogsFirst) {
+    nodes {
+      tags
+      id
+      title
+      handle
+      __typename
+    }
+    __typename
+  }
+
+  themes(first: 250) {
+    nodes {
+      id
+      role
+      name
+      files(first: 250, filenames: ["templates/article.*"]) {
+        nodes {
+          filename
+
+          __typename
+        }
+      }
+      __typename
+    }
+    __typename
+  }
+  article(id: $articleId) @include(if: $hasArticleId) {
+    ...ArticleDetailsFragment
+    __typename
+  }
+}
+fragment ArticleDetailsFragment on Article {
+  id
+  title
+  isPublished
+  publishedAt
+  summary
+  blog {
+    handle
+    id
+    __typename
+  }
+
+  dataJson: metafield(key: "data_json", namespace: "article") {
+    value
+    __typename
+  }
+  contactPresse: metafield(key: "editor", namespace: "contact") {
+    value
+    __typename
+  }
+
+  seoTitle: metafield(namespace: "global", key: "title_tag") {
+    value
+    __typename
+  }
+  seoDescription: metafield(namespace: "global", key: "description_tag") {
+    value
+    __typename
+  }
+
+  defaultCursor
+  handle
+  templateSuffix
+  tags
+  __typename
+}

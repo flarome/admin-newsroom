@@ -5,8 +5,6 @@ import validateAction from "./modules/midelware/validateAction";
 import { getShop } from "./modules/utils/getShop";
 import { CheckCircleIcon } from "@shopify/polaris-icons";
 
-
-
 export async function api(
   client,
   shopify,
@@ -38,14 +36,9 @@ export async function api(
       promises.push(getShop(shopify).then((data) => (shop = data)));
     }
 
-
-    
-
     if (requireTheme && !theme) {
       promises.push(getTheme(shopify).then((data) => (theme = data)));
     }
-
-
 
     // Attendre que toutes les promesses soient résolues
     await Promise.all(promises);
@@ -57,7 +50,6 @@ export async function api(
     if (requireTheme && !theme) {
       theme = await getTheme(shopify);
     }
-
 
     const cdnUrl = shop ? shop.url + "/cdn/shop/files/" : null;
     const themeId = theme ? theme.id : null;
@@ -84,29 +76,21 @@ export async function api(
         const requirePromises = Object.entries(
           actionConfig.preValidate.get || {},
         ).map(async ([key, getAction]) => {
-      
-
           if (getAction.condition && !getAction.condition(body)) {
             responseValidate[key] = {};
             return null;
           }
 
+          const nextBody =
+            typeof getAction.body === "function"
+              ? getAction.body(body)
+              : getAction.body;
 
-               const nextBody =
-          typeof getAction.body === "function"
-            ? getAction.body(body)
-            : getAction.body;
-
-            
           const { mutation, variables, mutationName, fetchMode } =
             typeof getAction.mutation === "function" &&
             getAction.mutation.constructor.name === "AsyncFunction"
-              ? await getAction.mutation(
-               nextBody
-                )
-              : getAction.mutation(
-           nextBody
-                );
+              ? await getAction.mutation(nextBody)
+              : getAction.mutation(nextBody);
 
           // Exécution de la requête (admin ou storefront)
           const { response: fetchedResponse, userErrors: fetchedUserErrors } =
@@ -127,10 +111,7 @@ export async function api(
         await Promise.all(requirePromises);
 
         const { make: fetchedMake, errors: fetchedErrors } =
-          await actionConfig.preValidate.validate(
-            body,
-            responseValidate,
-          );
+          await actionConfig.preValidate.validate(body, responseValidate);
         errors = fetchedErrors || {};
         make = fetchedMake !== undefined ? fetchedMake : true;
       }
@@ -139,81 +120,119 @@ export async function api(
     // Si l'action passe la pré-validation
     if (make) {
       // Parcours des sous-actions dans la configuration
-      const actionPromises = Object.entries(actionConfig.get || {}).map(
-        async ([key, getAction]) => {
+
+      const dependants = actionConfig.dependantsGET || {};
+      const getKeys = Object.keys(actionConfig.get || {});
+      const resolved = new Set();
+
+      const phases = [];
+
+      while (resolved.size < getKeys.length) {
+        const currentPhase = [];
+
+        for (const key of getKeys) {
+          if (resolved.has(key)) continue;
+
+          const dependency = dependants[key];
+
+          if (!dependency || resolved.has(dependency)) {
+            currentPhase.push(key);
+          }
+        }
+
+        if (currentPhase.length === 0) {
+          throw new Error(
+            "Circular or unsatisfiable dependencies in dependantsGET",
+          );
+        }
+
+        phases.push(currentPhase);
+        currentPhase.forEach((k) => resolved.add(k));
+      }
+
+      // Exécuter phase par phase
+      for (const phaseKeys of phases) {
+        const phasePromises = phaseKeys.map(async (key) => {
+          const getAction = actionConfig.get[key];
+
           if (getAction.condition && !getAction.condition(body)) {
             response[key] = {};
-            return null; // Sauter cette action si la condition échoue
+            return;
           }
 
           const type = getAction.type || "return";
 
           if (type === "return") {
-            const { mutation, variables, mutationName, fetchMode } =
+
+                  const nextBody =
+              typeof getAction.body === "function"
+                ? getAction.body(body, response)
+                : body;
+
+
+            const getMutationData =
               typeof getAction.mutation === "function" &&
               getAction.mutation.constructor.name === "AsyncFunction"
                 ? await getAction.mutation(
-                    body,
+                    nextBody,
                     themeId,
                     client,
                     shopify,
                     cdnUrl,
                     files,
+                    client,
                   )
                 : getAction.mutation(
-                    body,
+                    nextBody,
                     themeId,
                     client,
                     shopify,
                     cdnUrl,
                     files,
+                    client,
                   );
 
-         /*   console.log("---------------------");
-            console.log("MUTATION", mutationName);
-            console.log("---------------------");*/
+            const { mutation, variables, mutationName, fetchMode } =
+              getMutationData;
 
-            // Exécution de la requête (admin ou storefront)
             const { response: fetchedResponse, userErrors: fetchedUserErrors } =
               fetchMode === "admin"
                 ? await admin(mutation, variables, mutationName, shopify)
                 : await storefront(mutation, variables, mutationName, client);
 
-            // Mise à jour de la réponse globale
             response[key] = fetchedResponse;
 
-            // Agrégation des erreurs utilisateur
             if (fetchedUserErrors?.length) {
               userErrors = [...userErrors, ...fetchedUserErrors];
             }
-          } else if (type === "rePost") {
-            // Récupérer la nouvelle action et le nouveau body
-            const nextAction = getAction.get;
+          }
 
-            const nextBody =
+      
+
+   
+          if (type === "rePost") {
+            const nextAction = getAction.get;
+               const nextBody =
               typeof nextAction.body === "function"
                 ? nextAction.body(req)
                 : nextAction.body;
 
-            // Réexécuter l'API avec les nouveaux paramètres
             const responseRepost = await api(
               client,
               shopify,
-              { body: nextBody, action: nextAction.action, files: files },
-              errors,
+              { body: nextBody, action: nextAction.action, files },
+              userErrors,
               make,
               shop,
-              theme,
+              themeId,
             );
 
-            // Mise à jour de la réponse globale
             response[key] = responseRepost;
           }
-        },
-      );
+        });
 
-      // Attendre que toutes les promesses soient terminées
-      await Promise.all(actionPromises);
+        await Promise.all(phasePromises);
+      }
     }
 
     if (
@@ -247,15 +266,7 @@ export async function api(
             cdnUrl,
             theme,
           )
-        : build(
-            response,
-            userErrors,
-            body,
-            errors,
-            shopify,
-            cdnUrl,
-            theme,
-          );
+        : build(response, userErrors, body, errors, shopify, cdnUrl, theme);
     } else if (type === "rePost") {
       // Récupérer la nouvelle action et le nouveau body
       const nextAction = build.action;

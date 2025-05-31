@@ -23,16 +23,14 @@ export async function admin(mutation, variables, acces, shopify) {
 
  
 
-  console.log('mutation', mutation);
-  console.log('variables', variables);
     try {
       const response1 = await shopify(mutation, {variables});
       const response2 = await response1.json();
 
-      console.log('response2', response2);
+
 
       const response = response2.data;
-      console.log('acces response', response);
+
       console.log('userErrors ', acces ? response[acces]?.userErrors : response.userErrors);
       console.log('warnings ', acces ? response[acces]?.warnings : response.warnings);
       console.log('response.errors.graphQLErrors', response.errors?.graphQLErrors);

@@ -7,15 +7,15 @@ export const beforeunload =  (isModified) => {
   
       if (isModified) {
         // Ajoute l'événement si `isModified` est vrai
-        window.addEventListener("beforeunload", handleBeforeUnload);
+        window?.addEventListener("beforeunload", handleBeforeUnload);
       } else {
         // Retire l'événement si `isModified` est faux
-        window.removeEventListener("beforeunload", handleBeforeUnload);
+        window?.removeEventListener("beforeunload", handleBeforeUnload);
       }
   
       // Nettoyage : retire toujours l'événement lors de la désactivation de l'effet
       return () => {
-        window.removeEventListener("beforeunload", handleBeforeUnload);
+        window?.removeEventListener("beforeunload", handleBeforeUnload);
       };
 
 };

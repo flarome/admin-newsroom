@@ -1,4 +1,4 @@
-import { generateArticle } from "../modules/generateArticle";
+import { generateArticle } from "../../article";
 
 
 const mutation = `
@@ -7,6 +7,7 @@ const mutation = `
       articleCreate(article: $article) {
         article {
          id
+         handle
         }
         userErrors {
           code
@@ -18,14 +19,13 @@ const mutation = `
 
 `;
 
-export default async function applyPromoCode(body, blogId, themeId, client, shopify, cdnUrl, files) {
+export default async function applyPromoCode(body, themeId, client, shopify, cdnUrl, files) {
 
-
+ 
   return {
     mutation,
     variables: {
       article: {
-        blogId: blogId,
         ...await generateArticle(body, true, shopify, cdnUrl, files)
       },
     },

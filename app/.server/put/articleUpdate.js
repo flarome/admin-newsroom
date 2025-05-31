@@ -1,5 +1,5 @@
 
-import { generateArticle } from "../modules/generateArticle"
+import { generateArticle } from "../../article"
 
 const mutation = `
 
@@ -19,7 +19,7 @@ id
     }
 `;
 
-export default async function applyPromoCode(body, blogId, themeId, client, shopify, cdnUrl, files) {
+export default async function applyPromoCode(body, themeId, client, shopify, cdnUrl, files) {
 
 
 
@@ -32,6 +32,7 @@ mutation UpdateArticle($article: ArticleUpdateInput!) {
         article {
          
 id
+handle
 
         }
         userErrors {

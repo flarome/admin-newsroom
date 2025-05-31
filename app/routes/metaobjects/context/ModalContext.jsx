@@ -11,7 +11,6 @@ export const MetaobjectModalProvider = ({ children }) => {
    const shopify = useAppBridge();
 
 
-    
   const [modalState, setModalState] = useState({ isOpen: false, id: null, handle: null });
 
   // Fonction pour afficher la modal

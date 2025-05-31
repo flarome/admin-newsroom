@@ -1,0 +1,14 @@
+mutation ArticleDetailsCreate($article: ArticleCreateInput!, $blog: ArticleBlogInput) {
+  articleCreate(article: $article, blog: $blog) {
+    userErrors {
+      field
+      message
+      __typename
+    }
+    article {
+      id
+      __typename
+    }
+    __typename
+  }
+}

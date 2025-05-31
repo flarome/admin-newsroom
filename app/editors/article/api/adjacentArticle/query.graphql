@@ -1,0 +1,34 @@
+query AdjacentArticle($cursor: String!, $sortKey: ArticleSortKeys, $reverse: Boolean) {
+    before: articles(
+      last: 1
+      before: $cursor
+      reverse: $reverse
+    ) {
+      edges {
+        cursor
+        node {
+          id
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    after: articles(
+      first: 1
+      after: $cursor
+      sortKey: $sortKey
+      reverse: $reverse
+    ) {
+      edges {
+        cursor
+        node {
+          id
+          __typename
+        }
+        __typename
+      }
+      __typename
+    }
+    __typename
+}

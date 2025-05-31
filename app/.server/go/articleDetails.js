@@ -1,8 +1,6 @@
 import { initialArticle } from "../../modules/initialState";
 import { formatArticle } from "../modules/formatArticle";
 
-
-
 // Fonction pour filtrer et formater les templates d'articles
 export function extractArticleTemplates(files) {
   return files
@@ -26,6 +24,8 @@ export function extractArticleTemplates(files) {
     });
 }
 
+import { getMainTheme, getDevTheme } from "../get/admin/theme";
+
 export default function builder(
   response,
   userErrors,
@@ -43,14 +43,39 @@ export default function builder(
   const blogs = response.blogs?.nodes || [];
 
   return {
+    article: {
+      id: articleData?.id ?? undefined,
+      splitId: articleData?.id?.split("/").pop() ?? undefined,
+      isNewArticle: articleData?.id ? false : true,
+      defaultCursor: articleData?.defaultCursor ?? null,
+      url: articleData?.id
+        ? `${response.shop.primaryDomain.url}/blogs/${articleData.blog.handle}/${articleData.handle}`
+        : null,
+      title: articleData?.title ?? null,
+      isPublished: articleData?.isPublished ?? false,
+      handle: articleData?.handle ?? null
+    
+      
+    },
+    themes: response.themes.edges.map((theme) => ({
+      id: theme.node.id,
+      name: theme.node.name,
+      role: theme.node.role,
+      templates: extractArticleTemplates(theme.node.files.edges),
+    })),
+
+    shop: { url: response.shop.primaryDomain.url },
     libs: {
       authors: response.authors?.entries || [],
       templates: extractArticleTemplates(theme.files.edges),
-      tags: [...new Set(blogs.flatMap(blog => blog.tags || []))],
+      tags: [...new Set(blogs.flatMap((blog) => blog.tags || []))],
     },
 
-    article: formatArticle(articleData, blogs),
+    data: formatArticle(articleData, blogs),
 
     blogs: blogs.map(({ handle, title, id }) => ({ handle, title, id })),
+
+    hasErrors: false,
+    errors: []
   };
 }

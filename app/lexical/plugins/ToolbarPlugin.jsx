@@ -103,17 +103,18 @@ export default function ToolbarPlugin() {
   }, [editor, $updateToolbar]);
 
   return (
-    <div className="toolbar" ref={toolbarRef}>
+    <InlineStack ref={toolbarRef}>
 
-          <Button disabled={!canUndo}  onClick={() => {
+
+          <Button variant="monochromePlain" disabled={!canUndo}  onClick={() => {
           editor.dispatchCommand(UNDO_COMMAND, undefined);
-        }}   className="toolbar-item spaced" accessibilityLabel="Undo" icon={UndoIcon}  />
+        }}  accessibilityLabel="Undo" icon={UndoIcon}  />
 
     
 
-         <Button disabled={!canRedo}  onClick={() => {
+         <Button variant="monochromePlain" disabled={!canRedo}  onClick={() => {
           editor.dispatchCommand(REDO_COMMAND, undefined);
-        }}   className="toolbar-item" accessibilityLabel="Redo" icon={RedoIcon}  />
+        }}   accessibilityLabel="Redo" icon={RedoIcon}  />
 
 
   
@@ -178,6 +179,7 @@ export default function ToolbarPlugin() {
         aria-label="Justify Align">
         <i className="format justify-align" />
       </button>{' '}
-    </div>
+
+    </InlineStack>
   );
 }

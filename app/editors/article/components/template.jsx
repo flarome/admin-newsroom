@@ -1,0 +1,101 @@
+import {
+  Select,
+  Card,
+  Icon,
+  Tooltip,
+  Button,
+  Text,
+  BlockStack,
+  InlineStack,
+} from "@shopify/polaris";
+import _ from "lodash";
+import { Controller, useFormContext, useWatch } from "react-hook-form";
+import { ViewIcon } from "@shopify/polaris-icons";
+import { useArticle } from "../context/articleContext";
+import { prefix } from "../config/ids";
+import { form as FieldsMap } from "../config/fieldMap";
+
+export const fieldPath = FieldsMap.template;
+
+const Template = () => {
+  const { availableTemplateOptions, hasArticle, shop, article } = useArticle();
+  const { control } = useFormContext();
+
+  const selectedValue = useWatch({ name: fieldPath }) || "";
+
+  const options =
+    availableTemplateOptions?.map((name) => {
+      const label =
+        name === "article"
+          ? "Modèle par défaut : Article de blog"
+          : name.replace("article.", "");
+
+      const value = name === "article" ? "" : label;
+
+      return { value, label };
+    }) ?? [];
+
+  const previewUrl =
+    hasArticle && article?.isPublished
+      ? `${shop.url}/blogs/${article.blog.handle}/${article.handle}${
+          selectedValue ? `?view=${selectedValue}` : ""
+        }`
+      : undefined;
+
+  return (
+    <Card>
+      <BlockStack gap="200">
+        <InlineStack
+          align="space-between"
+          blockAlign="center"
+          wrap
+          gap={{ xs: "200" }}
+        >
+          <Text as="h2" variant="headingSm" fontWeight="semibold">
+            Modèle de thème
+          </Text>
+
+          <Tooltip
+            content={
+              previewUrl
+                ? "Afficher le modèle"
+                : hasArticle && !article.isPublished
+                  ? "Publiez l'article pour activer l’affichage du modèle"
+                  : "Enregistrez l'article pour activer l’affichage du modèle"
+            }
+          >
+            <Button
+              icon={<Icon source={ViewIcon} />}
+              url={previewUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              variant="plain"
+              size="medium"
+              accessibilityLabel="Prévisualiser le modèle"
+              disabled={!Boolean(previewUrl)}
+              external
+            />
+          </Tooltip>
+        </InlineStack>
+
+        <Controller
+          name={fieldPath}
+          control={control}
+          render={({ field: { value, onChange }, fieldState: { error } }) => (
+            <Select
+              label="Modèle de thème"
+              name={`${prefix}.${fieldPath}`}
+              id={`${prefix}:${fieldPath}`}
+              options={options}
+              value={value || options[0].value}
+              onChange={onChange}
+              error={error?.message}
+            />
+          )}
+        />
+      </BlockStack>
+    </Card>
+  );
+};
+
+export default Template;

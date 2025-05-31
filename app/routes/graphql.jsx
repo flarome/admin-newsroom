@@ -1,39 +1,18 @@
 import { json } from "@remix-run/node";
-import { authenticate, unauthenticated } from "../shopify.server";
-import { parseJSONSafe } from "../global-modules/utils/parseJSONSafe";
-import { api } from "../.server/api";
+import { getShopifyContext } from "../lib/shopify/context.server";
+import { execAdmin, execStorefront } from "../.server/graphql";
 
-// Action pour récupérer les articles et le blog associés
-export async function action({ request }) {
-  const { admin, session } = await authenticate.admin(request);
-  const { storefront } = await unauthenticated.storefront(session.shop);
+export const action = async ({ request }) => {
+  const url = new URL(request.url); // ✅ lecture des searchParams
+  const apiTarget = url.searchParams.get("api"); // "admin" ou "storefront"
 
-  
-  const formData = await request.formData();
+  const config = await getShopifyContext(request);
+  const body = await request.json(); // ✅ on attend un JSON, pas un FormData
 
-    // Associer les fichiers à leurs références
-    const files = {};
-    for (const entry of formData.entries()) {
-      const [key, value] = entry;
-      if (key.startsWith("__file_")) {
-        files[key] = value; // Ajoute chaque fichier avec sa référence
-      }
-    }
+  const data =
+    apiTarget === "storefront"
+      ? await execStorefront(config, body)
+      : await execAdmin(config, body);
 
-  
-  try {
-    const data = await api(storefront.graphql, admin.graphql, {
-      action: formData.get("action"),
-      body: parseJSONSafe(formData.get("body")),
-      files: files
-    });
- 
-
-    return json(data); // Renvoie les données sous forme de JSON
-  } catch (error) {
-    console.error("Erreur dans l'action :", error);
-    throw new Response(error, {
-      status: 500,
-    });
-  }
-}
+  return json(data);
+};

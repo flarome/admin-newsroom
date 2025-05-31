@@ -35,7 +35,8 @@ export function formatArticle(article, blogs) {
       author,
       contactPresse,
       url,
-      layout
+      layout,
+      body
     } = getArticleInfo(
       [
         "title",
@@ -55,7 +56,7 @@ export function formatArticle(article, blogs) {
         "author",
         "url",
         "layout",
-        "contact-presse"
+        "contact-presse",
       ],
       article,
 
@@ -83,9 +84,7 @@ export function formatArticle(article, blogs) {
       downloadsAllsMedia: downloadsAllsMedia || initialState.downloadsAllsMedia,
       mainImage: mainImage || initialState.mainImage,
       content: originalHtml || initialState.content,
-
-      body: [],
-
+      body: body || initialState.body,
       tags: tags || initialState.tags,
       template: template || initialState.template,
       isPublished:
