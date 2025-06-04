@@ -138,7 +138,16 @@ const Editor = () => {
 
 
   const { control, setError } = useFormContext();
-  const { fieldDefs, hasEntrie, entry } = useMetaobjectEntriesModal();
+  const { fieldDefs, hasEntrie, entry, open } = useMetaobjectEntriesModal();
+
+   const [alreadyOpen, setAlreadyOpen] = useState(false);
+    
+      if (!open && !alreadyOpen) return null;
+    
+      if (!alreadyOpen) {
+        setAlreadyOpen(true);
+      }
+    
 
 
 

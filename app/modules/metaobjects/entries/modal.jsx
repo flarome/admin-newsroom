@@ -1,5 +1,5 @@
 // modal/index.jsx
-import { memo, useCallback, useEffect, useState } from "react";
+import { memo, useCallback, useEffect } from "react";
 import { AppProvider, Modal as PolarisModal } from "@shopify/polaris";
 import { Modal, TitleBar } from "@shopify/app-bridge-react";
 import Skeleton from "./states/loading";
@@ -75,19 +75,12 @@ const MetaobjectModalPortal = memo(({ onReady }) => {
 });
 
 const MetaobjectContent = memo(({ onReady }) => {
-  const { defaultValues, open } = useMetaobjectEntriesModal();
+  const { defaultValues } = useMetaobjectEntriesModal();
 
 
 
 
-    const [alreadyOpen, setAlreadyOpen] = useState(false);
-  
-    if (!open && !alreadyOpen) return null;
-  
-    if (!alreadyOpen) {
-      setAlreadyOpen(true);
-    }
-  
+   
 
 
   return (

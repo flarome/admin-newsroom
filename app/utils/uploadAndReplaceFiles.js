@@ -23,11 +23,17 @@ export async function uploadAndReplaceFilesRecursively(data) {
     } else if (Array.isArray(node)) {
       await Promise.all(node.map((item, idx) => collect(item, [...path, idx])));
     } else if (typeof node === "object" && node !== null) {
-      await Promise.all(Object.entries(node).map(([key, val]) => collect(val, [...path, key])));
+      await Promise.all(
+        Object.entries(node).map(([key, val]) => collect(val, [...path, key])),
+      );
     }
   }
 
   await collect(data);
+
+  if (uniqueFiles.length === 0) {
+    return data; // ✅ Rien à faire, on retourne l'objet d'origine
+  }
 
   const uploadedUrls = await customUploadMany(uniqueFiles);
 
@@ -36,6 +42,11 @@ export async function uploadAndReplaceFilesRecursively(data) {
     let ref = clone;
     for (const part of path.slice(0, -1)) {
       ref = ref[part];
+    }
+    if (!uploadedUrls[index]) {
+      throw new Error(
+        `Fichier manquant pour l'index ${index} (upload échoué ?)`,
+      );
     }
     ref[path[path.length - 1]] = uploadedUrls[index];
   });

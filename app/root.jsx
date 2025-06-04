@@ -34,8 +34,11 @@ export default function App() {
     </html>
   );
 }
+
+
 /*
 export function ErrorBoundary() {
+
   const error = useRouteError();
 
   if (isRouteErrorResponse(error)) {
@@ -83,5 +86,4 @@ export function ErrorBoundary() {
       <p>{error.message || "Quelque chose s'est mal passé."}</p>
     </div>
   );
-}
-*/
+}*/

@@ -50,7 +50,7 @@ export async function generateArticle(
     const excerpt = _.get(fields, excerptPath) || "";
     const metaDescription = _.get(fields, metaDescPath) || "";
     const metaTitle = _.get(fields, metaTitlePath) || "";
-    const handle = toShopifySlug(new Date()) || _.get(fields, handlePath) || null;
+    const handle =  _.get(fields, handlePath) || null;
     const redirectNewHandle = _.get(fields, redirectPath) === true;
     const publishDateRaw = _.get(fields, publishDateFieldPath);
     const isPublished = Boolean(_.get(fields, publishedFieldPath));

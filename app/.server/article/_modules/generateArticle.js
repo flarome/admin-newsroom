@@ -17,6 +17,24 @@ export async function articleWithFallback(
 
   if (!operationName) throw new Error("operationName requis");
 
+  if (isNew) {
+    const input = await generateArticle(config, fields, isNew, false);
+
+    const result = await adminClient.graphql(mutation, {
+      ...variables,
+      article: input,
+    });
+
+    return {
+      __wasRefetched: false,
+      __future_dual: false,
+      __winningStrategy: "single",
+      __fallbackDebug: null,
+      ...result?.[operationName],
+    };
+  }
+
+
   let resolved = false;
   const fastTimestamp = Date.now();
   const fullTimestamp = fastTimestamp + 1;

@@ -1,3 +1,12 @@
+// === ⚙️ CONFIGURATION TEMPS POLLING ===
+const POLLING_CONFIG = {
+  PROCESSING_INTERVAL_MS: 1, // Pour PROCESSING / UPLOADED / READY sans URL
+  FAILED_RETRY_BASE_MS: 1000, // Pour les erreurs
+  FAILED_RETRY_MAX: 3,        // Nombre max de retries pour FAILED
+};
+
+
+
 /**
  * Upload groupé de fichiers vers Shopify, avec polling intelligent
  * et récupération d'URL une fois READY.
@@ -65,8 +74,8 @@ async function handleFileStatus(config, originalFile, createdFile, { ecrase }, f
       return { status: "ok", url, data };
     }
 
-       console.warn(`⏳ READY mais URL non dispo pour ${id}, nouvelle tentative...`);
-    await wait(1000 * (failedAttempts + 1));
+    console.warn(`⏳ READY mais URL non dispo pour ${id}, nouvelle tentative...`);
+    await wait(POLLING_CONFIG.PROCESSING_INTERVAL_MS);
     return handleFileStatus(config, originalFile, data, { ecrase }, failedAttempts + 1);
   }
 
@@ -81,7 +90,7 @@ async function handleFileStatus(config, originalFile, createdFile, { ecrase }, f
       };
     }
 
-    if (failedAttempts >= 3) {
+    if (failedAttempts >= POLLING_CONFIG.FAILED_RETRY_MAX) {
       return {
         status: "error",
         message: "Le fichier a échoué après plusieurs tentatives.",
@@ -90,14 +99,17 @@ async function handleFileStatus(config, originalFile, createdFile, { ecrase }, f
       };
     }
 
-    console.warn(`🔁 Retry #${failedAttempts + 1} for FAILED file: ${id}`);
-    await wait(1000 * (failedAttempts + 1));
+
+    const delay = POLLING_CONFIG.FAILED_RETRY_BASE_MS * Math.pow(2, failedAttempts);
+    console.warn(`🔁 Retry FAILED #${failedAttempts + 1} dans ${delay}ms pour ${id}`);
+    await wait(delay);
+
     const retryData = await getFileById(config, id);
     return handleFileStatus(config, originalFile, retryData, { ecrase }, failedAttempts + 1);
   }
 
   if (fileStatus === "PROCESSING" || fileStatus === "UPLOADED") {
-    await wait(1000);
+    await wait(POLLING_CONFIG.PROCESSING_INTERVAL_MS);
     const retryData = await getFileById(config, id);
     return handleFileStatus(config, originalFile, retryData, { ecrase }, failedAttempts);
   }
