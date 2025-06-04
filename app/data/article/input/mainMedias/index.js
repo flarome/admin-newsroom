@@ -1,0 +1,1 @@
+export {tile as mainImage_tile} from './image'

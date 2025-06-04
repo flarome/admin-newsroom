@@ -1,2 +1,0 @@
-export {body as text_body, copy as text_copy, props as text_props, config as text_config} from "./text/index.js"
-export {body as header_body, copy as header_copy, props as header_props, config as header_config} from "./header/index.js"

@@ -3,10 +3,17 @@ mutation ArticleDetailsCreate($article: ArticleCreateInput!, $blog: ArticleBlogI
     userErrors {
       field
       message
+      code
       __typename
     }
     article {
       id
+
+  debug: metafield(key: "fallback_guard", namespace: "debug") {
+    value
+    __typename
+  }
+
       __typename
     }
     __typename

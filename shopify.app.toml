@@ -3,7 +3,7 @@
 client_id = "e492689cd409d873cb2b0c8df3e93dfa"
 name = "newsroom"
 handle = "newsroom-2"
-application_url = "https://ports-tractor-doc-mentioned.trycloudflare.com"
+application_url = "https://presentations-alt-examine-organization.trycloudflare.com"
 embedded = true
 
 [build]
@@ -27,9 +27,9 @@ scopes = "unauthenticated_read_product_listings,read_content,read_draft_orders,r
 
 [auth]
 redirect_urls = [
-  "https://ports-tractor-doc-mentioned.trycloudflare.com/auth/callback",
-  "https://ports-tractor-doc-mentioned.trycloudflare.com/auth/shopify/callback",
-  "https://ports-tractor-doc-mentioned.trycloudflare.com/api/auth/callback"
+  "https://presentations-alt-examine-organization.trycloudflare.com/auth/callback",
+  "https://presentations-alt-examine-organization.trycloudflare.com/auth/shopify/callback",
+  "https://presentations-alt-examine-organization.trycloudflare.com/api/auth/callback"
 ]
 
 [pos]

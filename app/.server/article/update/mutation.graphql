@@ -1,12 +1,17 @@
-mutation ArticleDetailsCreate($article: ArticleCreateInput!, $blog: ArticleBlogInput) {
-  articleCreate(article: $article, blog: $blog) {
+mutation ArticleDetailsCreate($id: ID!, $article: ArticleUpdateInput!, $blog: ArticleBlogInput) {
+  articleUpdate(id: $id, article: $article, blog: $blog) {
     userErrors {
       field
       message
+      code
       __typename
     }
     article {
       id
+        debug: metafield(key: "fallback_guard", namespace: "debug") {
+    value
+    __typename
+  }
       __typename
     }
     __typename

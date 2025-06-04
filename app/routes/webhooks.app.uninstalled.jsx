@@ -1,5 +1,5 @@
-import { authenticate } from "../shopify.server";
-import db from "../db.server";
+import { authenticate } from "../lib/shopify/shopify.server";
+import db from "../lib/prisma/db.server";
 
 export const action = async ({ request }) => {
   const { shop, session, topic } = await authenticate.webhook(request);

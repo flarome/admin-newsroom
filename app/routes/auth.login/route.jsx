@@ -3,7 +3,7 @@ import { json } from "@remix-run/node";
 import { Form, useActionData, useLoaderData } from "@remix-run/react";
 import {
   AppProvider as PolarisAppProvider,
-  Button, 
+  Button,
   Card,
   FormLayout,
   Page,
@@ -12,11 +12,10 @@ import {
 } from "@shopify/polaris";
 import polarisTranslations from "@shopify/polaris/locales/fr.json";
 import polarisStyles from "@shopify/polaris/build/esm/styles.css?url";
-import { login } from "../../shopify.server";
+import { login } from "../../lib/shopify/shopify.server";
 import { loginErrorMessage } from "./error.server";
 
 export const links = () => [{ rel: "stylesheet", href: polarisStyles }];
-
 
 
 export const loader = async ({ request }) => {
@@ -41,6 +40,7 @@ export default function Auth() {
 
   return (
     <PolarisAppProvider i18n={loaderData.polarisTranslations}>
+    
       <Page>
         <Card>
           <Form method="post">
@@ -52,7 +52,7 @@ export default function Auth() {
                 type="text"
                 name="shop"
                 label="Shop domain"
-                helpText="example.myshopify.com"
+                helpText="www.flarome.com"
                 value={shop}
                 onChange={setShop}
                 autoComplete="on"

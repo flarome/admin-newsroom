@@ -1,0 +1,50 @@
+mutation UpdateMetaobject($id: ID!, 
+  $metaobject: MetaobjectUpdateInput!
+) {
+  metaobjectUpdate(id: $id, metaobject: $metaobject) {
+    metaobject {
+      id
+      handle
+      fields {
+        key
+        value
+      }
+          displayName
+      updatedAt
+
+      definition {
+        description
+        displayNameKey
+        id
+        metaobjectsCount
+        name
+        type
+        fieldDefinitions {
+          description
+          key
+          name
+          required
+          validations {
+            name
+            type
+            value
+          }
+          type {
+            category
+            name
+            valueType
+            supportedValidations {
+              name
+              type
+            }
+          }
+        }
+      }
+    }
+    userErrors {
+      field
+      message
+      code
+    }
+  }
+}

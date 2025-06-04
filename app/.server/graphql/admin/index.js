@@ -5,7 +5,6 @@ export async function exec(config, body) {
   try {
     const response = await adminClient.graphql(query, variables);
 
-    console.log("🟢 GraphQL Success:", response);
 
     return response;
   } catch (error) {

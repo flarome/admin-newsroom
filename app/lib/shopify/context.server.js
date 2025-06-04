@@ -1,5 +1,4 @@
-import { authenticate, unauthenticated } from "../../shopify.server"; // selon ton projet
-import { apiVersion } from "../../shopify.server";
+import { apiVersion, authenticate, unauthenticated } from "./shopify.server";
 import Shopify from "shopify-api-node";
 
 export async function getShopifyContext(request) {
@@ -12,6 +11,7 @@ export async function getShopifyContext(request) {
     apiVersion: apiVersion,
     maxRetries: 3,
   });
+
 
   return { admin, adminClient, session, storefront, shop: session.shop };
 }

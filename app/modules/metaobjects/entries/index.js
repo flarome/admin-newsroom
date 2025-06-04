@@ -1,0 +1,1 @@
+export { MetaobjectEntriesModalProvider as Modal } from './context/MetaobjetsEntriesModalContext';

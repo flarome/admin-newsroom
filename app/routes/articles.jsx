@@ -4,15 +4,8 @@ import { boundary } from "@shopify/shopify-app-remix/server";
 import { AppProvider } from "@shopify/shopify-app-remix/react";
 import { NavMenu } from "@shopify/app-bridge-react";
 import polarisStyles from "@shopify/polaris/build/esm/styles.css?url";
-import { authenticate } from "../shopify.server";
+import { authenticate } from "../lib/shopify/shopify.server";
 import polarisTranslations from "@shopify/polaris/locales/fr.json";
-
-
-import ToastNotification from "../components/toastNotification";
-
-import { Frame } from "@shopify/polaris";
-
-import { ToastProvider } from "../context/toast";
 
 export const links = () => [{ rel: "stylesheet", href: polarisStyles }];
 
@@ -26,27 +19,22 @@ export default function App() {
   const { apiKey } = useLoaderData();
 
   return (
-    <AppProvider i18n={polarisTranslations} theme="light" isEmbeddedApp apiKey={apiKey}>
+    <AppProvider
+      i18n={polarisTranslations}
+      theme="light"
+      isEmbeddedApp
+      apiKey={apiKey}
+    >
       <NavMenu>
         <Link to="/articles" rel="home" reloadDocument>
           Articles
         </Link>
-        <Link to="/articles/new" reloadDocument>Nouveau</Link>
+        <Link to="/articles/new" reloadDocument>
+          Nouveau
+        </Link>
       </NavMenu>
 
-      <Frame>
-      <ToastProvider>
-      <ToastNotification />
       <Outlet />
-
-
-
-
-      </ToastProvider>
-      </Frame>
-
-
-
     </AppProvider>
   );
 }

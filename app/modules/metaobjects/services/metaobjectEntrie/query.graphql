@@ -1,0 +1,44 @@
+query MetaobjectEntrie($id: ID!) {
+  metaobject(id: $id) {
+    id
+    handle
+
+    type
+    displayName
+
+    fields {
+      key
+      value
+    }
+    updatedAt
+
+    definition {
+      description
+      displayNameKey
+      id
+      metaobjectsCount
+      name
+      type
+      fieldDefinitions {
+        description
+        key
+        name
+        required
+        validations {
+          name
+          type
+          value
+        }
+        type {
+          category
+          name
+          valueType
+          supportedValidations {
+            name
+            type
+          }
+        }
+      }
+    }
+  }
+}

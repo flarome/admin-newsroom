@@ -1,0 +1,11 @@
+query GetMetaobject($id: ID!) {
+  metaobject(id: $id) {
+    id
+    handle
+    displayName
+    fields {
+      key
+      value
+    }
+  }
+}

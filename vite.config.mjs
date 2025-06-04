@@ -5,7 +5,6 @@ import prefixSelector from "postcss-prefix-selector";
 import fs from "fs";
 import path from "path";
 
-
 function graphqlRawLoader() {
   return {
     name: "vite-plugin-graphql-raw-loader",
@@ -20,7 +19,6 @@ function graphqlRawLoader() {
     },
   };
 }
-
 
 // Related: https://github.com/remix-run/remix/issues/2835#issuecomment-1144102176
 // Replace the HOST env var with SHOPIFY_APP_URL so that it doesn't break the remix server. The CLI will eventually
@@ -54,7 +52,31 @@ if (host === "localhost") {
   };
 }
 
+// 2. Ignorer les sélecteurs non préfixables ou globaux
+const invalidSelectors = [
+  "html",
+  "body",
+  ":root",
+  ":host",
+  "::", // pseudo-elements comme ::before ou ::view-transition-new
+];
+
 export default defineConfig({
+
+   /* __REACT_DEVTOOLS_GLOBAL_HOOK__: true,
+  __DEV__: true,
+  dev: {
+
+     preTransformRequests: true, // active la pré-transformation des imports directs
+    sourcemap: {
+      js: true,
+      css: false,
+    },
+    sourcemapIgnoreList: (sourcePath) => sourcePath.includes("node_modules"),
+    recoverable: true,
+
+  },*/
+  
   server: {
     port: Number(process.env.PORT || 3000),
     hmr: hmrConfig,
@@ -68,7 +90,7 @@ export default defineConfig({
       ignoredRouteFiles: ["**/.*"],
     }),
     tsconfigPaths(),
- graphqlRawLoader(), // ✅ le vrai, sans compression, sans suppression de \n
+    graphqlRawLoader(), // ✅ le vrai, sans compression, sans suppression de \n
   ],
 
   css: {
@@ -81,14 +103,48 @@ export default defineConfig({
             if (!file || !file.includes(path.join("app", "VPE", "styles"))) {
               return selector;
             }
-            // Ignore html/body/root même dans les VPE styles
+
+            // a. Ignore tous les sélecteurs qui commencent par un élément interdit
             if (
-              selector.startsWith("html") ||
-              selector.startsWith("body") ||
-              selector.startsWith(":root")
+              invalidSelectors.some((invalid) =>
+                selector.startsWith(invalid),
+              ) ||
+              selector.startsWith("@") || // @keyframes, @layer...
+              selector.startsWith("::") || // ::pseudo
+              selector.startsWith(":") // :global, :where, etc. (optionnel selon ton besoin)
             ) {
               return selector;
             }
+
+            // 3. Sinon, on applique le prefix
+            return prefixedSelector;
+          },
+        }),
+
+        prefixSelector({
+          prefix: '[data-cms="index"]',
+          transform: (prefix, selector, prefixedSelector, file) => {
+            // Si ce n'est PAS un VPE style, on ne touche pas
+            if (
+              !file ||
+              !file.includes(path.join("app", "editors", "article", "styles"))
+            ) {
+              return selector;
+            }
+
+            // a. Ignore tous les sélecteurs qui commencent par un élément interdit
+            if (
+              invalidSelectors.some((invalid) =>
+                selector.startsWith(invalid),
+              ) ||
+              selector.startsWith("@") || // @keyframes, @layer...
+              selector.startsWith("::") || // ::pseudo
+              selector.startsWith(":") // :global, :where, etc. (optionnel selon ton besoin)
+            ) {
+              return selector;
+            }
+
+            // 3. Sinon, on applique le prefix
             return prefixedSelector;
           },
         }),
@@ -98,27 +154,47 @@ export default defineConfig({
 
   build: {
     assetsInlineLimit: 0,
-    cssCodeSplit: false, // pour n’avoir qu’un seul CSS aussi
+   cssCodeSplit: true,
     sourcemap: false,
+
+
+
 
     rollupOptions: {
       output: {
+
+        manualChunks(id) {
+        // Tout ce qui est dans node_modules → vendor.js
+        if (id.includes("node_modules")) return "vendor";
+      },
+      // ✅ Un seul fichier par entrée
+
+      chunkFileNames: "[name].js",
+      entryFileNames: "[name].js",
+      assetFileNames: "[name].[ext]",
+
         // 👇 format qui supprime tous les import/export, autoexécuté !
-    
-        manualChunks: undefined, // pas de split
-  
+
+      //  manualChunks: undefined, // pas de split
 
         /*
          preserveModules: false,  // Désactive la préservation des modules pour les regrouper tous dans un seul fichier
           compact: true,  // Active la réduction de taille*/
         footer: 'console.log("Flarome Newsroom - Version 1");', // Ajoute un footer
       },
-    },    // Empêche Rollup de séparer vendor
+    }, // Empêche Rollup de séparer vendor
     preserveEntrySignatures: "strict",
+    minify: "terser",
 
   },
-   minify: "terser",  // minification maximale
-     // 👇 pour désactiver les chunks dynamiques et tout mettre dans un seul fichier
+
+  resolve: {
+    alias: {
+      "~": path.resolve(__dirname, "app"),
+    },
+  },
+
+  // 👇 pour désactiver les chunks dynamiques et tout mettre dans un seul fichier
   brotliSize: false,
   reportCompressedSize: false,
 });
