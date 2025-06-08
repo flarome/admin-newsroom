@@ -53,16 +53,18 @@ fragment ArticleDetailsFragment on Article {
     __typename
   }
 
-  dataJson: metafield(key: "data_json", namespace: "article") {
-    value
-    __typename
-  }
-  contactPresse: metafield(key: "editor", namespace: "contact") {
+
+  adminArticle: metafield(key: "data", namespace: "admin") {
     value
     __typename
   }
 
-  category: metafield(key: "category", namespace: "article") {
+  contactPresse: metafield(key: "press_contacts", namespace: "global") {
+    value
+    __typename
+  }
+
+  category: metafield(key: "category", namespace: "global") {
     value
     __typename
   }

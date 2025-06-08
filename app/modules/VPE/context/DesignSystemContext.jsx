@@ -12,9 +12,13 @@ import React, {
 import { initScrollLockManager } from "../utils/ScrollLockManager";
 import SkeletonApp from "../SkeletonApp";
 import { useAppBridge } from "@shopify/app-bridge-react";
+import { createAppStore, defaultAppState, appStoreContext } from "../store";
+import { usePropsContext } from "./PropsContext";
 const DesignSystemContext = createContext(null);
 
 export function DesignSystemProvider({ themes = [], children }) {
+  const { ui: initialUi, initialHistory: _initialHistory } = usePropsContext();
+
   const shopify = useAppBridge();
 
   const [mounted, setMounted] = useState(false);
@@ -95,7 +99,56 @@ export function DesignSystemProvider({ themes = [], children }) {
     shopify.toast.show("Changements enregistrés.");
   };
 
-  return (
+  const [generatedAppState] =
+    useState
+    (() => {
+      const initial = { ...defaultAppState.ui, ...initialUi };
+
+      const newAppState = {
+        ...defaultAppState,
+        ui: {
+          ...initial,
+        },
+      };
+
+      return newAppState;
+    });
+
+  const { appendData = true } = _initialHistory || {};
+
+  const [blendedHistories] = useState(
+    [
+      ...(_initialHistory?.histories || []),
+      ...(appendData ? [{ state: generatedAppState }] : []),
+    ].map((history) => {
+      // Inject default data to enable partial history injections
+      let newState = { ...generatedAppState, ...history.state };
+
+      return {
+        ...history,
+        state: newState,
+      };
+    }),
+  );
+
+  const initialHistoryIndex =
+    _initialHistory?.index || blendedHistories.length - 1;
+  const initialAppState = blendedHistories[initialHistoryIndex].state;
+
+  const generateAppStore = useCallback(
+    (state) => {
+      return {
+        state,
+      };
+    },
+    [initialAppState],
+  );
+
+  const [appStore] = useState(() =>
+    createAppStore(generateAppStore(initialAppState)),
+  );
+
+  return (<appStoreContext.Provider value={appStore}>
     <DesignSystemContext.Provider
       value={{
         portalRef,
@@ -137,6 +190,7 @@ export function DesignSystemProvider({ themes = [], children }) {
         </div>
       </div>
     </DesignSystemContext.Provider>
+    </appStoreContext.Provider>
   );
 }
 

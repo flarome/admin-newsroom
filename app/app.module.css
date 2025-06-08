@@ -1,0 +1,14 @@
+
+.ChildContainer {
+    opacity: 1;
+    transition: opacity 50ms;
+    border-radius: var(--p-border-radius-300)
+}
+.loading {
+    position: relative;
+    opacity: 0;
+    pointer-events: none;
+    -webkit-user-select: none;
+    user-select: none;
+    transition: opacity 50ms
+}

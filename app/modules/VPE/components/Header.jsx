@@ -268,7 +268,7 @@ export default function Header({}) {
   const { progress, notifyAll, localeDataModified, themes } = useDesignSystem();
 
 
-  const [themeID, setThemeId] = useState(themes.find((theme) => theme.role === "MAIN").id);
+  const [themeID, setThemeId] = useState(themes.find((theme) => theme.role === "MAIN")?.id);
 
 
   const optionsThemes = (themes || []).map((theme) => ({

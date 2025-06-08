@@ -1,38 +1,46 @@
+import { filterVisibleSectionsWithBlocks } from "../helpers/vpe.js";
 import {
   pagebody_body,
   pagebody_copy,
   pagebody_config,
   pagebody_props,
   pagebody_blocks,
-  pagebody_revert
+
+    imageInline_body,
+  imageInline_copy,
+  imageInline_config,
+  imageInline_props,
+  imageInline_blocks,
 } from "./components/index.js";
 
-export const sections = [
+export const sections = [ 
   {
     title: pagebody_config.title,
     type: pagebody_config.type,
     props: Object.values(pagebody_props),
     blocks: pagebody_blocks,
   },
+    {
+    title: imageInline_config.title,
+    type: imageInline_config.type,
+    props: Object.values(imageInline_props),
+    blocks: imageInline_blocks,  
+  },
 ];
 
+console.log('sections', JSON.stringify(sections, null, 2))
 
-export function revertStructure(bodyStructure) {
-  return bodyStructure.map((sectionData) => {
-    if (sectionData[pagebody_config.type]) {
-      return pagebody_revert(sectionData);
-    }
 
-    return null;
-  }).filter(Boolean);
-}
 
-async function body(sections = []) {
+async function body(filteredSections = []) {
+
   const content =
-    sections?.map((section) => {
+    filteredSections?.map((section) => {
       switch (section.type) {
         case pagebody_config.type:
           return pagebody_body(section);
+                  case imageInline_config.type:
+          return imageInline_body(section);
         default:
           return []; // par sécurité
       }
@@ -41,12 +49,14 @@ async function body(sections = []) {
   return { body: content };
 }
 
-function copy(sections = []) {
+function copy(filteredSections = []) {
   const content =
-    sections?.flatMap((section) => {
+    filteredSections?.flatMap((section) => {
       switch (section.type) {
         case pagebody_config.type:
           return pagebody_copy(section); // retourne un tableau
+             case imageInline_config.type:
+          return imageInline_copy(section);
         default:
           return []; // par sécurité
       }
@@ -57,12 +67,17 @@ function copy(sections = []) {
 
 export default async function generate(data) {
   // Conversion HTML → JSON
-  const { body: bodyData } = await body(data);
 
-  const { copy: copyText } = copy(data);
+  const filteredSections = filterVisibleSectionsWithBlocks(data);
+  const { body: bodyData } = await body(filteredSections);
+  const { copy: copyText } = copy(filteredSections);
 
   return {
-    copyText,
-    body: bodyData,
+    admin: data,
+    history: {},
+    frontend: {
+      copyText,
+      body: bodyData,
+    },
   };
 }

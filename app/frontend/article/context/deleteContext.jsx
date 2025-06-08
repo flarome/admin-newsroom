@@ -16,14 +16,16 @@ export const DeleteModalProvider = ({ isDelete, children }) => {
   const shopify = useAppBridge();
 
   const [open, setOpen] = useState(
-    isDelete || window.location.pathname.endsWith("/delete"),
+    isDelete || typeof window !== "undefined" && window.location.pathname.endsWith("/delete"), 
   );
   const [isLoading, setIsLoading] = useState(false);
 
   const show = useCallback(() => {
+
     setOpen(true);
     shopify.modal.show(id);
 
+    if(typeof window === "undefined") return;
     window.history.pushState({}, "", `${window.location.pathname}/delete`);
   }, [shopify]);
 

@@ -47,8 +47,13 @@ export async function fetchImageBuffer(url) {
       throw new Error(`Format refusé : ${contentType} pour ${url}`);
     }
 
-    const buffer = await response.body.arrayBuffer();
-    return Buffer.from(buffer);
+
+        const arrayBuf = await response.body.arrayBuffer();
+    const buffer = Buffer.from(arrayBuf);
+
+    return { buffer, contentType };
+
+
   })();
 
   // 📌 On stocke même si la promise n’est pas encore résolue (anti-race)

@@ -1,4 +1,4 @@
-import stagedUploadsCreate from "./mutations/stagedUploadsCreate.graphql";
+import stagedUploadsCreate from "../../../mutations/stagedUploadsCreate.graphql";
 import { graphqlRequest } from "../../../lib/client/request";
 
 /**

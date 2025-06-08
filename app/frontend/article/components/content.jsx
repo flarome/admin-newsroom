@@ -2,7 +2,10 @@ import { useController, useFormContext } from "react-hook-form";
 import { MediaCard } from "@shopify/polaris";
 import { useAppBridge } from "@shopify/app-bridge-react";
 import { useState } from "react";
-import { Modal } from "../../../modules/VPE";
+//import { Modal } from "../../../modules/VPE";
+
+
+import {Modal} from '../../../modules/VPE'
 import { useArticle } from "../context/articleContext";
 import { sections as bodySections } from '../../../data/article/input/body'
 import { form as FieldsMap } from "../../../data/article/config/fieldMap";

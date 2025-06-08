@@ -24,13 +24,17 @@ import { fieldPath as TitleFieldPath } from "../title";
 import { fieldPath as metaDescriptionPath } from "./components/metaDescription";
 import { fieldPath as metaTitlePath } from "./components/metaTitle";
 import { fieldPath as handlePath } from "./components/handle";
+import { publishDateFieldPath } from "../visible";
 import _ from "lodash";
+import { getValidDate } from "../../../../utils/date";
+import { formatHandlePrefix } from "../../../../data/article/input/helpers/handle";
+import { toShopifySlug } from "../../../../utils/str";
 
 // ID unique pour le composant Collapsible (accessibilité)
 const collapsibleId = `${prefix}:${getFieldRoot(FormFieldsMap, ["seo"])}:collapsible`;
 
 const Seo = () => {
-  const { article, shop } = useArticle();
+  const { shop } = useArticle();
   const [open, setOpen] = useState(true);
 
   // --- Hooks RHF pour surveiller les champs SEO ---
@@ -38,12 +42,13 @@ const Seo = () => {
   const metaDescription = useWatch({ name: metaDescriptionPath }) || "";
   const handle = useWatch({ name: handlePath }) || "";
   const title = useWatch({ name: TitleFieldPath }) || "";
+  const publishedDate = useWatch({ name: publishDateFieldPath });
+  const validDate = getValidDate(publishedDate);
 
   const blog = useGetBlog();
   const blogHandle = blog?.handle || "";
   const shopUrl = shop.url;
    const shopName = shop.name;
-  const staticArticleHandle = article.handle;
 
   const previewDescription = useMemo(
     () => _.truncate(metaDescription.trim(), { length: 145, omission: "…" }),
@@ -52,10 +57,8 @@ const Seo = () => {
 
   const seoUrl = useMemo(
     () =>
-      `${shopUrl} › blogs › ${blogHandle}${
-        handle || staticArticleHandle ? " › " + (handle || staticArticleHandle) : ""
-      }`,
-    [shopUrl, blogHandle, handle, staticArticleHandle]
+      `${shopUrl} › blogs › ${blogHandle} › ${formatHandlePrefix(validDate)}${handle || toShopifySlug(title)}`,
+    [shopUrl, blogHandle, handle, title]
   );
 
   return (
@@ -90,7 +93,7 @@ const Seo = () => {
                 </BlockStack>
                 <BlockStack gap={{ xs: metaDescription ? "150" : "0" }}>
                   <Text variant="headingLg" as="span">
-                    <span style={{ color: "var(--p-color-text-link)" }}>
+                    <span style={{ color: "var(--p-color-text-link)", wordBreak: "break-all" }}>
                       {metaTitle || title}
                     </span>
                   </Text>

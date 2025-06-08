@@ -5,6 +5,7 @@ import Editor from "../frontend/article";
 import { getShopifyContext } from "../lib/shopify/context.server";
 import { getArticleDetails } from "../.server/article";
 import { useEffect } from "react";
+import App from "..";
 
 // ⬇️ LOADER — charge un article existant ou retourne un template vide si "new"
 export const loader = async ({ request, params }) => {
@@ -26,5 +27,9 @@ export default function ArticleEditorRoute() {
     window.history.replaceState(null, "", window.location.pathname);
   }, []);
 
-  return <Editor data={data} isDelete={false} key={id} />;
+  return (
+    <App>
+      <Editor data={data} isDelete={false} key={id} />
+    </App>
+  );
 }

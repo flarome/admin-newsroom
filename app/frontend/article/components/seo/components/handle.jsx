@@ -1,20 +1,24 @@
 import { memo } from "react";
 import { TextField, FormLayout } from "@shopify/polaris";
-import { Controller, useFormContext } from "react-hook-form";
+import { Controller, useFormContext, useWatch } from "react-hook-form";
 import { prefix } from "../../../config/ids";
 import { form as FormFieldsMap } from "../../../../../data/article/config/fieldMap";
 import { getFieldPath } from "../../../../../utils/getFieldPath";
 import { useGetBlog } from "../../../selectors/blogs";
 import { useGetHandleByTitle } from "../../../selectors/form";
-
+import { publishDateFieldPath } from "../../visible";
+import { getMonth, getValidDate, getYear } from "../../../../../utils/date";
+import { formatHandlePrefix } from "../../../../../data/article/input/helpers/handle";
 // Exemple : ["seo", "urlAnchor"]
 export const fieldPath = getFieldPath(FormFieldsMap, ["seo", "urlAnchor"]);
 
-function SeoHandle() {
+function SeoHandle() { 
   const { control } = useFormContext();
   const blog = useGetBlog();
   const handlePlaceholder = useGetHandleByTitle();
 
+  const publishedDate = useWatch({ name: publishDateFieldPath });
+  const validDate = getValidDate(publishedDate);
   return (
     <FormLayout>
       <Controller
@@ -34,7 +38,7 @@ function SeoHandle() {
             error={error?.message}
             autoComplete="off"
             type="text"
-            prefix={`blogs/${blog.handle || ""}/`}
+            prefix={`blogs/${blog.handle || ""}/${formatHandlePrefix(validDate)}`}
             placeholder={handlePlaceholder}
             clearButton
             onClearButtonClick={() => onChange("")}

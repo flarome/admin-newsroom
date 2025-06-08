@@ -1,0 +1,56 @@
+.Online-Store-UI-NavHeader {
+    border-bottom: var(--p-border-width-025) solid var(--p-color-border-secondary)
+}
+
+
+.Online-Store-UI-NavHeader-Section {
+    --osui_nav-header-section-divider-offset: 0;
+    padding: var(--p-space-200)
+}
+
+.Online-Store-UI-NavHeader-Section+.Online-Store-UI-NavHeader-Section {
+    padding-top: 0
+}
+
+.Online-Store-UI-NavHeader-Section+.Online-Store-UI-NavHeader-Section:before {
+    content: "";
+    display: block;
+    width: 100%;
+    height: var(--p-border-width-025);
+    background-color: var(--p-color-border-secondary);
+    margin-bottom: var(--p-space-200);
+    margin-left: var(--osui_nav-header-section-divider-offset);
+    width: calc(100% - var(--osui_nav-header-section-divider-offset))
+}
+
+.Online-Store-UI-NavHeader-Section:first-child {
+    padding-top: var(--p-space-400)
+}
+
+.Online-Store-UI-NavHeader-Section--alignToActionBar:first-child {
+    padding-top: calc(var(--p-space-300) + var(--p-space-050));
+    padding-bottom: calc(var(--p-space-300) + var(--p-space-050))
+}
+
+.Online-Store-UI-NavHeader-Section--alignToNav {
+    padding-left: 1.75rem
+}
+
+.Online-Store-UI-NavHeader-Section--alignToNav,.Online-Store-UI-NavHeader-Section--alignToNav+.Online-Store-UI-NavHeader-Section {
+    --osui_nav-header-section-divider-offset: calc(1.75rem - var(--p-space-200))
+}
+
+.Online-Store-UI-NavHeader-Section--alignToNav:first-child,.Online-Store-UI-NavHeader-Section--alignToNav+.Online-Store-UI-NavHeader-Section:first-child {
+    padding-left: var(--p-space-400);
+    padding-right: var(--p-space-400)
+}
+
+.Online-Store-UI-NavHeader-Section--dense {
+    padding-left: 0
+}
+
+.Online-Store-UI-NavHeader-Section--dense:first-child,.Online-Store-UI-NavHeader-Section--dense+.Online-Store-UI-NavHeader-Section:first-child {
+    padding-left: 0
+}
+
+

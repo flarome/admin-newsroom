@@ -47,11 +47,8 @@ const allTimeZones = getTimeZones({ includeUtc: true });
 
 
 
-export function isValidDate(value) {
-  if (!value) return false; // null, undefined, '' → ❌
-  const date = value instanceof Date ? value : new Date(value);
-  return date instanceof Date && !isNaN(date.getTime());
-}
+import { isValidDate, getValidDate, dateToLocale } from "../../../utils/date";
+
 function useTimeZoneOptions(selectedDate) {
   return useMemo(() => {
     const date = DateTime.fromJSDate(selectedDate || new Date());
@@ -89,7 +86,8 @@ const DateModal = memo(function DateModal({
   setTimeZone,
   initialDate,
 }) {
-  const { setValue } = useFormContext();
+  const { setValue} = useFormContext();
+
 
   // FORMAT 24/12h STATE
   const [hourFormat, setHourFormat] = useState("24"); // "24" ou "12"
@@ -378,10 +376,15 @@ const DateModal = memo(function DateModal({
 
   const handleValidate = useCallback(() => {
     if (!dateIsValid || !luxonDate) return;
+
+
     setValue(publishDateFieldPath, luxonDate.toJSDate(), {
       shouldValidate: true,
       shouldDirty: true,
     });
+
+
+      
     const now = DateTime.now().setZone(selectedTz);
     setValue(publishedFieldPath, luxonDate <= now, {
       shouldValidate: true,
@@ -607,15 +610,7 @@ const DateModal = memo(function DateModal({
   );
 });
 
-function dateToLocale(date, timeZone) {
-  return DateTime.fromJSDate(date)
-    .setZone(timeZone)
-    .toLocaleString(DateTime.DATETIME_HUGE);
-}
 
-function getValidDate(date) {
-  return isValidDate(date) ? new Date(date) : new Date();
-}
 
 const DateVisibility = () => {
   const shopify = useAppBridge();

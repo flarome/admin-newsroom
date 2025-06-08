@@ -1,0 +1,23 @@
+#app>div {
+    height: 100%
+}
+
+html {
+    --osw-z-index-hidden: -9999;
+    --osw-z-index-iframe-hidden: -1;
+    --osw-z-index-iframe-visible: 1;
+    --osw-z-index-anchor-lines: 2;
+    --osw-z-index-floating-controls: 3;
+    --osw-z-index-tabs-list: 30;
+    --osw-z-index-top-bar: 40;
+    --osw-z-index-top-bar-surface: 41;
+    --osw-z-index-bottom-bar: 50;
+    --osw-z-index-editor: 100;
+    --osw-z-index-base: 10;
+    --osw-z-index-middle: 20;
+    --osw-z-index-top: 30
+}
+
+html {
+    --osw-polaris-text-field-vertical-padding: var(--p-space-150)
+}

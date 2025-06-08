@@ -18,7 +18,7 @@ export async function articleWithFallback(
   if (!operationName) throw new Error("operationName requis");
 
   if (isNew) {
-    const input = await generateArticle(config, fields, isNew, false);
+    const input = await generateArticle(config, fields, isNew, false, variables);
 
     const result = await adminClient.graphql(mutation, {
       ...variables,
@@ -39,7 +39,7 @@ export async function articleWithFallback(
   const fastTimestamp = Date.now();
   const fullTimestamp = fastTimestamp + 1;
 
-  const fastPromise = generateArticle(config, fields, isNew, true)
+  const fastPromise = generateArticle(config, fields, isNew, true, variables)
     .then((fastInput) => {
        
       if (resolved) return null; // ❌ Trop tard → on n'appelle même pas adminClient.graphql
@@ -78,7 +78,7 @@ export async function articleWithFallback(
       return null;
     });
 
-  const fullPromise = generateArticle(config, fields, isNew, false)
+  const fullPromise = generateArticle(config, fields, isNew, false, variables)
     .then((fullInput) => {
       resolved = true; // ⛔ On verrouille ici
 
@@ -134,7 +134,7 @@ export async function articleWithFallback(
   if (wasOverridden) {
    console.warn("⚠️ La fast a été retournée mais la full était plus récente → relance full");
 
-    const fullInput = await generateArticle(config, fields, isNew, false);
+    const fullInput = await generateArticle(config, fields, isNew, false, variables);
     fullInput.metafields = [
       ...(fullInput.metafields || []),
       {

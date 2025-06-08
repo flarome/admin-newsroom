@@ -1,0 +1,37 @@
+
+.SuffixIcon {
+    display: flex;
+    align-items: center
+}
+
+.SuffixIcon>[aria-pressed=true]:not([aria-disabled=true]) svg,.SuffixIcon>[aria-pressed=true]:not([aria-disabled=true]) s-internal-icon {
+    color: var(--p-color-icon-secondary)
+}
+
+.SuffixIcon>[aria-pressed=true] {
+    background-color: initial
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .SuffixIcon>[aria-pressed=true]:hover {
+        color:var(--p-color-text-brand)
+    }
+
+    .SuffixIcon>[aria-pressed=true]:hover svg,.SuffixIcon>[aria-pressed=true]:hover s-internal-icon {
+        color: var(--p-color-text-brand)
+    }
+
+    @media (-ms-high-contrast: active) {
+        .SuffixIcon>[aria-pressed=true]:hover svg,.SuffixIcon>[aria-pressed=true]:hover s-internal-icon {
+            color: var(--p-color-icon-secondary)
+        }
+    }
+
+    .SuffixIcon>[aria-pressed=true]:hover {
+        background-color: var(--p-color-bg-fill-transparent-secondary)
+    }
+}
+
+.SubduedDeleteIcon svg,.SubduedDeleteIcon s-internal-icon {
+    color: var(--p-color-icon-secondary)
+}

@@ -1,0 +1,27 @@
+query ArticleDetails(
+  $articleId: ID!
+  $hasArticleId: Boolean!
+  $blogID: ID!
+) {
+  shop {
+    url
+    __typename
+  }
+
+  blog(id: $blogID) {
+    handle
+    __typename
+  }
+
+  article(id: $articleId) @include(if: $hasArticleId) {
+    ...ArticleDetailsFragment
+    __typename
+  }
+}
+fragment ArticleDetailsFragment on Article {
+  history: metafield(key: "history", namespace: "system") {
+    value
+    __typename
+  }
+  __typename
+}

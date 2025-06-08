@@ -4,6 +4,13 @@ export {
   props as pagebody_props,
   config as pagebody_config,
   blocks as pagebody_blocks,
-  revert as pagebody_revert
-} from "./pagebody/index.js";
+} from "./bodyCopy/index.js";
+
+export {
+  body as imageInline_body,
+  copy as imageInline_copy,
+  props as imageInline_props,
+  config as imageInline_config,
+  blocks as imageInline_blocks,
+} from "./imageInline/index.js";
 

@@ -73,7 +73,8 @@ const previewUrl =
               size="medium"
               accessibilityLabel="Prévisualiser le modèle"
               disabled={!Boolean(previewUrl)}
-              external
+
+            
             />
           </Tooltip>
         </InlineStack>

@@ -1,9 +1,143 @@
-/* If using CSS modules in Remix, make sure you have configured CSS bundling (https://remix.run/docs/en/main/styling/bundling) */
-
-.itemAction {
-  opacity: 0.6;
+:root {
+    --osui-nav-item-interior-padding: var(--p-space-200);
+    --osui_nav-action-connected-button-width: 1.75rem;
+    --osui_nav-action-connected-button-width-slim: 1.25rem;
+    --osui_nav-action-common-prefix-size: 1.25rem;
+    --osui_nav-action-common-prefix-gap: var(--p-space-200);
+    --osui-nav-item-alignment-none: 0;
+    --osui-nav-item-alignment-base-tight: var(--p-space-300);
+    --osui_nav-item-alignment-common-icon: calc(var(--osui_nav-action-common-prefix-size) + var(--osui_nav-action-common-prefix-gap) + var(--osui-nav-item-alignment-base-tight));
+    --osui_nav-item-alignment-common-action-with-icon: calc(var(--osui_nav-action-connected-button-width-slim) + var(--osui_nav-action-common-prefix-size) + var(--osui_nav-action-common-prefix-gap));
+    --osui_nav-item-alignment-nested-offset: var(--p-space-100)
 }
 
-.itemAction:hover {
-  opacity: 1;
+:root[data-support-dnd-across-ancestors=true] .Online-Store-UI-SortableList .Online-Store-UI-SortableList--activeList:after {
+    border: none
+}
+
+.Online-Store-UI-SortableList {
+    --osui_gap-pe-sortable-list: calc(var(--p-space-100)/2);
+    --osui_margin-top-pe-sortable-list-divider: var(--p-space-100);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--p-color-bg-surface);
+    padding-left: var(--osui_padding-left-pe-sortable-list)
+}
+
+@media (max-width: 41.685em) {
+    .Online-Store-UI-SortableList {
+        --osui_nav-action-connected-button-width: var(--osui_size-min-action-mobile);
+        --osui_nav-action-connected-button-width-slim: var(--osui_size-min-action-mobile);
+        --osui_height-nav-action: var(--osui_size-min-action-mobile)
+    }
+}
+
+.Online-Store-UI-SortableList .Online-Store-UI-SortableList li,
+.Online-Store-UI-SortableList li+li {
+    margin-top: var(--osui_gap-pe-sortable-list)
+}
+
+.Online-Store-UI-SortableList > * {
+    -webkit-user-select: none;
+    user-select: none
+}
+
+@media (max-width: 41.685em) {
+    .Online-Store-UI-SortableList {
+        --osui_gap-pe-sortable-list: var(--p-space-200);
+        --osui_margin-top-pe-sortable-list-divider: var(--p-space-300)
+    }
+}
+
+.Online-Store-UI-SortableList + .Online-Store-UI-SortableList:before {
+    content: "";
+    margin: var(--osui_margin-top-pe-sortable-list-divider) var(--p-space-400);
+    height: var(--p-border-width-025);
+    background-color: var(--p-color-border-secondary)
+}
+
+.Online-Store-UI-SortableList .Online-Store-UI-SortableList {
+    background: none
+}
+
+@media (max-width: 41.685em) {
+    .Online-Store-UI-SortableList .Online-Store-UI-SortableList {
+        --osui_gap-pe-sortable-list: var(--p-space-100)
+    }
+
+    .Online-Store-UI-SortableList .Online-Store-UI-SortableList li:first-child {
+        margin-top: var(--osui_gap-pe-sortable-list)
+    }
+}
+
+.Online-Store-UI-SortableList.Online-Store-UI-SortableList--activeList {
+    position: relative
+}
+
+.Online-Store-UI-SortableList.Online-Store-UI-SortableList--activeList:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: var(--p-border-width-025) dashed transparent;
+    border-color: var(--p-color-border-highlight);
+    border-radius: var(--p-border-radius-200)
+}
+
+.Online-Store-UI-SortableList + .Online-Store-UI-SortableList.Online-Store-UI-SortableList.Online-Store-UI-SortableList--activeList:after {
+    top: calc(var(--osui_margin-top-pe-sortable-list-divider)*2);
+    height: calc(100% - var(--osui_margin-top-pe-sortable-list-divider)*2)
+}
+
+.Online-Store-UI-SortableList.Online-Store-UI-SortableList--leftAlignmentNone {
+    --osui_padding-left-pe-sortable-list: var(--osui-nav-item-alignment-spacing-none)
+}
+
+.Online-Store-UI-SortableList.Online-Store-UI-SortableList--leftAlignmentBaseTight {
+    --osui_padding-left-pe-sortable-list: var(--osui-nav-item-alignment-base-tight)
+}
+
+.Online-Store-UI-SortableList .Online-Store-UI-SortableList.Online-Store-UI-SortableList--leftAlignmentBaseTight {
+    --osui_padding-left-pe-sortable-list: calc(var(--osui-nav-item-alignment-base-tight) - var(--osui_nav-item-alignment-nested-offset))
+}
+
+.Online-Store-UI-SortableList.Online-Store-UI-SortableList--leftAlignmentPrefix {
+    --osui_padding-left-pe-sortable-list: var(--osui_nav-action-connected-button-width-slim)
+}
+
+.Online-Store-UI-SortableList .Online-Store-UI-SortableList.Online-Store-UI-SortableList--leftAlignmentPrefix {
+    --osui_padding-left-pe-sortable-list: calc(var(--osui_nav-action-connected-button-width-slim) - var(--osui_nav-item-alignment-nested-offset))
+}
+
+.Online-Store-UI-SortableList.Online-Store-UI-SortableList--leftAlignmentIcon {
+    --osui_padding-left-pe-sortable-list: var(--osui_nav-item-alignment-common-icon)
+}
+
+.Online-Store-UI-SortableList .Online-Store-UI-SortableList.Online-Store-UI-SortableList--leftAlignmentIcon {
+    --osui_padding-left-pe-sortable-list: calc(var(--osui_nav-action-common-prefix-size) - var(--osui_nav-item-alignment-nested-offset))
+}
+
+.Online-Store-UI-SortableList.Online-Store-UI-SortableList--leftAlignmentPrefixWithIcon {
+    --osui_padding-left-pe-sortable-list: var(--osui_nav-item-alignment-common-action-with-icon)
+}
+
+.Online-Store-UI-SortableList .Online-Store-UI-SortableList.Online-Store-UI-SortableList--leftAlignmentPrefixWithIcon {
+    --osui_padding-left-pe-sortable-list: calc(var(--osui_nav-item-alignment-common-action-with-icon) - var(--osui_nav-item-alignment-nested-offset))
+}
+
+.Online-Store-UI-SortableList.Online-Store-UI-SortableList--leftAlignmentCompact {
+    --osui_padding-left-pe-sortable-list: var(--osui_nav-item-alignment-common-action-with-icon)
+}
+
+.Online-Store-UI-SortableList .Online-Store-UI-SortableList.Online-Store-UI-SortableList--leftAlignmentCompact {
+    --osui_padding-left-pe-sortable-list: calc(var(--osui_nav-item-alignment-nested-offset) + var(--osui-nav-item-alignment-base-tight))
+}
+
+:has(.Online-Store-UI-SortableList--activeList) .Online-Store-UI-SortableList:not(.Online-Store-UI-SortableList--activeList) > li > [data-interior] {
+    opacity: .6
 }

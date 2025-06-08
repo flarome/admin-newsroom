@@ -1,10 +1,9 @@
 import { useState, createContext, useContext, useEffect, useMemo } from "react";
 import { ClientOnly } from "remix-utils/client-only";
-import { Fullscreen, History, Modal, Redirect } from "@shopify/app-bridge/actions";
-
-// Composant SkeletonApp à fournir quelque part
-import SkeletonApp from "../states/loading";
-import { useLocation, useNavigation } from "@remix-run/react";
+import {
+  History,
+} from "@shopify/app-bridge/actions";
+import { useLocation } from "@remix-run/react";
 import { useAppBridge } from "@shopify/app-bridge-react";
 import { createApp } from "@shopify/app-bridge";
 
@@ -15,9 +14,8 @@ const ArticleContext = createContext({});
 export function ArticleProvider({ data: p1, children }) {
   const [data, setData] = useState(p1);
 
-
   const location = useLocation();
-  const shopify = useAppBridge()
+  const shopify = useAppBridge();
   const { isNew = false } = location.state || {};
   const [toastShown, setToastShown] = useState(false);
 
@@ -26,18 +24,17 @@ export function ArticleProvider({ data: p1, children }) {
     setToastShown(true);
   }
 
-
- useEffect(() => {
-   const shopify = useAppBridge()
+  useEffect(() => {
+    const shopify = useAppBridge();
     if (!shopify || !location?.pathname) return;
-    window.history.replaceState(null, '', window.location.pathname);
-   const history = History.create(createApp(shopify.config));
+    if (typeof window !== "undefined") {
+      window.history.replaceState(null, "", window.location.pathname);
+    }
+    const history = History.create(createApp(shopify.config));
     history.dispatch(History.Action.REPLACE, location.pathname);
   }, [location?.pathname]);
 
-
-
-    const contextValue = useMemo(() => {
+  const contextValue = useMemo(() => {
     return {
       ...data,
       data,
@@ -45,8 +42,11 @@ export function ArticleProvider({ data: p1, children }) {
     };
   }, [data]);
 
-
- 
+  return (
+    <ArticleContext.Provider value={contextValue}>
+      {children}
+    </ArticleContext.Provider>
+  );
   return (
     <ClientOnly fallback={""}>
       {() => (

@@ -1,6 +1,6 @@
 
 // src/data/sectionCatalog.js
-const settingsData = {
+export const settingsData = {
   hero: {
     img: {
       title: "mon titre perso",
@@ -8,12 +8,12 @@ const settingsData = {
   }, 
 };
 
-export const settingsCatalog = [
+export const SETTINGS_CATALOG = [
   {
     title: "Hero Section",
     name: "hero",
     props: [
-         {
+         { 
             name: "title",
             type: "plainText",
             label: "Title",
@@ -338,11 +338,10 @@ export const settingsCatalog = [
       },
     ],
   },
-];
+]; 
 
-export const SECTION_CATALOG = [
 
-  
+const SECTION_CATALOG =  [ 
   {
     title: "Hero Section",
     type: "hero",
@@ -438,17 +437,12 @@ export const SECTION_CATALOG = [
   },
 ];
 
-// data/sectionCatalogs.js
-export const HEADER_SECTION_CATALOG = SECTION_CATALOG;
-export const MAIN_SECTION_CATALOG = SECTION_CATALOG;
-export const FOOTER_SECTION_CATALOG = SECTION_CATALOG;
-export const MODEL_SECTION_CATALOG = SECTION_CATALOG;
 
-export const data = {
+export const sectionsData = {
   header: [
     {
       title: "Hero Section",
-      type: "hero",
+      type: "hero", 
       visible: true,
       blocks: [
         {
@@ -491,10 +485,8 @@ export const data = {
   // Ajoute ici tes groupes custom
 };
 
-export const catalog = {
-  header: HEADER_SECTION_CATALOG,
-  main: HEADER_SECTION_CATALOG,
-  footer: HEADER_SECTION_CATALOG,
-  modele: HEADER_SECTION_CATALOG,
+export const SECTIONS_CATALOG = {
+  header: { label: "header", sections: SECTION_CATALOG },
+   body: { label: "body", sections: SECTION_CATALOG },
   // Ajoute ici tes groupes custom
 };

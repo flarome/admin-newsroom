@@ -14,7 +14,7 @@ function SeoRedirectCheckbox() {
   const { article } = useArticle();
   const { control, setValue } = useFormContext();
 
-  const staticArticleHandle = article.handle;
+  const staticArticleHandle = article.handleWithOutDate;
   const formHandle = useWatch({ name: handleFieldPath }) || "";
    const field = useWatch({ name: fieldPath }) || "";
 

@@ -1,146 +1,115 @@
-import {
-    BlockStack,
-    Card,
-    ResourceList,
-    Text,
-    ResourceItem,
-    Avatar,
-    Box,
-    InlineStack,
-    Badge,
-    Button
-  } from '@shopify/polaris';
-  import { DragHandleIcon, XIcon } from '@shopify/polaris-icons';
-  import {
-    DndContext,
-    closestCenter,
-    KeyboardSensor,
-    PointerSensor,
-    useSensor,
-    useSensors
-  } from '@dnd-kit/core';
-  import {
-    arrayMove,
-    SortableContext,
-    sortableKeyboardCoordinates,
-    verticalListSortingStrategy,
-    useSortable
-  } from '@dnd-kit/sortable';
-  import { restrictToVerticalAxis, restrictToParentElement } from '@dnd-kit/modifiers';
-  import styles from './SortableList.module.css';
-  
-  const Item = ({ id, title, status }) => {
-    const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
-      id
-    });
-  
-    const tone = status === 'active' ? 'success' : status === 'draft' ? 'info' : undefined;
-  
-    const style = {
-      ...(transform
-        ? {
-            transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-            transition
-          }
-        : {}),
-      zIndex: isDragging ? 1000 : 0,
-      position: 'relative'
-    };
-  
-    return (
-      <div style={style} ref={setNodeRef}>
-        <ResourceItem
-          id={id}
-          accessibilityLabel={`View details for ${title}`}
-          onClick={() => console.log('Handle item click')}
+import { DragDropProvider } from "@dnd-kit/react";
+import { useSensors } from "../lib/dnd/use-sensors";
+import { createDynamicCollisionDetector } from "../lib/dnd/collision/dynamic";
+import { useSortable } from "@dnd-kit/react/sortable";
+import getClassNameFactory from "../../../lib/get-class-name-factory";
+
+import styles from "../styles/SortableList.module.css";
+import { useState } from "react";
+
+const getListClassName = getClassNameFactory(
+  "Online-Store-UI-SortableList",
+  styles,
+);
+
+export const SortableList = ({ children, listOptions = {}, ...props }) => {
+  return (
+    <SortableProvider {...props}>
+      {(isDragging) => (
+        <ol
+          className={getListClassName({ ...listOptions, activeList: isDragging })}
         >
-          <InlineStack align='space-between' blockAlign='center'>
-            <InlineStack gap='400' blockAlign='center'>
-              {/* Build your own implementation of the ResourceItem, but preserve this drag handle div as the first item in the InlineStack */}
-              <div
-                {...attributes}
-                {...listeners}
-                onClick={(e) => e.stopPropagation()}
-                className={styles.itemAction}
-                style={{ touchAction: 'none' }} // Prevents page scrolling on mobile touch
-              >
-                <DragHandleIcon width='20' height='20' />
-              </div>
-              {/* Don't use `media` prop of ResourceItem, if you need to you can place your Avatar or Image here instead after the DragHandler */}
-              <Avatar size='md' name={title} />
-              <Text variant='bodyMd' as='h3'>
-                {title}
-              </Text>
-            </InlineStack>
-            <InlineStack gap='400'>
-              <Badge tone={tone} size='small'>
-                {`${status.charAt(0).toUpperCase()}${status.slice(1)}`}
-              </Badge>
-              <div
-                style={{ width: 20, height: 20 }}
-                className={styles.itemAction}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  console.log('Remove Item');
-                }}
-              >
-                <Button icon={XIcon} variant='monochromePlain'></Button>
-              </div>
-            </InlineStack>
-          </InlineStack>
-        </ResourceItem>
-      </div>
-    );
-  };
-  
-  export const SortableList = ({ items, setItems }) => {
-    const sensors = useSensors(
-      useSensor(PointerSensor),
-      useSensor(KeyboardSensor, {
-        coordinateGetter: sortableKeyboardCoordinates
-      })
-    );
-  
-    const handleDragEnd = (event) => {
-      const { active, over } = event;
-  
-      if (active.id !== over.id) {
-        // Updates items in state, add additional update handler logic here (e.g. API calls, toasts, etc.)
-        setItems((items) => {
-          const oldIndex = items.findIndex((item) => item.id === active.id);
-          const newIndex = items.findIndex((item) => item.id === over.id);
-          const updatedItems = arrayMove(items, oldIndex, newIndex);
-  
-          return updatedItems;
-        });
-      }
-    };
-  
-    return (
-      <Card padding='0'>
-        <BlockStack gap='300'>
-          <Box paddingBlockStart='300' paddingInlineStart='300' zIndex='100'>
-            <Text as='h3' variant='headingSm'>
-              Sortable Products
-            </Text>
-          </Box>
-          <DndContext
-            sensors={sensors}
-            collisionDetection={closestCenter}
-            onDragEnd={handleDragEnd}
-            modifiers={[restrictToVerticalAxis, restrictToParentElement]}
-          >
-            <SortableContext items={items} strategy={verticalListSortingStrategy}>
-              <ResourceList
-                resourceName={{ singular: 'customer', plural: 'customers' }}
-                items={items}
-                renderItem={(item) => {
-                  return <Item {...item} />;
-                }}
-              />
-            </SortableContext>
-          </DndContext>
-        </BlockStack>
-      </Card>
-    );
-  };
+          {children}
+        </ol>
+      )}
+    </SortableProvider>
+  );
+};
+
+
+export const SortableProvider = ({
+  children,
+  onDragStart,
+  onDragEnd,
+  onMove,
+}) => {
+  const sensors = useSensors({
+    mouse: { distance: { value: 5 } },
+  });
+
+    const [isDragging, setIsDragging] = useState(false);
+
+  return (
+    <DragDropProvider
+      sensors={sensors}
+      onDragStart={(event) => {
+          setIsDragging(true);
+        const id = event.operation?.source?.id?.toString?.() ?? "";
+        onDragStart(id);
+      }}
+      onDragOver={(event, manager) => {
+        event.preventDefault();
+
+        const { operation } = event;
+        const { source, target } = operation || {};
+
+        if (!source || !target) return;
+
+        let sourceIndex = source.data.index;
+        let targetIndex = target.data.index;
+
+        const collisionData = manager?.collisionObserver?.collisions?.[0]?.data;
+        const direction = collisionData?.direction;
+
+        if (sourceIndex !== targetIndex && source.id !== target.id) {
+          const collisionPosition = direction === "up" ? "before" : "after";
+
+          if (targetIndex >= sourceIndex) {
+            targetIndex = targetIndex - 1;
+          }
+
+          if (collisionPosition === "after") {
+            targetIndex = targetIndex + 1;
+          }
+
+          onMove({
+            source: sourceIndex,
+            target: targetIndex,
+          });
+        }
+      }}
+      onDragEnd={() => {
+        setTimeout(() => {
+          setIsDragging(false);
+          onDragEnd();
+        }, 250);
+      }}
+    >
+      {typeof children === "function" ? children(isDragging) : children}
+    </DragDropProvider>
+  );
+};
+
+
+export const Sortable = ({ id, index, disabled, children, type = "item" }) => {
+  const {
+    ref: sortableRef,
+    isDragging,
+    isDropping,
+    handleRef,
+  } = useSortable({
+    id,
+    type,
+    index,
+    disabled,
+    data: { index },
+    collisionDetector: createDynamicCollisionDetector("y"),
+  });
+
+  return children({
+    isDragging,
+    isDropping,
+    ref: sortableRef,
+    handleRef,
+  });
+};

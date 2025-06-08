@@ -683,8 +683,8 @@ export function SectionsProvider({ children, data, catalog, onChange }) {
             item.type,
           type: item.type,
           visible: item.visible ?? true,
-          props: resolveProps(item.type, item.values, normalizedCatalog[group]?.sections),
-          blocks: resolveBlocks(item.type, item.blocks || [], normalizedCatalog[group]?.sections),
+          props: resolveProps(item.type, item.values, normalizedCatalog[group]?.sections || []),
+          blocks: resolveBlocks(item.type, item.blocks || [], normalizedCatalog[group]?.sections || []),
         })),
       ])
     );

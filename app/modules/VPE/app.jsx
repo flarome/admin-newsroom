@@ -26,6 +26,9 @@ import Header from "./components/Header";
 import Preview from "./components/Preview";
 import ActionBar from "./components/ActionBar";
 
+
+import {SECTIONS_CATALOG, SETTINGS_CATALOG} from './test/data'
+import { PropsProvider } from "./context/PropsContext";
 // ------ LAYOUT -------
 function Layout({}) {
   const { mode } = usePreview();
@@ -83,7 +86,7 @@ const App = memo(function App({ onReady, sections, settings, sectionsCatalog, se
         data={sections}
         onChange={onSectionsChange}
       >
-        <PreviewProvider>
+        <PreviewProvider> 
           <Layout />
         </PreviewProvider>
       </SectionsProvider>
@@ -92,21 +95,25 @@ const App = memo(function App({ onReady, sections, settings, sectionsCatalog, se
   );
 });
 
-const Main = memo(function Main({ open = true, sections, settings, sectionsCatalog, settingsCatalog, onSectionsChange, onSettingsChange, themes }) {
-  const [alreadyOpen, setAlreadyOpen] = useState(false);
+const Main = memo(function Main({ sections = {}, settings = {}, sectionsCatalog = SECTIONS_CATALOG, settingsCatalog = SETTINGS_CATALOG, onSectionsChange = () => "", onSettingsChange = () => "", themes = [] , ...props}) {
+ /* const [alreadyOpen, setAlreadyOpen] = useState(false);
 
   if (!open && !alreadyOpen) return null;
 
   if (!alreadyOpen) {
     setAlreadyOpen(true);
   }
+ */
  
-
   return (
     <div data-cms="vpe">
+<PropsProvider {...props}>
+
+
         <DesignSystemProvider themes={themes}>
           <App sections={sections} settings={settings} sectionsCatalog={sectionsCatalog} settingsCatalog={settingsCatalog} onSectionsChange={onSectionsChange} onSettingsChange={onSettingsChange} />
         </DesignSystemProvider>
+        </PropsProvider>
     </div>
   );
 });

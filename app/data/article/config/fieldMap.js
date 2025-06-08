@@ -5,7 +5,7 @@ import { flattenWithRoot } from "../../../utils/buildFieldsMap";
 export const form = {
   category: "category",
   publishDate: "date",
-  published: "isPublished", 
+  published: "isPublished",
   title: "headline",
   subTitle: "subhead",
   blogId: "blogId",
@@ -40,7 +40,6 @@ export const form = {
             {
               square: "square",
               landscape: "landscape",
-              big: "big",
               portrait: "portrait",
             },
             "srcs",
@@ -54,6 +53,3 @@ export const form = {
   ),
   // ... etc
 };
-
-
-

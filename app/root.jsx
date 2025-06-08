@@ -12,6 +12,7 @@ import {
 
 import P404 from "./frontend/404";
 import styles from "./frontend/404/styles/styles.css?url"
+
 export default function App() {
   return (
     <html lang="fr-FR" dir="ltr">

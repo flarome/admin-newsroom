@@ -68,18 +68,13 @@ export const mainImage_Srcs_LandscapeFieldPath = getFieldPath(formFieldMap, [
   "srcs",
   "landscape",
 ]);
-export const mainImage_Srcs_BigFieldPath = getFieldPath(formFieldMap, [
-  "mainMedias",
-  "image",
-  "srcs",
-  "big",
-]);
 export const mainImage_Srcs_PortraitFieldPath = getFieldPath(formFieldMap, [
   "mainMedias",
   "image",
   "srcs",
   "portrait",
 ]);
+
 
 const modalId = `${mainImagePrefix}:${getFieldRoot(formFieldMap.mainMedias.image)}`;
 
@@ -262,10 +257,13 @@ export const Srcs = ({ name, label, helpText, id, control }) => {
 };
 
 const requireImage = [
+      mainImage_Srcs_LandscapeFieldPath,
+      mainImage_Srcs_SquareFieldPath,
   mainImage_Srcs_PortraitFieldPath,
-  mainImage_Srcs_LandscapeFieldPath,
-  mainImage_Srcs_BigFieldPath,
-  mainImage_Srcs_SquareFieldPath,
+
+
+
+
 ];
 
 const globalFieldPaths = requireImage.concat([
@@ -274,8 +272,7 @@ const globalFieldPaths = requireImage.concat([
 ]);
 
 function getLabelFromPath(path) {
-  if (path === mainImage_Srcs_LandscapeFieldPath) return "Paysage";
-  if (path === mainImage_Srcs_BigFieldPath) return "Big";
+  if (path === mainImage_Srcs_LandscapeFieldPath) return "Paysage (source)";
   if (path === mainImage_Srcs_PortraitFieldPath) return "Portrait";
   if (path === mainImage_Srcs_SquareFieldPath) return "Carrée";
   return "Image";
@@ -283,13 +280,11 @@ function getLabelFromPath(path) {
 
 function getHelpTextFromPath(path) {
   if (path === mainImage_Srcs_LandscapeFieldPath)
-    return "960×1200 px recommandé (4:5)";
-  if (path === mainImage_Srcs_BigFieldPath)
-    return "1600×900 px recommandé (16:9)";
+    return "3840x2160px recommandé (16:9)";
   if (path === mainImage_Srcs_PortraitFieldPath)
-    return "2400×1260 px recommandé (2:1)";
+    return "2400×3000 px recommandé (4:5)";
   if (path === mainImage_Srcs_SquareFieldPath)
-    return "1200×1200 px recommandé (1:1)";
+    return "2048×2048 px recommandé (1:1)";
   return "";
 }
 
@@ -469,7 +464,7 @@ const ImageModal = ({ open: modalOpen, onClose }) => {
   );
 };
 
-const MainImage = () => {
+const MainImage = () => { 
   const { setValue, watch } = useFormContext();
   const shopify = useAppBridge();
   const [modalOpen, setModalOpen] = useState(false);
@@ -490,45 +485,20 @@ const MainImage = () => {
   const imagePreview = useMemo(() => {
     if (!file) return null;
 
-    if (typeof file === "string") {
-      return (
+
+       return (
         <button
           type="button"
           onClick={handleModalOpen}
           className="_ImageContainerClickable_t82h6_28"
         >
           <div className="_ImageContainerWrapper_t82h6_5">
-            <img className="_ImageElement_t82h6_40" src={file} alt="" />
+            <img className="_ImageElement_t82h6_40" src={typeof file === "string" ? file : window?.URL?.createObjectURL(file)} alt="" />
           </div>
         </button>
       );
-    }
 
-    return (
-      <InlineStack gap={{ xs: "200" }}>
-        <Thumbnail
-          alt={file.name}
-          size="small"
-          source={window?.URL?.createObjectURL(file)}
-        />
-        <Box
-          paddingBlock="50"
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            minHeight: "3rem", // correspond à la hauteur du thumbnail "small"
-          }}
-        >
-          <Text as="p" variant="bodySm">
-            {file.name}
-          </Text>
-          <Text as="p" variant="bodySm" tone="subdued">
-            {(file.size / 1024).toFixed(1)} Ko
-          </Text>
-        </Box>
-      </InlineStack>
-    );
+
   }, [file]);
 
   const handleDeleteImage = useCallback(() => {

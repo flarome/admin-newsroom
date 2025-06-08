@@ -2,7 +2,7 @@
 import { ArticleProvider } from "./context/articleContext";
 
 // states
-import App from "./states/app";
+import App from "./app";
 
 import "./styles/main.css";
 import "./styles/render.css";

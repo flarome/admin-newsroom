@@ -38,7 +38,7 @@ const BannerList = ({ banners }) => {
         console.warn("Navigation bloquée par Shopify SaveBar", err);
       });
     },
-    [shopify.saveBar.leaveConfirmation, navigate],
+    [shopify, navigate],
   );
   
 

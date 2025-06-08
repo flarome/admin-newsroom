@@ -1,29 +1,8 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSectionGroup } from "../context/SectionGroupContext";
 
 import { PopoverProvider, usePopover } from "../context/PopoverContext";
 import { Popover, PopoverWithReference } from "../providerElements/popover";
-
-
-import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-} from "@dnd-kit/core";
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
-  useSortable,
-} from "@dnd-kit/sortable";
-import {
-  restrictToVerticalAxis,
-  restrictToParentElement,
-} from "@dnd-kit/modifiers";
 
 import {
   TextField,
@@ -37,9 +16,9 @@ import {
   OptionList,
 } from "@shopify/polaris";
 import {
-  ArrowLeftIcon,
   CaretDownIcon,
-  CaretUpIcon,
+  ChevronDownIcon,
+ChevronLeftIcon,
   DeleteIcon,
   DragHandleIcon,
   HideIcon,
@@ -49,134 +28,75 @@ import {
   ViewIcon,
 } from "@shopify/polaris-icons";
 
-import { CSS } from "@dnd-kit/utilities";
+import { SortableProvider, Sortable, SortableList } from "../sortable";
 
+import navItemsStyles from "../styles/NavItem.module.css";
+import EditorStyles from "../styles/Editor.module.css";
+import DisclosureStyles from "../styles/Disclosure.module.css";
+import getClassNameFactory from "../../../lib/get-class-name-factory";
+import PlainActionStyles from "../styles/PlainAction.module.css";
+import SortableListStyles from "../styles/SortableList.module.css";
 
-const frameTransform = (el) => {
-  const rect = el.getBoundingClientRect();
-  const style = getComputedStyle(el);
-  return {
-    scaleX: parseFloat(style.scale?.split(" ")[0]) || 1,
-    scaleY: parseFloat(style.scale?.split(" ")[1]) || 1,
-    x: rect.left,
-    y: rect.top,
-  };
-};
+const getNavItemClassName = getClassNameFactory(
+  "Online-Store-UI-NavItem",
+  navItemsStyles,
+);
+ 
+const getPlainActioClassName = getClassNameFactory(
+  "Online-Store-UI-PlainAction",
+  PlainActionStyles,
+);
 
-const parseTranslate = (value) => {
-  if (!value || value === "none") return null;
-  const match = value.match(/([-+]?\d*\.?\d+)px[, ]+([-+]?\d*\.?\d+)px/);
-  if (!match) return null;
-  return { x: parseFloat(match[1]), y: parseFloat(match[2]) };
-};
-
+const getSortableListClassName = getClassNameFactory(
+  "Online-Store-UI-SortableList",
+  SortableListStyles,
+);
 
 function SortableItem({ id, children }) {
-
-
-    const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
-      id
-    });
-
-
-
-      const ref = useRef(null);
-if (ref.current && isDragging) {
-    const m = ref.current;
-    const g = frameTransform(m.offsetParent || document.body);
-    const S = frameTransform(m);
-
-    let { width: E, height: N, top: I, left: P } = m.getBoundingClientRect();
-
-    const y = m.offsetParent !== m;
-    const O = {
-      x: S.scaleX / g.scaleX,
-      y: S.scaleY / g.scaleY,
-    };
-
-    if (y) {
-      E = E / O.x;
-      N = N / O.y;
-    }
-
-    const style = getComputedStyle(m);
-    const boxSizing = style.boxSizing;
-    const K = boxSizing === "content-box";
-
-    const X = K ?
-      parseInt(style.paddingLeft) + parseInt(style.paddingRight) +
-      parseInt(style.borderLeftWidth) + parseInt(style.borderRightWidth)
-      : 0;
-    const Y = K ?
-      parseInt(style.paddingTop) + parseInt(style.paddingBottom) +
-      parseInt(style.borderTopWidth) + parseInt(style.borderBottomWidth)
-      : 0;
-
-    const activatorEvent = window.__lastDndEvent || { clientX: I + E / 2, clientY: I + N / 2 };
-
-    const transformOrigin = {
-      x: (activatorEvent.clientX - P * g.scaleX - g.x) / (E * g.scaleX),
-      y: (activatorEvent.clientY - I * g.scaleY - g.y) / (N * g.scaleY),
-    };
-
-    const _e = I * g.scaleY + g.y;
-    const le = P * g.scaleX + g.x;
-    const coordinates = { x: le, y: _e };
-
-    if (O.x !== 1 || O.y !== 1) {
-      coordinates.x += (E * S.scaleX - E) * transformOrigin.x;
-      coordinates.y += (N * S.scaleY - N) * transformOrigin.y;
-    }
-
-    const ce = {
-      x: coordinates.x - le,
-      y: coordinates.y - _e,
-    };
-
-    const Te = {
-      width: (E * O.x - E * g.scaleX) * transformOrigin.x,
-      height: (N * O.y - N * g.scaleY) * transformOrigin.y,
-    };
-
-    const xe = {
-      x: ce.x / g.scaleX + Te.width,
-      y: ce.y / g.scaleY + Te.height,
-    };
-
-    const Ve = {
-      left: P + xe.x,
-      top: I + xe.y,
-    };
-
-    const rawTranslate = parseTranslate(style.translate);
-    const translateX = transform?.x * g.scaleX + (rawTranslate?.x || 0);
-    const translateY = transform?.y * g.scaleY + (rawTranslate?.y || 0);
-
-    m.style.setProperty("--dnd-width", `${E - X}px`);
-    m.style.setProperty("--dnd-height", `${N - Y}px`);
-    m.style.setProperty("--dnd-left", `${Ve.left}px`);
-    m.style.setProperty("--dnd-top", `${Ve.top}px`);
-    m.style.setProperty("--dnd-translate", `${translateX}px ${translateY}px`);
-    m.style.setProperty("--dnd-transition", transition || "translate 0ms linear");
-    m.style.setProperty("--dnd-transform-origin", `${transformOrigin.x * 100}% ${transformOrigin.y * 100}%`);
-  }
-
-
-
-
   return (
+    <Sortable key={id} id={id} index={id} disabled={false}>
+      {({ isDragging, ref, handleRef }) => (
+        <div ref={ref} className={""}>
+          <div
+            ref={handleRef}
+            onClick={(e) => {
+              if (isDragging) return;
 
-   
+              e.preventDefault();
+              e.stopPropagation();
 
+              if (arrayState.openId === _arrayId) {
+                setUi(
+                  mapArrayStateToUi({
+                    openId: "",
+                  }),
+                );
+              } else {
+                setUi(
+                  mapArrayStateToUi({
+                    openId: _arrayId,
+                  }),
+                );
+              }
+            }}
+          >
+            <div>
+              <div>
+                <div></div>
+                <div></div>
+              </div>
 
-    <div className="Online-Store-UI-NavItem__Interior_1y0gz Online-Store-UI-NavItem--fleeting_1094b"  {...(isDragging ? { 'data-dnd-dragging': "" } : {})}  data-interior="true"      ref={(el) => {
-        setNodeRef(el);
-        ref.current = el;
-      }}   {...attributes}
-                {...listeners}
-                onClick={(e) => e.stopPropagation()}>
-      {children}
-    </div>
+              <div>
+                <svg viewBox="0 0 20 20" width="12" fill="currentColor">
+                  <path d="M7 2a2 2 0 1 0 .001 4.001A2 2 0 0 0 7 2zm0 6a2 2 0 1 0 .001 4.001A2 2 0 0 0 7 8zm0 6a2 2 0 1 0 .001 4.001A2 2 0 0 0 7 14zm6-8a2 2 0 1 0-.001-4.001A2 2 0 0 0 13 6zm0 2a2 2 0 1 0 .001 4.001A2 2 0 0 0 13 8zm0 6a2 2 0 1 0 .001 4.001A2 2 0 0 0 13 14z"></path>
+                </svg>
+              </div>
+            </div>
+          </div>
+          {children}
+        </div>
+      )}
+    </Sortable>
   );
 }
 const Block = ({ section, block }) => {
@@ -392,7 +312,7 @@ export function ListPopover({ items, onSelect }) {
 }
 
 // Exemple d'intégration dans une section
-const Section = ({ section, blocksLibs }) => {
+const Section = ({ section, blocksLibs, handleRef, isDragging, refDrag }) => {
   const {
     removeSection,
     setAddBetweenBlock,
@@ -402,14 +322,7 @@ const Section = ({ section, blocksLibs }) => {
     sectionHasProps,
   } = useSectionGroup();
 
-  const {
-    open,
-    setOpen,
-    referenceRef,
-    setReference,
-    addClickReference,
-    popoverId,
-  } = usePopover();
+  const { setOpen } = usePopover();
 
   const [collapse, setCollapse] = useState(true);
 
@@ -419,35 +332,41 @@ const Section = ({ section, blocksLibs }) => {
 
   const hasBlockLibs = blocksLibs?.length > 0 ? true : false;
 
+  const [hover, setHover] = useState(false);
   return (
     <>
-      <SortableItem
-   
-        id={`${section.id}`}
+      <div
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+        ref={refDrag}
+        className={`${navItemsStyles["Online-Store-UI-NavItem__Interior"]} ${getNavItemClassName({ fleeting: true }, false)}`}
+        data-interior="true"
       >
         {sectionHasProps(section.type) && (
           <button
             onClick={() => openAnSection(section.id)}
             type="button"
             onPointerDown={(e) => e.stopPropagation()}
-            className="Online-Store-UI-NavItem__PrimaryAction_1r8fd"
-            aria-labelledby="template--15819007328317__image_banner-label"
-          ></button>
+            className={navItemsStyles["Online-Store-UI-NavItem__PrimaryAction"]}
+          />
         )}
 
         {hasBlockLibs && (
-          <span className="Online-Store-UI-NavItem__Prefix_s4mxt">
+          <span className={navItemsStyles["Online-Store-UI-NavItem__Prefix"]}>
             <div>
               <button
                 onClick={toggleCollapse}
                 type="button"
-                className="Online-Store-UI-Disclosure__DisclosureAction_z495j"
+                className={
+                  DisclosureStyles[
+                    "Online-Store-UI-Disclosure__DisclosureAction"
+                  ]
+                }
                 aria-label="Ouvrir le menu des sous-éléments"
-                aria-controls="Collapsible-template--15819007328317__image_banner"
-                aria-expanded="true"
+                aria-expanded={collapse}
               >
                 <Icon
-                  source={collapse ? CaretDownIcon : CaretUpIcon}
+                  source={CaretDownIcon}
                   tone="legacy-inherit"
                 />
               </button>
@@ -456,30 +375,42 @@ const Section = ({ section, blocksLibs }) => {
         )}
 
         <span
-          className={
-            hasBlockLibs
-              ? "Online-Store-UI-NavItem__TitleContent_gfudd Online-Store-UI-NavItem--itemHasPrefix_1sy3u Online-Store-UI-NavItem--labelAlignmentNone_13syg"
-              : "Online-Store-UI-NavItem__TitleContent_gfudd Online-Store-UI-NavItem--labelAlignmentPrefix_hh0c3"
-          }
+          className={`${navItemsStyles["Online-Store-UI-NavItem__TitleContent"]} ${getNavItemClassName(
+            {
+              hasPreventFleeting: true,
+              itemHasPrefix: hasBlockLibs,
+              labelAlignmentNone: hasBlockLibs,
+              labelAlignmentPrefix: !hasBlockLibs,
+            },
+            false,
+          )}
+       `}
         >
-          <div className="Online-Store-UI-NavItem__LabelPrefix_1jhe5 Online-Store-UI-NavItem--hasHoverPrefix_1blo3 Online-Store-UI-NavItem--hasDefaultPrefix_1gvwn">
-            <span className="Online-Store-UI-NavItem__HoverPrefix_1jttz">
+          <div
+            className={`${navItemsStyles["Online-Store-UI-NavItem__LabelPrefix"]} ${getNavItemClassName({ showHoverPrefix: hover, hasHoverPrefix: true, hasDefaultPrefix: true }, false)}`}
+          >
+            <span
+              className={navItemsStyles["Online-Store-UI-NavItem__HoverPrefix"]}
+            >
               <div className="Online-Store-UI-DragHandle__DragContainer_rlftj">
                 <button
-                  type="button"
                   className="Online-Store-UI-DragHandle_1pyd3 Online-Store-UI-DragHandle--sizeSlim_1fq16"
                   aria-label="Réorganiser l'ordre d'apparition de « Bannière avec image » dans la liste"
-                  aria-pressed="false"
-                  aria-roledescription="draggable"
-                  aria-describedby="dnd-kit-description-11"
-                  aria-grabbed="false"
-                  aria-disabled="false"
+                  ref={handleRef}
+                  onClick={(e) => {
+                    if (isDragging) return;
+
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
                 >
                   <Icon source={DragHandleIcon} tone="legacy-inherit" />
                 </button>
               </div>
             </span>
-            <span className="Online-Store-UI-NavItem__TitlePrefix_1jcka">
+            <span
+              className={navItemsStyles["Online-Store-UI-NavItem__TitlePrefix"]}
+            >
               <div className="Online-Store-UI-ResourceThumbnail_14771 Online-Store-UI-ResourceThumbnail--typeIcon_cfz9b">
                 <span className="Polaris-Icon">
                   <svg
@@ -519,12 +450,18 @@ const Section = ({ section, blocksLibs }) => {
           </span>
         </span>
 
-        <span className="Online-Store-UI-NavItem__Suffix_s4mtm">
+        <span className={navItemsStyles["Online-Store-UI-NavItem__Suffix"]}>
           {sectionIsDelectable(section.id) && (
-            <div className="_SuffixIcon_17ht1_9">
+            <div
+              className={`${EditorStyles["SuffixIcon"]} ${EditorStyles["SubduedDeleteIcon"]}`}
+            >
               <button
                 onClick={() => removeSection(section.id)}
-                className="Online-Store-UI-PlainAction_1jhib Online-Store-UI-PlainAction--fontSizeBodyMd_fa29c Online-Store-UI-PlainAction--slim_1buo4 Online-Store-UI-PlainAction--iconOnly_vgqbv"
+                className={getPlainActioClassName({
+                  fontSizeBodyMd: true,
+                  slim: true,
+                  iconOnly: true,
+                })}
                 aria-label="Retirer la section"
                 aria-disabled="false"
                 type="button"
@@ -533,8 +470,16 @@ const Section = ({ section, blocksLibs }) => {
                     "var(--p-font-weight-regular)",
                 }}
               >
-                <div className="Online-Store-UI-PlainAction__Interior_9sack">
-                  <div className="Online-Store-UI-PlainAction__Prefix_vg8vc">
+                <div
+                  className={
+                    PlainActionStyles["Online-Store-UI-PlainAction__Interior"]
+                  }
+                >
+                  <div
+                    className={
+                      PlainActionStyles["Online-Store-UI-PlainAction__Prefix"]
+                    }
+                  >
                     <Icon source={DeleteIcon} tone="legacy-inherit" />
                   </div>
                 </div>
@@ -542,36 +487,92 @@ const Section = ({ section, blocksLibs }) => {
             </div>
           )}
 
-          <div className="_SuffixIcon_17ht1_9">
-            <button
-              onClick={() => toggleSectionVisibility(section.id)}
-              className="Online-Store-UI-PlainAction_1jhib Online-Store-UI-PlainAction--fontSizeBodyMd_fa29c Online-Store-UI-PlainAction--slim_1buo4 Online-Store-UI-PlainAction--iconOnly_vgqbv"
-              aria-label="Masquer la section"
-              aria-disabled="false"
-              type="button"
-              aria-pressed="false"
-              onPointerDown={(e) => e.stopPropagation()}
-              style={{
-                "--osui_plain-action-font-weight":
-                  "var(--p-font-weight-regular)",
-              }}
-            >
-              <div className="Online-Store-UI-PlainAction__Interior_9sack">
-                <div className="Online-Store-UI-PlainAction__Prefix_vg8vc">
-                  <Icon
-                    source={section.visible ? ViewIcon : HideIcon}
-                    tone="legacy-inherit"
-                  />
+          {section.visible ? (
+            <div className={`${EditorStyles["SuffixIcon"]}`}>
+              <button
+                onClick={() => toggleSectionVisibility(section.id)}
+                className={getPlainActioClassName({
+                  fontSizeBodyMd: true,
+                  slim: true,
+                  iconOnly: true,
+                })}
+                aria-label="Masquer la section"
+                aria-disabled="false"
+                type="button"
+                aria-pressed="false"
+                onPointerDown={(e) => e.stopPropagation()}
+                style={{
+                  "--osui_plain-action-font-weight":
+                    "var(--p-font-weight-regular)",
+                }}
+              >
+                <div
+                  className={
+                    PlainActionStyles["Online-Store-UI-PlainAction__Interior"]
+                  }
+                >
+                  <div
+                    className={
+                      PlainActionStyles["Online-Store-UI-PlainAction__Prefix"]
+                    }
+                  >
+                    <Icon
+                      source={section.visible ? ViewIcon : HideIcon}
+                      tone="legacy-inherit"
+                    />
+                  </div>
                 </div>
+              </button>
+            </div>
+          ) : (
+            <div
+              className={
+                navItemsStyles["Online-Store-UI-NavItem__PreventFleeting"]
+              }
+            >
+              <div className={`${EditorStyles["SuffixIcon"]}`}>
+                <button
+                  onClick={() => toggleSectionVisibility(section.id)}
+                  className={getPlainActioClassName({
+                    fontSizeBodyMd: true,
+                    slim: true,
+                    iconOnly: true,
+                  })}
+                  aria-label="Masquer la section"
+                  aria-disabled="false"
+                  type="button"
+                  aria-pressed="false"
+                  onPointerDown={(e) => e.stopPropagation()}
+                  style={{
+                    "--osui_plain-action-font-weight":
+                      "var(--p-font-weight-regular)",
+                  }}
+                >
+                  <div
+                    className={
+                      PlainActionStyles["Online-Store-UI-PlainAction__Interior"]
+                    }
+                  >
+                    <div
+                      className={
+                        PlainActionStyles["Online-Store-UI-PlainAction__Prefix"]
+                      }
+                    >
+                      <Icon
+                        source={section.visible ? ViewIcon : HideIcon}
+                        tone="legacy-inherit"
+                      />
+                    </div>
+                  </div>
+                </button>
               </div>
-            </button>
-          </div>
+            </div>
+          )}
         </span>
-      </SortableItem>
-
+      </div>
       {hasBlockLibs && blocks?.length <= 0 && (
         <Collapsible open={collapse}>
-          <ol className="Online-Store-UI-SortableList_p19g7 Online-Store-UI-SortableList--leftAlignmentCompact_1dw7q">
+          <ol className={getSortableListClassName({leftAlignmentCompact: true})}>
             <span>
               <AddBTN
                 onClick={() => setAddBetweenBlock([null, null])}
@@ -579,12 +580,14 @@ const Section = ({ section, blocksLibs }) => {
               />
             </span>
             <span>
+              <div>
               <li
-                className="Online-Store-UI-NavItem_3840o Online-Store-UI-NavItem--preventNestedOffset_s8g9w Online-Store-UI-NavItem--nested_uxuke"
+                className={getNavItemClassName({preventNestedOffset: true, nested: true})}
                 tabIndex="-1"
               >
                 <div
-                  className="Online-Store-UI-NavItem__Interior_1y0gz Online-Store-UI-NavItem--interactive_p3lww"
+                className={`${navItemsStyles["Online-Store-UI-NavItem__Interior"]} ${getNavItemClassName({interactive: true}, false)}`}
+      
                   data-interior="true"
                 >
                   <button
@@ -593,6 +596,8 @@ const Section = ({ section, blocksLibs }) => {
                     className="Online-Store-UI-NavItem__PrimaryAction_1r8fd"
                     aria-labelledby="AddBlock-template--15819007328317__rich_text_rYti4V-label"
                   ></button>
+
+
                   <span className="Online-Store-UI-NavItem__TitleContent_gfudd Online-Store-UI-NavItem--labelAlignmentPrefix_hh0c3">
                     <div className="Online-Store-UI-NavItem__LabelPrefix_1jhe5 Online-Store-UI-NavItem--hasDefaultPrefix_1gvwn">
                       <span className="Online-Store-UI-NavItem__HoverPrefix_1jttz"></span>
@@ -611,6 +616,7 @@ const Section = ({ section, blocksLibs }) => {
                   </span>
                 </div>
               </li>
+              </div>
             </span>
           </ol>
         </Collapsible>
@@ -619,6 +625,7 @@ const Section = ({ section, blocksLibs }) => {
       {blocks?.length > 0 && (
         <>
           <Collapsible open={collapse}>
+       
             <ol className="Online-Store-UI-SortableList_p19g7 Online-Store-UI-SortableList--leftAlignmentCompact_1dw7q">
               <SortableContext
                 items={blocks.map((b) => `block:${b.id}|${section.id}`)}
@@ -733,13 +740,6 @@ export default function SectionGroup({}) {
     groupLabel,
   } = useSectionGroup();
 
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: sortableKeyboardCoordinates,
-    }),
-  );
-
   const handleDragEnd = (event) => {
     const { active, over } = event;
 
@@ -750,6 +750,8 @@ export default function SectionGroup({}) {
       moveSection(oldIndex, newIndex);
     }
   };
+
+  const [draggedItem, setDraggedItem] = useState("");
 
   return (
     <>
@@ -767,129 +769,168 @@ export default function SectionGroup({}) {
         <section className="Online-Store-UI-StaticPanel-Layout__Section_10usc Online-Store-UI-StaticPanel-Layout--sectionSpacingDefault_djyin Online-Store-UI-StaticPanel-Layout--paddingExtraTight_gna4b Online-Store-UI-StaticPanel-Layout--denseUi_41sbe">
           <div className="Online-Store-UI-StaticPanel-Layout__ChildrenWrapper_1tp4f">
             <Box paddingBlockEnd={{ sm: "200" }}>
-              <ol className="Online-Store-UI-SortableList_p19g7 Online-Store-UI-SortableList--leftAlignmentNone_1ab8d">
-                <DndContext
-                  sensors={sensors}
-                  collisionDetection={closestCenter}
-                  onDragEnd={handleDragEnd}
-                  modifiers={[restrictToVerticalAxis, restrictToParentElement]}
-                >
-                  <SortableContext
-                    items={sections.map((s) => `${s.id}`)}
-                    strategy={verticalListSortingStrategy}
-                  >
-                    {sections.map((section, index) => {
-                      const blocksLibs = getBlockCatalog(section.id);
+              <SortableList
+                listOptions={{ leftAlignmentNone: true }}
+                onDragStart={(id) => setDraggedItem(id)}
+                onDragEnd={() => {
+                  setDraggedItem("");
 
-                      return (
-                        <React.Fragment key={section.id}>
-                          {/* Ajouter un bouton avant la première section */}
-                          {index === 0 && (
-                            <span>
-                              <AddBTN
-                                onClick={() =>
-                                  setAddBetween([null, section.id])
-                                }
-                              />
-                            </span>
-                          )}
+                  //   onChange(valueRef.current);
+                }}
+                onMove={(move) => {
+                  // A race condition means we can sometimes have the wrong source element
+                  // so we double double check before proceeding
+                  if (arrayState.items[move.source]._arrayId !== draggedItem) {
+                    return;
+                  }
 
-                          {/* Section affichée */}
-                          <span>
-                            <PopoverProvider>
-                              <PopoverWithReference
-                                referent={{
-                                  as: "li",
-                                  props: {
-                                    className: "Online-Store-UI-NavItem_3840o",
-                                  },
-                                }}
-                                popover={{
-                                  content: (
-                                    <ListPopover
-                                      items={blocksLibs.map((block) => ({
-                                        value: block.type,
-                                        label: block.title,
-                                      }))}
-                                      onSelect={(selected) => {
-                                        addBlock(section.id, selected[0]);
-                                      }}
-                                    />
-                                  ),
-                                  props: {
-                                    transparentBackdrop: true,
-                                    width: 300,
-                                    maxWidth: 657,
-                                    right: 8,
-                                  },
-                                }}
-                              >
+                  const newValue = reorder(
+                    localState.value,
+                    move.source,
+                    move.target,
+                  );
+
+                  const newArrayStateItems = reorder(
+                    arrayState.items,
+                    move.source,
+                    move.target,
+                  );
+
+                  const state = appStore.getState().state;
+
+                  const newUi = {
+                    arrayState: {
+                      ...state.ui.arrayState,
+                      [id]: { ...arrayState, items: newArrayStateItems },
+                    },
+                  };
+
+                  setUi(newUi, false);
+                  setLocalState({
+                    value: newValue,
+                    arrayState: { ...arrayState, items: newArrayStateItems },
+                  });
+
+                  valueRef.current = newValue;
+                }}
+              >
+                {sections.map((section, index) => {
+                  const blocksLibs = getBlockCatalog(section.id);
+
+                  return (
+                    <React.Fragment key={section.id}>
+                      {/* Ajouter un bouton avant la première section */}
+                      {index === 0 && (
+                        <span>
+                          <AddBTN
+                            onClick={() => setAddBetween([null, section.id])}
+                          />
+                        </span>
+                      )}
+
+                      {/* Section affichée */}
+                      <span>
+                        <PopoverProvider>
+                          <PopoverWithReference
+                            referent={{
+                              as: "li",
+                              props: {
+                                className: getNavItemClassName({
+                                  hidden: false,
+                                }),
+                              },
+                            }}
+                            popover={{
+                              content: (
+                                <ListPopover
+                                  items={blocksLibs.map((block) => ({
+                                    value: block.type,
+                                    label: block.title,
+                                  }))}
+                                  onSelect={(selected) => {
+                                    addBlock(section.id, selected[0]);
+                                  }}
+                                />
+                              ),
+                              props: {
+                                transparentBackdrop: true,
+                                width: 300,
+                                maxWidth: 657,
+                                right: 8,
+                              },
+                            }}
+                          >
+                            <Sortable
+                              key={section.id}
+                              id={section.id}
+                              index={index}
+                              disabled={false}
+                            >
+                              {({ isDragging, ref, handleRef }) => (
                                 <Section
+                                  handleRef={handleRef}
+                                  isDragging={isDragging}
                                   section={section}
                                   blocksLibs={blocksLibs}
+                                  refDrag={ref}
                                 />
-                              </PopoverWithReference>
-                            </PopoverProvider>
-                          </span>
-                          <span>
-                            <AddBTN
-                              onClick={() =>
-                                setAddBetween([
-                                  section.id,
-                                  index < sections.length - 1
-                                    ? sections[index + 1].id
-                                    : null,
-                                ])
-                              }
-                            />
-                          </span>
-                        </React.Fragment>
-                      );
-                    })}
-                  </SortableContext>
-                </DndContext>
-
-                <span>
-                  <li
-                    id="AddSection-index"
-                    className="Online-Store-UI-NavItem_3840o"
-                    tabIndex={-1}
+                              )}
+                            </Sortable>
+                          </PopoverWithReference>
+                        </PopoverProvider>
+                      </span>
+                      <span>
+                        <AddBTN
+                          onClick={() =>
+                            setAddBetween([
+                              section.id,
+                              index < sections.length - 1
+                                ? sections[index + 1].id
+                                : null,
+                            ])
+                          }
+                        />
+                      </span>
+                    </React.Fragment>
+                  );
+                })}
+              </SortableList>
+              <span>
+                <li
+                  className={getNavItemClassName()}
+                  tabIndex={-1}
+                >
+                  <div
+                    className="Online-Store-UI-NavItem__Interior_1y0gz Online-Store-UI-NavItem--interactive_p3lww"
+                    data-interior="true"
                   >
-                    <div
-                      className="Online-Store-UI-NavItem__Interior_1y0gz Online-Store-UI-NavItem--interactive_p3lww"
-                      data-interior="true"
-                    >
-                      <button
-                        type="button"
-                        onClick={addClickReference}
-                        className="Online-Store-UI-NavItem__PrimaryAction_1r8fd"
-                        aria-labelledby="AddSection-index-label"
-                        aria-haspopup="dialog"
-                        aria-expanded="false"
-                      />
-                      <span className="Online-Store-UI-NavItem__TitleContent_gfudd Online-Store-UI-NavItem--labelAlignmentPrefix_hh0c3">
-                        <div className="Online-Store-UI-NavItem__LabelPrefix_1jhe5 Online-Store-UI-NavItem--hasDefaultPrefix_1gvwn">
-                          <span className="Online-Store-UI-NavItem__HoverPrefix_1jttz" />
-                          <span className="Online-Store-UI-NavItem__TitlePrefix_1jcka">
-                            <Icon
-                              source={PlusCircleIcon}
-                              tone="legacy-inherit"
-                            />
-                          </span>
-                        </div>
-                        <span
-                          className="Online-Store-UI-NavItem__Title_1gmab"
-                          id="AddSection-index-label"
-                        >
-                          <span className="Polaris-Text--root Polaris-Text--bodySm Polaris-Text--block Polaris-Text--truncate">
-                            Ajouter une section
-                          </span>
+                    <button
+                      type="button"
+                      onClick={addClickReference}
+                      className="Online-Store-UI-NavItem__PrimaryAction_1r8fd"
+                      aria-labelledby="AddSection-index-label"
+                      aria-haspopup="dialog"
+                      aria-expanded="false"
+                    />
+                    <span className="Online-Store-UI-NavItem__TitleContent_gfudd Online-Store-UI-NavItem--labelAlignmentPrefix_hh0c3">
+                      <div className="Online-Store-UI-NavItem__LabelPrefix_1jhe5 Online-Store-UI-NavItem--hasDefaultPrefix_1gvwn">
+                        <span className="Online-Store-UI-NavItem__HoverPrefix_1jttz" />
+                        <span className="Online-Store-UI-NavItem__TitlePrefix_1jcka">
+                          <Icon source={PlusCircleIcon} tone="legacy-inherit" />
+                        </span>
+                      </div>
+                      <span
+                        className="Online-Store-UI-NavItem__Title_1gmab"
+                        id="AddSection-index-label"
+                      >
+                        <span className="Polaris-Text--root Polaris-Text--bodySm Polaris-Text--block Polaris-Text--truncate">
+                          Ajouter une section
                         </span>
                       </span>
-                    </div>
-                  </li>
-                </span>
-              </ol>
+                    </span>
+                  </div>
+                </li>
+              </span>
             </Box>
           </div>
 

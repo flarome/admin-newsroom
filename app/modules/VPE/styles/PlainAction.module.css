@@ -1,0 +1,763 @@
+
+.Online-Store-UI-PlainAction {
+    --osui_plain-action-content-padding-x: var(--p-space-150);
+    --osui_plain-action-prefix-max-size: 1.875rem;
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+    padding: 0;
+    background: none;
+    border: none;
+    font-size: inherit;
+    line-height: inherit;
+    color: inherit;
+    cursor: pointer;
+    min-width: 0;
+    font-weight: var(--osui_plain-action-font-weight);
+    text-transform: initial;
+    letter-spacing: initial;
+    fill: var(--p-color-icon);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: var(--osui_height-common-control);
+    max-width: 100%;
+    min-height: var(--osui_height-common-control);
+    border-radius: var(--p-border-radius-200);
+    line-height: 1;
+    text-decoration: none;
+    color: var(--p-color-text);
+    transition-property: color,background-color;
+    transition-duration: var(--p-motion-duration-150);
+    transition-timing-function: var(--p-motion-ease);
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    outline: none;
+    position: relative
+}
+
+.Online-Store-UI-PlainAction:focus {
+    outline: none
+}
+
+.Online-Store-UI-PlainAction:after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    inset: -.0625rem;
+    display: block;
+    pointer-events: none;
+    box-shadow: 0 0 0 -.0625rem var(--p-color-border-focus);
+    transition: box-shadow var(--p-motion-duration-100) var(--p-motion-ease);
+    border-radius: calc(var(--p-border-radius-200) + .0625rem)
+}
+
+.Online-Store-UI-PlainAction:focus:after {
+    box-shadow: 0 0 0 .125rem var(--p-color-border-focus);
+    outline: var(--osui_high-contrast-outline)
+}
+
+.Online-Store-UI-PlainAction:focus:not(:focus-visible):after {
+    box-shadow: 0 0 0 0 transparent
+}
+
+@media (-ms-high-contrast: active) {
+    .Online-Store-UI-PlainAction:focus:not(:focus-visible):after {
+        outline: none
+    }
+}
+
+.Online-Store-UI-PlainAction:focus-visible:after {
+    box-shadow: 0 0 0 .125rem var(--p-color-border-focus);
+    outline: var(--osui_high-contrast-outline)
+}
+
+.Online-Store-UI-PlainAction s-internal-icon,.Online-Store-UI-PlainAction svg {
+    transition: color var(--p-motion-duration-150) var(--p-motion-ease)
+}
+
+.Online-Store-UI-PlainAction:focus-visible {
+    color: var(--p-color-text-brand);
+    background-color: var(--p-color-bg-fill-transparent-secondary)
+}
+
+.Online-Store-UI-PlainAction:focus-visible s-internal-icon,.Online-Store-UI-PlainAction:focus-visible svg {
+    color: var(--p-color-text-brand)
+}
+
+@media (-ms-high-contrast: active) {
+    .Online-Store-UI-PlainAction:focus-visible s-internal-icon,.Online-Store-UI-PlainAction:focus-visible svg {
+        color: var(--p-color-icon-secondary)
+    }
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .Online-Store-UI-PlainAction:hover {
+        color:var(--p-color-text-brand);
+        background-color: var(--p-color-bg-fill-transparent-secondary)
+    }
+
+    .Online-Store-UI-PlainAction:hover s-internal-icon,.Online-Store-UI-PlainAction:hover svg {
+        color: var(--p-color-text-brand)
+    }
+}
+
+@media (hover: hover) and (pointer: fine) and (-ms-high-contrast: active) {
+    .Online-Store-UI-PlainAction:hover s-internal-icon,.Online-Store-UI-PlainAction:hover svg {
+        color:var(--p-color-icon-secondary)
+    }
+}
+
+.Online-Store-UI-PlainAction:active {
+    color: var(--p-color-text-brand);
+    background-color: var(--p-color-bg-surface-tertiary)
+}
+
+.Online-Store-UI-PlainAction:active s-internal-icon,.Online-Store-UI-PlainAction:active svg {
+    color: var(--p-color-text-brand)
+}
+
+@media (-ms-high-contrast: active) {
+    .Online-Store-UI-PlainAction:active s-internal-icon,.Online-Store-UI-PlainAction:active svg {
+        color: var(--p-color-icon-secondary)
+    }
+}
+
+.Online-Store-UI-PlainAction.Online-Store-UI-PlainAction--hyperlink:focus-visible {
+    background-color: transparent
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .Online-Store-UI-PlainAction.Online-Store-UI-PlainAction--hyperlink:hover {
+        background-color:transparent
+    }
+}
+
+.Online-Store-UI-PlainAction.Online-Store-UI-PlainAction--hyperlink,.Online-Store-UI-PlainAction.Online-Store-UI-PlainAction--hyperlink:active {
+    background-color: transparent
+}
+
+.Online-Store-UI-PlainAction.Online-Store-UI-PlainAction--subtitle {
+    line-height: var(--p-font-line-height-500);
+    font-size: var(--p-font-size-350)
+}
+
+.Online-Store-UI-PlainAction.Online-Store-UI-PlainAction--looseLineHeight {
+    line-height: var(--p-space-500)
+}
+
+.Online-Store-UI-PlainAction.Online-Store-UI-PlainAction--extraLooseLineHeight {
+    line-height: 2.75rem
+}
+
+@media (-ms-high-contrast: active) {
+    .Online-Store-UI-PlainAction {
+        outline: var(--osui_high-contrast-button-outline)
+    }
+}
+
+.Online-Store-UI-PlainAction--fontSizeBodyMd {
+    font-size: var(--p-font-size-325)
+}
+
+.Online-Store-UI-PlainAction--small,.Online-Store-UI-PlainAction--fontSizeBodyLg {
+    font-size: var(--p-font-size-350)
+}
+
+.Online-Store-UI-PlainAction--fontSizeBodyXl {
+    font-size: .9375rem
+}
+
+.Online-Store-UI-PlainAction--noPadding {
+    --osui_plain-action-content-padding-x: 0
+}
+
+.Online-Store-UI-PlainAction--hasContent:not(.Online-Store-UI-PlainAction--slim):not(.Online-Store-UI-PlainAction--noPadding) {
+    --osui_plain-action-content-padding-x: var(--p-space-300)
+}
+
+@media (max-width: 41.685em) {
+    .Online-Store-UI-PlainAction--iconOnly:not(.Online-Store-UI-PlainAction--disclosure) {
+        width:var(--osui_size-min-action-mobile);
+        height: var(--osui_size-min-action-mobile);
+        -webkit-tap-highlight-color: rgba(0,0,0,0);
+        outline: none;
+        position: relative
+    }
+
+    .Online-Store-UI-PlainAction--iconOnly:not(.Online-Store-UI-PlainAction--disclosure):after {
+        content: "";
+        position: absolute;
+        z-index: 1;
+        inset: -.0625rem;
+        display: block;
+        pointer-events: none;
+        box-shadow: 0 0 0 -.0625rem var(--p-color-border-focus);
+        transition: box-shadow var(--p-motion-duration-100) var(--p-motion-ease);
+        border-radius: calc(var(--p-border-radius-200) + .0625rem)
+    }
+
+    .Online-Store-UI-PlainAction--iconOnly:not(.Online-Store-UI-PlainAction--disclosure):focus:after {
+        box-shadow: 0 0 0 .125rem var(--p-color-border-focus);
+        outline: var(--osui_high-contrast-outline)
+    }
+
+    .Online-Store-UI-PlainAction--iconOnly:not(.Online-Store-UI-PlainAction--disclosure):focus:not(:focus-visible):after {
+        box-shadow: 0 0 0 0 transparent
+    }
+}
+
+@media (max-width: 41.685em) and (-ms-high-contrast: active) {
+    .Online-Store-UI-PlainAction--iconOnly:not(.Online-Store-UI-PlainAction--disclosure):focus:not(:focus-visible):after {
+        outline:none
+    }
+}
+
+@media (max-width: 41.685em) {
+    .Online-Store-UI-PlainAction--iconOnly:not(.Online-Store-UI-PlainAction--disclosure):focus-visible:after {
+        box-shadow:0 0 0 .125rem var(--p-color-border-focus);
+        outline: var(--osui_high-contrast-outline)
+    }
+
+    .Online-Store-UI-PlainAction--iconOnly:not(.Online-Store-UI-PlainAction--disclosure):after {
+        inset: var(--p-border-width-050) var(--p-border-width-050) var(--p-border-width-050) var(--p-border-width-050);
+        border-radius: var(--p-border-radius-200)
+    }
+
+    .Online-Store-UI-PlainAction--iconOnly:not(.Online-Store-UI-PlainAction--disclosure) s-internal-icon,.Online-Store-UI-PlainAction--iconOnly:not(.Online-Store-UI-PlainAction--disclosure) svg {
+        transition: color var(--p-motion-duration-150) var(--p-motion-ease)
+    }
+
+    .Online-Store-UI-PlainAction--iconOnly:not(.Online-Store-UI-PlainAction--disclosure):focus-visible {
+        color: var(--p-color-text-brand);
+        background-color: var(--p-color-bg-fill-transparent-secondary)
+    }
+
+    .Online-Store-UI-PlainAction--iconOnly:not(.Online-Store-UI-PlainAction--disclosure):focus-visible s-internal-icon,.Online-Store-UI-PlainAction--iconOnly:not(.Online-Store-UI-PlainAction--disclosure):focus-visible svg {
+        color: var(--p-color-text-brand)
+    }
+}
+
+@media (max-width: 41.685em) and (-ms-high-contrast: active) {
+    .Online-Store-UI-PlainAction--iconOnly:not(.Online-Store-UI-PlainAction--disclosure):focus-visible s-internal-icon,.Online-Store-UI-PlainAction--iconOnly:not(.Online-Store-UI-PlainAction--disclosure):focus-visible svg {
+        color:var(--p-color-icon-secondary)
+    }
+}
+
+@media (max-width: 41.685em) and (hover: hover) and (pointer: fine) {
+    .Online-Store-UI-PlainAction--iconOnly:not(.Online-Store-UI-PlainAction--disclosure):hover {
+        color:var(--p-color-text-brand);
+        background-color: var(--p-color-bg-fill-transparent-secondary)
+    }
+
+    .Online-Store-UI-PlainAction--iconOnly:not(.Online-Store-UI-PlainAction--disclosure):hover s-internal-icon,.Online-Store-UI-PlainAction--iconOnly:not(.Online-Store-UI-PlainAction--disclosure):hover svg {
+        color: var(--p-color-text-brand)
+    }
+}
+
+@media (max-width: 41.685em) and (hover: hover) and (pointer: fine) and (-ms-high-contrast: active) {
+    .Online-Store-UI-PlainAction--iconOnly:not(.Online-Store-UI-PlainAction--disclosure):hover s-internal-icon,.Online-Store-UI-PlainAction--iconOnly:not(.Online-Store-UI-PlainAction--disclosure):hover svg {
+        color:var(--p-color-icon-secondary)
+    }
+}
+
+@media (max-width: 41.685em) {
+    .Online-Store-UI-PlainAction--iconOnly:not(.Online-Store-UI-PlainAction--disclosure):active {
+        color:var(--p-color-text-brand);
+        background-color: var(--p-color-bg-surface-tertiary)
+    }
+
+    .Online-Store-UI-PlainAction--iconOnly:not(.Online-Store-UI-PlainAction--disclosure):active s-internal-icon,.Online-Store-UI-PlainAction--iconOnly:not(.Online-Store-UI-PlainAction--disclosure):active svg {
+        color: var(--p-color-text-brand)
+    }
+}
+
+@media (max-width: 41.685em) and (-ms-high-contrast: active) {
+    .Online-Store-UI-PlainAction--iconOnly:not(.Online-Store-UI-PlainAction--disclosure):active s-internal-icon,.Online-Store-UI-PlainAction--iconOnly:not(.Online-Store-UI-PlainAction--disclosure):active svg {
+        color:var(--p-color-icon-secondary)
+    }
+}
+
+.Online-Store-UI-PlainAction--extraPadding {
+    padding: var(--p-space-500)
+}
+
+.Online-Store-UI-PlainAction--paddingLoose {
+    --osui_plain-action-content-padding-x: 0;
+    padding: .625rem
+}
+
+.Online-Store-UI-PlainAction--backgroundSubdued,.Online-Store-UI-PlainAction--withSurfaceSubduedBackground {
+    background-color: var(--p-color-bg-surface-secondary)
+}
+
+.Online-Store-UI-PlainAction--backgroundDark {
+    background-color: var(--p-color-bg-inverse)
+}
+
+.Online-Store-UI-PlainAction--backgroundGrey {
+    background-color: var(--p-color-bg)
+}
+
+.Online-Store-UI-PlainAction--interactive:not(.Online-Store-UI-PlainAction--disabled):not(.Online-Store-UI-PlainAction--pressed) {
+    background-color: var(--p-color-bg-surface-brand-selected);
+    color: var(--p-color-text-highlight)
+}
+
+.Online-Store-UI-PlainAction--interactive:not(.Online-Store-UI-PlainAction--disabled):not(.Online-Store-UI-PlainAction--pressed) s-internal-icon,.Online-Store-UI-PlainAction--interactive:not(.Online-Store-UI-PlainAction--disabled):not(.Online-Store-UI-PlainAction--pressed) svg {
+    color: var(--p-color-icon-highlight)
+}
+
+.Online-Store-UI-PlainAction--interactive:not(.Online-Store-UI-PlainAction--disabled):not(.Online-Store-UI-PlainAction--pressed):hover {
+    background-color: var(--p-color-bg-surface-brand-hover);
+    color: var(--p-color-text-highlight-hover)
+}
+
+.Online-Store-UI-PlainAction--interactive:not(.Online-Store-UI-PlainAction--disabled):not(.Online-Store-UI-PlainAction--pressed):hover s-internal-icon,.Online-Store-UI-PlainAction--interactive:not(.Online-Store-UI-PlainAction--disabled):not(.Online-Store-UI-PlainAction--pressed):hover svg {
+    color: var(--p-color-icon-highlight-hover)
+}
+
+.Online-Store-UI-PlainAction--interactive.Online-Store-UI-PlainAction--disabled {
+    background-color: var(--p-color-bg-surface-disabled)
+}
+
+.Online-Store-UI-PlainAction--interactive.Online-Store-UI-PlainAction--pressed,.Online-Store-UI-PlainAction--interactive.Online-Store-UI-PlainAction--pressed:hover {
+    background-color: var(--p-color-bg-surface-brand-hover);
+    color: var(--p-color-text-highlight-hover)
+}
+
+.Online-Store-UI-PlainAction--interactive.Online-Store-UI-PlainAction--pressed s-internal-icon,.Online-Store-UI-PlainAction--interactive.Online-Store-UI-PlainAction--pressed svg,.Online-Store-UI-PlainAction--interactive.Online-Store-UI-PlainAction--pressed:hover s-internal-icon,.Online-Store-UI-PlainAction--interactive.Online-Store-UI-PlainAction--pressed:hover svg {
+    color: var(--p-color-icon-highlight-hover)
+}
+
+.Online-Store-UI-PlainAction--destructive {
+    color: var(--p-color-text-critical)
+}
+
+.Online-Store-UI-PlainAction--destructive s-internal-icon,.Online-Store-UI-PlainAction--destructive svg {
+    color: var(--p-color-text-critical)
+}
+
+.Online-Store-UI-PlainAction--destructive:focus-visible,.Online-Store-UI-PlainAction--destructive:active {
+    color: var(--p-color-text-critical);
+    background-color: var(--osui_color-plain-button-bg)
+}
+
+.Online-Store-UI-PlainAction--destructive:focus-visible s-internal-icon,.Online-Store-UI-PlainAction--destructive:focus-visible svg,.Online-Store-UI-PlainAction--destructive:active s-internal-icon,.Online-Store-UI-PlainAction--destructive:active svg {
+    color: var(--p-color-text-critical)
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .Online-Store-UI-PlainAction--destructive:hover {
+        color:var(--p-color-text-critical);
+        background-color: var(--osui_color-plain-button-bg)
+    }
+
+    .Online-Store-UI-PlainAction--destructive:hover s-internal-icon,.Online-Store-UI-PlainAction--destructive:hover svg {
+        color: var(--p-color-text-critical)
+    }
+}
+
+.Online-Store-UI-PlainAction--darkInverse,.Online-Store-UI-PlainAction--dark {
+    color: #a7aaad
+}
+
+.Online-Store-UI-PlainAction--darkInverse s-internal-icon,.Online-Store-UI-PlainAction--darkInverse svg,.Online-Store-UI-PlainAction--dark s-internal-icon,.Online-Store-UI-PlainAction--dark svg {
+    color: #a7aaad
+}
+
+.Online-Store-UI-PlainAction--darkInverse .Online-Store-UI-PlainAction__Subtitle,.Online-Store-UI-PlainAction--dark .Online-Store-UI-PlainAction__Subtitle {
+    color: #999fa4
+}
+
+.Online-Store-UI-PlainAction--darkInverse.Online-Store-UI-PlainAction--disabled,.Online-Store-UI-PlainAction--dark.Online-Store-UI-PlainAction--disabled {
+    color: #a7aaad66
+}
+
+.Online-Store-UI-PlainAction--darkInverse.Online-Store-UI-PlainAction--disabled s-internal-icon,.Online-Store-UI-PlainAction--darkInverse.Online-Store-UI-PlainAction--disabled svg,.Online-Store-UI-PlainAction--dark.Online-Store-UI-PlainAction--disabled s-internal-icon,.Online-Store-UI-PlainAction--dark.Online-Store-UI-PlainAction--disabled svg {
+    color: #a7aaad66
+}
+
+.Online-Store-UI-PlainAction--darkInverse.Online-Store-UI-PlainAction--disabled .Online-Store-UI-PlainAction__Subtitle,.Online-Store-UI-PlainAction--dark.Online-Store-UI-PlainAction--disabled .Online-Store-UI-PlainAction__Subtitle {
+    color: #6f7377
+}
+
+.Online-Store-UI-PlainAction--darkInverse.Online-Store-UI-PlainAction--destructive,.Online-Store-UI-PlainAction--dark.Online-Store-UI-PlainAction--destructive {
+    color: #f56b6b
+}
+
+.Online-Store-UI-PlainAction--darkInverse.Online-Store-UI-PlainAction--destructive s-internal-icon,.Online-Store-UI-PlainAction--darkInverse.Online-Store-UI-PlainAction--destructive svg,.Online-Store-UI-PlainAction--dark.Online-Store-UI-PlainAction--destructive s-internal-icon,.Online-Store-UI-PlainAction--dark.Online-Store-UI-PlainAction--destructive svg {
+    color: #f56b6b
+}
+
+.Online-Store-UI-PlainAction--darkInverse.Online-Store-UI-PlainAction--destructive:focus-visible,.Online-Store-UI-PlainAction--darkInverse.Online-Store-UI-PlainAction--destructive:active,.Online-Store-UI-PlainAction--dark.Online-Store-UI-PlainAction--destructive:focus-visible,.Online-Store-UI-PlainAction--dark.Online-Store-UI-PlainAction--destructive:active {
+    color: #f56b6b;
+    background-color: #303133
+}
+
+.Online-Store-UI-PlainAction--darkInverse.Online-Store-UI-PlainAction--destructive:focus-visible s-internal-icon,.Online-Store-UI-PlainAction--darkInverse.Online-Store-UI-PlainAction--destructive:focus-visible svg,.Online-Store-UI-PlainAction--darkInverse.Online-Store-UI-PlainAction--destructive:active s-internal-icon,.Online-Store-UI-PlainAction--darkInverse.Online-Store-UI-PlainAction--destructive:active svg,.Online-Store-UI-PlainAction--dark.Online-Store-UI-PlainAction--destructive:focus-visible s-internal-icon,.Online-Store-UI-PlainAction--dark.Online-Store-UI-PlainAction--destructive:focus-visible svg,.Online-Store-UI-PlainAction--dark.Online-Store-UI-PlainAction--destructive:active s-internal-icon,.Online-Store-UI-PlainAction--dark.Online-Store-UI-PlainAction--destructive:active svg {
+    color: #f56b6b
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .Online-Store-UI-PlainAction--darkInverse.Online-Store-UI-PlainAction--destructive:hover,.Online-Store-UI-PlainAction--dark.Online-Store-UI-PlainAction--destructive:hover {
+        color:#f56b6b;
+        background-color: #303133
+    }
+
+    .Online-Store-UI-PlainAction--darkInverse.Online-Store-UI-PlainAction--destructive:hover s-internal-icon,.Online-Store-UI-PlainAction--darkInverse.Online-Store-UI-PlainAction--destructive:hover svg,.Online-Store-UI-PlainAction--dark.Online-Store-UI-PlainAction--destructive:hover s-internal-icon,.Online-Store-UI-PlainAction--dark.Online-Store-UI-PlainAction--destructive:hover svg {
+        color: #f56b6b
+    }
+}
+
+.Online-Store-UI-PlainAction--darkInverse:focus-visible,.Online-Store-UI-PlainAction--darkInverse:active,.Online-Store-UI-PlainAction--dark:focus-visible,.Online-Store-UI-PlainAction--dark:active {
+    color: var(--p-color-text-inverse);
+    background-color: #303133
+}
+
+.Online-Store-UI-PlainAction--darkInverse:focus-visible s-internal-icon,.Online-Store-UI-PlainAction--darkInverse:focus-visible svg,.Online-Store-UI-PlainAction--darkInverse:active s-internal-icon,.Online-Store-UI-PlainAction--darkInverse:active svg,.Online-Store-UI-PlainAction--dark:focus-visible s-internal-icon,.Online-Store-UI-PlainAction--dark:focus-visible svg,.Online-Store-UI-PlainAction--dark:active s-internal-icon,.Online-Store-UI-PlainAction--dark:active svg {
+    color: var(--p-color-icon-inverse)
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .Online-Store-UI-PlainAction--darkInverse:hover,.Online-Store-UI-PlainAction--dark:hover {
+        color:var(--p-color-text-inverse);
+        background-color: #303133
+    }
+
+    .Online-Store-UI-PlainAction--darkInverse:hover s-internal-icon,.Online-Store-UI-PlainAction--darkInverse:hover svg,.Online-Store-UI-PlainAction--dark:hover s-internal-icon,.Online-Store-UI-PlainAction--dark:hover svg {
+        color: var(--p-color-icon-inverse)
+    }
+}
+
+.Online-Store-UI-PlainAction--darkInverse {
+    color: var(--p-color-text-inverse)
+}
+
+.Online-Store-UI-PlainAction--darkInverse s-internal-icon,.Online-Store-UI-PlainAction--darkInverse svg {
+    color: var(--p-color-icon-inverse)
+}
+
+.Online-Store-UI-PlainAction--slim {
+    min-width: var(--osui_height-common-control-slim);
+    min-height: var(--osui_height-common-control-slim)
+}
+
+.Online-Store-UI-PlainAction--slim:not(.Online-Store-UI-PlainAction--hasContent):not(.Online-Store-UI-PlainAction--noPadding):not(.Online-Store-UI-PlainAction--disclosure) {
+    --osui_plain-action-content-padding-x: var(--p-space-050)
+}
+
+.Online-Store-UI-PlainAction--unstyled {
+    color: var(--p-color-text-highlight)
+}
+
+.Online-Store-UI-PlainAction--unstyled s-internal-icon,.Online-Store-UI-PlainAction--unstyled svg {
+    color: var(--p-color-icon-highlight)
+}
+
+.Online-Store-UI-PlainAction--unstyled:focus-visible {
+    color: var(--p-color-text-highlight-hover)
+}
+
+.Online-Store-UI-PlainAction--unstyled:focus-visible s-internal-icon,.Online-Store-UI-PlainAction--unstyled:focus-visible svg {
+    color: var(--p-color-icon-highlight-hover)
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .Online-Store-UI-PlainAction--unstyled:hover {
+        color:var(--p-color-text-highlight-hover)
+    }
+
+    .Online-Store-UI-PlainAction--unstyled:hover s-internal-icon,.Online-Store-UI-PlainAction--unstyled:hover svg {
+        color: var(--p-color-icon-highlight-hover)
+    }
+}
+
+.Online-Store-UI-PlainAction--unstyled:active {
+    color: var(--p-color-text-highlight-hover)
+}
+
+.Online-Store-UI-PlainAction--unstyled:active s-internal-icon,.Online-Store-UI-PlainAction--unstyled:active svg {
+    color: var(--p-color-icon-highlight-hover)
+}
+
+.Online-Store-UI-PlainAction--alignLeft {
+    justify-content: left;
+    text-align: left
+}
+
+.Online-Store-UI-PlainAction--fullWidth {
+    width: 100%
+}
+
+.Online-Store-UI-PlainAction--fillContainer {
+    width: 100%;
+    height: 100%;
+    border-radius: 0
+}
+
+.Online-Store-UI-PlainAction--pressed {
+    color: var(--p-color-text-highlight);
+    background-color: var(--p-color-bg-fill-transparent-active)
+}
+
+.Online-Store-UI-PlainAction--pressed s-internal-icon,.Online-Store-UI-PlainAction--pressed svg {
+    color: var(--p-color-icon-highlight)
+}
+
+.Online-Store-UI-PlainAction--pressed:focus-visible {
+    color: var(--p-color-text-highlight-hover);
+    background-color: var(--p-color-bg-fill-transparent-hover)
+}
+
+.Online-Store-UI-PlainAction--pressed:focus-visible s-internal-icon,.Online-Store-UI-PlainAction--pressed:focus-visible svg {
+    color: var(--p-color-icon-highlight-hover)
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .Online-Store-UI-PlainAction--pressed:hover {
+        color:var(--p-color-text-highlight-hover);
+        background-color: var(--p-color-bg-fill-transparent-hover)
+    }
+
+    .Online-Store-UI-PlainAction--pressed:hover s-internal-icon,.Online-Store-UI-PlainAction--pressed:hover svg {
+        color: var(--p-color-icon-highlight-hover)
+    }
+}
+
+.Online-Store-UI-PlainAction--pressed:active {
+    color: var(--p-color-text-highlight-active);
+    background-color: var(--osui_color-plain-action-bg-active-dark)
+}
+
+.Online-Store-UI-PlainAction--pressed:active s-internal-icon,.Online-Store-UI-PlainAction--pressed:active svg {
+    color: var(--p-color-icon-highlight-active)
+}
+
+.Online-Store-UI-PlainAction--loading {
+    background-color: var(--osui_color-plain-button-bg-active)
+}
+
+.Online-Store-UI-PlainAction--disabled {
+    pointer-events: none;
+    touch-action: none;
+    -webkit-user-select: none;
+    user-select: none;
+    color: var(--p-color-text-secondary)
+}
+
+.Online-Store-UI-PlainAction--disabled s-internal-icon,.Online-Store-UI-PlainAction--disabled svg {
+    color: var(--p-color-icon-disabled)
+}
+
+.Online-Store-UI-PlainAction--disabled .Online-Store-UI-PlainAction__Subtitle {
+    color: var(--p-color-text-disabled)
+}
+
+.Online-Store-UI-PlainAction--disabled.Online-Store-UI-PlainAction--pressed {
+    background-color: var(--osui_color-plain-action-bg-active-light)
+}
+
+.Online-Store-UI-PlainAction--disabled.Online-Store-UI-PlainAction--pressed:focus-visible {
+    background-color: var(--osui_color-plain-action-bg-active-light)
+}
+
+.Online-Store-UI-PlainAction--outlinee {
+    border: var(--p-border-width-025) solid var(--p-color-border-secondary)
+}
+
+.Online-Store-UI-PlainAction--vertical.Online-Store-UI-PlainAction--hyperlink {
+    text-align: center
+}
+
+.Online-Store-UI-PlainAction__Interior {
+    display: grid;
+    align-items: center;
+    padding-left: var(--osui_plain-action-content-padding-x);
+    padding-right: var(--osui_plain-action-content-padding-x);
+    width: 100%
+}
+
+.Online-Store-UI-PlainAction--loading .Online-Store-UI-PlainAction__Interior {
+    opacity: 0
+}
+
+.Online-Store-UI-PlainAction:not(.Online-Store-UI-PlainAction--vertical) .Online-Store-UI-PlainAction__Interior {
+    grid-auto-flow: column;
+    grid-auto-columns: auto 1fr auto;
+    gap: var(--p-space-200)
+}
+
+.Online-Store-UI-PlainAction--vertical .Online-Store-UI-PlainAction__Interior {
+    grid-template-areas: "top" "bottom";
+    justify-content: center
+}
+
+.Online-Store-UI-PlainAction--vertical:not(.Online-Store-UI-PlainAction--noPadding) .Online-Store-UI-PlainAction__Interior {
+    padding-top: var(--p-space-100);
+    padding-bottom: var(--p-space-100)
+}
+
+.Online-Store-UI-PlainAction__Interior.Online-Store-UI-PlainAction--noPadding {
+    padding: 0
+}
+
+.Online-Store-UI-PlainAction__Prefix,.Online-Store-UI-PlainAction__WrappedContent,.Online-Store-UI-PlainAction__Subtitle,.Online-Store-UI-PlainAction__Disclosure,.Online-Store-UI-PlainAction__SubtitleWrapperContent {
+    min-width: 0;
+    max-width: 100%
+}
+
+.Online-Store-UI-PlainAction__Prefix,.Online-Store-UI-PlainAction__ExternalIcon,.Online-Store-UI-PlainAction__Disclosure {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto
+}
+
+.Online-Store-UI-PlainAction__PrefixItem {
+    overflow: hidden;
+    max-height: var(--osui_plain-action-prefix-max-size);
+    max-width: var(--osui_plain-action-prefix-max-size)
+}
+
+.Online-Store-UI-PlainAction--fullWidth:not(.Online-Store-UI-PlainAction--vertical) .Online-Store-UI-PlainAction__Prefix {
+    justify-self: flex-start
+}
+
+.Online-Store-UI-PlainAction--vertical .Online-Store-UI-PlainAction__Prefix {
+    grid-area: top
+}
+
+.Online-Store-UI-PlainAction--disabled .Online-Store-UI-PlainAction__Prefix {
+    opacity: .5;
+    color: var(--p-color-icon-disabled)
+}
+
+.Online-Store-UI-PlainAction--disabled .Online-Store-UI-PlainAction__PrefixDark {
+    opacity: .8;
+    color: var(--p-color-icon-disabled)
+}
+
+.Online-Store-UI-PlainAction__WrappedContent {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center
+}
+
+.Online-Store-UI-PlainAction--vertical .Online-Store-UI-PlainAction__WrappedContent {
+    grid-area: bottom;
+    margin-top: var(--p-space-200)
+}
+
+.Online-Store-UI-PlainAction__SubtitleWrapperContent {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin: var(--p-space-050)
+}
+
+.Online-Store-UI-PlainAction__Subtitle {
+    flex: 1 1 auto;
+    font-size: var(--p-font-size-300);
+    color: var(--p-color-text-secondary)
+}
+
+.Online-Store-UI-PlainAction--truncate_1aegu .Online-Store-UI-PlainAction__Subtitle {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin-bottom: -.14em;
+    padding-bottom: .14em
+}
+
+@supports (-webkit-line-clamp: var(--osui_plain-action-multiline-truncate, 2)) {
+    .Online-Store-UI-PlainAction--multilineTruncate .Online-Store-UI-PlainAction__Subtitle {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: var(--osui_plain-action-multiline-truncate, 2);
+        overflow: hidden
+    }
+}
+
+.Online-Store-UI-PlainAction__Content {
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: 100%
+}
+
+.Online-Store-UI-PlainAction--hyperlink:not(.Online-Store-UI-PlainAction--removeUnderline) .Online-Store-UI-PlainAction__Content {
+    text-decoration: underline
+}
+
+.Online-Store-UI-PlainAction--truncate_1aegu .Online-Store-UI-PlainAction__Content {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin-bottom: -.14em;
+    padding-bottom: .14em
+}
+
+@supports (-webkit-line-clamp: var(--osui_plain-action-multiline-truncate, 2)) {
+    .Online-Store-UI-PlainAction--multilineTruncate .Online-Store-UI-PlainAction__Content {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: var(--osui_plain-action-multiline-truncate, 2);
+        overflow: hidden
+    }
+}
+
+.Online-Store-UI-PlainAction__ExternalIcon {
+    flex: 0 0 auto
+}
+
+.Online-Store-UI-PlainAction:not(.Online-Store-UI-PlainAction--vertical) .Online-Store-UI-PlainAction__ExternalIcon {
+    width: 1rem;
+    overflow: hidden;
+    margin-left: var(--p-space-100)
+}
+
+.Online-Store-UI-PlainAction:not(.Online-Store-UI-PlainAction--vertical) .Online-Store-UI-PlainAction__ExternalIcon .Online-Store-UI-PlainAction__IconWrapper {
+    width: 1.25rem;
+    margin-left: -.125rem
+}
+
+.Online-Store-UI-PlainAction:not(.Online-Store-UI-PlainAction--vertical) .Online-Store-UI-PlainAction__Disclosure {
+    width: .75rem;
+    overflow: hidden
+}
+
+.Online-Store-UI-PlainAction:not(.Online-Store-UI-PlainAction--vertical) .Online-Store-UI-PlainAction__Disclosure .Online-Store-UI-PlainAction__IconWrapper {
+    width: 1.25rem;
+    margin-left: -.25rem
+}
+
+.Online-Store-UI-PlainAction--fullWidth:not(.Online-Store-UI-PlainAction--vertical) .Online-Store-UI-PlainAction__Disclosure {
+    justify-self: flex-end
+}
+
+.Online-Store-UI-PlainAction--vertical .Online-Store-UI-PlainAction__Disclosure {
+    grid-area: top
+}
+
+.Online-Store-UI-PlainAction--vertical .Online-Store-UI-PlainAction__WrappedContent+.Online-Store-UI-PlainAction__Disclosure {
+    margin-left: calc(1.875rem + var(--p-space-200))
+}
+
+.Online-Store-UI-PlainAction--vertical .Online-Store-UI-PlainAction__SubtitleWrapperContent+.Online-Store-UI-PlainAction__Disclosure {
+    margin-left: calc(1.875rem + var(--p-space-200))
+}
+
+.Online-Store-UI-PlainAction__LoadingIndicator {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+
+.Online-Store-UI-PlainAction--toneMagic,.Online-Store-UI-PlainAction--toneMagic:hover {
+    color: var(--p-color-text-ai)
+}
+
+.Online-Store-UI-PlainAction--toneMagic s-internal-icon,.Online-Store-UI-PlainAction--toneMagic svg,.Online-Store-UI-PlainAction--toneMagic:hover s-internal-icon,.Online-Store-UI-PlainAction--toneMagic:hover svg {
+    color: var(--p-color-text-ai)
+}
