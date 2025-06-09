@@ -15,14 +15,22 @@ import { fileURLToPath } from "url";
 import { dirname, resolve } from "path";
 
 // 📍 Point de départ = fichier courant
-const __filename = fileURLToPath(import.meta.url);
+/*const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename); 
+
 
 // 🔒 Résolution absolue vers le fichier
 const licencePath = resolve(__dirname, "../../../../external/article/assets/LEGAL_NOTICE.rtf");
 
 // ✅ Chargement du buffer binaire
 const licenceBuffer = readFileSync(licencePath);
+*/
+
+
+// ✅ Résout le fichier de manière fiable en dev + prod
+const licenceBuffer = readFileSync(
+  fileURLToPath(new URL("../../../../external/article/assets/LEGAL_NOTICE.rtf", import.meta.url))
+);
 /**
  * Crée une archive ZIP contenant une licence et un tableau d’images.
  *
