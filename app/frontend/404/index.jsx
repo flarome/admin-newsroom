@@ -1,6 +1,6 @@
 
 
-import error404Image from "./assets/error.svg";
+import error404Image from "./assets/error.svg?url";
 
 const App = () => {
   return (

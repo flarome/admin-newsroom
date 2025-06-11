@@ -35,10 +35,13 @@ const licenceBuffer = readFileSync(licencePath);
 
 // import licencePath from '../../../../external/article/assets/LEGAL_NOTICE.rtf?url'; // te donne le chemin absolu
 
-const licencePath = fileURLToPath(new URL('../../../../external/article/assets/LEGAL_NOTICE.rtf', import.meta.url).href)
+// const licencePath = fileURLToPath(new URL('../../../../external/article/assets/LEGAL_NOTICE.rtf', import.meta.url).href)
 
-const licenceBuffer = readFileSync(licencePath);
+// const licenceBuffer = readFileSync(licencePath);
 
+import licenceBuffer from "../../../../external/article/assets/LEGAL_NOTICE.rtf";
+
+const NOTICE_NAME = "LEGAL_NOTICE.rtf";
 /**
  * Crée une archive ZIP contenant une licence et un tableau d’images.
  *
@@ -51,7 +54,7 @@ export async function createZipWithLicenceAndImages(images) {
 
     try {
       // ✅ Ajoute la licence
-      zipfile.addBuffer(licenceBuffer, "LEGAL_NOTICE.rtf", { compress: false });
+      zipfile.addBuffer(licenceBuffer, NOTICE_NAME, { compress: false });
 
       // ✅ Ajoute chaque image (pas de compression pour fiabilité)
       for (const { buffer, name } of images) {

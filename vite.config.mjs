@@ -3,6 +3,7 @@ import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 import prefixSelector from "postcss-prefix-selector";
 import fs from "fs";
+import { readFileSync } from "fs";
 import path from "path";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 function graphqlRawLoader() {
@@ -15,6 +16,20 @@ function graphqlRawLoader() {
           code: `export default \`${raw.replace(/`/g, "\\`")}\`;`,
           map: null,
         };
+      }
+    },
+  };
+}
+
+function importRtfAsBufferPlugin() {
+  return {
+    name: "vite:rtf-as-buffer",
+    enforce: "pre",
+    load(id) {
+      if (id.endsWith(".rtf")) {
+        const content = readFileSync(id); // Buffer, pas utf8
+        const encoded = content.toJSON().data; // Array of numbers
+        return `export default Buffer.from([${encoded.join(",")}]);`;
       }
     },
   };
@@ -92,7 +107,7 @@ export default defineConfig({
     tsconfigPaths(),
     graphqlRawLoader(), // ✅ le vrai, sans compression, sans suppression de \n
 
-
+ importRtfAsBufferPlugin()
 
 
   ],
