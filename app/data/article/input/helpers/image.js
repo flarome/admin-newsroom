@@ -1,6 +1,7 @@
 import yazl from "yazl";
 
-// import licenceBuffer from "../../../../external/article/assets/LEGAL_NOTICE.rtf?raw";
+// import licenceBuffenr from "../../../../external/article/assets/LEGAL_NOTICE.rtf?raw";
+
 import {
   getFilenameFromUrl,
   hasUnexpectedParams,
@@ -28,9 +29,16 @@ const licenceBuffer = readFileSync(licencePath);
 
 
 // ✅ Résout le fichier de manière fiable en dev + prod
-const licenceBuffer = readFileSync(
+/*const licenceBuffer = readFileSync(
   fileURLToPath(new URL("../../../../external/article/assets/LEGAL_NOTICE.rtf", import.meta.url))
-);
+);*/
+
+// import licencePath from '../../../../external/article/assets/LEGAL_NOTICE.rtf?url'; // te donne le chemin absolu
+
+const licencePath = fileURLToPath(new URL('../../../../external/article/assets/LEGAL_NOTICE.rtf', import.meta.url).href)
+
+const licenceBuffer = readFileSync(licencePath);
+
 /**
  * Crée une archive ZIP contenant une licence et un tableau d’images.
  *

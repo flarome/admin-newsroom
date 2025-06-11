@@ -4,7 +4,7 @@ import tsconfigPaths from "vite-tsconfig-paths";
 import prefixSelector from "postcss-prefix-selector";
 import fs from "fs";
 import path from "path";
-
+import { viteStaticCopy } from "vite-plugin-static-copy";
 function graphqlRawLoader() {
   return {
     name: "vite-plugin-graphql-raw-loader",
@@ -91,7 +91,13 @@ export default defineConfig({
     }),
     tsconfigPaths(),
     graphqlRawLoader(), // ✅ le vrai, sans compression, sans suppression de \n
+
+
+
+
   ],
+
+ assetsInclude: ['**/*.rtf'],
 
   css: {
     postcss: {
