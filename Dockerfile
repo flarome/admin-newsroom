@@ -40,7 +40,7 @@ COPY package.json package-lock.json* ./
 RUN npm ci --omit=dev && npm cache clean --force
 
 # 3. On copie le dossier patches à côté du package.json (==> /app/patches)
-COPY patches ./patches
+COPY patches ./
 
 
 # 4. On installe patch-package juste pour le patch
