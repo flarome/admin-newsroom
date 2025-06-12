@@ -47,6 +47,13 @@ RUN npm remove @shopify/cli
 
 COPY . .
 
+# 1. Installer patch-package
+RUN npm install patch-package
+
+# 2. Appliquer les patchs
+RUN npx patch-package
+
+
 RUN npm run build
 
 CMD ["npm", "run", "docker-start"]
