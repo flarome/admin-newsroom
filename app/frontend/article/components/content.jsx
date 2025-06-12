@@ -1,13 +1,12 @@
 import { useController, useFormContext } from "react-hook-form";
-import { MediaCard } from "@shopify/polaris";
+import { FormLayout, MediaCard, Text, Card } from "@shopify/polaris";
 import { useAppBridge } from "@shopify/app-bridge-react";
 import { useState } from "react";
 //import { Modal } from "../../../modules/VPE";
 
-
-import { ModalExternal as Modal} from '../../../VPE'
+import { ModalExternal as Modal, VPE } from "../../../VPE";
 import { useArticle } from "../context/articleContext";
-import { sections as bodySections } from '../../../data/article/input/body'
+import { sections as bodySections } from "../../../data/article/input/body";
 import { form as FieldsMap } from "../../../data/article/config/fieldMap";
 import { getFieldPath, getFieldRoot } from "../../../utils/getFieldPath";
 import { prefix } from "../config/ids";
@@ -17,9 +16,12 @@ export const settingsFieldPath = FieldsMap.settings;
 export const bodyFieldPath = getFieldPath(FieldsMap, ["content", "body"]);
 export const headerFieldPath = getFieldPath(FieldsMap, ["content", "header"]);
 
+import EditorStyles from "../styles/Editor.module.css";
+
 const sectionsCatalog = {
   body: { label: "MON BODY", sections: bodySections },
 };
+
 
 const settingsCatalog = [];
 
@@ -31,7 +33,7 @@ const Content = () => {
   const shopify = useAppBridge();
   const [modalOpen, setModalOpen] = useState(false);
 
-  const openModal = () => { 
+  const openModal = () => {
     setModalOpen(true);
     shopify.modal.show(modalId);
   };
@@ -54,14 +56,42 @@ const Content = () => {
 
   return (
     <div>
+      <Card>
+      <FormLayout>
+        <div className={EditorStyles["RichTextEditor"]}>
+          <Text as="span" visuallyHidden variant="bodySm">
+            Éditeur de texte enrichi
+          </Text>
+
+          <div>
+            <div className="Polaris-Labelled__LabelWrapper">
+              <div className="Polaris-Label">
+                <label
+                  id="article-bodyLabel"
+                  for="article-body"
+                  className="Polaris-Label__Text"
+                >
+                  <span className="Polaris-Text--root Polaris-Text--bodyMd">
+                    Contenu
+                  </span>
+                </label>
+              </div>
+            </div>
+
+            <div className={EditorStyles["Editor"]}>
+              <VPE />
+            </div>
+          </div>
+        </div>
+      </FormLayout>
+      </Card>
       <MediaCard
-      
         title="Présentation de l'article"
         primaryAction={{
           content: "🖌️ Éditer l'article",
           onAction: openModal,
-           ariaControls: modalId,
-             ariaExpanded: modalOpen,
+          ariaControls: modalId,
+          ariaExpanded: modalOpen,
         }}
         description="Personnalisez l’aspect complet de votre article, de l’en-tête au contenu principal."
         size="medium"
@@ -79,7 +109,7 @@ const Content = () => {
       </MediaCard>
 
       <Modal
-      closeModal={closeModal}
+        closeModal={closeModal}
         open={modalOpen}
         modalId={modalId}
         sections={{

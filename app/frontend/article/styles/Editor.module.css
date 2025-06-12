@@ -1,0 +1,9 @@
+.RichTextEditor {
+    position: relative
+}
+.Editor {
+    position: relative;
+    border: var(--p-border-width-0165) solid var(--p-color-input-border);
+    border-radius: var(--p-border-radius-200);
+    overflow: hidden
+}

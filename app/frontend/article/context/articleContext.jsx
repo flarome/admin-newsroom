@@ -7,6 +7,8 @@ import { useLocation } from "@remix-run/react";
 import { useAppBridge } from "@shopify/app-bridge-react";
 import { createApp } from "@shopify/app-bridge";
 
+
+
 // Créez le contexte
 const ArticleContext = createContext({});
 
