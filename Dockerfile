@@ -42,7 +42,11 @@ RUN npm ci --omit=dev && npm cache clean --force
 # 3. On copie le dossier patches à côté du package.json (==> /app/patches)
 COPY patches ./patches
 
-# 2. Appliquer les patchs
+
+# 4. On installe patch-package juste pour le patch
+RUN npm install --no-save patch-package
+
+# 5. On applique les patchs
 RUN npx patch-package
 
 
