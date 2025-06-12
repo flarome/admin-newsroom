@@ -49,6 +49,8 @@ RUN npm install --no-save patch-package
 # 5. On applique les patchs
 RUN npx patch-package
 
+# 6. On peut supprimer patch-package si tu veux alléger l'image (optionnel)
+RUN npm uninstall patch-package
 
 # Remove CLI packages since we don't need them in production by default.
 # Remove this line if you want to run CLI commands in your container.
