@@ -35,3 +35,45 @@
 .SubduedDeleteIcon svg,.SubduedDeleteIcon s-internal-icon {
     color: var(--p-color-icon-secondary)
 }
+
+.TemplateHeadingWithoutPicker:not(.removeHeadingSpacing) {
+    padding-left: var(--p-space-400);
+    padding-bottom: var(--p-space-100)
+}
+
+
+
+
+.Heading {
+    padding-bottom: var(--p-space-300)
+}
+
+@supports (-webkit-line-clamp: 2) {
+    .Heading {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden
+    }
+}
+
+.Heading:only-child {
+    padding-bottom: 0
+}
+
+.Heading>h1 {
+    font-size: 1rem
+}
+
+
+.LabelWrapper {
+    padding: var(--p-space-100);
+    padding-left: 1.75rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center
+}
+
+.LabelWrapper.dense {
+    padding-left: var(--p-space-300)
+}

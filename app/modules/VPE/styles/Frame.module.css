@@ -1,0 +1,142 @@
+
+.Online-Store-UI-Frame,.Online-Store-UI-Frame__GenericFrame {
+    background-color: var(--osui_color-frame-bg)
+}
+
+.Online-Store-UI-Frame {
+    min-width: 0;
+    max-width: 100%;
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: auto 1fr auto auto;
+    grid-template-areas: "header" "main" "children" "primary-aux-sidebar" "primary-sidebar" "secondary-sidebar" "footer";
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden
+}
+
+@supports (-webkit-touch-callout: none) {
+    .Online-Store-UI-Frame {
+        height: -webkit-fill-available
+    }
+}
+
+@media (min-width: 41.6875em) {
+    .Online-Store-UI-Frame {
+        grid-template-columns:minmax(0,auto) minmax(0,auto) 1fr minmax(0,auto);
+        grid-template-areas: "header header header header" "primary-aux-sidebar primary-sidebar main secondary-sidebar" "primary-aux-sidebar primary-sidebar children secondary-sidebar" "footer footer footer footer"
+    }
+}
+
+.Online-Store-UI-Frame--experimental {
+    --osui_color-panel-bg: var(--p-color-bg)
+}
+
+.Online-Store-UI-Frame--dragging {
+    cursor: grabbing
+}
+
+.Online-Store-UI-Frame--dragging * {
+    -webkit-user-select: none;
+    user-select: none;
+    pointer-events: none
+}
+
+.Online-Store-UI-Frame--slimHeader {
+    --osui_height-frame-header: 2.75rem
+}
+
+.Online-Store-UI-Frame__ChildrenArea {
+    min-width: 0;
+    max-width: 100%;
+    grid-area: children
+}
+
+.Online-Store-UI-Frame-HeaderArea {
+    grid-area: header;
+    position: relative;
+    z-index: 40;
+    width: 100%
+}
+
+.Online-Store-UI-Frame-FooterArea {
+    grid-area: footer;
+    z-index: 60;
+    position: relative;
+    height: var(--osui_height-frame-footer)
+}
+
+@media (min-width: 41.6875em) {
+    .Online-Store-UI-Frame-Sidebar {
+        grid-area:primary-sidebar;
+        z-index: 10;
+        position: relative;
+        overflow: hidden
+    }
+
+    .Online-Store-UI-Frame-Sidebar:not(.Online-Store-UI-Frame-Sidebar--secondary) {
+        border-right: var(--p-border-width-025) solid var(--p-color-border-secondary)
+    }
+}
+
+@media (min-width: 41.6875em) {
+    .Online-Store-UI-Frame-Sidebar--secondary {
+        grid-area:secondary-sidebar;
+        border-left: var(--p-border-width-025) solid var(--p-color-border-secondary)
+    }
+}
+
+@media (min-width: 41.6875em) {
+    .Online-Store-UI-Frame-Sidebar--aux {
+        grid-area:primary-aux-sidebar
+    }
+}
+
+.Online-Store-UI-Frame-Sidebar--hide {
+    display: none
+}
+
+.Online-Store-UI-Frame-MainArea {
+    min-width: 0;
+    max-width: 100%;
+    grid-area: main;
+    z-index: 40;
+    position: relative;
+    display: flex;
+    --osui_margin-bottom-main-area: calc(var(--p-border-radius-100)*-1)
+}
+
+.Online-Store-UI-Frame-MainArea.Online-Store-UI-Frame-MainArea--usesBottomSheet {
+    --osui_margin-bottom-main-area: calc(var(--p-space-400)*-1)
+}
+
+@media (max-width: 41.685em) {
+    .Online-Store-UI-Frame-MainArea {
+        z-index:35;
+        margin-bottom: var(--osui_margin-bottom-main-area)
+    }
+}
+
+@media (min-width: 41.6875em) {
+    .Online-Store-UI-Frame-MainArea {
+        --osui_preview-padding: var(--p-space-200)
+    }
+}
+
+
+
+.Online-Store-UI-Frame-PanelArea {
+    position: relative;
+    width: 100%;
+    height: 100%
+}
+
+@media (min-width: 41.6875em) {
+    .Online-Store-UI-Frame-PanelArea {
+        width:var(--osui_width-sidebar-desktop)
+    }
+}
+
+.Online-Store-UI-Frame-PanelArea:empty {
+    display: none
+}

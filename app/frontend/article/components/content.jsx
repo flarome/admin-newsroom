@@ -5,7 +5,7 @@ import { useState } from "react";
 //import { Modal } from "../../../modules/VPE";
 
 
-import {Modal} from '../../../modules/VPE'
+import { ModalExternal as Modal} from '../../../VPE'
 import { useArticle } from "../context/articleContext";
 import { sections as bodySections } from '../../../data/article/input/body'
 import { form as FieldsMap } from "../../../data/article/config/fieldMap";
@@ -31,7 +31,7 @@ const Content = () => {
   const shopify = useAppBridge();
   const [modalOpen, setModalOpen] = useState(false);
 
-  const openModal = () => {
+  const openModal = () => { 
     setModalOpen(true);
     shopify.modal.show(modalId);
   };

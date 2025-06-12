@@ -13,6 +13,23 @@ import { PopoverProvider } from "../context/PopoverContext";
 import { GENERAL_GROUP_NAME } from "../context/SectionsContext";
 import Skeleton from "../Skeleton/Sections";
 
+import StaticPanelStyles from "../styles/StaticPanel.module.css";
+import NavHeaderStyles from "../styles/NavHeader.module.css";
+import getClassNameFactory from "../../../lib/get-class-name-factory";
+import EditorStyles from "../styles/Editor.module.css";
+const getStaticPanelClass = getClassNameFactory(
+  "Online-Store-UI-StaticPanel",
+  StaticPanelStyles,
+);
+const getNavHeaderSection = getClassNameFactory(
+  "Online-Store-UI-NavHeader-Section",
+  NavHeaderStyles,
+);
+const getStaticPanelLayoutClassName = getClassNameFactory(
+  "Online-Store-UI-StaticPanel-Layout",
+  StaticPanelStyles,
+);
+
 const Props = () => {
   const { selectedSection: selected, onOneSectionIsUpdated } = useSections();
 
@@ -48,7 +65,7 @@ const Props = () => {
                   onOneSectionIsUpdated(
                     selected.id,
                     name,
-                    value, 
+                    value,
                     generaleGroup.name,
                   )
                 }
@@ -92,12 +109,13 @@ const Props = () => {
   );
 };
 
+
+
 const Sections = () => {
   const {
     sectionGroupsState,
     closeSelectedSection,
     selectedSection: selected,
-    onOneSectionIsUpdated,
     onSelectedElementIsDelected,
     selectedElementCanDelete,
   } = useSections();
@@ -109,42 +127,59 @@ const Sections = () => {
   return (
     <>
       <div
-        className={clsx("Online-Store-UI-StaticPanel_1hinh", {
-          "Online-Store-UI-StaticPanel--suspend_1qx89": !!selected,
-        })}
+        className={getStaticPanelClass({ suspend: !!selected })}
         {...(!selected ? { tabIndex: -1 } : {})}
-        {...(selected
-          ? { inert: "true", "data-inert": "true", "aria-hidden": "true" }
-          : {})}
+        aria-hidden={selected}
+        {...(selected ? { "data-inert": "true" } : {})}
       >
-        <div className="Online-Store-UI-StaticPanel__ChildrenWrapper_1a4a2">
-          <div className="_ScrollableWrapper_auf6i_8">
-            <div className="Online-Store-UI-StaticPanel-Layout_1q75s Online-Store-UI-StaticPanel-Layout--layoutSpacingDefault_10qs4 Online-Store-UI-StaticPanel-Layout--fullHeight_27lvp Online-Store-UI-StaticPanel-Layout--scrollable_2d5te">
-              <div className="Online-Store-UI-NavHeader_qxk5v">
-                <Box paddingInlineStart={{ xs: "400" }}>
-                  <div className="Online-Store-UI-NavHeader-Section_1nmyf Online-Store-UI-NavHeader-Section--alignToNav_fn5cr Online-Store-UI-NavHeader-Section--alignToActionBar_ic2m6 Online-Store-UI-NavHeader-Section--dense_uvnf9">
-                    <div className="_TemplateHeadingWithoutPicker_2r1gl_31 _removeHeadingSpacing_2r1gl_26">
-                      <div className="_Heading_2r1gl_36">
-                        <Text variant="headingMd">Sections</Text>
-                      </div>
-                    </div>
+        <div
+          className={
+            StaticPanelStyles["Online-Store-UI-StaticPanel__ChildrenWrapper"]
+          }
+        >
+          <div className={NavHeaderStyles["Online-Store-UI-NavHeader"]}>
+            <Box paddingInlineStart={{ xs: "400" }}>
+              <div
+                className={getNavHeaderSection({
+                  alignToNav: true,
+                  alignToActionBar: true,
+                  dense: true,
+                })}
+              >
+                <div
+                  className={`${EditorStyles["TemplateHeadingWithoutPicker"]} ${EditorStyles["removeHeadingSpacing"]}`}
+                >
+                  <div className={EditorStyles["Heading"]}>
+                    <Text variant="headingMd" as="h1">
+                      Sections
+                    </Text>
                   </div>
-                </Box>
+                </div>
               </div>
+            </Box>
+          </div>
 
-              <div className="Online-Store-UI-StaticPanel-Layout_1q75s Online-Store-UI-StaticPanel-Layout--layoutSpacingDefault_10qs4 Online-Store-UI-StaticPanel-Layout--spaceAfter_13747 Online-Store-UI-StaticPanel-Layout--divided_girqq Online-Store-UI-StaticPanel-Layout--fullHeight_27lvp Online-Store-UI-StaticPanel-Layout--scrollable_2d5te">
-                {Object.entries(sectionGroupsState).map(([group, {}]) => (
-                  <SectionGroupProvider name={group} key={group}>
-                    <section className="Online-Store-UI-StaticPanel-Layout__Section_10usc Online-Store-UI-StaticPanel-Layout--sectionSpacingNone_1bf69 Online-Store-UI-StaticPanel-Layout--paddingNone_1rhh6 Online-Store-UI-StaticPanel-Layout--denseUi_41sbe">
-                      <PopoverProvider>
-                        <SectionGroup />
-                      </PopoverProvider>
-                    </section>
-                  </SectionGroupProvider>
-                ))}
-              </div>
-            </div>
-          </div>{" "}
+          <div
+            className={getStaticPanelLayoutClassName({
+              layoutSpacingDefault: true,
+              spaceAfter: true,
+              divided: true,
+              fullHeight: true,
+              scrollable: true,
+            })}
+          >
+            {Object.entries(sectionGroupsState).map(([group, {}]) => (
+              <SectionGroupProvider name={group} key={group}>
+                <section
+                  className={`${StaticPanelStyles["Online-Store-UI-StaticPanel-Layout__Section"]} ${getStaticPanelLayoutClassName({ sectionSpacingNone: true, paddingNone: true, denseUi: true }, false)}`}
+                >
+                  <PopoverProvider>
+                    <SectionGroup />
+                  </PopoverProvider>
+                </section>
+              </SectionGroupProvider>
+            ))}
+          </div>
         </div>{" "}
       </div>
 

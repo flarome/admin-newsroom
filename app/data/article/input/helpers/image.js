@@ -1,47 +1,17 @@
 import yazl from "yazl";
 
-// import licenceBuffenr from "../../../../external/article/assets/LEGAL_NOTICE.rtf?raw";
-
 import {
   getFilenameFromUrl,
   hasUnexpectedParams,
-  keepOnlyParams,
   stripUrlParams,
 } from "../../../../utils/url";
 import { buildShopifyFileCdnUrl } from "../../../../utils/shopify/cdn";
 
- 
-import { readFileSync } from "fs";
-import { fileURLToPath } from "url";
-import { dirname, resolve } from "path";
-
-// 📍 Point de départ = fichier courant
-/*const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename); 
-
-
-// 🔒 Résolution absolue vers le fichier
-const licencePath = resolve(__dirname, "../../../../external/article/assets/LEGAL_NOTICE.rtf");
-
-// ✅ Chargement du buffer binaire
-const licenceBuffer = readFileSync(licencePath);
-*/
-
-
-// ✅ Résout le fichier de manière fiable en dev + prod
-/*const licenceBuffer = readFileSync(
-  fileURLToPath(new URL("../../../../external/article/assets/LEGAL_NOTICE.rtf", import.meta.url))
-);*/
-
-// import licencePath from '../../../../external/article/assets/LEGAL_NOTICE.rtf?url'; // te donne le chemin absolu
-
-// const licencePath = fileURLToPath(new URL('../../../../external/article/assets/LEGAL_NOTICE.rtf', import.meta.url).href)
-
-// const licenceBuffer = readFileSync(licencePath);
-
 import licenceBuffer from "../../../../external/article/assets/LEGAL_NOTICE.rtf";
 
 const NOTICE_NAME = "LEGAL_NOTICE.rtf";
+export const ADMIN_IMAGE_VERSION = "ts";
+
 /**
  * Crée une archive ZIP contenant une licence et un tableau d’images.
  *
@@ -110,7 +80,7 @@ export function extractFilenameAndVersion(url, versionFallback) {
   }
 }
 
-export const ADMIN_IMAGE_VERSION = "ts";
+
 
 export function isSameImageThatAlreadyUploaded(
   shopURL,

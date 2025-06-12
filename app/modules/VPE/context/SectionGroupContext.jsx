@@ -41,6 +41,15 @@ export function SectionGroupProvider({ children, name }) {
   const [addBetween, setAddBetween] = useState([]);
   const [addBetweenBlock, setAddBetweenBlock] = useState([]);
 
+
+   const updateUISection = useCallback(
+    (newVal) => {
+      onOneGroupIsUpdated(name, "section", newVal);
+    },
+    [sections, name, onOneGroupIsUpdated]
+  );
+
+
   const moveSection = useCallback(
     (fromIndex, toIndex) => {
       if (fromIndex === toIndex) return;
@@ -125,6 +134,9 @@ export function SectionGroupProvider({ children, name }) {
     },
     [sections, name, onOneGroupIsUpdated]
   );
+
+
+
   const openAnBlock = useCallback(
     (sectionId, blockID) =>
       openSelectedSection(name, "block", formatBlockId(sectionId, blockID)),
@@ -266,6 +278,8 @@ export function SectionGroupProvider({ children, name }) {
       sectionIsDelectable,
       sectionHasProps,
       blockHasProps,
+      groupName: name,
+      updateUISection
     }),
     [
       sections,
@@ -289,7 +303,10 @@ export function SectionGroupProvider({ children, name }) {
       sectionIsDelectable,
       sectionHasProps,
       blockHasProps,
+      name,
+      updateUISection
     ]
+
   );
 
   return (

@@ -1,0 +1,80 @@
+
+.Online-Store-UI-AppProvider {
+    --osui_version: "22.10.1";
+    --osui_animation-name-fade-in: osui_fade-in;
+    --osui_animation-name-fade-out: osui_fade-out;
+    --osui_animation-name-drag-handle-pulse: osui_drag-handle-pulse;
+    --osui_motion-suspended-travel: 25%;
+    --osui_easing-bounce: cubic-bezier(.18, .67, .6, 1.22);
+    --osui_color-panel-bg: var(--p-color-bg-surface);
+    --osui_color-frame-bg: var(--p-color-bg);
+    --osui_color-frame-surface-bg: var(--p-color-bg-surface);
+    --osui_color-plain-action-bg-active-light: var(--p-color-bg-surface-brand-selected);
+    --osui_color-plain-action-bg-active-base: var(--p-color-bg-surface-brand-hover);
+    --osui_color-plain-action-bg-active-dark: var(--p-color-bg-surface-brand-active);
+    --osui_color-plain-button-bg: var(--p-color-bg-fill-tertiary);
+    --osui_color-plain-button-bg-active: rgba(33, 43, 54, .08);
+    --osui_color-setting-label: rgba(77, 77, 77, 1);
+    --osui_size-common-spacing: var(--p-space-400);
+    --osui_size-min-action-mobile: 2.75rem;
+    --osui_size-resource-thumbnail: 2.5rem;
+    --osui_height-frame-footer: 4rem;
+    --osui_height-frame-header: 3.5rem;
+    --osui_width-action-bar: 3.25rem;
+    --osui_width-labelled-setting-label: 6.25rem;
+    --osui_height-nav-action: 2.125rem;
+    --osui_height-nav-action-legacy: 2.25rem;
+    --osui_width-sidebar-desktop: 18.75rem;
+    --osui_width-sidebar-interior-desktop: calc(18.75rem - var(--p-space-400)*2);
+    --osui_width-sidebar-interior-card-desktop: calc(18.75rem - var(--p-space-400)*2 - var(--p-space-400)*2);
+    --osui_width-topbar-sidebar-desktop: calc(18.75rem - var(--p-space-400));
+    --osui_radius-sidebar-children: var(--p-space-200);
+    --osui_radius-sidebar-children-legacy: .25rem;
+    --osui_height-common-control: var(--p-space-800);
+    --osui_height-common-control-slim: var(--p-space-600);
+    --osui_high-contrast-outline: var(--p-border-width-025) solid transparent;
+    --osui_high-contrast-button-outline: var(--p-border-width-050) dotted
+}
+
+@keyframes osui_fade-in {
+    0% {
+        opacity: 0
+    }
+
+    to {
+        opacity: 1
+    }
+}
+
+@keyframes osui_fade-out {
+    0% {
+        opacity: 1
+    }
+
+    to {
+        opacity: 0
+    }
+}
+
+@keyframes osui_drag-handle-pulse {
+    0% {
+        background-color: inherit;
+        outline: var(--osui_high-contrast-outline)
+    }
+
+    to {
+        background-color: #0000001a;
+        outline: solid transparent
+    }
+}
+
+@media screen and (prefers-reduced-motion: reduce) {
+    .Online-Store-UI-AppProvider * {
+        animation-duration: .001ms!important;
+        transition-duration: .001ms!important
+    }
+}
+
+.Online-Store-UI-AppProvider.Online-Store-UI-AppProvider--dense {
+    --osui_height-nav-action: 1.875rem
+}

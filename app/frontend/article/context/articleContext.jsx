@@ -1,5 +1,5 @@
 import { useState, createContext, useContext, useEffect, useMemo } from "react";
-import { ClientOnly } from "remix-utils/client-only";
+
 import {
   History,
 } from "@shopify/app-bridge/actions";

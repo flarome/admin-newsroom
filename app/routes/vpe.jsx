@@ -10,7 +10,7 @@ import {useAppBridge} from '@shopify/app-bridge-react';
 import { AppProvider as PolarisProvider } from "@shopify/polaris";
 
 import { useEffect, useState } from "react";
-import {VPE} from "../modules/VPE";
+import {VPE} from "../VPE";
 
 
 

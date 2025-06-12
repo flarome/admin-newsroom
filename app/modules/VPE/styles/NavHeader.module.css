@@ -2,17 +2,16 @@
     border-bottom: var(--p-border-width-025) solid var(--p-color-border-secondary)
 }
 
-
 .Online-Store-UI-NavHeader-Section {
     --osui_nav-header-section-divider-offset: 0;
     padding: var(--p-space-200)
 }
 
-.Online-Store-UI-NavHeader-Section+.Online-Store-UI-NavHeader-Section {
+.Online-Store-UI-NavHeader-Section + .Online-Store-UI-NavHeader-Section {
     padding-top: 0
 }
 
-.Online-Store-UI-NavHeader-Section+.Online-Store-UI-NavHeader-Section:before {
+.Online-Store-UI-NavHeader-Section + .Online-Store-UI-NavHeader-Section:before {
     content: "";
     display: block;
     width: 100%;
@@ -36,11 +35,13 @@
     padding-left: 1.75rem
 }
 
-.Online-Store-UI-NavHeader-Section--alignToNav,.Online-Store-UI-NavHeader-Section--alignToNav+.Online-Store-UI-NavHeader-Section {
+.Online-Store-UI-NavHeader-Section--alignToNav,
+.Online-Store-UI-NavHeader-Section--alignToNav + .Online-Store-UI-NavHeader-Section {
     --osui_nav-header-section-divider-offset: calc(1.75rem - var(--p-space-200))
 }
 
-.Online-Store-UI-NavHeader-Section--alignToNav:first-child,.Online-Store-UI-NavHeader-Section--alignToNav+.Online-Store-UI-NavHeader-Section:first-child {
+.Online-Store-UI-NavHeader-Section--alignToNav:first-child,
+.Online-Store-UI-NavHeader-Section--alignToNav + .Online-Store-UI-NavHeader-Section:first-child {
     padding-left: var(--p-space-400);
     padding-right: var(--p-space-400)
 }
@@ -49,8 +50,7 @@
     padding-left: 0
 }
 
-.Online-Store-UI-NavHeader-Section--dense:first-child,.Online-Store-UI-NavHeader-Section--dense+.Online-Store-UI-NavHeader-Section:first-child {
+.Online-Store-UI-NavHeader-Section--dense:first-child,
+.Online-Store-UI-NavHeader-Section--dense + .Online-Store-UI-NavHeader-Section:first-child {
     padding-left: 0
 }
-
-

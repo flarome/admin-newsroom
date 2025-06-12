@@ -1,0 +1,419 @@
+
+.Online-Store-UI-TopBar {
+    position: relative;
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    height: var(--osui_height-frame-header);
+    background-color: var(--osui_color-frame-surface-bg);
+    border: 0;
+    box-shadow: 0 .125rem .0625rem #0000000d,0 0 .0625rem #42474c73
+}
+
+
+.Online-Store-UI-TopBar--loading {
+    padding-right: var(--p-space-400);
+    padding-left: var(--p-space-400)
+}
+
+.Online-Store-UI-TopBar--slim {
+    --osui_height-frame-header: 2.75rem
+}
+
+.Online-Store-UI-TopBar--slim.Online-Store-UI-TopBar--usesBottomSheet {
+    --osui_height-frame-header: 3.5rem
+}
+
+.Online-Store-UI-TopBar__LoadingSkeleton {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%
+}
+
+.Online-Store-UI-TopBar__LoadingSkeleton>div {
+    flex: 0 1 20%
+}
+
+@media (max-width: 41.685em) {
+    .Online-Store-UI-TopBar__LoadingSkeleton>div:nth-child(3) {
+        display:none
+    }
+}
+
+.Online-Store-UI-TopBar-Divider {
+    width: var(--p-border-width-025);
+    background-color: var(--p-color-border-secondary);
+    height: var(--osui_height-divider);
+    border-radius: var(--p-border-radius-300)
+}
+
+.Online-Store-UI-TopBar-ExitAction__ExitActionWrapper {
+    display: flex;
+    align-items: center;
+    flex: 0 1 auto;
+    height: 100%
+}
+
+.Online-Store-UI-TopBar-ExitAction {
+    -webkit-appearance: none;
+    appearance: none;
+    margin: 0;
+    padding: 0;
+    background: none;
+    border: none;
+    font-size: inherit;
+    line-height: inherit;
+    color: inherit;
+    cursor: pointer;
+    min-width: 0;
+    font-weight: var(--osui_plain-action-font-weight);
+    text-transform: initial;
+    letter-spacing: initial;
+    fill: var(--p-color-icon);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: var(--osui_height-common-control);
+    max-width: 100%;
+    min-height: var(--osui_height-common-control);
+    border-radius: var(--p-border-radius-200);
+    line-height: 1;
+    text-decoration: none;
+    color: var(--p-color-text);
+    transition-property: color,background-color;
+    transition-duration: var(--p-motion-duration-150);
+    transition-timing-function: var(--p-motion-ease);
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    outline: none;
+    position: relative;
+    flex: 0 0 auto;
+    text-align: left
+}
+
+.Online-Store-UI-TopBar-ExitAction:focus {
+    outline: none
+}
+
+.Online-Store-UI-TopBar-ExitAction:after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    inset: -.0625rem;
+    display: block;
+    pointer-events: none;
+    box-shadow: 0 0 0 -.0625rem var(--p-color-border-focus);
+    transition: box-shadow var(--p-motion-duration-100) var(--p-motion-ease);
+    border-radius: calc(var(--p-border-radius-200) + .0625rem)
+}
+
+.Online-Store-UI-TopBar-ExitAction:focus:after {
+    box-shadow: 0 0 0 .125rem var(--p-color-border-focus);
+    outline: var(--osui_high-contrast-outline)
+}
+
+.Online-Store-UI-TopBar-ExitAction:focus:not(:focus-visible):after {
+    box-shadow: 0 0 0 0 transparent
+}
+
+@media (-ms-high-contrast: active) {
+    .Online-Store-UI-TopBar-ExitAction:focus:not(:focus-visible):after {
+        outline: none
+    }
+}
+
+.Online-Store-UI-TopBar-ExitAction:focus-visible:after {
+    box-shadow: 0 0 0 .125rem var(--p-color-border-focus);
+    outline: var(--osui_high-contrast-outline)
+}
+
+.Online-Store-UI-TopBar-ExitAction s-internal-icon,.Online-Store-UI-TopBar-ExitAction svg {
+    transition: color var(--p-motion-duration-150) var(--p-motion-ease)
+}
+
+.Online-Store-UI-TopBar-ExitAction:focus-visible {
+    color: var(--p-color-text-brand);
+    background-color: var(--p-color-bg-fill-transparent-secondary)
+}
+
+.Online-Store-UI-TopBar-ExitAction:focus-visible s-internal-icon,.Online-Store-UI-TopBar-ExitAction:focus-visible svg {
+    color: var(--p-color-text-brand)
+}
+
+@media (-ms-high-contrast: active) {
+    .Online-Store-UI-TopBar-ExitAction:focus-visible s-internal-icon,.Online-Store-UI-TopBar-ExitAction:focus-visible svg {
+        color: var(--p-color-icon-secondary)
+    }
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .Online-Store-UI-TopBar-ExitAction:hover {
+        color:var(--p-color-text-brand);
+        background-color: var(--p-color-bg-fill-transparent-secondary)
+    }
+
+    .Online-Store-UI-TopBar-ExitAction:hover s-internal-icon,.Online-Store-UI-TopBar-ExitAction:hover svg {
+        color: var(--p-color-text-brand)
+    }
+}
+
+@media (hover: hover) and (pointer: fine) and (-ms-high-contrast: active) {
+    .Online-Store-UI-TopBar-ExitAction:hover s-internal-icon,.Online-Store-UI-TopBar-ExitAction:hover svg {
+        color:var(--p-color-icon-secondary)
+    }
+}
+
+.Online-Store-UI-TopBar-ExitAction:active {
+    color: var(--p-color-text-brand);
+    background-color: var(--p-color-bg-surface-tertiary)
+}
+
+.Online-Store-UI-TopBar-ExitAction:active s-internal-icon,.Online-Store-UI-TopBar-ExitAction:active svg {
+    color: var(--p-color-text-brand)
+}
+
+@media (-ms-high-contrast: active) {
+    .Online-Store-UI-TopBar-ExitAction:active s-internal-icon,.Online-Store-UI-TopBar-ExitAction:active svg {
+        color: var(--p-color-icon-secondary)
+    }
+}
+
+@media (min-width: 41.6875em) {
+    .Online-Store-UI-TopBar-ExitAction {
+        height:100%;
+        justify-content: left;
+        border-radius: 0;
+        color: var(--p-color-text)
+    }
+
+    .Online-Store-UI-TopBar-ExitAction:after {
+        inset: var(--p-border-width-050) var(--p-border-width-050) var(--p-border-width-050) var(--p-border-width-050);
+        border-radius: var(--p-border-radius-200)
+    }
+
+    .Online-Store-UI-TopBar-ExitAction:focus-visible:before {
+        opacity: 0
+    }
+
+    .Online-Store-UI-TopBar-ExitAction--animated .Online-Store-UI-TopBar-ExitAction {
+        z-index: 2;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-color: var(--osui_color-frame-surface-bg)
+    }
+
+    .Online-Store-UI-TopBar-ExitAction--animated .Online-Store-UI-TopBar-ExitAction:hover {
+        background-color: var(--osui_color-frame-surface-bg)
+    }
+
+    .Online-Store-UI-TopBar-ExitAction--animated .Online-Store-UI-TopBar-ExitAction:active {
+        background-color: var(--osui_color-plain-button-bg-active)
+    }
+}
+
+.Online-Store-UI-TopBar-ExitAction__Content {
+    display: flex;
+    align-items: center;
+    overflow: hidden
+}
+
+@media (min-width: 41.6875em) {
+    .Online-Store-UI-TopBar-ExitAction__Content {
+        min-width:3.5rem;
+        height: 100%
+    }
+
+    .Online-Store-UI-TopBar-ExitAction--animated .Online-Store-UI-TopBar-ExitAction__Content {
+        max-width: 3.5rem;
+        height: calc(100% - var(--p-border-width-025));
+        transition: max-width var(--p-motion-duration-150) var(--p-motion-ease)
+    }
+
+    .Online-Store-UI-TopBar-ExitAction--animated .Online-Store-UI-TopBar-ExitAction:focus .Online-Store-UI-TopBar-ExitAction__Content,.Online-Store-UI-TopBar-ExitAction--animated .Online-Store-UI-TopBar-ExitAction:hover .Online-Store-UI-TopBar-ExitAction__Content {
+        max-width: calc(10.5rem + var(--p-space-300))
+    }
+}
+
+.Online-Store-UI-TopBar-ExitAction__Label,.Online-Store-UI-TopBar-ExitAction__IconWrapper {
+    min-width: 0;
+    max-width: 100%;
+    flex: 0 0 auto
+}
+
+@media (min-width: 41.6875em) {
+    .Online-Store-UI-TopBar-ExitAction__IconWrapper {
+        display:flex;
+        align-items: center;
+        justify-content: center;
+        width: 3.5rem;
+        height: 100%
+    }
+}
+
+.Online-Store-UI-TopBar-ExitAction__Label {
+    margin-left: calc(var(--p-space-200)*-1);
+    padding-right: var(--p-space-300);
+    max-width: calc(7rem + var(--p-space-300))
+}
+
+.Online-Store-UI-TopBar-ExitAction__Label>* {
+    padding-bottom: .14em;
+    line-height: 1.1
+}
+
+@supports (-webkit-line-clamp: 2) {
+    .Online-Store-UI-TopBar-ExitAction__Label>* {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden
+    }
+}
+
+.Online-Store-UI-TopBar-ExitAction--animated .Online-Store-UI-TopBar-ExitAction__Label {
+    opacity: 0;
+    transform: translate(calc(var(--p-space-200)*-1));
+    transition-property: opacity,transform;
+    transition-duration: var(--p-motion-duration-150);
+    transition-timing-function: var(--p-motion-ease)
+}
+
+.Online-Store-UI-TopBar-ExitAction--animated .Online-Store-UI-TopBar-ExitAction:focus .Online-Store-UI-TopBar-ExitAction__Label,.Online-Store-UI-TopBar-ExitAction--animated .Online-Store-UI-TopBar-ExitAction:hover .Online-Store-UI-TopBar-ExitAction__Label,.Online-Store-UI-TopBar-ExitAction--animated .Online-Store-UI-TopBar-ExitAction:active .Online-Store-UI-TopBar-ExitAction__Label {
+    opacity: 1;
+    transform: translate(0)
+}
+
+.Online-Store-UI-TopBar-ExitAction__ChildrenWrapper {
+    min-width: 0;
+    max-width: 100%;
+    z-index: 1;
+    position: relative;
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: var(--p-space-300);
+    flex: 0 1 auto;
+    padding-left: var(--p-space-200);
+    height: 100%
+}
+
+@media (min-width: 41.6875em) {
+    .Online-Store-UI-TopBar-ExitAction--animated .Online-Store-UI-TopBar-ExitAction__ChildrenWrapper {
+        padding-left:calc(3.5rem + var(--p-space-200));
+        transition-property: opacity,transform;
+        transition-duration: var(--p-motion-duration-150);
+        transition-timing-function: var(--p-motion-ease)
+    }
+
+    .Online-Store-UI-TopBar-ExitAction--animated .Online-Store-UI-TopBar-ExitAction:focus+.Online-Store-UI-TopBar-ExitAction__ChildrenWrapper,.Online-Store-UI-TopBar-ExitAction--animated .Online-Store-UI-TopBar-ExitAction:hover+.Online-Store-UI-TopBar-ExitAction__ChildrenWrapper,.Online-Store-UI-TopBar-ExitAction--animated .Online-Store-UI-TopBar-ExitAction:active+.Online-Store-UI-TopBar-ExitAction__ChildrenWrapper {
+        opacity: 0;
+        transform: translate(var(--p-space-200))
+    }
+}
+
+.Online-Store-UI-ExitAction-Title>* {
+    padding-bottom: .14em;
+    line-height: 1.1
+}
+
+@supports (-webkit-line-clamp: 2) {
+    .Online-Store-UI-ExitAction-Title>* {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden
+    }
+}
+
+@media (min-width: 41.6875em) {
+    .Online-Store-UI-ExitAction-Title {
+        max-width:20vw
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+.Online-Store-UI-TopBar-LayoutGroup {
+    min-width: 0;
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+    height: 100%
+}
+
+.Online-Store-UI-TopBar-LayoutGroup--grow {
+    flex-grow: 1
+}
+
+.Online-Store-UI-TopBar-LayoutGroup--shrink {
+    flex-shrink: 1
+}
+
+.Online-Store-UI-TopBar-LayoutGroup--center {
+    justify-content: center
+}
+
+.Online-Store-UI-TopBar-LayoutGroup--distributeSpace {
+    justify-content: space-between
+}
+
+.Online-Store-UI-TopBar-LayoutGroup--alignRight {
+    margin-left: auto
+}
+
+.Online-Store-UI-TopBar-LayoutGroup--paddedBoth {
+    padding-right: var(--p-space-400);
+    padding-left: var(--p-space-400)
+}
+
+.Online-Store-UI-TopBar-LayoutGroup--paddedBoth.Online-Store-UI-TopBar-LayoutGroup--usesBottomSheet {
+    padding-right: var(--p-space-300);
+    padding-left: var(--p-space-300)
+}
+
+.Online-Store-UI-TopBar-LayoutGroup--paddedLeft {
+    padding-left: var(--p-space-400)
+}
+
+.Online-Store-UI-TopBar-LayoutGroup--paddedRight {
+    padding-right: var(--p-space-400)
+}
+
+.Online-Store-UI-TopBar-LayoutGroup--spacingNone>*+* {
+    margin-left: 0
+}
+
+.Online-Store-UI-TopBar-LayoutGroup--spacingBase>*+* {
+    margin-left: var(--p-space-400)
+}
+
+.Online-Store-UI-TopBar-LayoutGroup--spacingTight>*+* {
+    margin-left: var(--p-space-200)
+}
+
+.Online-Store-UI-TopBar-LayoutGroup--spacingLoose>*+* {
+    margin-left: var(--p-space-500)
+}
+
+.Online-Store-UI-TopBar-LayoutGroup__spacingBase--tight>*+* {
+    margin-left: var(--p-space-300)
+}
+
+.Online-Store-UI-TopBar-LayoutGroup__spacingExtra--tight>*+* {
+    margin-left: var(--p-space-100)
+}
+
+.Online-Store-UI-TopBar-LayoutGroup--alignBaseline {
+    align-items: baseline
+}

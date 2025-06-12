@@ -18,7 +18,7 @@ import {
 import {
   CaretDownIcon,
   ChevronDownIcon,
-ChevronLeftIcon,
+  ChevronLeftIcon,
   DeleteIcon,
   DragHandleIcon,
   HideIcon,
@@ -31,7 +31,7 @@ ChevronLeftIcon,
 import { SortableProvider, Sortable, SortableList } from "../sortable";
 
 import navItemsStyles from "../styles/NavItem.module.css";
-import EditorStyles from "../styles/Editor.module.css";
+
 import DisclosureStyles from "../styles/Disclosure.module.css";
 import getClassNameFactory from "../../../lib/get-class-name-factory";
 import PlainActionStyles from "../styles/PlainAction.module.css";
@@ -41,7 +41,7 @@ const getNavItemClassName = getClassNameFactory(
   "Online-Store-UI-NavItem",
   navItemsStyles,
 );
- 
+
 const getPlainActioClassName = getClassNameFactory(
   "Online-Store-UI-PlainAction",
   PlainActionStyles,
@@ -51,7 +51,22 @@ const getSortableListClassName = getClassNameFactory(
   "Online-Store-UI-SortableList",
   SortableListStyles,
 );
+import StaticPanelStyles from "../styles/StaticPanel.module.css";
+import NavHeaderStyles from "../styles/NavHeader.module.css";
 
+import EditorStyles from "../styles/Editor.module.css";
+const getStaticPanelClass = getClassNameFactory(
+  "Online-Store-UI-StaticPanel",
+  StaticPanelStyles,
+);
+const getNavHeaderSection = getClassNameFactory(
+  "Online-Store-UI-NavHeader-Section",
+  NavHeaderStyles,
+);
+const getStaticPanelLayoutClassName = getClassNameFactory(
+  "Online-Store-UI-StaticPanel-Layout",
+  StaticPanelStyles,
+);
 function SortableItem({ id, children }) {
   return (
     <Sortable key={id} id={id} index={id} disabled={false}>
@@ -365,10 +380,7 @@ const Section = ({ section, blocksLibs, handleRef, isDragging, refDrag }) => {
                 aria-label="Ouvrir le menu des sous-éléments"
                 aria-expanded={collapse}
               >
-                <Icon
-                  source={CaretDownIcon}
-                  tone="legacy-inherit"
-                />
+                <Icon source={CaretDownIcon} tone="legacy-inherit" />
               </button>
             </div>
           </span>
@@ -572,7 +584,9 @@ const Section = ({ section, blocksLibs, handleRef, isDragging, refDrag }) => {
       </div>
       {hasBlockLibs && blocks?.length <= 0 && (
         <Collapsible open={collapse}>
-          <ol className={getSortableListClassName({leftAlignmentCompact: true})}>
+          <ol
+            className={getSortableListClassName({ leftAlignmentCompact: true })}
+          >
             <span>
               <AddBTN
                 onClick={() => setAddBetweenBlock([null, null])}
@@ -581,41 +595,42 @@ const Section = ({ section, blocksLibs, handleRef, isDragging, refDrag }) => {
             </span>
             <span>
               <div>
-              <li
-                className={getNavItemClassName({preventNestedOffset: true, nested: true})}
-                tabIndex="-1"
-              >
-                <div
-                className={`${navItemsStyles["Online-Store-UI-NavItem__Interior"]} ${getNavItemClassName({interactive: true}, false)}`}
-      
-                  data-interior="true"
+                <li
+                  className={getNavItemClassName({
+                    preventNestedOffset: true,
+                    nested: true,
+                  })}
+                  tabIndex="-1"
                 >
-                  <button
-                    onClick={() => setOpen(true)}
-                    type="button"
-                    className="Online-Store-UI-NavItem__PrimaryAction_1r8fd"
-                    aria-labelledby="AddBlock-template--15819007328317__rich_text_rYti4V-label"
-                  ></button>
+                  <div
+                    className={`${navItemsStyles["Online-Store-UI-NavItem__Interior"]} ${getNavItemClassName({ interactive: true }, false)}`}
+                    data-interior="true"
+                  >
+                    <button
+                      onClick={() => setOpen(true)}
+                      type="button"
+                      className="Online-Store-UI-NavItem__PrimaryAction_1r8fd"
+                      aria-labelledby="AddBlock-template--15819007328317__rich_text_rYti4V-label"
+                    ></button>
 
-
-                  <span className="Online-Store-UI-NavItem__TitleContent_gfudd Online-Store-UI-NavItem--labelAlignmentPrefix_hh0c3">
-                    <div className="Online-Store-UI-NavItem__LabelPrefix_1jhe5 Online-Store-UI-NavItem--hasDefaultPrefix_1gvwn">
-                      <span className="Online-Store-UI-NavItem__HoverPrefix_1jttz"></span>
-                      <span className="Online-Store-UI-NavItem__TitlePrefix_1jcka">
-                        <Icon source={PlusCircleIcon} tone="legacy-inherit" />
-                      </span>
-                    </div>
-                    <span
-                      className="Online-Store-UI-NavItem__Title_1gmab"
-                      id="AddBlock-template--15819007328317__rich_text_rYti4V-label"
-                    >
-                      <span className="Polaris-Text--root Polaris-Text--bodySm Polaris-Text--block Polaris-Text--truncate">
-                        Ajouter un bloc
+                    <span className="Online-Store-UI-NavItem__TitleContent_gfudd Online-Store-UI-NavItem--labelAlignmentPrefix_hh0c3">
+                      <div className="Online-Store-UI-NavItem__LabelPrefix_1jhe5 Online-Store-UI-NavItem--hasDefaultPrefix_1gvwn">
+                        <span className="Online-Store-UI-NavItem__HoverPrefix_1jttz"></span>
+                        <span className="Online-Store-UI-NavItem__TitlePrefix_1jcka">
+                          <Icon source={PlusCircleIcon} tone="legacy-inherit" />
+                        </span>
+                      </div>
+                      <span
+                        className="Online-Store-UI-NavItem__Title_1gmab"
+                        id="AddBlock-template--15819007328317__rich_text_rYti4V-label"
+                      >
+                        <span className="Polaris-Text--root Polaris-Text--bodySm Polaris-Text--block Polaris-Text--truncate">
+                          Ajouter un bloc
+                        </span>
                       </span>
                     </span>
-                  </span>
-                </div>
-              </li>
+                  </div>
+                </li>
               </div>
             </span>
           </ol>
@@ -625,7 +640,6 @@ const Section = ({ section, blocksLibs, handleRef, isDragging, refDrag }) => {
       {blocks?.length > 0 && (
         <>
           <Collapsible open={collapse}>
-       
             <ol className="Online-Store-UI-SortableList_p19g7 Online-Store-UI-SortableList--leftAlignmentCompact_1dw7q">
               <SortableContext
                 items={blocks.map((b) => `block:${b.id}|${section.id}`)}
@@ -726,7 +740,7 @@ const AddBTN = ({ onClick, nested }) => {
 };
 
 export default function SectionGroup({}) {
-  const { addClickReference } = usePopover();
+  const { addClickReference, open: PopoverOpen, popoverId } = usePopover();
 
   const {
     setAddBetween,
@@ -736,8 +750,9 @@ export default function SectionGroup({}) {
     catalog,
     getBlockCatalog,
     moveSection,
-    moveBlock,
     groupLabel,
+    groupName,
+    updateUISection
   } = useSectionGroup();
 
   const handleDragEnd = (event) => {
@@ -751,14 +766,32 @@ export default function SectionGroup({}) {
     }
   };
 
-  const [draggedItem, setDraggedItem] = useState("");
+ 
+
+
 
   return (
     <>
-      <div className="Online-Store-UI-StaticPanel-Layout__ChildrenWrapper_1tp4f">
-        <section className="Online-Store-UI-StaticPanel-Layout__Section_10usc Online-Store-UI-StaticPanel-Layout--sectionSpacingTight_as2n2 Online-Store-UI-StaticPanel-Layout--paddingExtraTight_gna4b Online-Store-UI-StaticPanel-Layout--denseUi_41sbe">
-          <div className="Online-Store-UI-StaticPanel-Layout__ChildrenWrapper_1tp4f">
-            <div className="_LabelWrapper_9ryhn_1 _dense_9ryhn_9">
+      <div
+        className={
+          StaticPanelStyles[
+            "Online-Store-UI-StaticPanel-Layout__ChildrenWrapper"
+          ]
+        }
+      >
+        <section
+          className={`${StaticPanelStyles["Online-Store-UI-StaticPanel-Layout__Section"]} ${getStaticPanelLayoutClassName({ sectionSpacingTight: true, paddingExtraTight: true, denseUi: true }, false)}`}
+        >
+          <div
+            className={
+              StaticPanelStyles[
+                "Online-Store-UI-StaticPanel-Layout__ChildrenWrapper"
+              ]
+            }
+          >
+            <div
+              className={`${EditorStyles["LabelWrapper"]} ${EditorStyles["dense"]}`}
+            >
               <Text variant="headingSm" as="h3">
                 {groupLabel}
               </Text>
@@ -766,8 +799,16 @@ export default function SectionGroup({}) {
           </div>
         </section>
 
-        <section className="Online-Store-UI-StaticPanel-Layout__Section_10usc Online-Store-UI-StaticPanel-Layout--sectionSpacingDefault_djyin Online-Store-UI-StaticPanel-Layout--paddingExtraTight_gna4b Online-Store-UI-StaticPanel-Layout--denseUi_41sbe">
-          <div className="Online-Store-UI-StaticPanel-Layout__ChildrenWrapper_1tp4f">
+        <section
+          className={`${StaticPanelStyles["Online-Store-UI-StaticPanel-Layout__Section"]} ${getStaticPanelLayoutClassName({ sectionSpacingDefault: true, paddingExtraTight: true, denseUi: true }, false)}`}
+        >
+          <div
+            className={
+              StaticPanelStyles[
+                "Online-Store-UI-StaticPanel-Layout__ChildrenWrapper"
+              ]
+            }
+          >
             <Box paddingBlockEnd={{ sm: "200" }}>
               <SortableList
                 listOptions={{ leftAlignmentNone: true }}
@@ -896,36 +937,55 @@ export default function SectionGroup({}) {
                 })}
               </SortableList>
               <span>
-                <li
-                  className={getNavItemClassName()}
-                  tabIndex={-1}
-                >
+                <li className={getNavItemClassName({pressed: PopoverOpen})} tabIndex={-1}>
                   <div
-                    className="Online-Store-UI-NavItem__Interior_1y0gz Online-Store-UI-NavItem--interactive_p3lww"
+                    className={`${navItemsStyles["Online-Store-UI-NavItem__Interior"]} ${getNavItemClassName({ interactive: true, pressed: PopoverOpen }, false)}`}
                     data-interior="true"
                   >
                     <button
                       type="button"
                       onClick={addClickReference}
-                      className="Online-Store-UI-NavItem__PrimaryAction_1r8fd"
-                      aria-labelledby="AddSection-index-label"
+                      className={
+                        navItemsStyles["Online-Store-UI-NavItem__PrimaryAction"]
+                      }
+                      aria-labelledby={`AddSection-index-${groupName}-label`}
                       aria-haspopup="dialog"
-                      aria-expanded="false"
+                      aria-expanded={PopoverOpen}
+                      aria-controls={PopoverOpen ? popoverId : undefined}
                     />
-                    <span className="Online-Store-UI-NavItem__TitleContent_gfudd Online-Store-UI-NavItem--labelAlignmentPrefix_hh0c3">
-                      <div className="Online-Store-UI-NavItem__LabelPrefix_1jhe5 Online-Store-UI-NavItem--hasDefaultPrefix_1gvwn">
-                        <span className="Online-Store-UI-NavItem__HoverPrefix_1jttz" />
-                        <span className="Online-Store-UI-NavItem__TitlePrefix_1jcka">
+                    <span
+                      className={`${navItemsStyles["Online-Store-UI-NavItem__TitleContent"]} ${getNavItemClassName({ labelAlignmentPrefix: true }, false)}`}
+                    >
+                      <div
+                        className={`${navItemsStyles["Online-Store-UI-NavItem__LabelPrefix"]} ${getNavItemClassName({ hasDefaultPrefix: true }, false)}`}
+                      >
+                        <span
+                          className={
+                            navItemsStyles[
+                              "Online-Store-UI-NavItem__HoverPrefix"
+                            ]
+                          }
+                        />
+                        <span
+                          className={
+                            navItemsStyles[
+                              "Online-Store-UI-NavItem__TitlePrefix"
+                            ]
+                          }
+                        >
                           <Icon source={PlusCircleIcon} tone="legacy-inherit" />
                         </span>
                       </div>
+
                       <span
-                        className="Online-Store-UI-NavItem__Title_1gmab"
-                        id="AddSection-index-label"
+                        className={
+                          navItemsStyles["Online-Store-UI-NavItem__Title"]
+                        }
+                        id={`AddSection-index-${groupName}-label`}
                       >
-                        <span className="Polaris-Text--root Polaris-Text--bodySm Polaris-Text--block Polaris-Text--truncate">
+                        <Text as="span" variant="bodySm" truncate>
                           Ajouter une section
-                        </span>
+                        </Text>
                       </span>
                     </span>
                   </div>

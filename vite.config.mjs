@@ -2,10 +2,10 @@ import { vitePlugin as remix } from "@remix-run/dev";
 import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 import prefixSelector from "postcss-prefix-selector";
-import fs from "fs";
-import { readFileSync } from "fs";
+import fs, { readFileSync } from "fs";
 import path from "path";
-import { viteStaticCopy } from "vite-plugin-static-copy";
+import tailwindcss from "@tailwindcss/vite";
+
 function graphqlRawLoader() {
   return {
     name: "vite-plugin-graphql-raw-loader",
@@ -91,6 +91,13 @@ export default defineConfig({
     recoverable: true,
 
   },*/
+
+    optimizeDeps: {
+    include: ['react-lite-youtube-embed', 'react-tweet'],
+  },
+  ssr: {
+    noExternal: ['react-lite-youtube-embed', 'react-tweet'],
+  },
   
   server: {
     port: Number(process.env.PORT || 3000),
@@ -107,7 +114,8 @@ export default defineConfig({
     tsconfigPaths(),
     graphqlRawLoader(), // ✅ le vrai, sans compression, sans suppression de \n
 
- importRtfAsBufferPlugin()
+ importRtfAsBufferPlugin(),
+  tailwindcss()
 
 
   ],
@@ -117,7 +125,7 @@ export default defineConfig({
   css: {
     postcss: {
       plugins: [
-        prefixSelector({
+       /* prefixSelector({
           prefix: '[data-cms="vpe"]',
           transform: (prefix, selector, prefixedSelector, file) => {
             // Si ce n'est PAS un VPE style, on ne touche pas
@@ -140,8 +148,8 @@ export default defineConfig({
             // 3. Sinon, on applique le prefix
             return prefixedSelector;
           },
-        }),
-
+        }),*/
+ 
         prefixSelector({
           prefix: '[data-cms="index"]',
           transform: (prefix, selector, prefixedSelector, file) => {
@@ -201,7 +209,7 @@ export default defineConfig({
         /*
          preserveModules: false,  // Désactive la préservation des modules pour les regrouper tous dans un seul fichier
           compact: true,  // Active la réduction de taille*/
-        footer: 'console.log("Flarome Newsroom - Version 1");', // Ajoute un footer
+      //  footer: 'console.log("Flarome Newsroom - Version 1");', // Ajoute un footer
       },
     }, // Empêche Rollup de séparer vendor
     preserveEntrySignatures: "strict",

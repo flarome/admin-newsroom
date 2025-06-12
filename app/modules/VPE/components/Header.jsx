@@ -40,13 +40,7 @@ import { usePreview } from "../context/PreviewContext";
 
 import loadable from "@loadable/component";
 import { useDesignSystem } from "../context/DesignSystemContext";
-const ReactJson = loadable(() => import("react-json-view"), {
-  fallback: (
-    <div style={{ padding: 20, textAlign: "center" }}>
-      <Spinner accessibilityLabel="Chargement de l’éditeur…" size="small" />
-    </div>
-  ),
-});
+
 
 export const JsonEditor = ({}) => {
   const content = "";
@@ -237,18 +231,7 @@ export const JsonEditor = ({}) => {
             borderRadius="200"
           >
             <Card>
-              <ReactJson
-                src={localContent}
-                onEdit={(e) => setLocalContent(e.updated_src)}
-                onAdd={(e) => setLocalContent(e.updated_src)}
-                onDelete={(e) => setLocalContent(e.updated_src)}
-                theme="rjv-default"
-                collapsed={false}
-                enableClipboard={false}
-                displayDataTypes={false}
-                displayObjectSize={false}
-                style={{ fontSize: 14, minHeight: 250 }}
-              />
+             <span></span>
             </Card>
           </Box>
         </Modal.Section>

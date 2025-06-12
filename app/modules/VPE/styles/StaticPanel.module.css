@@ -1,0 +1,279 @@
+.Online-Store-UI-StaticPanel {
+    z-index: 20;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%
+}
+
+.Online-Store-UI-StaticPanel--suspend {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none
+}
+
+.Online-Store-UI-StaticPanel__ChildrenWrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: var(--osui_color-frame-surface-bg)
+}
+
+.Online-Store-UI-StaticPanel-Footer {
+    position: relative
+}
+
+.Online-Store-UI-StaticPanel-Footer__ChildrenWrapper {
+    position: relative;
+    z-index: 4
+}
+
+.Online-Store-UI-StaticPanel-Footer__ChildrenWrapper:not(:only-child):last-child:before {
+    content: "";
+    display: block;
+    width: 100%;
+    height: var(--p-border-width-025);
+    background-color: var(--p-color-border-secondary);
+    margin-bottom: var(--osui_static-panel-layout-spacing)
+}
+
+.Online-Store-UI-StaticPanel-Footer__ChildrenWrapper:not(:only-child):last-child:before {
+    margin-bottom: 0
+}
+
+.Online-Store-UI-StaticPanel-Layout {
+    --osui_sidebar-action-offset: var(--p-space-100);
+    display: flex;
+    flex-direction: column;
+    flex: 0 0 auto
+}
+
+.Online-Store-UI-StaticPanel-Layout>.Online-Store-UI-StaticPanel-Layout.Online-Store-UI-StaticPanel-Layout--sticky {
+    z-index: 5;
+    position: sticky
+}
+
+.Online-Store-UI-StaticPanel-Layout>.Online-Store-UI-StaticPanel-Layout.Online-Store-UI-StaticPanel-Layout--sticky:first-child {
+    top: 0
+}
+
+.Online-Store-UI-StaticPanel-Layout>.Online-Store-UI-StaticPanel-Layout.Online-Store-UI-StaticPanel-Layout--sticky:last-child {
+    bottom: var(--p-border-width-025);
+    margin-top: auto;
+    padding-top: 0
+}
+
+.Online-Store-UI-StaticPanel-Layout--spaceBefore {
+    padding-top: var(--osui_static-panel-layout-spacing)
+}
+
+.Online-Store-UI-StaticPanel-Layout--spaceAfter {
+    padding-bottom: var(--osui_static-panel-layout-spacing)
+}
+
+.Online-Store-UI-StaticPanel-Layout--sticky:first-child.Online-Store-UI-StaticPanel-Layout--isStuck {
+    border-bottom: var(--p-border-width-025) solid var(--p-color-border-secondary)
+}
+
+.Online-Store-UI-StaticPanel-Layout--sticky:last-child {
+    border-top: var(--p-border-width-025) solid var(--p-color-border-secondary)
+}
+
+.Online-Store-UI-StaticPanel-Layout--sticky .Online-Store-UI-StaticPanel-Layout__ChildrenWrapper {
+    background-color: var(--p-color-bg-surface)
+}
+
+.Online-Store-UI-StaticPanel-Layout--fullHeight {
+    flex: 1 1 auto
+}
+
+.Online-Store-UI-StaticPanel-Layout--scrollable {
+    height: 100%;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch
+}
+
+@media (max-width: 41.685em) {
+    .Online-Store-UI-StaticPanel-Layout--scrollable {
+        overflow-x: hidden
+    }
+}
+
+.Online-Store-UI-StaticPanel-Layout--layoutSpacingNone,
+.Online-Store-UI-StaticPanel-Layout--sectionSpacingNone,
+.Online-Store-UI-StaticPanel-Layout--sectionSpacingDefault:first-of-type,
+.Online-Store-UI-StaticPanel-Layout--sectionSpacingDefault:only-child {
+    --osui_static-panel-layout-spacing: var(--p-space-0)
+}
+
+.Online-Store-UI-StaticPanel-Layout--layoutSpacingExtraTight,
+.Online-Store-UI-StaticPanel-Layout--sectionSpacingExtraTight {
+    --osui_static-panel-layout-spacing: var(--p-space-100)
+}
+
+.Online-Store-UI-StaticPanel-Layout--layoutSpacingTight,
+.Online-Store-UI-StaticPanel-Layout--sectionSpacingTight {
+    --osui_static-panel-layout-spacing: var(--p-space-200)
+}
+
+.Online-Store-UI-StaticPanel-Layout--layoutSpacingBaseTight,
+.Online-Store-UI-StaticPanel-Layout--sectionSpacingBaseTight {
+    --osui_static-panel-layout-spacing: var(--p-space-300)
+}
+
+.Online-Store-UI-StaticPanel-Layout--layoutSpacingDefault,
+.Online-Store-UI-StaticPanel-Layout--layoutSpacingBase,
+.Online-Store-UI-StaticPanel-Layout--sectionSpacingBase {
+    --osui_static-panel-layout-spacing: var(--p-space-400)
+}
+
+.Online-Store-UI-StaticPanel-Layout--layoutSpacingLoose,
+.Online-Store-UI-StaticPanel-Layout--sectionSpacingLoose {
+    --osui_static-panel-layout-spacing: var(--p-space-500)
+}
+
+.Online-Store-UI-StaticPanel-Layout--layoutSpacingExtraLoose,
+.Online-Store-UI-StaticPanel-Layout--sectionSpacingExtraLoose {
+    --osui_static-panel-layout-spacing: var(--p-space-800)
+}
+
+.Online-Store-UI-StaticPanel-Layout--dividerBefore {
+    border-top: var(--p-border-width-025) solid var(--p-color-border-secondary)
+}
+
+.Online-Store-UI-StaticPanel-Layout--dividerAfter {
+    border-bottom: var(--p-border-width-025) solid var(--p-color-border-secondary)
+}
+
+.Online-Store-UI-StaticPanel-Layout--divider:before,
+.Online-Store-UI-StaticPanel-Layout--divided>.Online-Store-UI-StaticPanel-Layout__Section:before {
+    content: "";
+    display: block;
+    width: 100%;
+    height: var(--p-border-width-025);
+    background-color: var(--p-color-border-secondary);
+    margin-bottom: var(--osui_static-panel-layout-spacing);
+    margin-left: var(--osui_static-panel-section-padding, var(--p-space-400));
+    width: calc(100% - var(--osui_static-panel-section-padding, var(--p-space-400))*2)
+}
+
+.Online-Store-UI-StaticPanel-Layout--dividerFull:before {
+    content: "";
+    display: block;
+    width: 100%;
+    height: var(--p-border-width-025);
+    background-color: var(--p-color-border-secondary);
+    margin-bottom: var(--osui_static-panel-layout-spacing)
+}
+
+.Online-Store-UI-StaticPanel-Layout--divided>.Online-Store-UI-StaticPanel-Layout--dividerFull:before {
+    margin-left: 0;
+    width: 100%
+}
+
+.Online-Store-UI-StaticPanel-Layout--dividerHide:before,
+.Online-Store-UI-StaticPanel-Layout--divider:first-of-type:before,
+.Online-Store-UI-StaticPanel-Layout--divider:only-child:before,
+.Online-Store-UI-StaticPanel-Layout--divider.Online-Store-UI-StaticPanel-Layout--sectionSpacingNone:before,
+.Online-Store-UI-StaticPanel-Layout--divided.Online-Store-UI-StaticPanel-Layout--layoutSpacingNone .Online-Store-UI-StaticPanel-Layout--sectionSpacingNone:before,
+.Online-Store-UI-StaticPanel-Layout--divided.Online-Store-UI-StaticPanel-Layout--layoutSpacingNone .Online-Store-UI-StaticPanel-Layout--sectionSpacingDefault:before,
+.Online-Store-UI-StaticPanel-Layout--divided>.Online-Store-UI-StaticPanel-Layout__Section:first-of-type:before,
+.Online-Store-UI-StaticPanel-Layout--divided>.Online-Store-UI-StaticPanel-Layout__Section:only-child:before,
+.Online-Store-UI-StaticPanel-Layout--divided>.Online-Store-UI-StaticPanel-Layout--dividerHide:before,
+.Online-Store-UI-StaticPanel-Layout--alignToBottom:not(.Online-Store-UI-StaticPanel-Layout--divider):before {
+    content: none
+}
+
+.Online-Store-UI-StaticPanel-Layout__Section {
+    z-index: 2;
+    position: relative;
+    padding-top: var(--osui_static-panel-layout-spacing);
+    width: 100%;
+    container-type: inline-size;
+    container-name: static-panel-layout-section
+}
+
+.Online-Store-UI-StaticPanel-Layout__Section.Online-Store-UI-StaticPanel-Layout--sticky {
+    z-index: 5;
+    position: sticky
+}
+
+.Online-Store-UI-StaticPanel-Layout__Section.Online-Store-UI-StaticPanel-Layout--sticky:first-child {
+    top: 0
+}
+
+.Online-Store-UI-StaticPanel-Layout__Section.Online-Store-UI-StaticPanel-Layout--sticky:last-child {
+    bottom: var(--p-border-width-025);
+    margin-top: auto;
+    padding-top: 0;
+    border-top: none
+}
+
+.Online-Store-UI-StaticPanel-Layout__Section.Online-Store-UI-StaticPanel-Layout--sticky:last-child:before {
+    content: "";
+    display: block;
+    height: var(--osui_static-panel-layout-spacing);
+    border-bottom: var(--p-border-width-025) solid var(--p-color-border-secondary)
+}
+
+.Online-Store-UI-StaticPanel-Layout--alignToActionBar {
+    padding-top: var(--p-space-200)
+}
+
+.Online-Store-UI-StaticPanel-Layout--alignToBottom {
+    --osui_static-panel-layout-spacing: var(--p-space-1600);
+    margin-top: auto
+}
+
+.Online-Store-UI-StaticPanel-Layout--alignToBottom:before,
+.Online-Store-UI-StaticPanel-Layout--divided>.Online-Store-UI-StaticPanel-Layout--alignToBottom:before {
+    margin-bottom: var(--p-space-400)
+}
+
+.Online-Store-UI-StaticPanel-Layout__ChildrenWrapper {
+    padding-left: var(--osui_static-panel-section-padding);
+    padding-right: var(--osui_static-panel-section-padding)
+}
+
+.Online-Store-UI-StaticPanel-Layout__ChildrenWrapper.Online-Store-UI-StaticPanel-Layout--paddingScrollbarCorrection {
+    padding-right: max(var(--osui_static-panel-section-padding) - var(--osui_static-panel-scrollbar-correction-width, var(--p-space-0)), .0625rem)
+}
+
+@container static-panel-layout-section (max-width: 18.4375rem) {
+    .Online-Store-UI-StaticPanel-Layout__ChildrenWrapper.Online-Store-UI-StaticPanel-Layout--paddingScrollbarCorrection {
+        --osui_static-panel-scrollbar-correction-width: var(--p-space-150)
+    }
+}
+
+.Online-Store-UI-StaticPanel-Layout--paddingNone {
+    --osui_static-panel-section-padding: var(--p-space-0)
+}
+
+.Online-Store-UI-StaticPanel-Layout--paddingExtraTight {
+    --osui_static-panel-section-padding: var(--p-space-100)
+}
+
+.Online-Store-UI-StaticPanel-Layout--paddingTight {
+    --osui_static-panel-section-padding: var(--p-space-200)
+}
+
+.Online-Store-UI-StaticPanel-Layout--paddingBaseTight {
+    --osui_static-panel-section-padding: var(--p-space-300)
+}
+
+.Online-Store-UI-StaticPanel-Layout--paddingBase {
+    --osui_static-panel-section-padding: var(--p-space-400)
+}
+
+.Online-Store-UI-StaticPanel-Layout--paddingBase.Online-Store-UI-StaticPanel-Layout--denseUi {
+    --osui_static-panel-section-padding: var(--p-space-300)
+}
+
+.Online-Store-UI-StaticPanel-Layout--paddingLoose {
+    --osui_static-panel-section-padding: var(--p-space-500)
+}
+
+.Online-Store-UI-StaticPanel-Layout--paddingExtraLoose {
+    --osui_static-panel-section-padding: var(--p-space-800)
+}

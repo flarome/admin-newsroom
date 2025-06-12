@@ -1,10 +1,9 @@
-import React, {
+import {
   createContext,
   useContext,
   useRef,
   useState,
   useEffect,
-  useMemo,
   cloneElement,
   useCallback,
 } from "react";
@@ -14,6 +13,11 @@ import SkeletonApp from "../SkeletonApp";
 import { useAppBridge } from "@shopify/app-bridge-react";
 import { createAppStore, defaultAppState, appStoreContext } from "../store";
 import { usePropsContext } from "./PropsContext";
+
+import AppProviderStyles from '../styles/AppProvider.module.css';
+import getClassNameFactory from "../../../lib/get-class-name-factory";
+const getAppProviderClass = getClassNameFactory("Online-Store-UI-AppProvider", AppProviderStyles)
+
 const DesignSystemContext = createContext(null);
 
 export function DesignSystemProvider({ themes = [], children }) {
@@ -168,7 +172,7 @@ export function DesignSystemProvider({ themes = [], children }) {
       <div className="is-html p-theme-light">
         <div
           ref={setBodyRef}
-          className="is-body"
+          className="is-body" 
           style={{
             backgroundColor: "var(--p-color-bg)",
             color: "var(--p-color-text)",
@@ -177,7 +181,7 @@ export function DesignSystemProvider({ themes = [], children }) {
           <div id="app" ref={setAppRef}>
             <div
               ref={setPortalRef}
-              className="Online-Store-UI-AppProvider_zm696 Online-Store-UI-AppProvider--dense_udbek"
+              className={getAppProviderClass({dense: true})}
             >
               <div style={{ display: loading ? "none" : "block" }}>
                 {cloneElement(children, {
