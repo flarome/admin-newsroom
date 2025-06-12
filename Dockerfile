@@ -39,6 +39,10 @@ COPY package.json package-lock.json* ./
 
 RUN npm ci --omit=dev && npm cache clean --force
 
+# 2. Appliquer les patchs
+RUN npx patch-package
+
+
 # Remove CLI packages since we don't need them in production by default.
 # Remove this line if you want to run CLI commands in your container.
 # RUN npm remove @shopify/cli --legacy-peer-deps
@@ -47,11 +51,6 @@ RUN npm remove @shopify/cli
 
 COPY . .
 
-# 1. Installer patch-package
-RUN npm install patch-package
-
-# 2. Appliquer les patchs
-RUN npx patch-package
 
 
 RUN npm run build
