@@ -21,7 +21,7 @@
     "graphql-codegen": "graphql-codegen",
     "vite": "vite",
     "start:prod": "dotenv -e env.prod -- npm run build && dotenv -e env.prod -- npm run start",
-     "postinstall": "patch-package"
+    "postinstall": "patch-package"
   },
   "type": "module",
   "engines": {
