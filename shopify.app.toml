@@ -3,7 +3,7 @@
 client_id = "e492689cd409d873cb2b0c8df3e93dfa"
 name = "newsroom"
 handle = "newsroom-2"
-application_url = "https://travelling-hu-fixtures-instruments.trycloudflare.com"
+application_url = "https://glow-stick-coat-kim.trycloudflare.com"
 embedded = true
 
 [build]
@@ -27,9 +27,9 @@ scopes = "unauthenticated_read_product_listings,read_content,read_draft_orders,r
 
 [auth]
 redirect_urls = [
-  "https://travelling-hu-fixtures-instruments.trycloudflare.com/auth/callback",
-  "https://travelling-hu-fixtures-instruments.trycloudflare.com/auth/shopify/callback",
-  "https://travelling-hu-fixtures-instruments.trycloudflare.com/api/auth/callback"
+  "https://glow-stick-coat-kim.trycloudflare.com/auth/callback",
+  "https://glow-stick-coat-kim.trycloudflare.com/auth/shopify/callback",
+  "https://glow-stick-coat-kim.trycloudflare.com/api/auth/callback"
 ]
 
 [pos]
