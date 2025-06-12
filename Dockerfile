@@ -32,6 +32,11 @@ WORKDIR /app
 ENV NODE_ENV=production
 
 COPY package.json package-lock.json* ./
+COPY patches ./
+
+RUN echo "===> Contenu de /app :" && ls -al . && \
+    echo "===> Contenu de /app/patches :" && ls -al ./patches || echo "AUCUN dossier /app/patches"
+
 
 # RUN /bin/sh
 
@@ -39,8 +44,6 @@ COPY package.json package-lock.json* ./
 
 RUN npm ci --omit=dev && npm cache clean --force
 
-# 3. On copie le dossier patches à côté du package.json (==> /app/patches)
-COPY patches ./
 
 
 # 4. On installe patch-package juste pour le patch
