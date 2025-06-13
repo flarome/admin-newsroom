@@ -187,17 +187,23 @@ export default defineConfig({
   },
 
   build: {
-    assetsInlineLimit: 0,
-   cssCodeSplit: true,
-    sourcemap: false,
+   //  assetsInlineLimit: 0,
+ //  cssCodeSplit: true,
+  //  sourcemap: false,
+
+
+
 
 
 
 
     rollupOptions: {
+
+
+
       output: {
 
-        manualChunks(id) {
+       /* manualChunks(id) {
         // Tout ce qui est dans node_modules → vendor.js
         if (id.includes("node_modules")) return "vendor";
       },
@@ -205,7 +211,7 @@ export default defineConfig({
 
       chunkFileNames: "[name].js",
       entryFileNames: "[name].js",
-      assetFileNames: "[name].[ext]",
+      assetFileNames: "[name].[ext]",*/
 
         // 👇 format qui supprime tous les import/export, autoexécuté !
 
@@ -216,8 +222,14 @@ export default defineConfig({
           compact: true,  // Active la réduction de taille*/
       //  footer: 'console.log("Flarome Newsroom - Version 1");', // Ajoute un footer
       },
+
+
+
+
+
+      
     }, // Empêche Rollup de séparer vendor
-    preserveEntrySignatures: "strict",
+   // preserveEntrySignatures: "strict",
     minify: "terser",
 
   },
@@ -226,11 +238,11 @@ export default defineConfig({
     alias: {
       "~": path.resolve(__dirname, "app"),
        'react-tweet': resolve(__dirname, "node_modules/react-tweet/dist/swr.js"),
-       
+
     },
   },
 
   // 👇 pour désactiver les chunks dynamiques et tout mettre dans un seul fichier
-  brotliSize: false,
-  reportCompressedSize: false,
+ // brotliSize: false,
+ // reportCompressedSize: false,
 });
