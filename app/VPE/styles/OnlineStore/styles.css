@@ -1,0 +1,113 @@
+
+
+
+html {
+    --osw-z-index-hidden: -9999;
+    --osw-z-index-iframe-hidden: -1;
+    --osw-z-index-iframe-visible: 1;
+    --osw-z-index-anchor-lines: 2;
+    --osw-z-index-floating-controls: 3;
+    --osw-z-index-tabs-list: 30;
+    --osw-z-index-top-bar: 40;
+    --osw-z-index-top-bar-surface: 41;
+    --osw-z-index-bottom-bar: 50;
+    --osw-z-index-editor: 100;
+    --osw-z-index-base: 10;
+    --osw-z-index-middle: 20;
+    --osw-z-index-top: 30
+}
+
+html {
+    --osw-polaris-text-field-vertical-padding: var(--p-space-150)
+}
+
+
+@keyframes Online-Store-UI-NavItem--dragLiftX {
+    to {
+        transform: translate3d(1.25rem,0,0)
+    }
+}
+
+@keyframes Online-Store-UI-NavItem--dragLiftY {
+    to {
+        transform: translate3d(0,-.8125rem,0)
+    }
+}
+@keyframes Online-Store-UI-NavItem_--start {
+    0% {
+        opacity: 0;
+        transform: translateZ(0)
+    }
+
+    to {
+        opacity: .85;
+        transform: translate3d(1.25rem,0,0)
+    }
+}
+@keyframes osui-in {
+    0% {
+        opacity: 0
+    }
+
+    to {
+        opacity: 1
+    }
+}
+
+@keyframes osui-out {
+    0% {
+        opacity: 1
+    }
+
+    to {
+        opacity: 0
+    }
+}
+
+@keyframes osui-handle-pulse {
+    0% {
+        background-color: inherit;
+        outline: var(--osui-contrast-outline)
+    }
+
+    to {
+        background-color: #0000001a;
+        outline: solid transparent
+    }
+}
+
+@keyframes Online-Store-UI-Popover--fadein {
+    0% {
+        opacity: 0;
+        transform: translateY(-.3125rem)
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0)
+    }
+}
+@keyframes Online-Store-UI-SortableListNext-OverlayItem_--lift {
+    to {
+        transform: translate3d(var(--p-space-500),0,0);
+        margin-right: var(--p-space-200)
+    }
+}
+
+
+:root {
+    --osui-nav-item-interior-padding: var(--p-space-200);
+    --osui_nav-action-connected-button-width: 1.75rem;
+    --osui_nav-action-connected-button-width-slim: 1.25rem;
+    --osui_nav-action-common-prefix-size: 1.25rem;
+    --osui_nav-action-common-prefix-gap: var(--p-space-200);
+    --osui-nav-item-alignment-none: 0;
+    --osui-nav-item-alignment-base-tight: var(--p-space-300);
+    --osui_nav-item-alignment-common-icon: calc(var(--osui_nav-action-common-prefix-size) + var(--osui_nav-action-common-prefix-gap) + var(--osui-nav-item-alignment-base-tight));
+    --osui_nav-item-alignment-common-action-with-icon: calc(var(--osui_nav-action-connected-button-width-slim) + var(--osui_nav-action-common-prefix-size) + var(--osui_nav-action-common-prefix-gap));
+    --osui_nav-item-alignment-nested-offset: var(--p-space-100)
+}
+:root {
+    --editable-text-border-radius: var(--p-border-radius-200);
+    --editable-text-padding: var(--p-space-100) var(--p-space-150)
+}

@@ -35,7 +35,7 @@ const collapsibleId = `${prefix}:${getFieldRoot(FormFieldsMap, ["seo"])}:collaps
 
 const Seo = () => {
   const { shop } = useArticle();
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
 
   // --- Hooks RHF pour surveiller les champs SEO ---
   const metaTitle = useWatch({ name: metaTitlePath }) || "";

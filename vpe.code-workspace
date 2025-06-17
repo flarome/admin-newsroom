@@ -1,0 +1,12 @@
+{
+  "folders": [
+    {
+      "name": "VPE",
+      "path": "app/vpe"
+    }
+  ],
+  "settings": {
+    "prettier.configPath": "./app/vpe/prettier.config.mjs",
+    "prettier.prettierPath": "./node_modules/prettier"
+  }
+}

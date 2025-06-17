@@ -5,8 +5,8 @@ import prefixSelector from "postcss-prefix-selector";
 import fs, { readFileSync } from "fs";
 import path from "path";
 import tailwindcss from "@tailwindcss/vite";
-import { fileURLToPath } from 'url';
-import { dirname, resolve } from 'path';
+import { fileURLToPath } from "url";
+import { dirname, resolve } from "path";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -82,8 +82,7 @@ const invalidSelectors = [
 ];
 
 export default defineConfig({
-
-   /* __REACT_DEVTOOLS_GLOBAL_HOOK__: true,
+  /* __REACT_DEVTOOLS_GLOBAL_HOOK__: true,
   __DEV__: true,
   dev: {
 
@@ -97,13 +96,13 @@ export default defineConfig({
 
   },*/
 
-    optimizeDeps: {
-    include: ['react-lite-youtube-embed', 'react-tweet'],
+  optimizeDeps: {
+    include: ["react-lite-youtube-embed", "react-tweet"],
   },
   ssr: {
-    noExternal: ['react-lite-youtube-embed', 'react-tweet'],
+    noExternal: ["react-lite-youtube-embed", "react-tweet"],
   },
-  
+
   server: {
     port: Number(process.env.PORT || 3000),
     hmr: hmrConfig,
@@ -119,42 +118,94 @@ export default defineConfig({
     tsconfigPaths(),
     graphqlRawLoader(), // ✅ le vrai, sans compression, sans suppression de \n
 
- importRtfAsBufferPlugin(),
-  tailwindcss()
-
-
+    importRtfAsBufferPlugin(),
+    tailwindcss(),
   ],
 
- assetsInclude: ['**/*.rtf'],
+  assetsInclude: ["**/*.rtf"],
 
   css: {
     postcss: {
       plugins: [
-       /* prefixSelector({
-          prefix: '[data-cms="vpe"]',
+
+                prefixSelector({
+  prefix: `[data-cms="vpe"]`,
+
           transform: (prefix, selector, prefixedSelector, file) => {
-            // Si ce n'est PAS un VPE style, on ne touche pas
             if (!file || !file.includes(path.join("app", "VPE", "styles"))) {
               return selector;
             }
 
-            // a. Ignore tous les sélecteurs qui commencent par un élément interdit
             if (
               invalidSelectors.some((invalid) =>
                 selector.startsWith(invalid),
               ) ||
-              selector.startsWith("@") || // @keyframes, @layer...
-              selector.startsWith("::") || // ::pseudo
-              selector.startsWith(":") // :global, :where, etc. (optionnel selon ton besoin)
+              selector.startsWith("@") ||
+              selector.startsWith("::") ||
+              selector.startsWith(":")
             ) {
               return selector;
             }
 
-            // 3. Sinon, on applique le prefix
-            return prefixedSelector;
+         /*   if (file.endsWith(".module.css")) {
+              return selector.startsWith(prefix) ? selector : prefixedSelector;
+            }*/
+
+            // ✅ Ne pas doubler le préfixe si déjà présent
+            return selector.startsWith(prefix) ? `${selector}:not([data-cms="editor"] *)` : `${prefixedSelector}:not([data-cms="editor"] *)`;
+          },
+        }),
+
+       
+     /*   prefixSelector({
+  prefix: `[data-cms="vpe"]`,
+
+          transform: (prefix, selector, prefixedSelector, file) => {
+            if (!file || !file.includes(path.join("app", "VPE", "styles"))) {
+              return selector;
+            }
+
+            if (
+              invalidSelectors.some((invalid) =>
+                selector.startsWith(invalid),
+              ) ||
+              selector.startsWith("@") ||
+              selector.startsWith("::") ||
+              selector.startsWith(":")
+            ) {
+              return selector;
+            }
+
+            // ✅ Ne pas doubler le préfixe si déjà présent
+            return selector.startsWith(prefix) ? selector : prefixedSelector;
           },
         }),*/
- 
+
+
+        /*prefixSelector({
+          prefix: `[data-cms="editor"]`,
+          transform: (prefix, selector, prefixedSelector, file) => {
+            if (!file || !file.includes(path.join("app", "VPE", "editor", "styles"))) {
+              return selector;
+            }
+
+            if (
+              invalidSelectors.some((invalid) =>
+                selector.startsWith(invalid),
+              ) ||
+              selector.startsWith("@") ||
+              selector.startsWith("::") ||
+              selector.startsWith(":")
+            ) {
+              return selector;
+            }
+            
+            // ✅ Ne pas doubler le préfixe si déjà présent
+            return selector.startsWith(prefix) ? selector : prefixedSelector;
+          },
+        }),*/
+
+
         prefixSelector({
           prefix: '[data-cms="index"]',
           transform: (prefix, selector, prefixedSelector, file) => {
@@ -187,23 +238,13 @@ export default defineConfig({
   },
 
   build: {
-   //  assetsInlineLimit: 0,
- //  cssCodeSplit: true,
-  //  sourcemap: false,
-
-
-
-
-
-
+    //  assetsInlineLimit: 0,
+    //  cssCodeSplit: true,
+    //  sourcemap: false,
 
     rollupOptions: {
-
-
-
       output: {
-
-       /* manualChunks(id) {
+        /* manualChunks(id) {
         // Tout ce qui est dans node_modules → vendor.js
         if (id.includes("node_modules")) return "vendor";
       },
@@ -212,37 +253,26 @@ export default defineConfig({
       chunkFileNames: "[name].js",
       entryFileNames: "[name].js",
       assetFileNames: "[name].[ext]",*/
-
         // 👇 format qui supprime tous les import/export, autoexécuté !
-
-      //  manualChunks: undefined, // pas de split
-
+        //  manualChunks: undefined, // pas de split
         /*
          preserveModules: false,  // Désactive la préservation des modules pour les regrouper tous dans un seul fichier
           compact: true,  // Active la réduction de taille*/
-      //  footer: 'console.log("Flarome Newsroom - Version 1");', // Ajoute un footer
+        //  footer: 'console.log("Flarome Newsroom - Version 1");', // Ajoute un footer
       },
-
-
-
-
-
-      
     }, // Empêche Rollup de séparer vendor
-   // preserveEntrySignatures: "strict",
+    // preserveEntrySignatures: "strict",
     minify: "terser",
-
   },
 
   resolve: {
     alias: {
       "~": path.resolve(__dirname, "app"),
-       'react-tweet': resolve(__dirname, "node_modules/react-tweet/dist/swr.js"),
-
+      "react-tweet": resolve(__dirname, "node_modules/react-tweet/dist/swr.js"),
     },
   },
 
   // 👇 pour désactiver les chunks dynamiques et tout mettre dans un seul fichier
- // brotliSize: false,
- // reportCompressedSize: false,
+  // brotliSize: false,
+  // reportCompressedSize: false,
 });

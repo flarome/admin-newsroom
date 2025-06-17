@@ -19,7 +19,8 @@
     "types": ["node"],
 
     "paths": {
-      "@/*": ["app/VPE/src/*"],
+      "@VPE/*": ["app/VPE/*"],
+      "@EDITOR/*": ["app/VPE/editor/*"],
     }
   }
 }

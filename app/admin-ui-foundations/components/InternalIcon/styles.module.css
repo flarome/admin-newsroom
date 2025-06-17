@@ -1,0 +1,54 @@
+.icon {
+  display: inline-flex;
+  margin-inline: var(--s-icon-margin-inline-25041);
+  color: var(--s-icon-color-25041, rgba(74, 74, 74, 1));
+  block-size: 1.25rem;
+  inline-size: 1.25rem;
+}
+.icon svg {
+  fill: currentColor;
+  overflow: visible;
+}
+@media (min-width: 48rem), (pointer: fine) {
+  .icon svg {
+    margin: 0.125rem;
+  }
+}
+.icon.size-small {
+  block-size: 1rem;
+  inline-size: 1rem;
+}
+.icon.color-base.tone-info {
+  color: #0094d5;
+}
+.icon.color-base.tone-success {
+  color: #047b5d;
+}
+.icon.color-base.tone-caution {
+  color: #998a00;
+}
+.icon.color-base.tone-warning {
+  color: #b28400;
+}
+.icon.color-base.tone-critical {
+  color: #e22c38;
+}
+.icon.color-subdued.tone-auto,
+.icon.color-subdued.tone-neutral {
+  color: #8a8a8a;
+}
+.icon {
+  display: block;
+}
+.icon.color-base.tone-ai {
+  color: #8051ff;
+}
+.icon.color-base.tone-brand {
+  color: #1a1a1a;
+}
+.icon.color-base.tone-highlight {
+  color: #005bd3;
+}
+.icon.tone-legacy-inherit:is(.icon.color-base, .icon.color-subdued) {
+  color: inherit;
+}

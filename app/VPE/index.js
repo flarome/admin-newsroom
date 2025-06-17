@@ -1,3 +1,3 @@
 export { default as Modal } from './modal';
-export { default as ModalExternal } from './modalExternal';
-export { default as VPE } from './app';
+export { default as VPE } from './main';
+export { default as Editor } from './editor';

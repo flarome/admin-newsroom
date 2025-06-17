@@ -16,14 +16,17 @@ import {
   Extrait,
   Seo,
   Visible,
-  MainMedia,
+  MainImage,
+  MainVideo,
+  
   Blog as BlogA,
   Title,
   SubTitle,
   Category,
+  Content,
+  EmbeddedContent
 } from "./components";
 
-import Content from "./components/content";
 
 import { getYear } from "../../utils/date";
 import { Banner as BannerForm } from "../../modules/form/components";
@@ -212,6 +215,8 @@ const RHFAppContent = ({}) => {
                       <Title />
                       {/* Sous-titre */}
                       <SubTitle />
+
+                      <EmbeddedContent />
                     </BlockStack>
                   </Card>
                   {/* */}
@@ -229,7 +234,8 @@ const RHFAppContent = ({}) => {
                 <BlockStack gap={{ xs: "400" }} align="space-between">
                   <Visible />
 
-                  <MainMedia />
+                  <MainImage />
+                   <MainVideo />
 
                   <Card>
                     <BlockStack gap={{ xs: "200" }}>

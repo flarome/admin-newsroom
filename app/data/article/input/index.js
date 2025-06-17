@@ -17,7 +17,7 @@ import { fieldPath as contactPath } from "../../../frontend/article/components/a
 import { fieldPath as blogPath } from "../../../frontend/article/components/blog";
 import { fieldPath as templatePath } from "../../../frontend/article/components/template";
 import { fieldPath as tagsPath } from "../../../frontend/article/components/tags";
-
+ 
 // 📌 Champs imbriqués
 import {
   publishDateFieldPath,

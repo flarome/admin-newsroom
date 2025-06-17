@@ -5,8 +5,9 @@ export { default as Banner } from "./banner";
 export { default as Extrait } from "./extrait";
 export { default as Seo } from "./seo";
 export { default as Visible } from "./visible";
-export { default as MainMedia } from "./mainMedias";
+export { Image as MainImage,  Video as MainVideo } from "./mainMedias";
 export { default as Blog } from "./blog";
 export {default as Title} from './title'
 export {default as SubTitle} from './subtitle'
 export {default as Category} from './category'
+export {default as Content, EmbeddedContent} from './content'

@@ -1,0 +1,21 @@
+ 
+[data-cms="editor"] {
+  all: initial;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  position: relative;
+  font: inherit;
+  color: inherit;
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+
+
+
+[data-cms="editor"] html {
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%
+}

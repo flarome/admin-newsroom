@@ -511,6 +511,7 @@ const MainImage = () => {
   const toggleActive = useCallback(() => setActive((active) => !active), []);
 
   return (
+    
     <Card>
       <BlockStack gap={{ xs: "400", sm: "500" }} inlineAlign="stretch">
         <InlineStack wrap align="space-between" direction={{ xs: "row" }}>
@@ -590,6 +591,11 @@ const MainImage = () => {
 
       <ImageModal open={modalOpen} onClose={handleModalClose} />
     </Card>
+
+
+
+
+
   );
 };
 

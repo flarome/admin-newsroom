@@ -205,6 +205,8 @@
     "eslint": "^8.42.0",
     "eslint-config-prettier": "^10.0.1",
     "prettier": "^3.2.4",
+    "prettier-plugin-packagejson": "^2.5.15",
+    "prettier-plugin-tailwindcss": "^0.6.12",
     "remix-flat-routes": "^0.8.5",
     "tailwindcss": "^4.1.10",
     "typed-css-modules": "^0.9.1",

@@ -1,0 +1,21 @@
+
+
+[data-cms="vpe"] {
+  all: initial;
+  display: block;
+  font: inherit;
+  color: inherit;
+  box-sizing: border-box;
+   height:100%;
+    width:100%;
+    padding:0;
+    margin:0; 
+     position: relative;
+}
+
+[data-cms="vpe"] html {
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%
+}
+
+

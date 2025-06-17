@@ -7,3 +7,23 @@
     border-radius: var(--p-border-radius-200);
     overflow: hidden
 }
+
+
+.Editor.magic {
+    border-color: var(--p-color-border-ai-secondary)
+}
+
+.Editor:hover:not(.Editor-focused) {
+    border-color: var(--p-color-input-border-hover)
+}
+
+.Editor:hover:not(.Editor-focused).magic {
+    border-color: var(--p-color-border-ai-secondary-hover)
+}
+
+.Editor-focused {
+    outline: var(--p-border-width-050) solid var(--p-color-border-focus);
+    outline-offset: var(--p-space-050);
+    border-color: transparent;
+    box-shadow: 0 0 0 var(--p-border-width-025) var(--p-color-input-border-active)
+}

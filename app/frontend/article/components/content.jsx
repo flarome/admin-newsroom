@@ -1,10 +1,10 @@
 import { useController, useFormContext } from "react-hook-form";
-import { FormLayout, MediaCard, Text, Card } from "@shopify/polaris";
+import { FormLayout, MediaCard, Text } from "@shopify/polaris";
 import { useAppBridge } from "@shopify/app-bridge-react";
-import { useState } from "react";
+import { memo, useCallback, useRef, useState } from "react";
 //import { Modal } from "../../../modules/VPE";
 
-import { ModalExternal as Modal, VPE } from "../../../VPE";
+import { Modal, Editor } from "../../../VPE";
 import { useArticle } from "../context/articleContext";
 import { sections as bodySections } from "../../../data/article/input/body";
 import { form as FieldsMap } from "../../../data/article/config/fieldMap";
@@ -15,17 +15,98 @@ export const settingsFieldPath = FieldsMap.settings;
 
 export const bodyFieldPath = getFieldPath(FieldsMap, ["content", "body"]);
 export const headerFieldPath = getFieldPath(FieldsMap, ["content", "header"]);
-
+import { clsx } from "clsx"; 
 import EditorStyles from "../styles/Editor.module.css";
 
 const sectionsCatalog = {
   body: { label: "MON BODY", sections: bodySections },
 };
 
-
 const settingsCatalog = [];
 
 const modalId = `${prefix}:${getFieldRoot(FieldsMap, ["content"])}:modal`;
+
+export const EmbeddedContentInnert = () => {
+  const [focus, setFocus] = useState(false);
+  const inputRef = useRef(null);
+
+  const getInputRef = useCallback(() => {
+    return inputRef.current;
+  }, []);
+
+  const handleOnFocus = (event) => {
+    setFocus(true);
+  };
+
+  function handleClick(event) {
+    // For TextFields used with Combobox, focus needs to be set again even
+    // if the TextField is already focused to trigger the logic to open the
+    // Combobox activator
+
+    if (false || focus) {
+      return;
+    }
+    getInputRef()?.focus();
+  }
+
+  function handleClickChild(event) {
+    if (true) {
+      event.stopPropagation();
+    }
+    if (false || focus) {
+      return;
+    }
+    setFocus(true);
+    getInputRef()?.focus();
+  }
+
+  function handleOnBlur(event) {
+    setFocus(false);
+  }
+
+  return (
+    <FormLayout>
+      <div className={EditorStyles["RichTextEditor"]}>
+        <Text as="span" visuallyHidden variant="bodySm">
+          Éditeur de texte enrichi
+        </Text>
+
+        <div>
+          <div className="Polaris-Labelled__LabelWrapper">
+            <div className="Polaris-Label">
+              <label
+                id="article-bodyLabel"
+                htmlFor="article-body"
+                className="Polaris-Label__Text"
+              >
+                <span className="Polaris-Text--root Polaris-Text--bodyMd">
+                  Contenu
+                </span>
+              </label>
+            </div>
+          </div>
+
+          <div
+            ref={inputRef}
+            onBlur={handleOnBlur}
+            onClick={handleClick}
+            onFocus={handleOnFocus}
+            className={clsx(
+              EditorStyles["Editor"],
+              focus && EditorStyles["Editor-focused"],
+            )}
+          >
+            <div onClick={handleClickChild}>
+              <Editor ui={{ mode: "EMBEDDED", minHeight: "200px", maxHeight: "430px" }} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </FormLayout>
+  );
+};
+
+export const EmbeddedContent = memo(EmbeddedContentInnert);
 
 const Content = () => {
   const { control } = useFormContext();
@@ -56,35 +137,6 @@ const Content = () => {
 
   return (
     <div>
-      <Card>
-      <FormLayout>
-        <div className={EditorStyles["RichTextEditor"]}>
-          <Text as="span" visuallyHidden variant="bodySm">
-            Éditeur de texte enrichi
-          </Text>
-
-          <div>
-            <div className="Polaris-Labelled__LabelWrapper">
-              <div className="Polaris-Label">
-                <label
-                  id="article-bodyLabel"
-                  for="article-body"
-                  className="Polaris-Label__Text"
-                >
-                  <span className="Polaris-Text--root Polaris-Text--bodyMd">
-                    Contenu
-                  </span>
-                </label>
-              </div>
-            </div>
-
-            <div className={EditorStyles["Editor"]}>
-              <VPE />
-            </div>
-          </div>
-        </div>
-      </FormLayout>
-      </Card>
       <MediaCard
         title="Présentation de l'article"
         primaryAction={{
