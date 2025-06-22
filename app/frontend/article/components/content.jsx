@@ -97,7 +97,7 @@ export const EmbeddedContentInnert = () => {
             )}
           >
             <div onClick={handleClickChild}>
-              <Editor ui={{ mode: "EMBEDDED", minHeight: "200px", maxHeight: "430px" }} />
+              <Editor onChange={(v) => ""} ui={{ mode: "EMBEDDED", minHeight: "200px", maxHeight: "430px" }} />
             </div>
           </div>
         </div>

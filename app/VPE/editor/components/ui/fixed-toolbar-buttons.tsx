@@ -46,6 +46,7 @@ import { TableToolbarButton } from './table-toolbar-button';
 import { ToggleToolbarButton } from './toggle-toolbar-button';
 import { ToolbarGroup } from './toolbar';
 import { TurnIntoToolbarButton } from './turn-into-toolbar-button';
+import { PartMetadataToolbarButton } from './pagebody-Metadata-button';
 
 export function FixedToolbarButtons() {
   const readOnly = useEditorReadOnly();
@@ -54,6 +55,12 @@ export function FixedToolbarButtons() {
     <div className="flex w-full">
       {!readOnly && (
         <>
+
+               <ToolbarGroup>
+        <PartMetadataToolbarButton />
+          </ToolbarGroup>
+
+
           <ToolbarGroup>
             <UndoToolbarButton />
             <RedoToolbarButton />

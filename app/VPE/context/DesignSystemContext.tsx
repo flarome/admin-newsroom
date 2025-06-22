@@ -18,7 +18,7 @@ export
   G extends UserGenerics<UserConfig> = UserGenerics<UserConfig>
 >({ children }: PropsWithChildren) {
 
-  const { ui: initialUi, initialHistory: _initialHistory } = usePropsContext();
+  const { ui: initialUi, initialHistory: _initialHistory, onChange } = usePropsContext();
 
   
   const [generatedAppState] =

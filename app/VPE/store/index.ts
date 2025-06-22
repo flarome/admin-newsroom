@@ -3,7 +3,7 @@ import { subscribeWithSelector } from "zustand/middleware";
 import { createContext, useContext } from "react";
 import { defaultAppState } from "./default-app-state";
 
-import { Config, UserGenerics, UiState, Data, InitialHistory } from "types";
+import { Config, UserGenerics, UiState, Data} from "types";
 import { VPEAction, createReducer } from "reducer";
 import { createHistorySlice, HistorySlice } from "./slices/history";
 
@@ -13,6 +13,11 @@ export type Status = "LOADING" | "MOUNTED" | "READY";
 
 export type Actions = "SECTIONS" | "SETTINGS";
 
+
+type Catalog = { 
+settings: {},
+  sections: {}
+}
 
 type ZoomConfig =
   | "DESKTOP"
@@ -30,7 +35,8 @@ export type AppStore<
   config: UserConfig;
   zoomConfig: ZoomConfig;
   setZoomConfig: (zoomConfig: ZoomConfig) => void;
-
+data: Data;
+catalog: Catalog;
   status: Status;
   selectedAction: Actions;
       setSelectedAction: (selectedAction: Actions) => void;
@@ -41,6 +47,19 @@ export type AppStore<
 
 export type AppStoreApi = StoreApi<AppStore>;
 
+
+const defaultData = {
+  settings: {},
+  sections: {}
+}
+
+const defaultCatalog = {
+  settings: {},
+  sections: {}
+}
+
+
+
 export const createAppStore = (initialAppStore?: Partial<AppStore>) =>
   create<AppStore>()(
     subscribeWithSelector((set, get) => ({
@@ -49,6 +68,8 @@ export const createAppStore = (initialAppStore?: Partial<AppStore>) =>
       zoomConfig: "DESKTOP",
       status: "LOADING",
       selectedAction: "SECTIONS",
+      data: defaultData,
+      catalog: defaultCatalog,
       ...initialAppStore,
 
       history: createHistorySlice(set, get),

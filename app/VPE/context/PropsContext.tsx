@@ -7,7 +7,7 @@ import {
 
 import { Config, UserGenerics,   UiState,  Data,  InitialHistory, } from "types";
 
-type VPEProps<
+export type VPEProps< 
   UserConfig extends Config = Config,
     G extends UserGenerics<UserConfig> = UserGenerics<UserConfig>
 > = {

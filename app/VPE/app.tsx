@@ -107,7 +107,7 @@ const LayoutInner = () => {
 
 const Layout = memo(LayoutInner);
 
-const App = () => {
+const App = (props: any) => {
  // const status = useAppStore((s) => s.status);
 
     return (

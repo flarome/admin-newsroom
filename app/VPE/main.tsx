@@ -10,14 +10,14 @@ import { getAppProviderClass } from 'styles/OnlineStore';
 import { memo, useId } from 'react';
 
 import { DesignSystemProvider } from './context/DesignSystemContext';
-import { PropsProvider } from 'context/PropsContext';
+import { PropsProvider, VPEProps } from 'context/PropsContext';
 
 import App from './app' 
 
-const Main = (props) => {
+const Main = (props: VPEProps) => {
 
   const uniqueId =  useId();
-
+ 
   return (
     <div data-cms="vpe">
     <div className={`${ThemeStyles["html"]} ${ThemeStyles["p-theme-light"]}`}>

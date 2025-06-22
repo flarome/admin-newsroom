@@ -795,7 +795,7 @@
     left: calc(var(--tree-connector-width)/2)
 }
 
-.TreeRoot li:not(._TreeItem--root_yv1c8_25):before {
+.TreeRoot li:not(.TreeItem--root):before {
     content: "";
     position: absolute;
     left: var(--p-space-100);
@@ -844,13 +844,13 @@
     z-index:var(--p-z-index-2)
 }
 
-._TreeItem--root_yv1c8_25 {
+.TreeItem--root {
     grid-template-columns: 1fr;
     grid-template-rows: auto auto;
     grid-template-areas: "content" "tree"
 }
 
-._TreeItem--root_yv1c8_25>ul {
+.TreeItem--root>ul {
     margin-left: calc(var(--indent-size)/2)
 }
 
@@ -942,70 +942,70 @@
     object-fit: cover
 }
 
-._MarketFlag__Placeholder_fwfft_33 {
+.MarketFlag__Placeholder {
     border: none
 }
 
-._MarketFlag__Gradient_fwfft_36 {
+.MarketFlag__Gradient {
     color: #fff;
     font-size: var(--p-font-size-500);
     -webkit-user-select: none;
     user-select: none
 }
 
-._MarketFlag__Gradient--1_fwfft_55 {
+.MarketFlag__Gradient--1 {
     background: linear-gradient(293.96deg,#c43256,#ffa781)
 }
 
-._MarketFlag__Gradient--2_fwfft_59 {
+.MarketFlag__Gradient--2 {
     background: linear-gradient(293.96deg,#004c3f,#92e6b5)
 }
 
-._MarketFlag__Gradient--3_fwfft_63 {
+.MarketFlag__Gradient--3 {
     background: linear-gradient(293.96deg,#c43256,#90dfd6)
 }
 
-._MarketFlag__Gradient--4_fwfft_67 {
+.MarketFlag__Gradient--4 {
     background: linear-gradient(293.96deg,#90dfd6,#004c3f)
 }
 
-._MarketFlag__Gradient--5_fwfft_71 {
+.MarketFlag__Gradient--5 {
     background: linear-gradient(293.96deg,#c43256,#92e6b5)
 }
 
-._MarketFlag__Gradient--6_fwfft_75 {
+.MarketFlag__Gradient--6 {
     background: linear-gradient(293.96deg,#004c3f,#ffa781)
 }
 
-._MarketFlag__Gradient--7_fwfft_79 {
+.MarketFlag__Gradient--7 {
     background: linear-gradient(293.96deg,#ffa781,#c43256)
 }
 
-._MarketFlag__Gradient--8_fwfft_83 {
+.MarketFlag__Gradient--8_fwfft_83 {
     background: linear-gradient(293.96deg,#ffcb67,#004c3f)
 }
 
-._MarketFlag__Gradient--9_fwfft_87 {
+.MarketFlag__Gradient--9_fwfft_87 {
     background: linear-gradient(293.96deg,#c43256,#004c3f)
 }
 
-._MarketFlag__Gradient--10_fwfft_91 {
+.MarketFlag__Gradient--10_fwfft_91 {
     background: linear-gradient(293.96deg,#90dfd6,#c43256)
 }
 
-._MarketFlag__Gradient--11_fwfft_95 {
+.MarketFlag__Gradient--11_fwfft_95 {
     background: linear-gradient(293.96deg,#004c3f,#ffcb67)
 }
 
-._MarketFlag__Gradient--12_fwfft_99 {
+.MarketFlag__Gradient--12_fwfft_99 {
     background: linear-gradient(293.96deg,#92e6b5,#004c3f)
 }
 
-._MarketFlag__Gradient--13_fwfft_103 {
+.MarketFlag__Gradient--13_fwfft_103 {
     background: linear-gradient(293.96deg,#004c3f,#90dfd6)
 }
 
-._MarketFlag__B2b_fwfft_107 {
+.MarketFlag__B2b_fwfft_107 {
     color: #1f2124;
     font-size: var(--p-font-size-400);
     -webkit-user-select: none;
@@ -1013,36 +1013,36 @@
     background: linear-gradient(90deg,#d0f224,#79dfff)
 }
 
-._MarketFlag--large_fwfft_115 {
+.MarketFlag--large {
     width: 3.875rem;
     height: 2.9375rem;
     border-radius: var(--p-border-radius-200)
 }
 
-._MarketFlag--large_fwfft_115 img {
+.MarketFlag--large img {
     min-width: 3.75rem;
     min-height: 2.9375rem
 }
 
-._MarketFlag--small_fwfft_124 {
+.MarketFlag--small {
     width: 2.5rem;
     height: 1.875rem;
     border-radius: var(--p-border-radius-100)
 }
 
-._MarketFlag--small_fwfft_124 img {
+.MarketFlag--small img {
     min-width: 2.375rem;
     min-height: 1.75rem
 }
 
-._MarketFlag--x-small_fwfft_133 {
+.MarketFlag--x-small {
     width: 1.75rem;
     height: 1.25rem;
     border-radius: var(--p-border-radius-100);
     font-size: var(--p-font-size-300)
 }
 
-._MarketFlag--x-small_fwfft_133 img {
+.MarketFlag--x-small img {
     min-width: 1.625rem;
     min-height: 1.1875rem
 }
@@ -1053,7 +1053,7 @@
     justify-content: center
 }
 
-._IconFlag__Icon_fwfft_149 {
+.IconFlag__Icon {
     width: 1.25rem;
     height: 1.25rem;
     fill: var(--p-color-icon-secondary)

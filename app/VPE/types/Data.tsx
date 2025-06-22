@@ -1,8 +1,7 @@
 
 
-export type Data<
-
-> = {
-
+export type Data = {
+settings: {},
+  sections: {}
 };
 
