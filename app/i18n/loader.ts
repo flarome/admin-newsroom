@@ -18,7 +18,7 @@ export function createLangLoader<
 ): LangLoader<Lang> {
   const loader: Partial<Record<Lang, () => Promise<any>>> = {};
 
-  config.availableLangs.forEach((lang) => {
+  config.availableLangs.forEach((lang) => { 
     loader[lang] = () => import(config.path(lang));
   });
 

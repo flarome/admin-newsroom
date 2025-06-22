@@ -9,7 +9,7 @@ type GlobalI18nStore = {
   setLang: (lang: Lang) => void;
 };
 
-const GlobalI18nContext = createContext<StoreApi<GlobalI18nStore> | null>(null);
+
 
 export function createGlobalI18nStore(initialLang: Lang) {
   return createStore<GlobalI18nStore>((set) => ({
@@ -17,6 +17,9 @@ export function createGlobalI18nStore(initialLang: Lang) {
     setLang: (lang) => set({ lang }),
   }));
 }
+
+// export const appStoreContext = createContext(createAppStore());
+const GlobalI18nContext = createContext<StoreApi<GlobalI18nStore> | null>(null);
 
 export function GlobalI18nProvider({
   children,
@@ -46,3 +49,7 @@ export function useSetGlobalLang(): (lang: Lang) => void {
   if (!store) throw new Error("useSetGlobalLang must be used inside GlobalI18nProvider");
   return store.getState().setLang;
 }
+
+
+
+

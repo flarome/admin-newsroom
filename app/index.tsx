@@ -13,7 +13,12 @@ import { createI18nContext } from "./i18n/context";
 import { GlobalI18nProvider } from "./i18n/global";
 import { language } from "./config/app";
 
-export const globalAppI18n = createI18nContext();
+export const globalAppI18n = createI18nContext({
+  fallback: language,
+  availableLangs: ["fr", "en"],
+  path: (lang) => new URL(`./locales/${lang}.json`, import.meta.url).pathname,
+  initialTranslations: {},
+});
 
 const RenderWrapper = ({ children }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
@@ -55,14 +60,11 @@ const RenderWrapper = ({ children }) => {
 
   return (
     <div ref={wrapperRef} className={styles["ChildContainer"]}>
-      <GlobalI18nProvider initialLang="fr"><globalAppI18n.I18nProvider      config={{
-        initialLang: "fr",
-        fallback: language,
-        availableLangs: ["fr", "en"],
-        
-        path: (lang) => new URL(`./locales/${lang}.json`, import.meta.url).pathname,
-        initialTranslations: {},
-      }}><PolarisI18n>{children}</PolarisI18n></globalAppI18n.I18nProvider></GlobalI18nProvider>
+      <GlobalI18nProvider initialLang="fr">
+        <globalAppI18n.I18nProvider>
+          <PolarisI18n>{children}</PolarisI18n>
+        </globalAppI18n.I18nProvider>
+      </GlobalI18nProvider>
     </div>
   );
 };
