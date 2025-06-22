@@ -1,11 +1,22 @@
 import { memo, useEffect, useRef, useState } from "react";
-import { createAppStore, useAppStoreApi, appStoreContext } from "./store";
+import {
+  createAppStore,
+  useAppStoreApi,
+  appStoreContext,
+  AppStoreApi,
+} from "./store";
 import styles from "./app.module.css";
 import "./app.css";
 import { useNavigation } from "@remix-run/react";
+import { PolarisI18n } from "./polaris";
+import { createI18nContext } from "./i18n/context";
+import { GlobalI18nProvider } from "./i18n/global";
+import { language } from "./config/app";
+
+export const globalAppI18n = createI18nContext();
 
 const RenderWrapper = ({ children }) => {
-  const wrapperRef = useRef();
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const store = useAppStoreApi();
   const navigation = useNavigation();
 
@@ -44,20 +55,23 @@ const RenderWrapper = ({ children }) => {
 
   return (
     <div ref={wrapperRef} className={styles["ChildContainer"]}>
-      {children}
+      <GlobalI18nProvider initialLang="fr"><globalAppI18n.I18nProvider      config={{
+        initialLang: "fr",
+        fallback: language,
+        availableLangs: ["fr", "en"],
+        
+        path: (lang) => new URL(`./locales/${lang}.json`, import.meta.url).pathname,
+        initialTranslations: {},
+      }}><PolarisI18n>{children}</PolarisI18n></globalAppI18n.I18nProvider></GlobalI18nProvider>
     </div>
   );
 };
 
 export const App = ({ children }) => {
-  const storeRef = useRef();
-
-  if (!storeRef.current) {
-    storeRef.current = createAppStore(); // ❗ appelé une seule fois
-  }
+  const [appStore] = useState(() => createAppStore({}));
 
   return (
-    <appStoreContext.Provider value={storeRef.current}>
+    <appStoreContext.Provider value={appStore}>
       <RenderWrapper>{children}</RenderWrapper>
     </appStoreContext.Provider>
   );

@@ -5,7 +5,7 @@ import Editor from "../frontend/article";
 import { getShopifyContext } from "../lib/shopify/context.server";
 import { getArticleDetails } from "../.server/article";
 import { useEffect } from "react";
-import App from "..";
+import App from ".."; 
 
 // ⬇️ LOADER — charge un article existant ou retourne un template vide si "new"
 export const loader = async ({ request, params }) => {

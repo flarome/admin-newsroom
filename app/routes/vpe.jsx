@@ -1,56 +1,19 @@
 
 import { json } from "@remix-run/node";
-import { Link, Outlet, useLoaderData, useRouteError } from "@remix-run/react";
+import { useLoaderData, useRouteError } from "@remix-run/react";
 import { boundary } from "@shopify/shopify-app-remix/server";
 import { AppProvider } from "@shopify/shopify-app-remix/react";
-
 import { authenticate } from "../lib/shopify/shopify.server";
+
 import polarisTranslations from "@shopify/polaris/locales/fr.json";
 
-import { AppProvider as PolarisProvider } from "@shopify/polaris";
-
-import { useEffect, useState } from "react";
-import {VPE} from "../VPE";
-
-
-
-// export const links = () => [{ rel: "stylesheet", href: polarisStyles }];
+import {Route} from "../VPE";
 
 export const loader = async ({ request }) => {
   await authenticate.admin(request);
 
   return json({ apiKey: process.env.SHOPIFY_API_KEY || "" });
 };
-
-
-function VpeEditorRoute() {
-  const [dataFromParent, setDataFromParent] = useState(null);
-
-  // Écoute le message postMessage du parent
-
-    useEffect(() => {
-    function handleMessageFromMainApp(ev) {
-      console.log('Message received in modal:', ev.data);
-          if (ev.data?.type === "EDITOR_INIT") {
-        setDataFromParent(ev.data.payload);
-      }
-    }
-
-    window.addEventListener('message', handleMessageFromMainApp)
-    return () => {
-      window.removeEventListener('message', handleMessageFromMainApp)
-    }
-  }, [])
-
-
-  return (
-   
-    <PolarisProvider i18n={polarisTranslations}>
-      <VPE {...dataFromParent} />
-      </PolarisProvider>
-  );
-}
-
 
 export default function App() {
   const { apiKey } = useLoaderData();
@@ -63,7 +26,7 @@ export default function App() {
       apiKey={apiKey}
     >
 
-      <VpeEditorRoute />
+     <Route />
     </AppProvider>
   );
 }
