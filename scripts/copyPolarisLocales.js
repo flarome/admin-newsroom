@@ -2,9 +2,9 @@ import fs from "fs";
 import path from "path";
 import { execSync } from "child_process";
 
-const polarisPackagePath = "../../../node_modules/@shopify/polaris/package.json";
-const sourceLocalesPath = "../../../node_modules/@shopify/polaris/locales";
-const targetLocalesPath = "../locales";
+const polarisPackagePath = "node_modules/@shopify/polaris/package.json";
+const sourceLocalesPath = "node_modules/@shopify/polaris/locales";
+const targetLocalesPath = "./app/polaris/locales";
 const versionFile = "./.cache/polaris-version.txt";
 const indexFile = path.join(targetLocalesPath, "index.ts");
 
