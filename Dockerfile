@@ -6,9 +6,11 @@ EXPOSE 3000
 
 WORKDIR /app
 
-# 1. Copier seulement package.json, lock et patches
+# 1. Copier package + scripts (pour que postinstall fonctionne)
 COPY package.json package-lock.json* ./
 COPY patches ./patches
+COPY scripts ./scripts
+
 
 # 2. Logs pour vérifier que patches est bien là
 RUN echo "===> Contenu de /app :" && ls -al . && \

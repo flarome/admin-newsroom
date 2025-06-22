@@ -21,6 +21,7 @@
     "graphql-codegen": "graphql-codegen",
     "vite": "vite",
     "start:prod": "dotenv -e env.prod -- npm run build && dotenv -e env.prod -- npm run start",
+    "copyPolarisLocales": "node scripts/copyPolarisLocales.js",
     "postinstall": "patch-package && node scripts/copyPolarisLocales.js"
   },
   "type": "module",
