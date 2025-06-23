@@ -13,13 +13,17 @@ import { DesignSystemProvider } from './context/DesignSystemContext';
 import { PropsProvider, VPEProps } from 'context/PropsContext';
 
 import App from './app' 
+import { globalAppI18n } from '..';
 
 const Main = (props: VPEProps) => {
 
   const uniqueId =  useId();
  
+  const i18n = globalAppI18n.useI18nStore((s) => s.i18n);
   return (
-    <div data-cms="vpe">
+    <div data-cms="vpe"> 
+
+      <p>{i18n.translate("test")}</p>
     <div className={`${ThemeStyles["html"]} ${ThemeStyles["p-theme-light"]}`}>
       <div className={ThemeStyles["body"]}>
       <div id={`vpe-app-${uniqueId}`}>

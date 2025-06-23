@@ -1,11 +1,24 @@
-import { createContext, useContext, useEffect, useState } from "react";
+// context.ts
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+} from "react";
 import { createStore, StoreApi, useStore } from "zustand";
 import { createLangLoader, loadLang } from "./loader";
-import { useGlobalLang } from "./global";
+import {
+  useGlobalLang,
+  getGlobalI18nStore,
+  registeredSources,
+  Lang,
+  i18nCache,
+} from "./global";
 import { I18n } from "./i18";
 
 type Translations = Record<string, any>;
-type Lang = string;
 
 export type I18nStore = {
   translations: Translations;
@@ -39,25 +52,59 @@ export function createI18nContext(config: I18nConfig) {
   function I18nProvider({ children }: { children: React.ReactNode }) {
     const [store] = useState(() => createI18nStore());
     const lang = useGlobalLang();
+    const global = getGlobalI18nStore();
+
+    // Génère un ID unique par instance de Provider
+
+    const id = useId(); // retourne un ID stable même en SSR
+    const instanceId = `ctx-${id}`;
+
+    registeredSources.add(instanceId);
 
     useEffect(() => {
       const load = async () => {
-        try {
-          const json = await loadLang(langLoader, lang);
+        const contextCache = i18nCache.get(instanceId) ?? new Map<Lang, any>();
+        const cached = contextCache.get(lang);
 
+        if (cached) {
           store.setState({
-            translations: json,
-            i18n: new I18n(json),
+            translations: cached,
+            i18n: new I18n(cached),
           });
-        } catch (err) {
-          console.error(
-            `[i18n] Failed to load translations for "${lang}"`,
-            err,
-          );
+        } else {
+          try {
+            const json = await loadLang(langLoader, lang);
+            contextCache.set(lang, json);
+            i18nCache.set(instanceId, contextCache);
+
+            store.setState({
+              translations: json,
+              i18n: new I18n(json),
+            });
+          } catch (err) {
+            console.error(
+              `[i18n] Failed to load translations for "${lang}" [${instanceId}]`,
+              err,
+            );
+          }
+        }
+
+        const trackers = Array.from(global.getState()._trackers);
+        for (const t of trackers) {
+          if (t.lang === lang && t.source === instanceId) {
+            t.resolve();
+            global.getState()._trackers.delete(t);
+          }
         }
       };
 
       load();
+
+      return () => {
+        // 🔻 Cleanup on unmount
+        registeredSources.delete(instanceId);
+        i18nCache.delete(instanceId); // facultatif : garde-le si tu veux libérer la mémoire
+      };
     }, [lang]);
 
     return (

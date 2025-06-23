@@ -12,12 +12,14 @@ import { PolarisI18n } from "./polaris";
 import { createI18nContext } from "./i18n/context";
 import { GlobalI18nProvider } from "./i18n/global";
 import { language } from "./config/app";
+import { languages } from "./locales";
+import fr from './locales/fr.json';
 
 export const globalAppI18n = createI18nContext({
   fallback: language,
-  availableLangs: ["fr", "en"],
+  availableLangs: languages,
   path: (lang) => new URL(`./locales/${lang}.json`, import.meta.url).pathname,
-  initialTranslations: {},
+  initialTranslations: fr,
 });
 
 const RenderWrapper = ({ children }) => {
