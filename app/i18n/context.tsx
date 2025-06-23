@@ -8,7 +8,7 @@ import {
   useState,
 } from "react";
 import { createStore, StoreApi, useStore } from "zustand";
-import { createLangLoader, loadLang } from "./loader";
+import { createLangLoader, LangLoaderConfig, loadLang } from "./loader";
 import {
   useGlobalLang,
   getGlobalI18nStore,
@@ -25,20 +25,18 @@ export type I18nStore = {
   i18n: I18n;
 };
 
-type I18nConfig = {
-  fallback: Lang;
-  availableLangs: readonly Lang[];
-  path: (lang: Lang) => string;
-  initialTranslations?: Translations;
+type I18nConfigBase = {
+  initialTranslations?: Translations; 
 };
+
+type I18nConfig = I18nConfigBase & LangLoaderConfig<Lang>;
+
 
 export function createI18nContext(config: I18nConfig) {
   const I18nStoreContext = createContext<StoreApi<I18nStore> | null>(null);
 
   const langLoader = createLangLoader({
-    availableLangs: config.availableLangs,
-    fallback: config.fallback,
-    path: config.path,
+    translations: config.translations
   });
 
   function createI18nStore(): StoreApi<I18nStore> {

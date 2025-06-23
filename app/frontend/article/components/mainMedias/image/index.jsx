@@ -41,7 +41,7 @@ import {
 import "../../../styles/featureImageCard.css";
 import { FormProviderWrapper } from "../../../../../modules/form";
 import { isSameFile } from "../../../../../utils/file";
-import { PolarisProvider } from "../../../../../polaris";
+import { PolarisProvider } from "../../../../../polaris/npm";
 
 const mainImagePrefix = `${prefix}:${getFieldRoot(formFieldMap, ["mainMedias"])}`;
 

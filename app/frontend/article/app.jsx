@@ -30,6 +30,7 @@ import {
 
 import { Card as CardV2 } from "@polaris/22.1.0";
 
+
 import { getYear } from "../../utils/date";
 import { Banner as BannerForm } from "../../modules/form/components";
 import { FormProviderWrapper } from "../../modules/form";
@@ -45,6 +46,8 @@ const App = ({ isDelete }) => {
   return (
     <FormProviderWrapper initialData={form}>
       <DeleteModalProvider isDelete={isDelete}>
+
+     
         <RHFAppContent />
       </DeleteModalProvider>
     </FormProviderWrapper>

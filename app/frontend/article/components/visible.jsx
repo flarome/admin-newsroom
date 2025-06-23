@@ -46,7 +46,7 @@ const allTimeZones = getTimeZones({ includeUtc: true });
 
 
 import { isValidDate, getValidDate, dateToLocale } from "../../../utils/date";
-import { PolarisProvider } from "../../../polaris";
+import { PolarisProvider } from "../../../polaris/npm";
 
 function useTimeZoneOptions(selectedDate) {
   return useMemo(() => {

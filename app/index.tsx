@@ -5,22 +5,29 @@ import {
   appStoreContext,
   AppStoreApi,
 } from "./store";
+// @ts-ignore
 import styles from "./app.module.css";
 import "./app.css";
 import { useNavigation } from "@remix-run/react";
-import { PolarisBridge, PolarisI18n } from "./polaris";
+import { PolarisBridge, PolarisI18n } from "./polaris/npm";
 import { createI18nContext } from "./i18n/context";
 import { GlobalI18nProvider } from "./i18n/global";
 import { language } from "./config/app";
-import { languages } from "./locales";
 import fr from './locales/fr.json';
 
 export const globalAppI18n = createI18nContext({
   fallback: language,
-  availableLangs: languages,
-  path: (lang) => new URL(`./locales/${lang}.json`, import.meta.url).pathname,
+  translations:  {  fr: {
+      type: 'parsed',
+      value: fr,
+    },
+    en: {
+      type: 'import',
+       value: () => import('./locales/en.json'),
+    },
+  },
   initialTranslations: fr,
-});
+}); 
 
 const RenderWrapper = ({ children }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);

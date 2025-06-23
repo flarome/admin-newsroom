@@ -10,7 +10,7 @@ import { FormProviderWrapper } from "../../form";
 
 
 import './styles/styles.css'
-import { PolarisProvider } from "../../../polaris";
+import { PolarisProvider } from "../../../polaris/npm";
 const MetaobjectModalPortal = memo(({ onReady }) => {
   const {
     open,
