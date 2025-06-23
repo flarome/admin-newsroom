@@ -1,7 +1,16 @@
 import { memo, useEffect, useState } from "react";
 import { VPE } from ".";
 import GlobalApp from "../";
-import { PolarisProvider } from "../polaris";
+
+// @ts-ignore
+import DesignSystemProviderStyles from "./styles/DesignSystemProvider.css?url";
+// @ts-ignore
+import MainStyles from "./styles/Main.css?url";
+
+export const links = [
+  { rel: "stylesheet", href: DesignSystemProviderStyles },
+  { rel: "stylesheet", href: MainStyles },
+];
 
 const Layout = () => {
   const [dataFromParent, setDataFromParent] = useState(null);
@@ -21,15 +30,15 @@ const Layout = () => {
     };
   }, []);
 
-  return (
-      <VPE {...dataFromParent} />
-  );
+  return <VPE {...dataFromParent} />;
 };
 
-const Route = () => (
-  <GlobalApp>
-    <Layout />
-  </GlobalApp>
+const RouteInner = () => (
+  <div data-cms="vpe">
+    <GlobalApp>
+      <Layout />
+    </GlobalApp>
+  </div>
 );
 
-export default memo(Route);
+export const Route = memo(RouteInner);

@@ -50,6 +50,9 @@ export function createGlobalI18nStore(initialLang?: Lang) {
         }
 
         set({ lang });
+        if (typeof document !== "undefined" && document && document.documentElement && document.documentElement.lang) {
+          document.documentElement.lang = lang; // ✅ client only
+        }
       });
     },
   }));

@@ -2,8 +2,8 @@
 
 
 
-import { Modal, TitleBar } from "@shopify/app-bridge-react";
-import { useEffect } from "react";
+import { Modal as BridgeModal, TitleBar } from "@shopify/app-bridge-react";
+import { memo, useEffect } from "react";
 
 const CMS = ({ open, modalId, closeModal, ...props1 }) => {
   const iframeSrc = "/vpe";
@@ -42,11 +42,11 @@ const CMS = ({ open, modalId, closeModal, ...props1 }) => {
 
   return (
     <>
-      <Modal variant="max" open={open} id={modalId} src={iframeSrc} onHide={closeModal}>
+      <BridgeModal variant="max" open={open} id={modalId} src={iframeSrc} onHide={closeModal}>
         <TitleBar title="Contenu de l'article" />
-      </Modal>
+      </BridgeModal>
     </>
   );
 };
 
-export default CMS;
+export const Modal = memo(CMS);

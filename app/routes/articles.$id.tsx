@@ -7,6 +7,10 @@ import { getArticleDetails } from "../.server/article";
 import { useEffect } from "react";
 import App from ".."; 
 
+import { PolarisTestProvider } from "@shopify/polaris";
+
+
+
 // ⬇️ LOADER — charge un article existant ou retourne un template vide si "new"
 export const loader = async ({ request, params }) => {
   const config = await getShopifyContext(request);

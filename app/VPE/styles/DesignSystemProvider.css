@@ -1,4 +1,6 @@
-@charset "UTF-8";:root,.p-theme-light {
+@charset "UTF-8";
+
+:root,.p-theme-light {
     --p-border-radius-0:0rem;
     --p-border-radius-050:.125rem;
     --p-border-radius-100:.25rem;
@@ -623,9 +625,6 @@ body {
 
 *,*:before,*:after {
     box-sizing:border-box
-}
-[data-cms="vpe"] *,[data-cms="vpe"]*::before,[data-cms="vpe"]*:after {
-    box-sizing: border-box
 }
 h1,h2,h3,h4,h5,h6,p {
     margin:0;
@@ -5237,7 +5236,7 @@ html[class~=Polaris-Safari-16-Font-Optical-Sizing-Patch] {
     display:contents;
     min-height:calc(var(--p-space-200)*2 + var(--p-height-400))
 }
-
+ 
 @supports (grid-template-columns:subgrid) {
     .Polaris-AlphaTable-TableRow {
         display:grid;

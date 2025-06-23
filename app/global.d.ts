@@ -12,3 +12,8 @@ declare module '*.module.scss' {
 
 // Pour les fichiers CSS normaux
 declare module '*.css';
+
+declare module "*.css?url" {
+  const url: string;
+  export default url;
+}

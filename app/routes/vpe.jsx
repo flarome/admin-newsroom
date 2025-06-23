@@ -7,7 +7,9 @@ import { authenticate } from "../lib/shopify/shopify.server";
 
 import polarisTranslations from "@shopify/polaris/locales/fr.json";
 
-import {Route} from "../VPE";
+import {Route, links as Links} from "../VPE";
+
+export const links = () => [...Links];
 
 export const loader = async ({ request }) => {
   await authenticate.admin(request);
@@ -17,7 +19,7 @@ export const loader = async ({ request }) => {
 
 export default function App() {
   const { apiKey } = useLoaderData();
- 
+  
   return (
     <AppProvider
       i18n={polarisTranslations}

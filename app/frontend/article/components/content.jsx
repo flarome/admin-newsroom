@@ -4,7 +4,8 @@ import { useAppBridge } from "@shopify/app-bridge-react";
 import { memo, useCallback, useRef, useState } from "react";
 //import { Modal } from "../../../modules/VPE";
 
-import { Modal, Editor } from "../../../VPE";
+import { Modal } from "../../../VPE";
+import Editor from "../../../VPE/editor";
 import { useArticle } from "../context/articleContext";
 import { sections as bodySections } from "../../../data/article/input/body";
 import { form as FieldsMap } from "../../../data/article/config/fieldMap";

@@ -1,8 +1,14 @@
+@import url('./Editor/styles.css');
+@import url('./Loading/styles.css');
+@import url('./OnlineStore/styles.css');
+@import url('./Theme/styles.css');
+
+
 
 
 [data-cms="vpe"] {
   all: initial;
-  display: block;
+  display: block; 
   font: inherit;
   color: inherit;
   box-sizing: border-box;
@@ -19,3 +25,8 @@
 }
 
 
+
+
+[id^="vpe-app"] > div {
+  height: 100%;
+} 

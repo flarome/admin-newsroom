@@ -1,18 +1,7 @@
 @charset "UTF-8";
-[data-cms="vpe"] {
-    --frame-border-size: .4rem;
-    --button-size: .4rem
-}
-
-@media screen and (min-width: 600px) {
-    [data-cms="vpe"] {
-        --button-size: .6rem;
-        --frame-border-size: .6rem
-    }
-}
 
 
-[data-cms="vpe"],
+:root,
 .p-theme-light {
     --p-border-radius-0: 0rem;
     --p-border-radius-050: .125rem;
@@ -459,7 +448,7 @@
     --p-shadow-bevel-100: .0625rem 0rem 0rem 0rem rgba(204, 204, 204, .08) inset, -.0625rem 0rem 0rem 0rem rgba(204, 204, 204, .08) inset, 0rem -.0625rem 0rem 0rem rgba(204, 204, 204, .08) inset, 0rem .0625rem 0rem 0rem rgba(204, 204, 204, .16) inset
 }
 
-.p-partial-theme-mobile {
+.p-partial-theme-mobile { 
     --p-font-weight-regular: 400;
     --p-font-weight-medium: 500;
     --p-font-weight-semibold: 600;
@@ -531,7 +520,7 @@
     }
 }
 
-[data-cms="vpe"] {
+:root {
     --polaris-version-number: "{{POLARIS_VERSION}}";
     --pg-navigation-width: 15rem;
     --pg-dangerous-magic-space-4: 1rem;
