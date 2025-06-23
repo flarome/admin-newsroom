@@ -6,8 +6,8 @@ import {
   Button,
   Text,
   InlineGrid,
-  Card,
 } from "@shopify/polaris";
+import { Card as CardV2 } from "@polaris/22.1.0";
 import { EditIcon } from "@shopify/polaris-icons";
 import { Controller, useFormContext } from "react-hook-form";
 import { prefix } from "../config/ids";
@@ -22,7 +22,7 @@ const Extrait = () => {
   const handleToggle = useCallback(() => setOpen((prev) => !prev), []);
 
   return (
-    <Card>
+    <CardV2>
       <BlockStack gap={{ xs: "200" }}>
         <InlineGrid columns={{ xs: "1fr auto" }}>
           <Text as="h2" variant="headingSm" fontWeight="semibold">
@@ -84,7 +84,7 @@ const Extrait = () => {
           </Collapsible>
         </BlockStack>
       </BlockStack>
-    </Card>
+    </CardV2>
   );
 };
 

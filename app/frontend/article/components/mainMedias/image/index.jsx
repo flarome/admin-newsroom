@@ -16,6 +16,7 @@ import {
   DropZone,
   ActionList,
 } from "@shopify/polaris";
+import { Card as CardV2 } from "@polaris/22.1.0";
 import {
   DeleteIcon,
   NoteIcon,
@@ -512,7 +513,7 @@ const MainImage = () => {
 
   return (
     
-    <Card>
+    <CardV2>
       <BlockStack gap={{ xs: "400", sm: "500" }} inlineAlign="stretch">
         <InlineStack wrap align="space-between" direction={{ xs: "row" }}>
           <Text as="h2" variant="headingSm" fontWeight="semibold">
@@ -590,7 +591,7 @@ const MainImage = () => {
       </BlockStack>
 
       <ImageModal open={modalOpen} onClose={handleModalClose} />
-    </Card>
+    </CardV2>
 
 
 

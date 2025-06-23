@@ -19,6 +19,7 @@
     "types": ["node"],
 
     "paths": {
+    "@polaris": ["app/polaris"],
       "@VPE/*": ["app/VPE/*"],
       "@EDITOR/*": ["app/VPE/editor/*"],
     }

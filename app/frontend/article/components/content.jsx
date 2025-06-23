@@ -27,7 +27,7 @@ const settingsCatalog = [];
 
 const modalId = `${prefix}:${getFieldRoot(FieldsMap, ["content"])}:modal`;
 
-export const EmbeddedContentInnert = () => {
+const EmbeddedContentInnert = () => {
   const [focus, setFocus] = useState(false);
   const inputRef = useRef(null);
 
@@ -98,7 +98,7 @@ export const EmbeddedContentInnert = () => {
             )}
           >
             <div onClick={handleClickChild}>
-              <Editor onChange={(v) => ""} ui={{ mode: "EMBEDDED", minHeight: "200px", maxHeight: "430px" }} />
+              <Editor editor={{onChange: () => ""}} ui={{ mode: "EMBEDDED", minHeight: "200px", maxHeight: "430px" }} />
             </div>
           </div>
         </div>

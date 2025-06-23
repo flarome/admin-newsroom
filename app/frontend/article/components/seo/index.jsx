@@ -9,6 +9,7 @@ import {
   Text,
   InlineGrid,
 } from "@shopify/polaris";
+import { Card as CardV2 } from "@polaris/22.1.0";
 import { EditIcon } from "@shopify/polaris-icons";
 import { useWatch } from "react-hook-form";
 import { useArticle } from "../../context/articleContext";
@@ -62,7 +63,7 @@ const Seo = () => {
   );
 
   return (
-    <Card padding={{ xs: "0" }}>
+    <CardV2 padding={{ xs: "0" }}>
       <Box padding={{ xs: "400" }}>
         <BlockStack gap={{ xs: "200" }}>
           <InlineGrid columns={{ xs: "1fr auto" }}>
@@ -127,7 +128,7 @@ const Seo = () => {
           </BlockStack>
         </Box>
       </Collapsible>
-    </Card>
+    </CardV2>
   );
 };
 

@@ -1,6 +1,5 @@
 import {
   Select,
-  Card,
   Icon,
   Tooltip,
   Button,
@@ -8,6 +7,7 @@ import {
   BlockStack,
   InlineStack,
 } from "@shopify/polaris";
+import { Card as CardV2 } from "@polaris/22.1.0";
 import _ from "lodash";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 import { ViewIcon } from "@shopify/polaris-icons";
@@ -43,7 +43,7 @@ const previewUrl =
     ? `${url}${selectedValue ? `?view=${selectedValue}` : ""}`
     : undefined;
   return (
-    <Card>
+    <CardV2>
       <BlockStack gap="200">
         <InlineStack
           align="space-between"
@@ -95,7 +95,7 @@ const previewUrl =
           )}
         />
       </BlockStack>
-    </Card>
+    </CardV2>
   );
 };
 

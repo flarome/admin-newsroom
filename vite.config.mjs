@@ -269,6 +269,7 @@ export default defineConfig({
     alias: {
       "~": path.resolve(__dirname, "app"),
       "react-tweet": resolve(__dirname, "node_modules/react-tweet/dist/swr.js"),
+      '@polaris': path.resolve(__dirname, 'app/polaris'),
     },
   },
 

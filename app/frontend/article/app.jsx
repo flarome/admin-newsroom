@@ -2,7 +2,7 @@ import { useEffect, useCallback, useState } from "react";
 import { useNavigate, useHref } from "@remix-run/react";
 import { useAppBridge, TitleBar } from "@shopify/app-bridge-react";
 
-import { Page, Badge, Layout, BlockStack, Card, Text } from "@shopify/polaris";
+import { Page, Badge, Layout, BlockStack, Text } from "@shopify/polaris";
 import { DeleteIcon, ViewIcon } from "@shopify/polaris-icons";
 import { useArticle } from "./context/articleContext";
 import { get as fetchAdjacentArticle } from "./services/adjacentArticle";
@@ -27,6 +27,8 @@ import {
   EmbeddedContent
 } from "./components";
 
+
+import { Card as CardV2 } from "@polaris/22.1.0";
 
 import { getYear } from "../../utils/date";
 import { Banner as BannerForm } from "../../modules/form/components";
@@ -150,6 +152,7 @@ const RHFAppContent = ({}) => {
 
   return (
     <>
+
       <Page
         backAction={{
           accessibilityLabel: "Accéder à la section des articles de blog",
@@ -209,7 +212,10 @@ const RHFAppContent = ({}) => {
             <Layout>
               <Layout.Section>
                 <BlockStack gap={{ xs: "400" }} align="space-between">
-                  <Card>
+
+  
+
+               <CardV2>
                     <BlockStack gap={{ xs: "400" }}>
                       {/* Titre */}
                       <Title />
@@ -218,7 +224,7 @@ const RHFAppContent = ({}) => {
 
                       <EmbeddedContent />
                     </BlockStack>
-                  </Card>
+                </CardV2>
                   {/* */}
 
                   <Content />
@@ -237,7 +243,7 @@ const RHFAppContent = ({}) => {
                   <MainImage />
                    <MainVideo />
 
-                  <Card>
+                   <CardV2>
                     <BlockStack gap={{ xs: "200" }}>
                       <Text as="h2" variant="headingSm" fontWeight="semibold">
                         Organisation
@@ -251,7 +257,7 @@ const RHFAppContent = ({}) => {
                         <Tags />
                       </BlockStack>
                     </BlockStack>
-                  </Card>
+                  </CardV2>
 
                   <Template />
                 </BlockStack>

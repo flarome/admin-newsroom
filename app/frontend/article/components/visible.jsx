@@ -1,8 +1,7 @@
 import { useState, useCallback, useMemo, useEffect, memo } from "react";
 import {
   Button,
-  Card,
-  Text,
+  Text, 
   BlockStack,
   InlineStack,
   Box,
@@ -18,6 +17,7 @@ import {
   Tooltip,
   InlineGrid,
 } from "@shopify/polaris";
+import { Card as CardV2 } from "@polaris/22.1.0";
 import {
   CalendarTimeIcon,
   CalendarIcon,
@@ -641,7 +641,7 @@ const DateVisibility = () => {
   }, [shopify]);
 
   return (
-    <Card>
+    <CardV2>
       <BlockStack gap={{ xs: "100" }} inlineAlign="stretch">
         <InlineStack wrap align="space-between" direction={{ xs: "row" }}>
           <Text as="h2" variant="headingSm" fontWeight="semibold">
@@ -791,7 +791,7 @@ const DateVisibility = () => {
         setTimeZone={setTimeZone}
         initialDate={dateSend}
       />
-    </Card>
+    </CardV2>
   );
 };
 

@@ -10,7 +10,7 @@ import polarisTranslations from "@shopify/polaris/locales/fr.json";
 import {Route, links as Links} from "../VPE";
 
 export const links = () => [...Links];
-
+ 
 export const loader = async ({ request }) => {
   await authenticate.admin(request);
 
