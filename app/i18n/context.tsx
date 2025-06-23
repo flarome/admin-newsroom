@@ -6,6 +6,7 @@ import {
   useId,
   useRef,
   useState,
+  useSyncExternalStore,
 } from "react";
 import { createStore, StoreApi, useStore } from "zustand";
 import { createLangLoader, LangLoaderConfig, loadLang } from "./loader";
@@ -26,17 +27,17 @@ export type I18nStore = {
 };
 
 type I18nConfigBase = {
-  initialTranslations?: Translations; 
+  initialTranslations?: Translations;
 };
 
 type I18nConfig = I18nConfigBase & LangLoaderConfig<Lang>;
-
 
 export function createI18nContext(config: I18nConfig) {
   const I18nStoreContext = createContext<StoreApi<I18nStore> | null>(null);
 
   const langLoader = createLangLoader({
-    translations: config.translations
+    fallback: config.fallback,
+    translations: config.translations,
   });
 
   function createI18nStore(): StoreApi<I18nStore> {
@@ -79,50 +80,57 @@ export function createI18nContext(config: I18nConfig) {
         registeredSources.delete(instanceId);
         i18nCache.delete(instanceId); // facultatif
       };
-    }, []);
+    }, [instanceId]);
 
+    // Subscribe to global language changes and load translations accordingly
     useEffect(() => {
-      if (lang === lastLangRef.current) return; // ✅ Pas un vrai changement
-      const load = async () => {
-        lastLangRef.current = lang;
+      const unsubscribe = global.subscribe(
+        (state) => state.lang,
+        async (newLang) => {
+          if (newLang === lastLangRef.current) return;
 
-        const contextCache = i18nCache.get(instanceId) ?? new Map<Lang, any>();
-        const cached = contextCache.get(lang);
+                  const contextCache = i18nCache.get(instanceId) ?? new Map<Lang, any>();
+          const cached = contextCache.get(newLang);
 
-        if (cached) {
-          store.setState({
-            translations: cached,
-            i18n: new I18n(cached),
-          });
-        } else {
-          try {
-            const json = await loadLang(langLoader, lang);
-            contextCache.set(lang, json);
-            i18nCache.set(instanceId, contextCache);
-
-            store.setState({
-              translations: json,
-              i18n: new I18n(json),
+          if (cached) {
+              store.setState({
+              translations: cached,
+              i18n: new I18n(cached),
             });
-          } catch (err) {
-            console.error(
-              `[i18n] Failed to load translations for "${lang}" [${instanceId}]`,
-              err,
-            );
+          } else {
+            try {
+            const json = await loadLang(langLoader, newLang);
+              contextCache.set(newLang, json);
+              i18nCache.set(instanceId, contextCache);
+              store.setState({
+                translations: json,
+                i18n: new I18n(json),
+              });
+            } catch (err) {
+              console.error(
+                `[i18n] Failed to load translations for "${newLang}" [${instanceId}]`,
+                err,
+              );
+            }
           }
-        }
 
-        const trackers = Array.from(global.getState()._trackers);
-        for (const t of trackers) {
-          if (t.lang === lang && t.source === instanceId) {
-            t.resolve();
-            global.getState()._trackers.delete(t);
+           // Notify trackers
+          const trackers = Array.from(global.getState()._trackers);
+          for (const t of trackers) {
+            if (t.lang === newLang && t.source === instanceId) {
+              t.resolve();
+              global.getState()._trackers.delete(t);
+            }
           }
-        }
+
+          lastLangRef.current = newLang;
+        },
+      );
+
+      return () => {
+        unsubscribe();
       };
-
-      load();
-    }, [lang]);
+    }, [instanceId]);
 
     return (
       <I18nStoreContext.Provider value={store}>

@@ -3,6 +3,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { createStore, useStore, StoreApi } from "zustand";
 import { language } from "../config/app";
 import { exposeStoreDevTools } from "../_dev/exposeStoreDevTools";
+import { subscribeWithSelector } from "zustand/middleware";
 
 export type Lang = string;
 
@@ -19,7 +20,10 @@ type GlobalI18nStore = {
 };
 
 export function createGlobalI18nStore(initialLang?: Lang) {
-  return createStore<GlobalI18nStore>((set, get) => ({
+
+    return createStore<GlobalI18nStore>()(
+    subscribeWithSelector((set, get) => ({
+
     lang: initialLang ?? language,
     _trackers: new Set(),
 
@@ -51,11 +55,14 @@ export function createGlobalI18nStore(initialLang?: Lang) {
 
         set({ lang });
         if (typeof document !== "undefined" && document && document.documentElement && document.documentElement.lang) {
-          document.documentElement.lang = lang; // ✅ client only
-        }
-      });
-    },
-  }));
+            requestIdleCallback(() => {
+    document.documentElement.lang = lang;// ✅ client only
+}, { timeout: 1000 });
+          }
+        });
+      },
+    }))
+  );
 }
 
 export const registeredSources = new Set<string>();
@@ -93,7 +100,8 @@ export function useSetGlobalLang(): (lang: Lang) => Promise<void> {
   const store = useContext(GlobalI18nContext);
   if (!store)
     throw new Error("useSetGlobalLang must be used inside GlobalI18nProvider");
-  return store.getState().setLang;
+
+  return useStore(store, (s) => s.setLang);
 }
 
 export function getGlobalI18nStore() {
@@ -103,7 +111,7 @@ export function getGlobalI18nStore() {
 // 🔁 Cache global des traductions : contextId -> lang -> translations
 export const i18nCache = new Map<string, Map<Lang, any>>();
 
-function DevI18nContext({ store }) {
+function DevI18nContext({ store }: { store: StoreApi<GlobalI18nStore> }) {
   useEffect(() => {
     // window.__STORES__.i18n.state.setLang("en")
     exposeStoreDevTools("i18n", store);

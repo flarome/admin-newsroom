@@ -2,21 +2,29 @@ import { createI18nContext } from "../../../i18n/context";
 import { AppProvider as PolarisProviderOriginal } from "@shopify/polaris";
 import fr from "../locales/fr.json";
 import { language } from "../../../config/app";
-// import { translations } from "../locales/locales";
+
+import { languages } from "../locales";
+
 
 const polarisI18n = createI18nContext({
   fallback: language,
   translations: {
+    // Langues à charger dynamiquement
+    ...Object.fromEntries(
+      languages
+        .map((lang) => [
+          lang,
+          { type: 'import' as const, value: () => import(`../locales/${lang}.json`) }
+        ])
+    ),
+
+    // Langue déjà chargée
     fr: {
       type: 'parsed',
       value: fr,
-    },
-    en: {
-      type: 'path',
-      value: new URL(`../locales/en.json`, import.meta.url).pathname,
-    },
+    }
   },
-  initialTranslations: fr, 
+  initialTranslations: fr,
 });
 
 export const PolarisI18n = ({ children }: { children: React.ReactNode }) => {

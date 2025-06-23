@@ -13,21 +13,22 @@ import { PolarisBridge, PolarisI18n } from "./polaris/npm";
 import { createI18nContext } from "./i18n/context";
 import { GlobalI18nProvider } from "./i18n/global";
 import { language } from "./config/app";
-import fr from './locales/fr.json';
+import fr from "./locales/fr.json";
 
 export const globalAppI18n = createI18nContext({
   fallback: language,
-  translations:  {  fr: {
-      type: 'parsed',
+  translations: {
+    fr: {
+      type: "parsed",
       value: fr,
     },
     en: {
-      type: 'import',
-       value: () => import('./locales/en.json'),
+      type: "import",
+      value: () => import("./locales/en.json"),
     },
   },
   initialTranslations: fr,
-}); 
+});
 
 const RenderWrapper = ({ children }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);

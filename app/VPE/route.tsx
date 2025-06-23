@@ -5,7 +5,7 @@ import GlobalApp from "../";
 // @ts-ignore
 import DesignSystemProviderStyles from "./styles/DesignSystemProvider.css?url";
 // @ts-ignore
-import MainStyles from "./styles/Main.css?url";
+import MainStyles from "./styles/Main.css?url"; 
 
 export const links = [
   { rel: "stylesheet", href: DesignSystemProviderStyles },
