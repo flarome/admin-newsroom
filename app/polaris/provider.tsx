@@ -16,7 +16,7 @@ export const PolarisI18n = ({ children }: { children: React.ReactNode }) => {
 };
 
 // Ce composant synchronise i18nStore avec PolarisProvider
-export function PolarisBridge({ children }: { children: React.ReactNode }) {
+export function PolarisProvider({ children }: { children: React.ReactNode }) {
   const translations = polarisI18n.useI18nStore((s) => s.translations);
 
   return (
@@ -25,3 +25,7 @@ export function PolarisBridge({ children }: { children: React.ReactNode }) {
     </PolarisProviderOriginal>
   );
 }
+
+export const PolarisBridge = ({ children }: { children: React.ReactNode }) => (
+   <PolarisI18n><PolarisProvider>{children}</PolarisProvider></PolarisI18n>
+)

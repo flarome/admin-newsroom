@@ -15,7 +15,6 @@ import {
   Modal as PolarisModal,
   DatePicker,
   Icon,
-  AppProvider,
   Tooltip,
   InlineGrid,
 } from "@shopify/polaris";
@@ -33,7 +32,6 @@ import _ from "lodash";
 import { form as formFieldMap } from "../../../data/article/config/fieldMap";
 import { relevantZones } from "../config/timezones";
 import { prefix } from "../config/ids";
-import polarisTranslations from "@shopify/polaris/locales/fr.json";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 import { form as formFieldStates} from "../../../data/article/config/fieldState";
 export const publishedFieldPath = formFieldMap.published;
@@ -48,6 +46,7 @@ const allTimeZones = getTimeZones({ includeUtc: true });
 
 
 import { isValidDate, getValidDate, dateToLocale } from "../../../utils/date";
+import { PolarisProvider } from "../../../polaris";
 
 function useTimeZoneOptions(selectedDate) {
   return useMemo(() => {
@@ -461,7 +460,8 @@ const DateModal = memo(function DateModal({
 
         <button onClick={onClose}>Annuler</button>
       </TitleBar>
-      <AppProvider i18n={polarisTranslations}>
+      <PolarisProvider>
+
         <PolarisModal.Section>
           <LegacyStack vertical>
             <LegacyStack.Item>
@@ -605,7 +605,7 @@ const DateModal = memo(function DateModal({
             </LegacyStack.Item>
           </LegacyStack>
         </PolarisModal.Section>
-      </AppProvider>
+      </PolarisProvider>
     </Modal>
   );
 });

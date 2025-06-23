@@ -4,17 +4,6 @@ import {
   Text,
   BlockStack,
   InlineStack,
-  Box,
-  Popover,
-  TextField,
-  Modal as PolarisModal,
-  Icon,
-  AppProvider,
-  Thumbnail,
-  InlineGrid,
-  Collapsible,
-  DropZone,
-  ActionList,
 } from "@shopify/polaris";
 
 const MainVideo = () => { 

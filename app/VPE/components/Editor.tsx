@@ -18,7 +18,7 @@ export const SkeletonEditor = () => (
 
 export const EditorURI = "/vpe/editor";
 
-const value = [
+const value = [ 
   {
     children: [{ text: "Welcome to the Plate Playground!" }],
     type: "h1",

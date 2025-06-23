@@ -263,10 +263,6 @@ function MyOnChangePlugin({ onChange }) {
   return null;
 }
 
-import { ActionList, AppProvider, Popover } from "@shopify/polaris";
-
-import polarisTranslations from "@shopify/polaris/locales/fr.json";
-
 
 export const Inline = ({ value: data, onChange: setData }) => {
   // Pour éviter une boucle infinie si l'output HTML ne change pas

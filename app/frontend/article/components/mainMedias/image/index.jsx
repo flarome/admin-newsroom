@@ -10,7 +10,6 @@ import {
   TextField,
   Modal as PolarisModal,
   Icon,
-  AppProvider,
   Thumbnail,
   InlineGrid,
   Collapsible,
@@ -28,7 +27,6 @@ import { Modal, TitleBar, useAppBridge } from "@shopify/app-bridge-react";
 import _ from "lodash";
 import { form as formFieldMap } from "../../../../../data/article/config/fieldMap";
 import { prefix } from "../../../config/ids";
-import polarisTranslations from "@shopify/polaris/locales/fr.json";
 import { getFieldPath, getFieldRoot } from "../../../../../utils/getFieldPath";
 import { Banner as BannerForm } from "../../../../../modules/form/components";
 import { validateSrc } from "../../../../../modules/form/validate/image";
@@ -42,6 +40,7 @@ import {
 import "../../../styles/featureImageCard.css";
 import { FormProviderWrapper } from "../../../../../modules/form";
 import { isSameFile } from "../../../../../utils/file";
+import { PolarisProvider } from "../../../../../polaris";
 
 const mainImagePrefix = `${prefix}:${getFieldRoot(formFieldMap, ["mainMedias"])}`;
 
@@ -351,7 +350,8 @@ const ImageModalContent = memo(function ImageModalContent({
         </button>
       </TitleBar>
 
-      <AppProvider i18n={polarisTranslations}>
+<PolarisProvider>
+
         <PolarisModal.Section>
           <BlockStack gap="600">
             <BannerForm />
@@ -430,7 +430,7 @@ const ImageModalContent = memo(function ImageModalContent({
             </InlineGrid>
           </BlockStack>
         </PolarisModal.Section>
-      </AppProvider>
+      </PolarisProvider>
     </Modal>
   );
 });

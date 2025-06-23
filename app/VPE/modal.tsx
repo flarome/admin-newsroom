@@ -10,8 +10,8 @@ const CMS = ({ open, modalId, closeModal, ...props1 }) => {
 
   const props = {p:2};
 
- 
-  useEffect(() => {
+  
+  useEffect(() => { 
     function handleMessageFromModal(ev) {
       console.log('Message received in main app:', ev.data);
     }

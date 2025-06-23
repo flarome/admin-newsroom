@@ -1,15 +1,16 @@
 // modal/index.jsx
 import { memo, useCallback, useEffect } from "react";
-import { AppProvider, Modal as PolarisModal } from "@shopify/polaris";
+import {  Modal as PolarisModal } from "@shopify/polaris";
 import { Modal, TitleBar } from "@shopify/app-bridge-react";
 import Skeleton from "./states/loading";
 import Editor from "./states/editor";
 import { useMetaobjectEntriesModal } from "./context/MetaobjetsEntriesModalContext";
 import { useFormContext, useFormState } from "react-hook-form";
-import polarisTranslations from "@shopify/polaris/locales/fr.json";
 import { FormProviderWrapper } from "../../form";
-import { prefix } from "./config/ids";
+
+
 import './styles/styles.css'
+import { PolarisProvider } from "../../../polaris";
 const MetaobjectModalPortal = memo(({ onReady }) => {
   const {
     open,
@@ -65,11 +66,12 @@ const MetaobjectModalPortal = memo(({ onReady }) => {
         </button>
       </TitleBar>
 
-      <AppProvider i18n={polarisTranslations}>
+<PolarisProvider>
+
         <PolarisModal.Section>
           {loading ? <Skeleton /> : <Editor />}
         </PolarisModal.Section>
-      </AppProvider>
+</PolarisProvider>
     </Modal>
   );
 });

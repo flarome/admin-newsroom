@@ -1,7 +1,7 @@
 import { memo, useEffect, useState } from "react";
 import { VPE } from ".";
 import GlobalApp from "../";
-import { PolarisBridge } from "../polaris";
+import { PolarisProvider } from "../polaris";
 
 const Layout = () => {
   const [dataFromParent, setDataFromParent] = useState(null);
@@ -22,9 +22,9 @@ const Layout = () => {
   }, []);
 
   return (
-    <PolarisBridge>
+    <PolarisProvider>
       <VPE {...dataFromParent} />
-    </PolarisBridge>
+    </PolarisProvider>
   );
 };
 
