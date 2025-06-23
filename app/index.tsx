@@ -8,7 +8,7 @@ import {
 import styles from "./app.module.css";
 import "./app.css";
 import { useNavigation } from "@remix-run/react";
-import { PolarisI18n } from "./polaris";
+import { PolarisBridge, PolarisI18n } from "./polaris";
 import { createI18nContext } from "./i18n/context";
 import { GlobalI18nProvider } from "./i18n/global";
 import { language } from "./config/app";
@@ -64,7 +64,7 @@ const RenderWrapper = ({ children }) => {
     <div ref={wrapperRef} className={styles["ChildContainer"]}>
       <GlobalI18nProvider initialLang="fr">
         <globalAppI18n.I18nProvider id="app">
-          <PolarisI18n>{children}</PolarisI18n>
+          <PolarisBridge>{children}</PolarisBridge>
         </globalAppI18n.I18nProvider>
       </GlobalI18nProvider>
     </div>

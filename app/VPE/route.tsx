@@ -22,9 +22,7 @@ const Layout = () => {
   }, []);
 
   return (
-    <PolarisProvider>
       <VPE {...dataFromParent} />
-    </PolarisProvider>
   );
 };
 
