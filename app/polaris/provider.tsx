@@ -12,7 +12,7 @@ const polarisI18n = createI18nContext({
 });
 
 export const PolarisI18n = ({ children }: { children: React.ReactNode }) => {
-  return <polarisI18n.I18nProvider>{children}</polarisI18n.I18nProvider>;
+  return <polarisI18n.I18nProvider id="polaris">{children}</polarisI18n.I18nProvider>;
 };
 
 // Ce composant synchronise i18nStore avec PolarisProvider

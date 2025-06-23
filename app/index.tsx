@@ -63,7 +63,7 @@ const RenderWrapper = ({ children }) => {
   return (
     <div ref={wrapperRef} className={styles["ChildContainer"]}>
       <GlobalI18nProvider initialLang="fr">
-        <globalAppI18n.I18nProvider>
+        <globalAppI18n.I18nProvider id="app">
           <PolarisI18n>{children}</PolarisI18n>
         </globalAppI18n.I18nProvider>
       </GlobalI18nProvider>

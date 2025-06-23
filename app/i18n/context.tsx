@@ -49,20 +49,39 @@ export function createI18nContext(config: I18nConfig) {
     }));
   }
 
-  function I18nProvider({ children }: { children: React.ReactNode }) {
+  function I18nProvider({ children, id }: { children: React.ReactNode, id: string }) {
     const [store] = useState(() => createI18nStore());
     const lang = useGlobalLang();
     const global = getGlobalI18nStore();
 
     // Génère un ID unique par instance de Provider
-
-    const id = useId(); // retourne un ID stable même en SSR
     const instanceId = `ctx-${id}`;
 
-    registeredSources.add(instanceId);
+    const lastLangRef = useRef<Lang>(lang);
+
 
     useEffect(() => {
+  if (registeredSources.has(instanceId)) {
+    console.error("[i18n] Registered sources:", [...registeredSources]);
+    throw new Error(`[i18n] Duplicate context id "${instanceId}"`);
+  }
+
+  registeredSources.add(instanceId);
+
+  return () => {
+    registeredSources.delete(instanceId);
+    i18nCache.delete(instanceId); // facultatif
+  };
+}, []);
+
+
+
+    useEffect(() => {
+
       const load = async () => {
+        if (lang === lastLangRef.current) return; // ✅ Pas un vrai changement
+        lastLangRef.current = lang;
+
         const contextCache = i18nCache.get(instanceId) ?? new Map<Lang, any>();
         const cached = contextCache.get(lang);
 
@@ -99,12 +118,6 @@ export function createI18nContext(config: I18nConfig) {
       };
 
       load();
-
-      return () => {
-        // 🔻 Cleanup on unmount
-        registeredSources.delete(instanceId);
-        i18nCache.delete(instanceId); // facultatif : garde-le si tu veux libérer la mémoire
-      };
     }, [lang]);
 
     return (
