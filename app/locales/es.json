@@ -1,3 +1,9 @@
 {
-    "test": "VERSION ES"
+    "test": "VERSION ES",
+      "languages": {
+    "fr": "Französisch",
+    "en": "Englisch",
+    "de": "Deutsch",
+    "es": "Spanisch"
+  }
 }

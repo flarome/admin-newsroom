@@ -20,20 +20,17 @@ import { useAppStore } from "store";
 import {
   Badge,
   Button,
-  Icon,
   SkeletonBodyText,
   SkeletonDisplayText,
   Text,
   Tooltip,
 } from "@shopify/polaris";
-import {
-  DesktopIcon,
-  MobileIcon,
-  ViewportWideIcon,
-} from "@shopify/polaris-icons";
+
 import { LegacyIcon } from "LegacyIcon";
 import { IconType, InternalIcon } from "../../admin-ui-foundations";
 import clsx from "clsx";
+
+import classnames from "classnames";
 
 export const SkeletonHeader = () => (
   <>
@@ -149,7 +146,7 @@ const HistoryButtons = () => (
     <span>
       <HistoryButton
         Action={() => ""}
-        icon="undoIcon"
+        icon="undo"
         tooltipContent={"Annuler"}
         disabled={true}
         ariaLabel={"Restaurer l'action la plus récente"}
@@ -159,7 +156,7 @@ const HistoryButtons = () => (
     <span>
       <HistoryButton
         Action={() => ""}
-        icon="redoIcon"
+        icon="redo"
         tooltipContent={"Rétablir"}
         disabled={true}
         ariaLabel={"Réappliquez la dernière action restaurée"}
@@ -205,7 +202,7 @@ const ZoomControl = () => {
 
   return (
     <ul
-      className={`${OnlineStoreStyles["Online-Store-UI-SegmentedControl__SegmentedControlContainer"]} ${getSegmentedControlClass({ dense: true }, false)}`}
+      className={classnames(OnlineStoreStyles["Online-Store-UI-SegmentedControl__SegmentedControlContainer"], getSegmentedControlClass({ dense: true }, false))}
     >
       <li
         className={`${OnlineStoreStyles["Online-Store-UI-SegmentedControl-Option__OptionWrapper"]} ${getSegmentedControlOptionClass({ dense: true, truncate: true, selected: zoomConfig === "DESKTOP" }, false)}`}
@@ -213,7 +210,7 @@ const ZoomControl = () => {
         <span>
           <ZoomControlItem
             Action={handleClickDesktop}
-            icon="desktopIcon"
+            icon="desktop"
             tooltipContent={"Ordinateur de bureau"}
             selected={zoomConfig === "DESKTOP"}
             visuallyHiddenLabel={
@@ -228,7 +225,7 @@ const ZoomControl = () => {
         <span>
           <ZoomControlItem
             Action={handleClickMobile}
-            icon="mobileIcon"
+            icon="mobile"
             tooltipContent={"Mobile"}
             selected={
               zoomConfig === "MOBILE" || zoomConfig === "MOBILE_LANDSCAPE"
@@ -245,7 +242,7 @@ const ZoomControl = () => {
         <span>
           <ZoomControlItem
             Action={handleClickFullscreen}
-            icon="viewportWideIcon"
+            icon="viewport-wide"
             tooltipContent={"Plein écran"}
             selected={zoomConfig === "FULLSCREEN"}
             visuallyHiddenLabel={

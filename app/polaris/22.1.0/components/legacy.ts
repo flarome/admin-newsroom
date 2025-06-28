@@ -2081,6 +2081,6 @@ function xB({subtitle: e, pageReadyAccessibilityLabel: t, titleMetadata: n, addi
         })]
     })
 }
-
+React.Children
 
 export {rs as Card, he as Box, ose as AppProvider, xB as Page}

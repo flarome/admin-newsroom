@@ -1,3 +1,9 @@
 {
-    "test": "VERSION ANGLAISE"
+    "test": "VERSION ANGLAISE",
+      "languages": {
+    "fr": "French",
+    "en": "English",
+    "de": "German",
+    "es": "Spanish"
+  }
 }

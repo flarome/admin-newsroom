@@ -20,48 +20,54 @@ type GlobalI18nStore = {
 };
 
 export function createGlobalI18nStore(initialLang?: Lang) {
-
-    return createStore<GlobalI18nStore>()(
+  return createStore<GlobalI18nStore>()(
     subscribeWithSelector((set, get) => ({
+      lang: initialLang ?? language,
+      _trackers: new Set(),
 
-    lang: initialLang ?? language,
-    _trackers: new Set(),
-
-    setLang: (lang: Lang) => {
-      return new Promise<void>((resolve) => {
-        const currentLang = get().lang;
-        if (lang === currentLang) {
-          return resolve(); // ✅ ne rien faire si la langue est déjà sélectionnée
-        }
-
-        const existingSources = new Set<string>();
-
-        // prevent duplicate source trackers for the same lang
-        for (const tracker of get()._trackers) {
-          if (tracker.lang === lang) {
-            existingSources.add(tracker.source);
+      setLang: (lang: Lang) => {
+        return new Promise<void>((resolve) => {
+          const currentLang = get().lang;
+          if (lang === currentLang) {
+            return resolve(); // ✅ ne rien faire si la langue est déjà sélectionnée
           }
-        }
 
-        if (registeredSources.size === 0) {
-          return resolve(); // ✅ aucun I18nContext → rien à attendre
-        }
-        // for each I18nContext, we expect a unique source ID to match
-        for (const source of registeredSources) {
-          if (!existingSources.has(source)) {
-            get()._trackers.add({ lang, source, resolve });
+          const existingSources = new Set<string>();
+
+          // prevent duplicate source trackers for the same lang
+          for (const tracker of get()._trackers) {
+            if (tracker.lang === lang) {
+              existingSources.add(tracker.source);
+            }
           }
-        }
 
-        set({ lang });
-        if (typeof document !== "undefined" && document && document.documentElement && document.documentElement.lang) {
-            requestIdleCallback(() => {
-    document.documentElement.lang = lang;// ✅ client only
-}, { timeout: 1000 });
+          if (registeredSources.size === 0) {
+            return resolve(); // ✅ aucun I18nContext → rien à attendre
+          }
+          // for each I18nContext, we expect a unique source ID to match
+          for (const source of registeredSources) {
+            if (!existingSources.has(source)) {
+              get()._trackers.add({ lang, source, resolve });
+            }
+          }
+
+          set({ lang });
+          if (
+            typeof document !== "undefined" &&
+            document &&
+            document.documentElement &&
+            document.documentElement.lang
+          ) {
+            requestIdleCallback(
+              () => {
+                document.documentElement.lang = lang; // ✅ client only
+              },
+              { timeout: 1000 },
+            );
           }
         });
       },
-    }))
+    })),
   );
 }
 

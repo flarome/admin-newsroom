@@ -4,6 +4,17 @@ import styles from "./styles.module.css";
 import { icons } from "../../icons";
 import { internalIcons } from "../../internal-only";
 
+
+const IconsNamesSet = new Set([
+  ...Object.keys(icons),
+  ...Object.keys(internalIcons)
+]);
+
+export function hasIcon(e: string) {
+  return typeof e === "string" && IconsNamesSet.has(e);
+}
+
+
 export type IconSize = "small" | "base";
 export type IconTone =
   | "auto"

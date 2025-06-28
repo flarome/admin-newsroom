@@ -18,20 +18,22 @@ import {
   Visible,
   MainImage,
   MainVideo,
-  
   Blog as BlogA,
   Title,
   SubTitle,
   Category,
   Content,
-  EmbeddedContent
+  EmbeddedContent,
 } from "./components";
 
+import {
+  Card as CardV2,
+  Page as PageV2,
+  AppWrapper as AppWrapperV2,
+  PageGroup,
+  Text as TextV2,
+} from "@polaris/22.1.0";
 
-import { Card as CardV2 } from "@polaris/22.1.0";
-
-
-import { getYear } from "../../utils/date";
 import { Banner as BannerForm } from "../../modules/form/components";
 import { FormProviderWrapper } from "../../modules/form";
 import { Actions, SaveBar } from "./structures";
@@ -40,14 +42,14 @@ import { DeleteModalProvider, useDeleteModal } from "./context/deleteContext";
 import { saveBarId } from "./structures/saveBar";
 import { get as fetchArticleDetails } from "./services/articleDetails";
 import { useApplyShopifyErrors } from "./helpers/shopifyErrors";
+import { Footer } from "../../components";
+
 const App = ({ isDelete }) => {
   const { form } = useArticle();
 
   return (
     <FormProviderWrapper initialData={form}>
       <DeleteModalProvider isDelete={isDelete}>
-
-     
         <RHFAppContent />
       </DeleteModalProvider>
     </FormProviderWrapper>
@@ -155,7 +157,26 @@ const RHFAppContent = ({}) => {
 
   return (
     <>
+      <AppWrapperV2>
+        <PageGroup.Page
 
+          breadcrumbs={[
+            { id: "articles", href: "/a", icon: "blog",  onClick: () => console.log('Clicked Fiche produit') },
+            {
+              title: (
+                <TextV2
+                  variant="headingLg"
+                  fontWeight="semibold"
+                  tone="base"
+                  as="h1"
+                >
+                  {hasArticle ? article.title : "Ajouter un article de blog"}
+                </TextV2>
+              ),
+            },
+          ]}
+        ></PageGroup.Page>
+      </AppWrapperV2>
       <Page
         backAction={{
           accessibilityLabel: "Accéder à la section des articles de blog",
@@ -215,10 +236,7 @@ const RHFAppContent = ({}) => {
             <Layout>
               <Layout.Section>
                 <BlockStack gap={{ xs: "400" }} align="space-between">
-
-  
-
-               <CardV2>
+                  <CardV2>
                     <BlockStack gap={{ xs: "400" }}>
                       {/* Titre */}
                       <Title />
@@ -227,7 +245,7 @@ const RHFAppContent = ({}) => {
 
                       <EmbeddedContent />
                     </BlockStack>
-                </CardV2>
+                  </CardV2>
                   {/* */}
 
                   <Content />
@@ -244,9 +262,9 @@ const RHFAppContent = ({}) => {
                   <Visible />
 
                   <MainImage />
-                   <MainVideo />
+                  <MainVideo />
 
-                   <CardV2>
+                  <CardV2>
                     <BlockStack gap={{ xs: "200" }}>
                       <Text as="h2" variant="headingSm" fontWeight="semibold">
                         Organisation
@@ -271,14 +289,7 @@ const RHFAppContent = ({}) => {
           </form>
         </BlockStack>
 
-        <div
-          className="Polaris-FooterHelp"
-          style={{ "--pc-footer-help-align": "center" }}
-        >
-          <Text as="p" variant="bodySm">
-            Copyright © {getYear()} Flarome. Tous droits réservés.
-          </Text>
-        </div>
+        <Footer />
       </Page>
     </>
   );

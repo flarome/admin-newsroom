@@ -3,7 +3,6 @@ import {
   createAppStore,
   useAppStoreApi,
   appStoreContext,
-  AppStoreApi,
 } from "./store";
 // @ts-ignore
 import styles from "./app.module.css";
@@ -13,21 +12,26 @@ import { PolarisBridge, PolarisI18n } from "./polaris/npm";
 import { createI18nContext } from "./i18n/context";
 import { GlobalI18nProvider } from "./i18n/global";
 import { language } from "./config/app";
-import fr from "./locales/fr.json";
+export { languages } from "./locales";
+import { translations } from "./locales/locales";
 
 export const globalAppI18n = createI18nContext({
   fallback: language,
   translations: {
+    // Langues à charger dynamiquement
+    ...Object.fromEntries(
+      Object.entries(translations).map(([lang, val]) => [
+        lang,
+        { type: "parsed" as const, value: val },
+      ]),
+    ),
+    // Langue déjà chargée
     fr: {
       type: "parsed",
-      value: fr,
-    },
-    en: {
-      type: "import",
-      value: () => import("./locales/en.json"),
+      value: translations.fr,
     },
   },
-  initialTranslations: fr,
+  initialTranslations: translations.fr,
 });
 
 const RenderWrapper = ({ children }) => {

@@ -1,0 +1,29 @@
+.footer {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(222, 227, 232, 0.5);
+  border-top-left-radius: 24px;
+  border-top-right-radius: 24px;
+  padding: 1.5rem 2rem;
+  display: flex;
+  align-items: center;
+  font-size: 0.875rem;
+  color: #6d7175;
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.06);
+  z-index: 10;
+  position: relative;
+  justify-content: space-between;
+}
+
+.langSelector {
+  margin-left: auto; /* pousse à droite */
+}
+
+/* Dark mode optionnel */
+@media (prefers-color-scheme: dark) {
+  .footer {
+    background: rgba(24, 24, 27, 0.75);
+    border-color: rgba(63, 63, 70, 0.4);
+    color: #d1d5db;
+  }
+}

@@ -2,13 +2,17 @@
 
 import React from 'react';
 import ReactDom from 'react-dom';
-
+import classnames from 'classnames';
+import {useRooterContext as kn, global as E, an as Gr,am as Ye} from '../../../_rooter';
+import { useNavigation } from '@remix-run/react';
+import { InternalIcon as Fe, hasIcon as So } from '../../../admin-ui-foundations';
+ 
 var tU = Object.defineProperty;
 var UT = e => {
     throw TypeError(e)
 }
 ;
-var nU = (e, t, n) => t in e ? tU(e, t, {
+var nU = (e, t, n) => t in e ? tU(e, t, { 
     enumerable: !0,
     configurable: !0,
     writable: !0,
@@ -25,6049 +29,43 @@ n)
   , PS = (e, t, n) => (TS(e, t, "access private method"),
 n);
 
-function Z9(e, t) {
-    for (var n = 0; n < t.length; n++) {
-        const i = t[n];
-        if (typeof i != "string" && !Array.isArray(i)) {
-            for (const a in i)
-                if (a !== "default" && !(a in e)) {
-                    const r = Object.getOwnPropertyDescriptor(i, a);
-                    r && Object.defineProperty(e, a, r.get ? r : {
-                        enumerable: !0,
-                        get: () => i[a]
-                    })
-                }
-        }
-    }
-    return Object.freeze(Object.defineProperty(e, Symbol.toStringTag, {
-        value: "Module"
-    }))
-}
-const SP = (e, t={}) => {
-     // @ts-ignore
-    const {sorted: n, ignorenull: i, ignoreEmptyArray: a, useDot: r, skipIndex: s, skipBracket: l, whitespace: c="+"} = t
-      // @ts-ignore
-      , d = k => String(k).replace(/[^ !'()~*]/gu, encodeURIComponent).replace(/ /g, c).replace(/[!'()~*]/g, C => `%${C.charCodeAt().toString(16).slice(-2).toUpperCase()}`)
-      , p = (k, C=Object.keys(k)) => n ? C.sort() : C
-      , f = k => k.filter(C => C).join("&")
-      , v = (k, C) => f(p(C).map(x => b(r ? `${k}.${x}` : `${k}[${x}]`, C[x])))
-      , g = (k, C, x=l ? "" : "[]") => C.length ? f(C.map( (A, _) => b(s ? k + x : k + "[" + _ + "]", A))) : a ? null : d(k + x)
-      , y = (k, C) => f(Array.from(C).map(x => b(k, x)))
-      , b = (k, C, x=typeof C, A=null) => (C === A ? A = i ? A : d(k) + "=" + A : /string|number|boolean/.test(x) ? A = d(k) + "=" + d(C) : Array.isArray(C) ? A = g(k, C) : C instanceof Set ? A = y(k, C) : x === "object" && (A = v(k, C)),
-    A);
-    return e && f(p(e).map(k => b(k, e[k])))
-}
-;
-function Y9(e) {
-    try {
-        const t = e.split("--")[0]
-          , n = J9(t)
-          , i = Date.now();
-        return n < i
-    } catch {
-        return !0
-    }
-}
-function J9(e) {
-    const t = JSON.parse(atob(e))[1];
-    return new Date(t).getTime()
-}
-const X9 = 100
-  , eW = "query-status-subscriber"
-  , tW = 1e3 * 60 * 60 * 24
-  , nW = /FROM\s+(\w+)\b(?:.+?SINCE\s+([^\s]+)\b)?(?:.+?UNTIL\s+([^\s]+)\b)?/;
-function iW(e, t=X9) {
-    const n = new Map
-      , i = new Map;
-    return e.forEach(a => {
-        const {query: r, endpoint: s, source: l} = a
-          , c = r.match(nW) || []
-          , d = c.length ? c.slice(1).join(":") : "null"
-          , p = `${s}:${l}:${d}`;
-        function f(k) {
-            i.has(k) || i.set(k, 1);
-            const C = i.get(k);
-            return `${k}:${C}`
-        }
-        const v = f(p)
-          , {queries: g=[]} = n.get(v) || {}
-          , y = [...g, a];
-        n.set(v, {
-            queries: y,
-            endpoint: s,
-            source: l
-        });
-        const b = i.get(p);
-        y.length === t && b && i.set(p, b + 1)
-    }
-    ),
-    n
-}
-let XA;
-(function(e) {
-    e[e.Forbidden = 403] = "Forbidden"
-}
-)(XA || (XA = {}));
 
-class dm {
-    [k: string]: any;
 
-    constructor() {
-        this.listeners = new Set,
-        this.subscribe = this.subscribe.bind(this)
-    }
-    subscribe(t) {
-        const n = {
-            listener: t
-        };
-        return this.listeners.add(n),
-        this.onSubscribe(),
-        () => {
-            this.listeners.delete(n),
-            this.onUnsubscribe()
-        }
-    }
-    hasListeners() {
-        return this.listeners.size > 0
-    }
-    onSubscribe() {}
-    onUnsubscribe() {}
-}
-const rf = typeof window > "u" || "Deno"in window;
-function Or() {}
-function rW(e, t) {
-    return typeof e == "function" ? e(t) : e
-}
-function e0(e) {
-    return typeof e == "number" && e >= 0 && e !== 1 / 0
-}
-function yj(e, t) {
-    return Math.max(e + (t || 0) - Date.now(), 0)
-}
-function Np(e, t, n) {
-    return jf(e) ? typeof t == "function" ? {
-        ...n,
-        queryKey: e,
-        queryFn: t
-    } : {
-        ...t,
-        queryKey: e
-    } : e
-}
-function oW(e, t, n) {
-    return jf(e) ? {
-        ...t,
-        mutationKey: e
-    } : typeof e == "function" ? {
-        ...t,
-        mutationFn: e
-    } : {
-        ...e
-    }
-}
-function Bl(e, t, n) {
-    return jf(e) ? [{
-        ...t,
-        queryKey: e
-    }, n] : [e || {}, t]
-}
-function CP(e, t) {
-    const {type: n="all", exact: i, fetchStatus: a, predicate: r, queryKey: s, stale: l} = e;
-    if (jf(s)) {
-        if (i) {
-            if (t.queryHash !== jx(s, t.options))
-                return !1
-        } else if (!Zv(t.queryKey, s))
-            return !1
-    }
-    if (n !== "all") {
-        const c = t.isActive();
-        if (n === "active" && !c || n === "inactive" && c)
-            return !1
-    }
-    return !(typeof l == "boolean" && t.isStale() !== l || typeof a < "u" && a !== t.state.fetchStatus || r && !r(t))
-}
-function AP(e, t) {
-    const {exact: n, fetching: i, predicate: a, mutationKey: r} = e;
-    if (jf(r)) {
-        if (!t.options.mutationKey)
-            return !1;
-        if (n) {
-            if (Gc(t.options.mutationKey) !== Gc(r))
-                return !1
-        } else if (!Zv(t.options.mutationKey, r))
-            return !1
-    }
-    return !(typeof i == "boolean" && t.state.status === "loading" !== i || a && !a(t))
-}
-function jx(e, t) {
-    return ((t == null ? void 0 : t.queryKeyHashFn) || Gc)(e)
-}
-function Gc(e) {
-    return JSON.stringify(e, (t, n) => n0(n) ? Object.keys(n).sort().reduce( (i, a) => (i[a] = n[a],
-    i), {}) : n)
-}
-function Zv(e, t) {
-    return bj(e, t)
-}
-function bj(e, t) {
-    return e === t ? !0 : typeof e != typeof t ? !1 : e && t && typeof e == "object" && typeof t == "object" ? !Object.keys(t).some(n => !bj(e[n], t[n])) : !1
-}
-function kj(e, t) {
-    if (e === t)
-        return e;
-    const n = xP(e) && xP(t);
-    if (n || n0(e) && n0(t)) {
-        const i = n ? e.length : Object.keys(e).length
-          , a = n ? t : Object.keys(t)
-          , r = a.length
-          , s = n ? [] : {};
-        let l = 0;
-        for (let c = 0; c < r; c++) {
-            const d = n ? c : a[c];
-            s[d] = kj(e[d], t[d]),
-            s[d] === e[d] && l++
-        }
-        return i === r && l === i ? e : s
-    }
-    return t
-}
-function t0(e, t) {
-    if (e && !t || t && !e)
-        return !1;
-    for (const n in e)
-        if (e[n] !== t[n])
-            return !1;
-    return !0
-}
-function xP(e) {
-    return Array.isArray(e) && e.length === Object.keys(e).length
-}
-function n0(e) {
-    if (!_P(e))
-        return !1;
-    const t = e.constructor;
-    if (typeof t > "u")
-        return !0;
-    const n = t.prototype;
-    return !(!_P(n) || !n.hasOwnProperty("isPrototypeOf"))
-}
-function _P(e) {
-    return Object.prototype.toString.call(e) === "[object Object]"
-}
-function jf(e) {
-    return Array.isArray(e)
-}
-function Sj(e) {
-    return new Promise(t => {
-        setTimeout(t, e)
-    }
-    )
-}
-function wP(e) {
-    Sj(0).then(e)
-}
-function sW() {
-    if (typeof AbortController == "function")
-        return new AbortController
-}
-function i0(e, t, n) {
-    return n.isDataEqual != null && n.isDataEqual(e, t) ? e : typeof n.structuralSharing == "function" ? n.structuralSharing(e, t) : n.structuralSharing !== !1 ? kj(e, t) : t
-}
-let lW = class extends dm {
-    [k: string]: any;
 
-    constructor() {
-        super(),
-        this.setup = t => {
-            if (!rf && window.addEventListener) {
-                const n = () => t();
-                return window.addEventListener("visibilitychange", n, !1),
-                window.addEventListener("focus", n, !1),
-                () => {
-                    window.removeEventListener("visibilitychange", n),
-                    window.removeEventListener("focus", n)
-                }
-            }
-        }
-    }
-    onSubscribe() {
-        this.cleanup || this.setEventListener(this.setup)
-    }
-    onUnsubscribe() {
-        if (!this.hasListeners()) {
-            var t;
-            (t = this.cleanup) == null || t.call(this),
-            this.cleanup = void 0
-        }
-    }
-    setEventListener(t) {
-        var n;
-        this.setup = t,
-        (n = this.cleanup) == null || n.call(this),
-        this.cleanup = t(i => {
-            typeof i == "boolean" ? this.setFocused(i) : this.onFocus()
-        }
-        )
-    }
-    setFocused(t) {
-        this.focused !== t && (this.focused = t,
-        this.onFocus())
-    }
-    onFocus() {
-        this.listeners.forEach( ({listener: t}) => {
-            t()
-        }
-        )
-    }
-    isFocused() {
-        return typeof this.focused == "boolean" ? this.focused : typeof document > "u" ? !0 : [void 0, "visible", "prerender"].includes(document.visibilityState)
-    }
-}
-;
-const Yv = new lW
-  , NP = ["online", "offline"];
-class cW extends dm {
-    [k: string]: any;
 
-    constructor() {
-        super(),
-        this.setup = t => {
-            if (!rf && window.addEventListener) {
-                const n = () => t();
-                return NP.forEach(i => {
-                    window.addEventListener(i, n, !1)
-                }
-                ),
-                () => {
-                    NP.forEach(i => {
-                        window.removeEventListener(i, n)
-                    }
-                    )
-                }
-            }
-        }
-    }
-    onSubscribe() {
-        this.cleanup || this.setEventListener(this.setup)
-    }
-    onUnsubscribe() {
-        if (!this.hasListeners()) {
-            var t;
-            (t = this.cleanup) == null || t.call(this),
-            this.cleanup = void 0
-        }
-    }
-    setEventListener(t) {
-        var n;
-        this.setup = t,
-        (n = this.cleanup) == null || n.call(this),
-        this.cleanup = t(i => {
-            typeof i == "boolean" ? this.setOnline(i) : this.onOnline()
-        }
-        )
-    }
-    setOnline(t) {
-        this.online !== t && (this.online = t,
-        this.onOnline())
-    }
-    onOnline() {
-        this.listeners.forEach( ({listener: t}) => {
-            t()
-        }
-        )
-    }
-    isOnline() {
-        return typeof this.online == "boolean" ? this.online : typeof navigator > "u" || typeof navigator.onLine > "u" ? !0 : navigator.onLine
-    }
-}
-const Jv = new cW;
-function uW(e) {
-    return Math.min(1e3 * 2 ** e, 3e4)
-}
-function Hy(e) {
-    return (e ?? "online") === "online" ? Jv.isOnline() : !0
-}
-class Cj {
-    [k: string]: any;
 
-    constructor(t) {
-        this.revert = t == null ? void 0 : t.revert,
-        this.silent = t == null ? void 0 : t.silent
-    }
-}
-function bv(e) {
-    return e instanceof Cj
-}
-function Aj(e) {
-    let t = !1, n = 0, i = !1, a, r, s;
-    const l = new Promise( (k, C) => {
-        r = k,
-        s = C
-    }
-    )
-      , c = k => {
-        i || (g(new Cj(k)),
-        e.abort == null || e.abort())
-    }
-      , d = () => {
-        t = !0
-    }
-      , p = () => {
-        t = !1
-    }
-      , f = () => !Yv.isFocused() || e.networkMode !== "always" && !Jv.isOnline()
-      , v = k => {
-        i || (i = !0,
-        e.onSuccess == null || e.onSuccess(k),
-        a == null || a(),
-        r(k))
-    }
-      , g = k => {
-        i || (i = !0,
-        e.onError == null || e.onError(k),
-        a == null || a(),
-        s(k))
-    }
-      , y = () => new Promise(k => {
-        a = C => {
-            const x = i || !f();
-            return x && k(C),
-            x
-        }
-        ,
-        e.onPause == null || e.onPause()
-    }
-    ).then( () => {
-        a = void 0,
-        i || e.onContinue == null || e.onContinue()
-    }
-    )
-      , b = () => {
-        if (i)
-            return;
-        let k;
-        try {
-            k = e.fn()
-        } catch (C) {
-            k = Promise.reject(C)
-        }
-        Promise.resolve(k).then(v).catch(C => {
-            var x, A;
-            if (i)
-                return;
-            const _ = (x = e.retry) != null ? x : 3
-              , w = (A = e.retryDelay) != null ? A : uW
-              , T = typeof w == "function" ? w(n, C) : w
-              , P = _ === !0 || typeof _ == "number" && n < _ || typeof _ == "function" && _(n, C);
-            if (t || !P) {
-                g(C);
-                return
-            }
-            n++,
-            e.onFail == null || e.onFail(n, C),
-            Sj(T).then( () => {
-                if (f())
-                    return y()
-            }
-            ).then( () => {
-                t ? g(C) : b()
-            }
-            )
-        }
-        )
-    }
-    ;
-    return Hy(e.networkMode) ? b() : y().then(b),
-    {
-        promise: l,
-        cancel: c,
-        continue: () => (a == null ? void 0 : a()) ? l : Promise.resolve(),
-        cancelRetry: d,
-        continueRetry: p
-    }
-}
-const Dx = console;
-function dW() {
-    let e = []
-      , t = 0
-      , n = p => {
-        p()
-    }
-      , i = p => {
-        p()
-    }
-    ;
-    const a = p => {
-        let f;
-        t++;
-        try {
-            f = p()
-        } finally {
-            t--,
-            t || l()
-        }
-        return f
-    }
-      // @ts-ignore
-      , r = p => {
-        
-        t ? e.push(p) : wP( () => {
-            n(p)
-        }
-        )
-    }
-      , s = p => (...f) => {
-        r( () => {
-            p(...f)
-        }
-        )
-    }
-      , l = () => {
-        const p = e;
-        e = [],
-        p.length && wP( () => {
-            i( () => {
-                p.forEach(f => {
-                    n(f)
-                }
-                )
-            }
-            )
-        }
-        )
-    }
-    ;
-    return {
-        batch: a,
-        batchCalls: s,
-        schedule: r,
-        setNotifyFunction: p => {
-            n = p
-        }
-        ,
-        setBatchNotifyFunction: p => {
-            i = p
-        }
-    }
-}
-const di = dW();
-class xj {
-    [k: string]: any;
 
-    destroy() {
-        this.clearGcTimeout()
-    }
-    scheduleGc() {
-        this.clearGcTimeout(),
-        e0(this.cacheTime) && (this.gcTimeout = setTimeout( () => {
-            this.optionalRemove()
-        }
-        , this.cacheTime))
-    }
-    updateCacheTime(t) {
-        this.cacheTime = Math.max(this.cacheTime || 0, t ?? (rf ? 1 / 0 : 5 * 60 * 1e3))
-    }
-    clearGcTimeout() {
-        this.gcTimeout && (clearTimeout(this.gcTimeout),
-        this.gcTimeout = void 0)
-    }
-}
-let mW = class extends xj {
-    [k: string]: any;
 
-    constructor(t) {
-        super(),
-        this.abortSignalConsumed = !1,
-        this.defaultOptions = t.defaultOptions,
-        this.setOptions(t.options),
-        this.observers = [],
-        this.cache = t.cache,
-        this.logger = t.logger || Dx,
-        this.queryKey = t.queryKey,
-        this.queryHash = t.queryHash,
-        this.initialState = t.state || pW(this.options),
-        this.state = this.initialState,
-        this.scheduleGc()
-    }
-    get meta() {
-        return this.options.meta
-    }
-    setOptions(t) {
-        this.options = {
-            ...this.defaultOptions,
-            ...t
-        },
-        this.updateCacheTime(this.options.cacheTime)
-    }
-    optionalRemove() {
-        !this.observers.length && this.state.fetchStatus === "idle" && this.cache.remove(this)
-    }
-    setData(t, n) {
-        const i = i0(this.state.data, t, this.options);
-        return this.dispatch({
-            data: i,
-            type: "success",
-            dataUpdatedAt: n == null ? void 0 : n.updatedAt,
-            manual: n == null ? void 0 : n.manual
-        }),
-        i
-    }
-    setState(t, n) {
-        this.dispatch({
-            type: "setState",
-            state: t,
-            setStateOptions: n
-        })
-    }
-    cancel(t) {
-        var n;
-        const i = this.promise;
-        return (n = this.retryer) == null || n.cancel(t),
-        i ? i.then(Or).catch(Or) : Promise.resolve()
-    }
-    destroy() {
-        super.destroy(),
-        this.cancel({
-            silent: !0
-        })
-          // @ts-ignore
-    }
-    reset() {
-        this.destroy(),
-        this.setState(this.initialState)
-    }
-    isActive() {
-        return this.observers.some(t => t.options.enabled !== !1)
-    }
-    isDisabled() {
-        return this.getObserversCount() > 0 && !this.isActive()
-    }
-    isStale() {
-        return this.state.isInvalidated || !this.state.dataUpdatedAt || this.observers.some(t => t.getCurrentResult().isStale)
-    }
-    isStaleByTime(t=0) {
-        return this.state.isInvalidated || !this.state.dataUpdatedAt || !yj(this.state.dataUpdatedAt, t)
-    }
-    onFocus() {
-        var t;
-        const n = this.observers.find(i => i.shouldFetchOnWindowFocus());
-        n && n.refetch({
-            cancelRefetch: !1
-        }),
-        (t = this.retryer) == null || t.continue()
-    }
-    onOnline() {
-        var t;
-        const n = this.observers.find(i => i.shouldFetchOnReconnect());
-        n && n.refetch({
-            cancelRefetch: !1
-        }),
-        (t = this.retryer) == null || t.continue()
-    }
-    addObserver(t) {
-        this.observers.includes(t) || (this.observers.push(t),
-        this.clearGcTimeout(),
-        this.cache.notify({
-            type: "observerAdded",
-            query: this,
-            observer: t
-        }))
-    }
-    removeObserver(t) {
-        this.observers.includes(t) && (this.observers = this.observers.filter(n => n !== t),
-        this.observers.length || (this.retryer && (this.abortSignalConsumed ? this.retryer.cancel({
-            revert: !0
-        }) : this.retryer.cancelRetry()),
-        this.scheduleGc()),
-        this.cache.notify({
-            type: "observerRemoved",
-            query: this,
-            observer: t
-        }))
-    }
-    getObserversCount() {
-        return this.observers.length
-    }
-    invalidate() {
-        this.state.isInvalidated || this.dispatch({
-            type: "invalidate"
-        })
-    }
-    fetch(t, n) {
-        var i, a;
-        if (this.state.fetchStatus !== "idle") {
-            if (this.state.dataUpdatedAt && n != null && n.cancelRefetch)
-                this.cancel({
-                    silent: !0
-                });
-            else if (this.promise) {
-                var r;
-                return (r = this.retryer) == null || r.continueRetry(),
-                this.promise
-            }
-        }
-        if (t && this.setOptions(t),
-        !this.options.queryFn) {
-            const g = this.observers.find(y => y.options.queryFn);
-            g && this.setOptions(g.options)
-        }
-        Array.isArray(this.options.queryKey);
-        const s = sW()
-          , l = {
-            queryKey: this.queryKey,
-            pageParam: void 0,
-            meta: this.meta
-        }
-          , c = g => {
-            Object.defineProperty(g, "signal", {
-                enumerable: !0,
-                get: () => {
-                    if (s)
-                        return this.abortSignalConsumed = !0,
-                        s.signal
-                }
-            })
-        }
-        ;
-        c(l);
-        const d = () => this.options.queryFn ? (this.abortSignalConsumed = !1,
-        this.options.queryFn(l)) : Promise.reject("Missing queryFn for queryKey '" + this.options.queryHash + "'")
-          , p = {
-            fetchOptions: n,
-            options: this.options,
-            queryKey: this.queryKey,
-            state: this.state,
-            fetchFn: d
-        };
-        if (c(p),
-        (i = this.options.behavior) == null || i.onFetch(p),
-        this.revertState = this.state,
-        this.state.fetchStatus === "idle" || this.state.fetchMeta !== ((a = p.fetchOptions) == null ? void 0 : a.meta)) {
-            var f;
-            this.dispatch({
-                type: "fetch",
-                meta: (f = p.fetchOptions) == null ? void 0 : f.meta
-            })
-        }
-        const v = g => {
-            if (bv(g) && g.silent || this.dispatch({
-                type: "error",
-                error: g
-            }),
-            !bv(g)) {
-                var y, b, k, C;
-                (y = (b = this.cache.config).onError) == null || y.call(b, g, this),
-                (k = (C = this.cache.config).onSettled) == null || k.call(C, this.state.data, g, this)
-            }
-            this.isFetchingOptimistic || this.scheduleGc(),
-            this.isFetchingOptimistic = !1
-        }
-        ;
-        return this.retryer = Aj({
-            fn: p.fetchFn,
-            abort: s == null ? void 0 : s.abort.bind(s),
-            onSuccess: g => {
-                var y, b, k, C;
-                  // @ts-ignore
-                if (typeof g > "u") {
-                    v(new Error(this.queryHash + " data is undefined"));
-                    return
-                }
-                this.setData(g),
-                (y = (b = this.cache.config).onSuccess) == null || y.call(b, g, this),
-                (k = (C = this.cache.config).onSettled) == null || k.call(C, g, this.state.error, this),
-                this.isFetchingOptimistic || this.scheduleGc(),
-                this.isFetchingOptimistic = !1
-            }
-            ,
-            onError: v,
-            onFail: (g, y) => {
-                this.dispatch({
-                    type: "failed",
-                    failureCount: g,
-                    error: y
-                })
-            }
-            ,
-            onPause: () => {
-                this.dispatch({
-                    type: "pause"
-                })
-            }
-            ,
-            onContinue: () => {
-                this.dispatch({
-                    type: "continue"
-                })
-            }
-            ,
-            retry: p.options.retry,
-            retryDelay: p.options.retryDelay,
-            networkMode: p.options.networkMode
-        }),
-        this.promise = this.retryer.promise,
-        this.promise
-    }
-    dispatch(t) {
-        const n = i => {
-            var a, r;
-            switch (t.type) {
-            case "failed":
-                return {
-                    ...i,
-                    fetchFailureCount: t.failureCount,
-                    fetchFailureReason: t.error
-                };
-            case "pause":
-                return {
-                    ...i,
-                    fetchStatus: "paused"
-                };
-            case "continue":
-                return {
-                    ...i,
-                    fetchStatus: "fetching"
-                };
-            case "fetch":
-                return {
-                    ...i,
-                    fetchFailureCount: 0,
-                    fetchFailureReason: null,
-                    fetchMeta: (a = t.meta) != null ? a : null,
-                    fetchStatus: Hy(this.options.networkMode) ? "fetching" : "paused",
-                    ...!i.dataUpdatedAt && {
-                        error: null,
-                        status: "loading"
-                    }
-                };
-            case "success":
-                return {
-                    ...i,
-                    data: t.data,
-                    dataUpdateCount: i.dataUpdateCount + 1,
-                    dataUpdatedAt: (r = t.dataUpdatedAt) != null ? r : Date.now(),
-                    error: null,
-                    isInvalidated: !1,
-                    status: "success",
-                    ...!t.manual && {
-                        fetchStatus: "idle",
-                        fetchFailureCount: 0,
-                        fetchFailureReason: null
-                    }
-                };
-            case "error":
-                const s = t.error;
-                return bv(s) && s.revert && this.revertState ? {
-                    ...this.revertState
-                } : {
-                    ...i,
-                    error: s,
-                    errorUpdateCount: i.errorUpdateCount + 1,
-                    errorUpdatedAt: Date.now(),
-                    fetchFailureCount: i.fetchFailureCount + 1,
-                    fetchFailureReason: s,
-                    fetchStatus: "idle",
-                    status: "error"
-                };
-            case "invalidate":
-                return {
-                    ...i,
-                    isInvalidated: !0
-                };
-            case "setState":
-                return {
-                    ...i,
-                    ...t.state
-                }
-            }
-        }
-        ;
-        this.state = n(this.state),
-        di.batch( () => {
-            this.observers.forEach(i => {
-                i.onQueryUpdate(t)
-            }
-            ),
-            this.cache.notify({
-                query: this,
-                type: "updated",
-                action: t
-            })
-        }
-        )
-    }
-}
-;
-function pW(e) {
-    const t = typeof e.initialData == "function" ? e.initialData() : e.initialData
-      , n = typeof t < "u"
-      , i = n ? typeof e.initialDataUpdatedAt == "function" ? e.initialDataUpdatedAt() : e.initialDataUpdatedAt : 0;
-    return {
-        data: t,
-        dataUpdateCount: 0,
-        dataUpdatedAt: n ? i ?? Date.now() : 0,
-        error: null,
-        errorUpdateCount: 0,
-        errorUpdatedAt: 0,
-        fetchFailureCount: 0,
-        fetchFailureReason: null,
-        fetchMeta: null,
-        isInvalidated: !1,
-        status: n ? "success" : "loading",
-        fetchStatus: "idle"
-    }
-}
-class fW extends dm {
-    [k: string]: any;
-    constructor(t) {
-        super(),
-        this.config = t || {},
-        this.queries = [],
-        this.queriesMap = {}
-    }
-    build(t, n, i) {
-        var a;
-        const r = n.queryKey
-          , s = (a = n.queryHash) != null ? a : jx(r, n);
-        let l = this.get(s);
-        return l || (l = new mW({
-            cache: this,
-            logger: t.getLogger(),
-            queryKey: r,
-            queryHash: s,
-            options: t.defaultQueryOptions(n),
-            state: i,
-            defaultOptions: t.getQueryDefaults(r)
-        }),
-        this.add(l)),
-        l
-    }
-    add(t) {
-        this.queriesMap[t.queryHash] || (this.queriesMap[t.queryHash] = t,
-        this.queries.push(t),
-        this.notify({
-            type: "added",
-            query: t
-        }))
-    }
-    remove(t) {
-        const n = this.queriesMap[t.queryHash];
-        n && (t.destroy(),
-        this.queries = this.queries.filter(i => i !== t),
-        n === t && delete this.queriesMap[t.queryHash],
-        this.notify({
-            type: "removed",
-            query: t
-        }))
-    }
-    clear() {
-        di.batch( () => {
-            this.queries.forEach(t => {
-                this.remove(t)
-            }
-            )
-        }
-        )
-    }
-    get(t) {
-        return this.queriesMap[t]
-    }
-    getAll() {
-        return this.queries
-    }
-    find(t, n) {
-        const [i] = Bl(t, n);
-          // @ts-ignore
-        return typeof i.exact > "u" && (i.exact = !0),
-        this.queries.find(a => CP(i, a))
-    }
-    findAll(t, n) {
-        const [i] = Bl(t, n);
-        return Object.keys(i).length > 0 ? this.queries.filter(a => CP(i, a)) : this.queries
-    }
-    notify(t) {
-        di.batch( () => {
-            this.listeners.forEach( ({listener: n}) => {
-                n(t)
-            }
-            )
-        }
-        )
-    }
-    onFocus() {
-        di.batch( () => {
-            this.queries.forEach(t => {
-                t.onFocus()
-            }
-            )
-        }
-        )
-    }
-    onOnline() {
-        di.batch( () => {
-            this.queries.forEach(t => {
-                t.onOnline()
-            }
-            )
-        }
-        )
-    }
-}
-let hW = class extends xj {
-    [k: string]: any;
-    constructor(t) {
-        super(),
-        this.defaultOptions = t.defaultOptions,
-        this.mutationId = t.mutationId,
-        this.mutationCache = t.mutationCache,
-        this.logger = t.logger || Dx,
-        this.observers = [],
-        this.state = t.state || _j(),
-        this.setOptions(t.options),
-        this.scheduleGc()
-    }
-    setOptions(t) {
-        this.options = {
-            ...this.defaultOptions,
-            ...t
-        },
-        this.updateCacheTime(this.options.cacheTime)
-    }
-    get meta() {
-        return this.options.meta
-    }
-    setState(t) {
-        this.dispatch({
-            type: "setState",
-            state: t
-        })
-    }
-    addObserver(t) {
-        this.observers.includes(t) || (this.observers.push(t),
-        this.clearGcTimeout(),
-        this.mutationCache.notify({
-            type: "observerAdded",
-            mutation: this,
-            observer: t
-        }))
-    }
-    removeObserver(t) {
-        this.observers = this.observers.filter(n => n !== t),
-        this.scheduleGc(),
-        this.mutationCache.notify({
-            type: "observerRemoved",
-            mutation: this,
-            observer: t
-        })
-    }
-    optionalRemove() {
-        this.observers.length || (this.state.status === "loading" ? this.scheduleGc() : this.mutationCache.remove(this))
-    }
-    continue() {
-        var t, n;
-        return (t = (n = this.retryer) == null ? void 0 : n.continue()) != null ? t : this.execute()
-    }
-    async execute() {
-        const t = () => {
-            var P;
-            return this.retryer = Aj({
-                fn: () => this.options.mutationFn ? this.options.mutationFn(this.state.variables) : Promise.reject("No mutationFn found"),
-                onFail: (I, L) => {
-                    this.dispatch({
-                        type: "failed",
-                        failureCount: I,
-                        error: L
-                    })
-                }
-                ,
-                onPause: () => {
-                    this.dispatch({
-                        type: "pause"
-                    })
-                }
-                ,
-                onContinue: () => {
-                    this.dispatch({
-                        type: "continue"
-                    })
-                }
-                ,
-                retry: (P = this.options.retry) != null ? P : 0,
-                retryDelay: this.options.retryDelay,
-                networkMode: this.options.networkMode
-            }),
-            this.retryer.promise
-        }
-          , n = this.state.status === "loading";
-        try {
-            var i, a, r, s, l, c, d, p;
-            if (!n) {
-                var f, v, g, y;
-                this.dispatch({
-                    type: "loading",
-                    variables: this.options.variables
-                }),
-                await ((f = (v = this.mutationCache.config).onMutate) == null ? void 0 : f.call(v, this.state.variables, this));
-                const I = await ((g = (y = this.options).onMutate) == null ? void 0 : g.call(y, this.state.variables));
-                I !== this.state.context && this.dispatch({
-                    type: "loading",
-                    context: I,
-                    variables: this.state.variables
-                })
-            }
-            const P = await t();
-            return await ((i = (a = this.mutationCache.config).onSuccess) == null ? void 0 : i.call(a, P, this.state.variables, this.state.context, this)),
-            await ((r = (s = this.options).onSuccess) == null ? void 0 : r.call(s, P, this.state.variables, this.state.context)),
-            await ((l = (c = this.mutationCache.config).onSettled) == null ? void 0 : l.call(c, P, null, this.state.variables, this.state.context, this)),
-            await ((d = (p = this.options).onSettled) == null ? void 0 : d.call(p, P, null, this.state.variables, this.state.context)),
-            this.dispatch({
-                type: "success",
-                data: P
-            }),
-            P
-        } catch (P) {
-            try {
-                var b, k, C, x, A, _, w, T;
-                throw await ((b = (k = this.mutationCache.config).onError) == null ? void 0 : b.call(k, P, this.state.variables, this.state.context, this)),
-                await ((C = (x = this.options).onError) == null ? void 0 : C.call(x, P, this.state.variables, this.state.context)),
-                await ((A = (_ = this.mutationCache.config).onSettled) == null ? void 0 : A.call(_, void 0, P, this.state.variables, this.state.context, this)),
-                await ((w = (T = this.options).onSettled) == null ? void 0 : w.call(T, void 0, P, this.state.variables, this.state.context)),
-                P
-            } finally {
-                this.dispatch({
-                    type: "error",
-                    error: P
-                })
-            }
-        }
-    }
-    dispatch(t) {
-        const n = i => {
-            switch (t.type) {
-            case "failed":
-                return {
-                    ...i,
-                    failureCount: t.failureCount,
-                    failureReason: t.error
-                };
-            case "pause":
-                return {
-                    ...i,
-                    isPaused: !0
-                };
-            case "continue":
-                return {
-                    ...i,
-                    isPaused: !1
-                };
-            case "loading":
-                return {
-                    ...i,
-                    context: t.context,
-                    data: void 0,
-                    failureCount: 0,
-                    failureReason: null,
-                    error: null,
-                    isPaused: !Hy(this.options.networkMode),
-                    status: "loading",
-                    variables: t.variables
-                };
-            case "success":
-                return {
-                    ...i,
-                    data: t.data,
-                    failureCount: 0,
-                    failureReason: null,
-                    error: null,
-                    status: "success",
-                    isPaused: !1
-                };
-            case "error":
-                return {
-                    ...i,
-                    data: void 0,
-                    error: t.error,
-                    failureCount: i.failureCount + 1,
-                    failureReason: t.error,
-                    isPaused: !1,
-                    status: "error"
-                };
-            case "setState":
-                return {
-                    ...i,
-                    ...t.state
-                }
-            }
-        }
-        ;
-        this.state = n(this.state),
-        di.batch( () => {
-            this.observers.forEach(i => {
-                i.onMutationUpdate(t)
-            }
-            ),
-            this.mutationCache.notify({
-                mutation: this,
-                type: "updated",
-                action: t
-            })
-        }
-        )
-    }
-}
-;
-function _j() {
-    return {
-        context: void 0,
-        data: void 0,
-        error: null,
-        failureCount: 0,
-        failureReason: null,
-        isPaused: !1,
-        status: "idle",
-        variables: void 0
-    }
-}
-class gW extends dm {
-    [k: string]: any;
-    constructor(t) {
-        super(),
-        this.config = t || {},
-        this.mutations = [],
-        this.mutationId = 0
-    }
-    build(t, n, i) {
-        const a = new hW({
-            mutationCache: this,
-            logger: t.getLogger(),
-            mutationId: ++this.mutationId,
-            options: t.defaultMutationOptions(n),
-            state: i,
-            defaultOptions: n.mutationKey ? t.getMutationDefaults(n.mutationKey) : void 0
-        });
-        return this.add(a),
-        a
-    }
-    add(t) {
-        this.mutations.push(t),
-        this.notify({
-            type: "added",
-            mutation: t
-        })
-    }
-    remove(t) {
-        this.mutations = this.mutations.filter(n => n !== t),
-        this.notify({
-            type: "removed",
-            mutation: t
-        })
-    }
-    clear() {
-        di.batch( () => {
-            this.mutations.forEach(t => {
-                this.remove(t)
-            }
-            )
-        }
-        )
-    }
-    getAll() {
-        return this.mutations
-    }
-    find(t) {
-        return typeof t.exact > "u" && (t.exact = !0),
-        this.mutations.find(n => AP(t, n))
-    }
-    findAll(t) {
-        return this.mutations.filter(n => AP(t, n))
-    }
-    notify(t) {
-        di.batch( () => {
-            this.listeners.forEach( ({listener: n}) => {
-                n(t)
-            }
-            )
-        }
-        )
-    }
-    resumePausedMutations() {
-        var t;
-        return this.resuming = ((t = this.resuming) != null ? t : Promise.resolve()).then( () => {
-            const n = this.mutations.filter(i => i.state.isPaused);
-            return di.batch( () => n.reduce( (i, a) => i.then( () => a.continue().catch(Or)), Promise.resolve()))
-        }
-        ).then( () => {
-            this.resuming = void 0
-        }
-        ),
-        this.resuming
-    }
-}
-function vW() {
-    return {
-        onFetch: e => {
-            e.fetchFn = () => {
-                var t, n, i, a, r, s;
-                const l = (t = e.fetchOptions) == null || (n = t.meta) == null ? void 0 : n.refetchPage
-                  , c = (i = e.fetchOptions) == null || (a = i.meta) == null ? void 0 : a.fetchMore
-                  , d = c == null ? void 0 : c.pageParam
-                  , p = (c == null ? void 0 : c.direction) === "forward"
-                  , f = (c == null ? void 0 : c.direction) === "backward"
-                  , v = ((r = e.state.data) == null ? void 0 : r.pages) || []
-                  , g = ((s = e.state.data) == null ? void 0 : s.pageParams) || [];
-                let y = g
-                  , b = !1;
-                const k = T => {
-                    Object.defineProperty(T, "signal", {
-                        enumerable: !0,
-                        get: () => {
-                            var P;
-                            if ((P = e.signal) != null && P.aborted)
-                                b = !0;
-                            else {
-                                var I;
-                                (I = e.signal) == null || I.addEventListener("abort", () => {
-                                    b = !0
-                                }
-                                )
-                            }
-                            return e.signal
-                        }
-                    })
-                }
-                  , C = e.options.queryFn || ( () => Promise.reject("Missing queryFn for queryKey '" + e.options.queryHash + "'"))
-                  , x = (T, P, I, L) => (y = L ? [P, ...y] : [...y, P],
-                L ? [I, ...T] : [...T, I])
-                  , A = (T, P, I, L) => {
-                    if (b)
-                        return Promise.reject("Cancelled");
-                    if (typeof I > "u" && !P && T.length)
-                        return Promise.resolve(T);
-                    const R = {
-                        queryKey: e.queryKey,
-                        pageParam: I,
-                        meta: e.options.meta
-                    };
-                    k(R);
-                      // @ts-ignore
-                    const D = C(R);
-                    return Promise.resolve(D).then(O => x(T, I, O, L))
-                }
-                ;
-                let _;
-                if (!v.length)
-                    _ = A([]);
-                else if (p) {
-                    const T = typeof d < "u"
-                      , P = T ? d : TP(e.options, v);
-                    _ = A(v, T, P)
-                } else if (f) {
-                      // @ts-ignore
-                    const T = typeof d < "u"
-                      , P = T ? d : yW(e.options, v);
-                    _ = A(v, T, P, !0)
-                } else {
-                    y = [];
-                    const T = typeof e.options.getNextPageParam > "u";
-                    _ = (l && v[0] ? l(v[0], 0, v) : !0) ? A([], T, g[0]) : Promise.resolve(x([], g[0], v[0]));
-                    for (let I = 1; I < v.length; I++)
-                        _ = _.then(L => {
-                            if (l && v[I] ? l(v[I], I, v) : !0) {
-                                const D = T ? g[I] : TP(e.options, L);
-                                return A(L, T, D)
-                            }
-                            return Promise.resolve(x(L, g[I], v[I]))
-                        }
-                        )
-                }
-                return _.then(T => ({
-                    pages: T,
-                    pageParams: y
-                }))
-            }
-        }
-    }
-}
-function TP(e, t) {
-      // @ts-ignore
-    return e.getNextPageParam == null ? void 0 : e.getNextPageParam(t[t.length - 1], t)
-}
-function yW(e, t) {
-      // @ts-ignore
-    return e.getPreviousPageParam == null ? void 0 : e.getPreviousPageParam(t[0], t)
-}
-class bW {
-    [k: string]: any;
-    constructor(t={}) {
-        this.queryCache = t.queryCache || new fW,
-        this.mutationCache = t.mutationCache || new gW,
-        this.logger = t.logger || Dx,
-        this.defaultOptions = t.defaultOptions || {},
-        this.queryDefaults = [],
-        this.mutationDefaults = [],
-        this.mountCount = 0
-    }
-    mount() {
-        this.mountCount++,
-        this.mountCount === 1 && (this.unsubscribeFocus = Yv.subscribe( () => {
-            Yv.isFocused() && (this.resumePausedMutations(),
-            this.queryCache.onFocus())
-        }
-        ),
-        this.unsubscribeOnline = Jv.subscribe( () => {
-            Jv.isOnline() && (this.resumePausedMutations(),
-            this.queryCache.onOnline())
-        }
-        ))
-    }
-    unmount() {
-        var t, n;
-        this.mountCount--,
-        this.mountCount === 0 && ((t = this.unsubscribeFocus) == null || t.call(this),
-        this.unsubscribeFocus = void 0,
-        (n = this.unsubscribeOnline) == null || n.call(this),
-        this.unsubscribeOnline = void 0)
-    }
-    isFetching(t, n) {
-        const [i] = Bl(t, n);
-        return i.fetchStatus = "fetching",
-        this.queryCache.findAll(i).length
-    }
-    isMutating(t) {
-        return this.mutationCache.findAll({
-            ...t,
-            fetching: !0
-        }).length
-    }
-    getQueryData(t, n) {
-        var i;
-        return (i = this.queryCache.find(t, n)) == null ? void 0 : i.state.data
-    }
-    ensureQueryData(t, n, i) {
-        const a = Np(t, n, i)
-          , r = this.getQueryData(a.queryKey);
-        return r ? Promise.resolve(r) : this.fetchQuery(a)
-    }
-    getQueriesData(t) {
-        return this.getQueryCache().findAll(t).map( ({queryKey: n, state: i}) => {
-            const a = i.data;
-            return [n, a]
-        }
-        )
-    }
-    setQueryData(t, n, i) {
-        const a = this.queryCache.find(t)
-          , r = a == null ? void 0 : a.state.data
-          , s = rW(n, r);
-        if (typeof s > "u")
-            return;
-        const l = Np(t)
-          , c = this.defaultQueryOptions(l);
-        return this.queryCache.build(this, c).setData(s, {
-            ...i,
-            manual: !0
-        })
-    }
-    setQueriesData(t, n, i) {
-        return di.batch( () => this.getQueryCache().findAll(t).map( ({queryKey: a}) => [a, this.setQueryData(a, n, i)]))
-    }
-    getQueryState(t, n) {
-        var i;
-        return (i = this.queryCache.find(t, n)) == null ? void 0 : i.state
-    }
-    removeQueries(t, n) {
-        const [i] = Bl(t, n)
-          , a = this.queryCache;
-        di.batch( () => {
-            a.findAll(i).forEach(r => {
-                a.remove(r)
-            }
-            )
-        }
-        )
-    }
-    resetQueries(t, n, i) {
-        const [a,r] = Bl(t, n, i)
-          , s = this.queryCache
-          , l = {
-            type: "active",
-            ...a
-        };
-        return di.batch( () => (s.findAll(a).forEach(c => {
-            c.reset()
-        }
-        ),
-        this.refetchQueries(l, r)))
-    }
-    cancelQueries(t, n, i) {
-        const [a,r={}] = Bl(t, n, i);
-        typeof r.revert > "u" && (r.revert = !0);
-        const s = di.batch( () => this.queryCache.findAll(a).map(l => l.cancel(r)));
-        return Promise.all(s).then(Or).catch(Or)
-    }
-    invalidateQueries(t, n, i) {
-        const [a,r] = Bl(t, n, i);
-        return di.batch( () => {
-            var s, l;
-            if (this.queryCache.findAll(a).forEach(d => {
-                d.invalidate()
-            }
-            ),
-            a.refetchType === "none")
-                return Promise.resolve();
-            const c = {
-                ...a,
-                type: (s = (l = a.refetchType) != null ? l : a.type) != null ? s : "active"
-            };
-            return this.refetchQueries(c, r)
-        }
-        )
-    }
-    refetchQueries(t, n, i) {
-        const [a,r] = Bl(t, n, i)
-          , s = di.batch( () => this.queryCache.findAll(a).filter(c => !c.isDisabled()).map(c => {
-            var d;
-            return c.fetch(void 0, {
-                ...r,
-                cancelRefetch: (d = r == null ? void 0 : r.cancelRefetch) != null ? d : !0,
-                meta: {
-                    refetchPage: a.refetchPage
-                }
-            })
-        }
-        ));
-        let l = Promise.all(s).then(Or);
-        return r != null && r.throwOnError || (l = l.catch(Or)),
-        l
-    }
-    fetchQuery(t, n, i) {
-        const a = Np(t, n, i)
-          , r = this.defaultQueryOptions(a);
-        typeof r.retry > "u" && (r.retry = !1);
-        const s = this.queryCache.build(this, r);
-        return s.isStaleByTime(r.staleTime) ? s.fetch(r) : Promise.resolve(s.state.data)
-    }
-    prefetchQuery(t, n, i) {
-        return this.fetchQuery(t, n, i).then(Or).catch(Or)
-    }
-    fetchInfiniteQuery(t, n, i) {
-        const a = Np(t, n, i);
-        return a.behavior = vW(),
-        this.fetchQuery(a)
-    }
-    prefetchInfiniteQuery(t, n, i) {
-        return this.fetchInfiniteQuery(t, n, i).then(Or).catch(Or)
-    }
-    resumePausedMutations() {
-        return this.mutationCache.resumePausedMutations()
-    }
-    getQueryCache() {
-        return this.queryCache
-    }
-    getMutationCache() {
-        return this.mutationCache
-    }
-    getLogger() {
-        return this.logger
-    }
-    getDefaultOptions() {
-        return this.defaultOptions
-    }
-    setDefaultOptions(t) {
-        this.defaultOptions = t
-    }
-    setQueryDefaults(t, n) {
-        const i = this.queryDefaults.find(a => Gc(t) === Gc(a.queryKey));
-        i ? i.defaultOptions = n : this.queryDefaults.push({
-            queryKey: t,
-            defaultOptions: n
-        })
-    }
-    getQueryDefaults(t) {
-        if (!t)
-            return;
-        const n = this.queryDefaults.find(i => Zv(t, i.queryKey));
-        return n == null ? void 0 : n.defaultOptions
-    }
-    setMutationDefaults(t, n) {
-        const i = this.mutationDefaults.find(a => Gc(t) === Gc(a.mutationKey));
-        i ? i.defaultOptions = n : this.mutationDefaults.push({
-            mutationKey: t,
-            defaultOptions: n
-        })
-    }
-    getMutationDefaults(t) {
-        if (!t)
-            return;
-        const n = this.mutationDefaults.find(i => Zv(t, i.mutationKey));
-        return n == null ? void 0 : n.defaultOptions
-    }
-    defaultQueryOptions(t) {
-        if (t != null && t._defaulted)
-            return t;
-        const n = {
-            ...this.defaultOptions.queries,
-            ...this.getQueryDefaults(t == null ? void 0 : t.queryKey),
-            ...t,
-            _defaulted: !0
-        };
-        return !n.queryHash && n.queryKey && (n.queryHash = jx(n.queryKey, n)),
-        typeof n.refetchOnReconnect > "u" && (n.refetchOnReconnect = n.networkMode !== "always"),
-        typeof n.useErrorBoundary > "u" && (n.useErrorBoundary = !!n.suspense),
-        n
-    }
-    defaultMutationOptions(t) {
-        return t != null && t._defaulted ? t : {
-            ...this.defaultOptions.mutations,
-            ...this.getMutationDefaults(t == null ? void 0 : t.mutationKey),
-            ...t,
-            _defaulted: !0
-        }
-    }
-    clear() {
-        this.queryCache.clear(),
-        this.mutationCache.clear()
-    }
-}
-class kW extends dm {
-    [k: string]: any;
-    constructor(t, n) {
-        super(),
-        this.client = t,
-        this.options = n,
-        this.trackedProps = new Set,
-        this.selectError = null,
-        this.bindMethods(),
-        this.setOptions(n)
-    }
-    bindMethods() {
-        this.remove = this.remove.bind(this),
-        this.refetch = this.refetch.bind(this)
-    }
-    onSubscribe() {
-        this.listeners.size === 1 && (this.currentQuery.addObserver(this),
-        PP(this.currentQuery, this.options) && this.executeFetch(),
-        this.updateTimers())
-    }
-    onUnsubscribe() {
-        this.hasListeners() || this.destroy()
-    }
-    shouldFetchOnReconnect() {
-        return a0(this.currentQuery, this.options, this.options.refetchOnReconnect)
-    }
-    shouldFetchOnWindowFocus() {
-        return a0(this.currentQuery, this.options, this.options.refetchOnWindowFocus)
-    }
-    destroy() {
-        this.listeners = new Set,
-        this.clearStaleTimeout(),
-        this.clearRefetchInterval(),
-        this.currentQuery.removeObserver(this)
-    }
-    setOptions(t, n) {
-        const i = this.options
-          , a = this.currentQuery;
-        if (this.options = this.client.defaultQueryOptions(t),
-        t0(i, this.options) || this.client.getQueryCache().notify({
-            type: "observerOptionsUpdated",
-            query: this.currentQuery,
-            observer: this
-        }),
-        typeof this.options.enabled < "u" && typeof this.options.enabled != "boolean")
-            throw new Error("Expected enabled to be a boolean");
-        this.options.queryKey || (this.options.queryKey = i.queryKey),
-        this.updateQuery();
-        const r = this.hasListeners();
-        r && IP(this.currentQuery, a, this.options, i) && this.executeFetch(),
-        this.updateResult(n),
-        r && (this.currentQuery !== a || this.options.enabled !== i.enabled || this.options.staleTime !== i.staleTime) && this.updateStaleTimeout();
-        const s = this.computeRefetchInterval();
-        r && (this.currentQuery !== a || this.options.enabled !== i.enabled || s !== this.currentRefetchInterval) && this.updateRefetchInterval(s)
-    }
-    getOptimisticResult(t) {
-        const n = this.client.getQueryCache().build(this.client, t)
-          , i = this.createResult(n, t);
-        return CW(this, i, t) && (this.currentResult = i,
-        this.currentResultOptions = this.options,
-        this.currentResultState = this.currentQuery.state),
-        i
-    }
-    getCurrentResult() {
-        return this.currentResult
-    }
-    trackResult(t) {
-        const n = {};
-        return Object.keys(t).forEach(i => {
-            Object.defineProperty(n, i, {
-                configurable: !1,
-                enumerable: !0,
-                get: () => (this.trackedProps.add(i),
-                t[i])
-            })
-        }
-        ),
-        n
-    }
-    getCurrentQuery() {
-        return this.currentQuery
-    }
-    remove() {
-        this.client.getQueryCache().remove(this.currentQuery)
-    }
-    refetch({refetchPage: t, ...n}={}) {
-        return this.fetch({
-            ...n,
-            meta: {
-                refetchPage: t
-            }
-        })
-    }
-    fetchOptimistic(t) {
-        const n = this.client.defaultQueryOptions(t)
-          , i = this.client.getQueryCache().build(this.client, n);
-        return i.isFetchingOptimistic = !0,
-        i.fetch().then( () => this.createResult(i, n))
-    }
-    fetch(t) {
-        var n;
-        return this.executeFetch({
-            ...t,
-            cancelRefetch: (n = t.cancelRefetch) != null ? n : !0
-        }).then( () => (this.updateResult(),
-        this.currentResult))
-    }
-    executeFetch(t) {
-        this.updateQuery();
-        let n = this.currentQuery.fetch(this.options, t);
-        return t != null && t.throwOnError || (n = n.catch(Or)),
-        n
-    }
-    updateStaleTimeout() {
-        if (this.clearStaleTimeout(),
-        rf || this.currentResult.isStale || !e0(this.options.staleTime))
-            return;
-        const n = yj(this.currentResult.dataUpdatedAt, this.options.staleTime) + 1;
-        this.staleTimeoutId = setTimeout( () => {
-            this.currentResult.isStale || this.updateResult()
-        }
-        , n)
-    }
-    computeRefetchInterval() {
-        var t;
-        return typeof this.options.refetchInterval == "function" ? this.options.refetchInterval(this.currentResult.data, this.currentQuery) : (t = this.options.refetchInterval) != null ? t : !1
-    }
-    updateRefetchInterval(t) {
-        this.clearRefetchInterval(),
-        this.currentRefetchInterval = t,
-        !(rf || this.options.enabled === !1 || !e0(this.currentRefetchInterval) || this.currentRefetchInterval === 0) && (this.refetchIntervalId = setInterval( () => {
-            (this.options.refetchIntervalInBackground || Yv.isFocused()) && this.executeFetch()
-        }
-        , this.currentRefetchInterval))
-    }
-    updateTimers() {
-        this.updateStaleTimeout(),
-        this.updateRefetchInterval(this.computeRefetchInterval())
-    }
-    clearStaleTimeout() {
-        this.staleTimeoutId && (clearTimeout(this.staleTimeoutId),
-        this.staleTimeoutId = void 0)
-    }
-    clearRefetchInterval() {
-        this.refetchIntervalId && (clearInterval(this.refetchIntervalId),
-        this.refetchIntervalId = void 0)
-    }
-    createResult(t, n) {
-        const i = this.currentQuery
-          , a = this.options
-          , r = this.currentResult
-          , s = this.currentResultState
-          , l = this.currentResultOptions
-          , c = t !== i
-          , d = c ? t.state : this.currentQueryInitialState
-          , p = c ? this.currentResult : this.previousQueryResult
-          , {state: f} = t;
-        let {dataUpdatedAt: v, error: g, errorUpdatedAt: y, fetchStatus: b, status: k} = f, C = !1, x = !1, A;
-        if (n._optimisticResults) {
-            const I = this.hasListeners()
-              , L = !I && PP(t, n)
-              , R = I && IP(t, i, n, a);
-            (L || R) && (b = Hy(t.options.networkMode) ? "fetching" : "paused",
-            v || (k = "loading")),
-            n._optimisticResults === "isRestoring" && (b = "idle")
-        }
-        if (n.keepPreviousData && !f.dataUpdatedAt && p != null && p.isSuccess && k !== "error")
-            A = p.data,
-            v = p.dataUpdatedAt,
-            k = p.status,
-            C = !0;
-        else if (n.select && typeof f.data < "u")
-            if (r && f.data === (s == null ? void 0 : s.data) && n.select === this.selectFn)
-                A = this.selectResult;
-            else
-                try {
-                    this.selectFn = n.select,
-                    A = n.select(f.data),
-                    A = i0(r == null ? void 0 : r.data, A, n),
-                    this.selectResult = A,
-                    this.selectError = null
-                } catch (I) {
-                    this.selectError = I
-                }
-        else
-            A = f.data;
-        if (typeof n.placeholderData < "u" && typeof A > "u" && k === "loading") {
-            let I;
-            if (r != null && r.isPlaceholderData && n.placeholderData === (l == null ? void 0 : l.placeholderData))
-                I = r.data;
-            else if (I = typeof n.placeholderData == "function" ? n.placeholderData() : n.placeholderData,
-            n.select && typeof I < "u")
-                try {
-                    I = n.select(I),
-                    this.selectError = null
-                } catch (L) {
-                    this.selectError = L
-                }
-            typeof I < "u" && (k = "success",
-            A = i0(r == null ? void 0 : r.data, I, n),
-            x = !0)
-        }
-        this.selectError && (g = this.selectError,
-        A = this.selectResult,
-        y = Date.now(),
-        k = "error");
-        const _ = b === "fetching"
-          , w = k === "loading"
-          , T = k === "error";
-        return {
-            status: k,
-            fetchStatus: b,
-            isLoading: w,
-            isSuccess: k === "success",
-            isError: T,
-            isInitialLoading: w && _,
-            data: A,
-            dataUpdatedAt: v,
-            error: g,
-            errorUpdatedAt: y,
-            failureCount: f.fetchFailureCount,
-            failureReason: f.fetchFailureReason,
-            errorUpdateCount: f.errorUpdateCount,
-            isFetched: f.dataUpdateCount > 0 || f.errorUpdateCount > 0,
-            isFetchedAfterMount: f.dataUpdateCount > d.dataUpdateCount || f.errorUpdateCount > d.errorUpdateCount,
-            isFetching: _,
-            isRefetching: _ && !w,
-            isLoadingError: T && f.dataUpdatedAt === 0,
-            isPaused: b === "paused",
-            isPlaceholderData: x,
-            isPreviousData: C,
-            isRefetchError: T && f.dataUpdatedAt !== 0,
-            isStale: Ox(t, n),
-            refetch: this.refetch,
-            remove: this.remove
-        }
-    }
-    updateResult(t) {
-        const n = this.currentResult
-          , i = this.createResult(this.currentQuery, this.options);
-        if (this.currentResultState = this.currentQuery.state,
-        this.currentResultOptions = this.options,
-        t0(i, n))
-            return;
-        this.currentResult = i;
-        const a = {
-            cache: !0
-        }
-          , r = () => {
-            if (!n)
-                return !0;
-            const {notifyOnChangeProps: s} = this.options
-              , l = typeof s == "function" ? s() : s;
-            if (l === "all" || !l && !this.trackedProps.size)
-                return !0;
-            const c = new Set(l ?? this.trackedProps);
-            return this.options.useErrorBoundary && c.add("error"),
-            Object.keys(this.currentResult).some(d => {
-                const p = d;
-                return this.currentResult[p] !== n[p] && c.has(p)
-            }
-            )
-        }
-        ;
-        (t == null ? void 0 : t.listeners) !== !1 && r() && (a.listeners = !0),
-        this.notify({
-            ...a,
-            ...t
-        })
-    }
-    updateQuery() {
-        const t = this.client.getQueryCache().build(this.client, this.options);
-        if (t === this.currentQuery)
-            return;
-        const n = this.currentQuery;
-        this.currentQuery = t,
-        this.currentQueryInitialState = t.state,
-        this.previousQueryResult = this.currentResult,
-        this.hasListeners() && (n == null || n.removeObserver(this),
-        t.addObserver(this))
-    }
-    onQueryUpdate(t) {
-        const n = {};
-        t.type === "success" ? n.onSuccess = !t.manual : t.type === "error" && !bv(t.error) && (n.onError = !0),
-        this.updateResult(n),
-        this.hasListeners() && this.updateTimers()
-    }
-    notify(t) {
-        di.batch( () => {
-            if (t.onSuccess) {
-                var n, i, a, r;
-                (n = (i = this.options).onSuccess) == null || n.call(i, this.currentResult.data),
-                (a = (r = this.options).onSettled) == null || a.call(r, this.currentResult.data, null)
-            } else if (t.onError) {
-                var s, l, c, d;
-                (s = (l = this.options).onError) == null || s.call(l, this.currentResult.error),
-                (c = (d = this.options).onSettled) == null || c.call(d, void 0, this.currentResult.error)
-            }
-            t.listeners && this.listeners.forEach( ({listener: p}) => {
-                p(this.currentResult)
-            }
-            ),
-            t.cache && this.client.getQueryCache().notify({
-                query: this.currentQuery,
-                type: "observerResultsUpdated"
-            })
-        }
-        )
-    }
-}
-function SW(e, t) {
-    return t.enabled !== !1 && !e.state.dataUpdatedAt && !(e.state.status === "error" && t.retryOnMount === !1)
-}
-function PP(e, t) {
-    return SW(e, t) || e.state.dataUpdatedAt > 0 && a0(e, t, t.refetchOnMount)
-}
-function a0(e, t, n) {
-    if (t.enabled !== !1) {
-        const i = typeof n == "function" ? n(e) : n;
-        return i === "always" || i !== !1 && Ox(e, t)
-    }
-    return !1
-}
-function IP(e, t, n, i) {
-    return n.enabled !== !1 && (e !== t || i.enabled === !1) && (!n.suspense || e.state.status !== "error") && Ox(e, n)
-}
-function Ox(e, t) {
-    return e.isStaleByTime(t.staleTime)
-}
-function CW(e, t, n) {
-    return n.keepPreviousData ? !1 : n.placeholderData !== void 0 ? t.isPlaceholderData : e.getCurrentResult() !== t
-}
-let AW = class extends dm {
-    [k: string]: any;
-    constructor(t, n) {
-        super(),
-        this.client = t,
-        this.setOptions(n),
-        this.bindMethods(),
-        this.updateResult()
-    }
-    bindMethods() {
-        this.mutate = this.mutate.bind(this),
-        this.reset = this.reset.bind(this)
-    }
-    setOptions(t) {
-        var n;
-        const i = this.options;
-        this.options = this.client.defaultMutationOptions(t),
-        t0(i, this.options) || this.client.getMutationCache().notify({
-            type: "observerOptionsUpdated",
-            mutation: this.currentMutation,
-            observer: this
-        }),
-        (n = this.currentMutation) == null || n.setOptions(this.options)
-    }
-    onUnsubscribe() {
-        if (!this.hasListeners()) {
-            var t;
-            (t = this.currentMutation) == null || t.removeObserver(this)
-        }
-    }
-    onMutationUpdate(t) {
-        this.updateResult();
-        const n = {
-            listeners: !0
-        };
-        t.type === "success" ? n.onSuccess = !0 : t.type === "error" && (n.onError = !0),
-        this.notify(n)
-    }
-    getCurrentResult() {
-        return this.currentResult
-    }
-    reset() {
-        this.currentMutation = void 0,
-        this.updateResult(),
-        this.notify({
-            listeners: !0
-        })
-    }
-    mutate(t, n) {
-        return this.mutateOptions = n,
-        this.currentMutation && this.currentMutation.removeObserver(this),
-        this.currentMutation = this.client.getMutationCache().build(this.client, {
-            ...this.options,
-            variables: typeof t < "u" ? t : this.options.variables
-        }),
-        this.currentMutation.addObserver(this),
-        this.currentMutation.execute()
-    }
-    updateResult() {
-        const t = this.currentMutation ? this.currentMutation.state : _j()
-          , n = {
-            ...t,
-            isLoading: t.status === "loading",
-            isSuccess: t.status === "success",
-            isError: t.status === "error",
-            isIdle: t.status === "idle",
-            mutate: this.mutate,
-            reset: this.reset
-        };
-        this.currentResult = n
-    }
-    notify(t) {
-        di.batch( () => {
-            if (this.mutateOptions && this.hasListeners()) {
-                if (t.onSuccess) {
-                    var n, i, a, r;
-                    (n = (i = this.mutateOptions).onSuccess) == null || n.call(i, this.currentResult.data, this.currentResult.variables, this.currentResult.context),
-                    (a = (r = this.mutateOptions).onSettled) == null || a.call(r, this.currentResult.data, null, this.currentResult.variables, this.currentResult.context)
-                } else if (t.onError) {
-                    var s, l, c, d;
-                    (s = (l = this.mutateOptions).onError) == null || s.call(l, this.currentResult.error, this.currentResult.variables, this.currentResult.context),
-                    (c = (d = this.mutateOptions).onSettled) == null || c.call(d, void 0, this.currentResult.error, this.currentResult.variables, this.currentResult.context)
-                }
-            }
-            t.listeners && this.listeners.forEach( ({listener: p}) => {
-                p(this.currentResult)
-            }
-            )
-        }
-        )
-    }
-}
-;
+
+
 var OS = {
     exports: {}
 }
   , $a = {}
-  , BS = {
-    exports: {}
-}
-  , zS = {};
+  ;
 
 
 
 
-const  Nj = React.useSyncExternalStore
-  , RP = React.createContext(void 0)
-  , Tj = React.createContext(!1);
-function Pj(e, t) {
-    return e || (t && typeof window < "u" ? (window.ReactQueryClientContext || (window.ReactQueryClientContext = RP),
-    window.ReactQueryClientContext) : RP)
-}
-const Ij = ({context: e}={}) => {
-    const t = React.useContext(Pj(e, React.useContext(Tj)));
-    if (!t)
-        throw new Error("No QueryClient set, use QueryClientProvider to set one");
-    return t
-}
-  , TW = ({client: e, children: t, context: n, contextSharing: i=!1}) => {
-    React.useEffect( () => (e.mount(),
-    () => {
-        e.unmount()
-    }
-    ), [e]);
-    const a = Pj(n, i);
-    return React.createElement(Tj.Provider, {
-        value: !n && i
-    }, React.createElement(a.Provider, {
-        value: e
-    }, t))
-}
-  , Lj = React.createContext(!1)
-  , PW = () => React.useContext(Lj);
-Lj.Provider;
-function IW() {
-    let e = !1;
-    return {
-        clearReset: () => {
-            e = !1
-        }
-        ,
-        reset: () => {
-            e = !0
-        }
-        ,
-        isReset: () => e
-    }
-}
-const LW = React.createContext(IW())
-  , FW = () => React.useContext(LW);
-function Fj(e, t) {
-    return typeof e == "function" ? e(...t) : !!e
-}
-const EW = (e, t) => {
-    (e.suspense || e.useErrorBoundary) && (t.isReset() || (e.retryOnMount = !1))
-}
-  , MW = e => {
-    React.useEffect( () => {
-        e.clearReset()
-    }
-    , [e])
-}
-  , RW = ({result: e, errorResetBoundary: t, useErrorBoundary: n, query: i}) => e.isError && !t.isReset() && !e.isFetching && Fj(n, [e.error, i])
-  , jW = e => {
-    e.suspense && typeof e.staleTime != "number" && (e.staleTime = 1e3)
-}
-  , DW = (e, t) => e.isLoading && e.isFetching && !t
-  , OW = (e, t, n) => (e == null ? void 0 : e.suspense) && DW(t, n)
-  , BW = (e, t, n) => t.fetchOptimistic(e).then( ({data: i}) => {
-    e.onSuccess == null || e.onSuccess(i),
-    e.onSettled == null || e.onSettled(i, null)
-}
-).catch(i => {
-    n.clearReset(),
-    e.onError == null || e.onError(i),
-    e.onSettled == null || e.onSettled(void 0, i)
-}
-);
-function zW(e, t) {
-    const n = Ij({
-        context: e.context
-    })
-      , i = PW()
-      , a = FW()
-      , r = n.defaultQueryOptions(e);
-    r._optimisticResults = i ? "isRestoring" : "optimistic",
-    r.onError && (r.onError = di.batchCalls(r.onError)),
-    r.onSuccess && (r.onSuccess = di.batchCalls(r.onSuccess)),
-    r.onSettled && (r.onSettled = di.batchCalls(r.onSettled)),
-    jW(r),
-    EW(r, a),
-    MW(a);
-    const [s] = React.useState( () => new t(n,r))
-      , l = s.getOptimisticResult(r);
-    if (Nj(React.useCallback(c => {
-        const d = i ? () => {}
-        : s.subscribe(di.batchCalls(c));
-        return s.updateResult(),
-        d
-    }
-    , [s, i]), () => s.getCurrentResult(), () => s.getCurrentResult()),
-    React.useEffect( () => {
-        s.setOptions(r, {
-            listeners: !1
-        })
-    }
-    , [r, s]),
-    OW(r, l, i))
-        throw BW(r, s, a);
-    if (RW({
-        result: l,
-        errorResetBoundary: a,
-        useErrorBoundary: r.useErrorBoundary,
-        query: s.getCurrentQuery()
-    }))
-        throw l.error;
-    return r.notifyOnChangeProps ? l : s.trackResult(l)
-}
-function cGe(e, t, n) {
-    const i = Np(e, t, n);
-    return zW(i, kW)
-}
-function uGe(e, t, n) {
-    const i = oW(e, t)
-      , a = Ij({
-        context: i.context
-    })
-      , [r] = React.useState( () => new AW(a,i));
-    React.useEffect( () => {
-        r.setOptions(i)
-    }
-    , [r, i]);
-    const s = Nj(React.useCallback(c => r.subscribe(di.batchCalls(c)), [r]), () => r.getCurrentResult(), () => r.getCurrentResult())
-      , l = React.useCallback( (c, d) => {
-        r.mutate(c, d).catch(VW)
-    }
-    , [r]);
-    if (s.error && Fj(r.options.useErrorBoundary, [s.error]))
-        throw s.error;
-    return {
-        ...s,
-        mutate: l,
-        mutateAsync: s.mutate
-    }
-}
-function VW() {}
-const Df = React.createContext({});
-Df.Consumer;
-function Bx({client: e, isReactNative: t, children: n}) {
-    const i = React.useMemo( () => new bW({
-        defaultOptions: {
-            queries: {
-                cacheTime: tW
-            }
-        }
-    }), [])
-      , a = React.useMemo( () => React.createContext(i), [i])
-      , r = React.useMemo( () => ({
-        client: e,
-        isReactNative: t,
-        queryClientContext: a
-    }), [e, t, a]);
-    return React.createElement(Df.Provider, {
-        value: r
-    }, React.createElement(TW, {
-        client: i,
-        context: a
-    }, n))
-}
-function Ej() {
-    return React.useContext(Df)
-}
-var VS, jP;
-function UW() {
-    if (jP)
-        return VS;
-    jP = 1;
-    var e = typeof Element < "u"
-      , t = typeof Map == "function"
-      , n = typeof Set == "function"
-      , i = typeof ArrayBuffer == "function" && !!ArrayBuffer.isView;
-    function a(r, s) {
-        if (r === s)
-            return !0;
-        if (r && s && typeof r == "object" && typeof s == "object") {
-            if (r.constructor !== s.constructor)
-                return !1;
-            var l, c, d;
-            if (Array.isArray(r)) {
-                if (l = r.length,
-                l != s.length)
-                    return !1;
-                for (c = l; c-- !== 0; )
-                    if (!a(r[c], s[c]))
-                        return !1;
-                return !0
-            }
-            var p;
-            if (t && r instanceof Map && s instanceof Map) {
-                if (r.size !== s.size)
-                    return !1;
-                for (p = r.entries(); !(c = p.next()).done; )
-                    if (!s.has(c.value[0]))
-                        return !1;
-                for (p = r.entries(); !(c = p.next()).done; )
-                    if (!a(c.value[1], s.get(c.value[0])))
-                        return !1;
-                return !0
-            }
-            if (n && r instanceof Set && s instanceof Set) {
-                if (r.size !== s.size)
-                    return !1;
-                for (p = r.entries(); !(c = p.next()).done; )
-                    if (!s.has(c.value[0]))
-                        return !1;
-                return !0
-            }
-            if (i && ArrayBuffer.isView(r) && ArrayBuffer.isView(s)) {
-                if (l = r.length,
-                l != s.length)
-                    return !1;
-                for (c = l; c-- !== 0; )
-                    if (r[c] !== s[c])
-                        return !1;
-                return !0
-            }
-            if (r.constructor === RegExp)
-                return r.source === s.source && r.flags === s.flags;
-            if (r.valueOf !== Object.prototype.valueOf && typeof r.valueOf == "function" && typeof s.valueOf == "function")
-                return r.valueOf() === s.valueOf();
-            if (r.toString !== Object.prototype.toString && typeof r.toString == "function" && typeof s.toString == "function")
-                return r.toString() === s.toString();
-            if (d = Object.keys(r),
-            l = d.length,
-            l !== Object.keys(s).length)
-                return !1;
-            for (c = l; c-- !== 0; )
-                if (!Object.prototype.hasOwnProperty.call(s, d[c]))
-                    return !1;
-            if (e && r instanceof Element)
-                return !1;
-            for (c = l; c-- !== 0; )
-                if (!((d[c] === "_owner" || d[c] === "__v" || d[c] === "__o") && r.$$typeof) && !a(r[d[c]], s[d[c]]))
-                    return !1;
-            return !0
-        }
-        return r !== r && s !== s
-    }
-    return VS = function(s, l) {
-        try {
-            return a(s, l)
-        } catch (c) {
-            if ((c.message || "").match(/stack|recursion/i))
-                return console.warn("react-fast-compare cannot handle circular refs"),
-                !1;
-            throw c
-        }
-    }
-    ,
-    VS
-}
-var $W = UW();
-
-let Mj = class extends React.Component {
-[k: string]: any;
-    constructor(...t) {
-        super(...t),
-        this.context = void 0,
-        this.state = {
-            queryStates: Object.keys(this.props.queries).reduce( (n, i) => ({
-                ...n,
-                [i]: {
-                    isLoading: !0,
-                    hasError: !1
-                }
-            }), {})
-        },
-        this.mounted = !1
-    }
-    componentDidMount() {
-        this.mounted = !0,
-        this.fetchData()
-    }
-    componentDidUpdate(t) {
-        t.queries !== this.props.queries && this.fetchData()
-    }
-    componentWillUnmount() {
-        this.mounted = !1
-    }
-    render() {
-        return this.props.children(this.state.queryStates)
-    }
-    applyUpdates(t) {
-        this.mounted && this.setState( ({queryStates: n}) => ({
-            queryStates: Object.assign({
-                ...n
-            }, ...t)
-        }))
-    }
-    fetchData() {
-        const {client: t} = this.context
-          , {queries: n, source: i, combineUpdates: a} = this.props;
-        if (t == null)
-            throw new Error("No reportify client found. Did you provide one to `ReportifyProvider`?");
-        const r = i == null ? {} : {
-            source: i
-        }
-          , s = [];
-        for (const l in n)
-            if (l in n) {
-                const c = n[l]
-                  , d = t.query(c, {
-                    ...r,
-                    handle: l
-                }).then(p => ({
-                    [l]: {
-                        isLoading: !1,
-                        hasError: !1,
-                        response: p
-                    }
-                })).catch(p => ({
-                    [l]: {
-                        isLoading: !1,
-                        hasError: !0,
-                        errorMessage: p
-                    }
-                }));
-                s.push(d)
-            }
-        a ? Promise.all(s).then(l => this.applyUpdates(l)).catch(l => {
-            throw l
-        }
-        ) : s.forEach(l => {
-            l.then(c => this.applyUpdates([c])).catch(c => {
-                throw c
-            }
-            )
-        }
-        )
-    }
-}
-;
-Mj.contextType = Df;
-let DP = 0;
-function HW(e) {
-    return DP++,
-    `${e}-${DP}`
-}
-function WW() {
-    const [e,t] = React.useState()
-      , {client: n} = Ej();
-    return React.useEffect( () => {
-        function i(r) {
-            t(s => s === r ? s : r)
-        }
-        const a = HW(eW);
-        return n != null && n.subscribeToQueryStatusEvents({
-            id: a,
-            callback: i
-        }),
-        () => {
-            n != null && n.unsubscribeFromQueryStatusEvents(a)
-        }
-    }
-    , [n, t]),
-    e
-}
-const qW = JSON.parse('{"Avatar":{"label":"Avatar","labelWithInitials":"Avatar s iniciálami {initials}"},"Autocomplete":{"spinnerAccessibilityLabel":"Načítání","ellipsis":"{content}…"},"Badge":{"PROGRESS_LABELS":{"incomplete":"Nedokončeno","partiallyComplete":"Částečně dokončeno","complete":"Dokončeno"},"TONE_LABELS":{"info":"Informace","success":"Úspěch","warning":"Varování","attention":"Upozornění","new":"Novinka","critical":"Kritické","readOnly":"Pouze pro čtení","enabled":"Aktivováno"},"progressAndTone":"{toneLabel}: {progressLabel}"},"Banner":{"dismissButton":"Zavřít notifikaci"},"Button":{"spinnerAccessibilityLabel":"Načítání"},"Common":{"checkbox":"zaškrtávací pole","undo":"Vrátit zpět","cancel":"Zrušit","clear":"Vymazat","close":"Zavřít","submit":"Odeslat","more":"Více"},"ContextualSaveBar":{"save":"Uložit","discard":"Zahodit"},"DataTable":{"sortAccessibilityLabel":"seřadit {direction} podle","navAccessibilityLabel":"Posunout tabulku o jeden sloupec {direction}","totalsRowHeading":"Celkem","totalRowHeading":"Celkem"},"DatePicker":{"previousMonth":"Zobrazit předchozí měsíc, {previousMonthName} {showPreviousYear}","nextMonth":"Zobrazit příští měsíc, {nextMonth} {nextYear}","today":"Dnes ","months":{"january":"Leden","february":"Únor","march":"Březen","april":"Duben","may":"Květen","june":"Červen","july":"Červenec","august":"Srpen","september":"Září","october":"Říjen","november":"Listopad","december":"Prosinec"},"daysAbbreviated":{"monday":"Po","tuesday":"Út","wednesday":"St","thursday":"Čt","friday":"Pá","saturday":"So","sunday":"Ne"},"days":{"monday":"pondělí","tuesday":"úterý","wednesday":"středa","thursday":"čtvrtek","friday":"pátek","saturday":"sobota","sunday":"neděle"},"start":"Začátek rozmezí","end":"Konec rozmezí"},"DiscardConfirmationModal":{"title":"Zahodit všechny neuložené změny","message":"Pokud zahodíte změny, odstraníte všechny úpravy provedené od posledního uložení.","primaryAction":"Zahodit změny","secondaryAction":"Pokračovat v úpravách"},"DropZone":{"errorOverlayTextFile":"Typ souboru není platný","errorOverlayTextImage":"Typ obrázku není platný","single":{"overlayTextFile":"Soubor nahrajete přetažením","overlayTextImage":"Obrázek nahrajete přetažením","actionTitleFile":"Přidejte soubor","actionTitleImage":"Přidejte obrázek","actionHintFile":"nebo ho nahrajte přetažením","actionHintImage":"nebo ho nahrajte přetažením","labelFile":"Nahrát soubor","labelImage":"Nahrát obrázek","overlayTextVideo":"Video nahrajete přetažením","actionTitleVideo":"Přidejte video","actionHintVideo":"nebo ho nahrajte přetažením","labelVideo":"Nahrát video"},"allowMultiple":{"overlayTextFile":"Soubory nahrajete přetažením","overlayTextImage":"Obrázky nahrajete přetažením","actionTitleFile":"Přidejte soubory","actionTitleImage":"Přidejte obrázky","actionHintFile":"nebo je nahrajte přetažením","actionHintImage":"nebo je nahrajte přetažením","labelFile":"Nahrát soubory","labelImage":"Nahrát obrázky","overlayTextVideo":"Nahrajte videa přetažením","actionTitleVideo":"Přidejte videa","actionHintVideo":"nebo je nahrajte přetažením","labelVideo":"Nahrát videa"},"errorOverlayTextVideo":"Typ videa není platný"},"EmptySearchResult":{"altText":"Žádné výsledky hledání"},"Frame":{"skipToContent":"Přeskočit na obsah","Navigation":{"closeMobileNavigationLabel":"Zavřít navigaci"},"navigationLabel":"Navigace"},"ActionMenu":{"RollupActions":{"rollupButton":"Zobrazit akce","rollupButtonBreadcrumbs":"Zobrazit navigační drobečky pro {sectionName}","rollupNavigationName":"Navigační drobečky pro {sectionName}","defaultRollupName":"Drobečková navigace"},"Actions":{"moreActions":"Další akce"}},"Filters":{"moreFilters":"Další filtry","filter":"Filtr: {resourceName}","noFiltersApplied":"Nejsou použity žádné filtry","cancel":"Zrušit","done":"Hotovo","clearAllFilters":"Vymazat všechny filtry","clear":"Vymazat","clearLabel":"Vymazat {filterName}","moreFiltersWithCount":"Další filtry ({count})","addFilter":"Přidat filtr","clearFilters":"Vymazat vše","searchInView":"v zobrazení: {viewName}"},"Modal":{"iFrameTitle":"kód hlavní části","modalWarning":"V modálním parametru chybí následující povinné vlastnosti: {missingProps}","unsavedChanges":"Neuložené změny"},"Pagination":{"previous":"Předchozí","next":"Další","pagination":"Stránkování"},"ProgressBar":{"negativeWarningMessage":"Hodnoty předané vlastnosti průběhu by neměly být záporné. Hodnota {progress} se resetuje na 0.","exceedWarningMessage":"Hodnoty předané vlastnosti průběhu by neměly být vyšší než 100. Hodnota {progress} se nastavuje na 100."},"ResourceList":{"sortingLabel":"Seřadit podle","defaultItemSingular":"položka","defaultItemPlural":"položky","showing":"Zobrazuje se tento počet: {itemsCount} ({resource})","loading":"Načítání: {resource}","selected":"Vybráno: {selectedItemsCount}","allItemsSelected":"V obchodě byly vybrány veškeré položky typu {resourceNamePlural}: {itemsLength} a více","selectAllItems":"Vybrat v obchodě vše typu {resourceNamePlural}: {itemsLength} a více","emptySearchResultTitle":"Nepovedlo se najít: {resourceNamePlural}","emptySearchResultDescription":"Zkuste změnit filtry nebo hledaný termín","selectButtonText":"Vybrat","a11yCheckboxDeselectAllSingle":"Zrušit výběr: {resourceNameSingular}","a11yCheckboxSelectAllSingle":"Vybrat: {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"Zrušit celý výběr: {resourceNamePlural} ({itemsLength})","a11yCheckboxSelectAllMultiple":"Vybrat vše: {resourceNamePlural} ({itemsLength})","Item":{"actionsDropdownLabel":"Akce pro: {accessibilityLabel}","actionsDropdown":"Rozevírací nabídka akcí","viewItem":"Zobrazit podrobnosti pro: {itemName}"},"BulkActions":{"actionsActivatorLabel":"Akce","moreActionsActivatorLabel":"Další akce"},"showingTotalCount":"Zobrazuje se tento počet: {itemsCount} z {totalItemsCount} ({resource})","allFilteredItemsSelected":"V tomto filtru byly vybrány veškeré položky typu {resourceNamePlural}: {itemsLength}","selectAllFilteredItems":"Vybrat všechny položky ({resourceNamePlural}: {itemsLength} a více) v tomto filtru"},"SkeletonPage":{"loadingLabel":"Stránka se načítá"},"Tabs":{"toggleTabsLabel":"Více zobrazení","newViewAccessibilityLabel":"Vytvořte nové zobrazení","newViewTooltip":"Vytvořit zobrazení","Tab":{"rename":"Přejmenovat zobrazení","duplicate":"Duplikování zobrazení","edit":"Upravit zobrazení","editColumns":"Upravit sloupce","delete":"Odstranit zobrazení","copy":"{name} – kopie","deleteModal":{"title":"Chcete zobrazení odstranit?","description":"Tato akce je nevratná. Zobrazení {viewName} už nebude k dispozici ve vašem administrátorovi.","cancel":"Zrušit","delete":"Odstranit zobrazení"}},"RenameModal":{"title":"Přejmenovat zobrazení","label":"Název","cancel":"Zrušit","create":"Uložit","errors":{"sameName":"Zobrazení s tímto názvem už existuje. Zvolte prosím odlišný název."}},"DuplicateModal":{"title":"Duplikování zobrazení","label":"Název","cancel":"Zrušit","create":"Vytvořit zobrazení","errors":{"sameName":"Zobrazení s tímto názvem už existuje. Zvolte prosím odlišný název."}},"CreateViewModal":{"title":"Vytvořte nové zobrazení","label":"Název","cancel":"Zrušit","create":"Vytvořit zobrazení","errors":{"sameName":"Zobrazení s tímto názvem už existuje. Zvolte prosím odlišný název."}}},"Tag":{"ariaLabel":"Odebrat: {children}"},"TextField":{"characterCount":"Počet znaků: {count}","characterCountWithMaxLength":"Použité znaky: {count} z {limit}"},"TopBar":{"toggleMenuLabel":"Přepnout nabídku","SearchField":{"clearButtonLabel":"Vymazat","search":"Hledání"}},"MediaCard":{"popoverButton":"Akce","dismissButton":"Zavřít"},"VideoThumbnail":{"playButtonA11yLabel":{"default":"Přehrát video","defaultWithDuration":"Přehrát video o délce: {duration}","duration":{"hours":{"other":{"only":"{hourCount} h","andMinutes":"{hourCount} h a {minuteCount} min","andMinute":"{hourCount} h a {minuteCount} min","minutesAndSeconds":"{hourCount} h {minuteCount} min a {secondCount} s","minutesAndSecond":"{hourCount} h {minuteCount} min a {secondCount} s","minuteAndSeconds":"{hourCount} h {minuteCount} min a {secondCount} s","minuteAndSecond":"{hourCount} h {minuteCount} min a {secondCount} s","andSeconds":"{hourCount} h a {secondCount} s","andSecond":"{hourCount} h a {secondCount} s"},"one":{"only":"{hourCount} h","andMinutes":"{hourCount} h a {minuteCount} min","andMinute":"{hourCount} h a {minuteCount} min","minutesAndSeconds":"{hourCount} h {minuteCount} min a {secondCount} s","minutesAndSecond":"{hourCount} h {minuteCount} min a {secondCount} s","minuteAndSeconds":"{hourCount} h {minuteCount} min a {secondCount} s","minuteAndSecond":"{hourCount} h {minuteCount} min a {secondCount} s","andSeconds":"{hourCount} h a {secondCount} s","andSecond":"{hourCount} h a {secondCount} s"}},"minutes":{"other":{"only":"{minuteCount} min","andSeconds":"{minuteCount} min a {secondCount} s","andSecond":"{minuteCount} min a {secondCount} s"},"one":{"only":"{minuteCount} min","andSeconds":"{minuteCount} min a {secondCount} s","andSecond":"{minuteCount} min a {secondCount} s"}},"seconds":{"other":"{secondCount} s","one":"{secondCount} s","few":"{secondCount} s","many":"{secondCount} s"}}}},"Loading":{"label":"Panel načítání stránky"},"TooltipOverlay":{"accessibilityLabel":"Tip s vysvětlením: {label}"},"IndexProvider":{"defaultItemSingular":"Položka","defaultItemPlural":"Položky","allItemsSelected":"Byly vybrány veškeré položky typu {resourceNamePlural}: {itemsLength} a více","selected":"Vybráno: {selectedItemsCount}","a11yCheckboxDeselectAllSingle":"Zrušit výběr: {resourceNameSingular}","a11yCheckboxSelectAllSingle":"Vybrat: {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"Zrušit celý výběr: {resourceNamePlural} ({itemsLength})","a11yCheckboxSelectAllMultiple":"Vybrat vše: {resourceNamePlural} ({itemsLength})"},"IndexTable":{"emptySearchTitle":"Nepovedlo se najít: {resourceNamePlural}","emptySearchDescription":"Zkuste změnit filtry nebo hledaný termín","onboardingBadgeText":"Novinka","resourceLoadingAccessibilityLabel":"{resourceNamePlural} se načítají…","selectAllLabel":"Vybrat vše: {resourceNamePlural}","selected":"Vybráno: {selectedItemsCount}","undo":"Vrátit zpět","selectAllItems":"Vybrat vše typu {resourceNamePlural} ({itemsLength} a více)","selectItem":"Vybrat: {resourceName}","selectButtonText":"Vybrat","sortAccessibilityLabel":"seřadit {direction} podle"},"Page":{"Header":{"rollupActionsLabel":"Zobrazte akce pro: {title}","pageReadyAccessibilityLabel":"{title}. Tato stránka je připravena."}},"FullscreenBar":{"back":"Zpět","accessibilityLabel":"Ukončit režim celé obrazovky"},"FilterPill":{"clear":"Vymazat","unsavedChanges":"Neuložené změny: {label}"},"IndexFilters":{"searchFilterTooltip":"Hledat a filtrovat","searchFilterAccessibilityLabel":"Výsledky hledání a filtrování","sort":"Seřadit výsledky","addView":"Přidat nové zobrazení","newView":"Vlastní hledání","SortButton":{"ariaLabel":"Seřadit výsledky","tooltip":"Seřadit","title":"Seřadit podle","sorting":{"asc":"Vzestupně","desc":"Sestupně","az":"A–Z","za":"Z–A"}},"UpdateButtons":{"cancel":"Zrušit","update":"Aktualizovat","save":"Uložit","saveAs":"Uložit jako","modal":{"title":"Uložení zobrazení jako","label":"Název","sameName":"Zobrazení s tímto názvem už existuje. Zvolte prosím odlišný název.","save":"Uložit","cancel":"Zrušit"}},"searchFilterTooltipWithShortcut":"Hledejte a filtrujte (F)","EditColumnsButton":{"tooltip":"Upravit sloupce","accessibilityLabel":"Přizpůsobit pořadí a viditelnost sloupců tabulky"}},"ActionList":{"SearchField":{"clearButtonLabel":"Vymazat","search":"Hledání","placeholder":"Vyhledejte akce"}},"AlphaTable":{"TableRowActions":{"heading":"Akce","activatorAccessibilityLabel":"Akce na otevřeném řádku","activatorLabel":"Akce"},"TableRowGroups":{"heading":"Zapnout/vypnout skupiny řádků","toggle":"Přepnutí viditelnosti této skupiny řádků"},"Sorting":{"sortAscending":"Seřadit tuto tabulku vzestupně podle sloupce {heading}","sortDescending":"Seřadit tuto tabulku sestupně podle sloupce {heading}"},"Selection":{"select":"Vybrat {id}","selectPage":"Vybrat vše na stránce (celkem {count})","selectAll":"Vybrat všechny položky v obchodě","selectAllWithTotal":"Vybrat vše v obchodě (celkem {total})","selectionHeader":"Výběr","unselectAll":"Zrušit výběr všech","selectedPage":"Vybráno: {count}","selectedAll":"Byly vybrány všechny položky v obchodě","selectedAllWithTotal":"Všechny vybrané v obchodě (celkem {total})","selectedSome":"Vybráno: {count}/{total}","undoSelectAll":"Vrátit zpět výběr všech položek v obchodě","undoSelectAllWithTotal":"Vrátit zpět výběr všech {total} v obchodě","showSelectedToggle":"Zobrazit vybrané","showingOnlySelected":"Zobrazuje se tento počet vybraných: {count}","paginationLabel":"Zobrazení {start}–{end} z celkového počtu vybraných položek: {total}"},"BulkActions":{"activatorLabel":"Akce"},"TableCell":{"spansColumns":"zahrnuje {count} sloupců"}},"SortPopover":{"ariaLabel":"Seřadit výsledky","tooltip":"Seřadit","title":"Seřadit podle","sorting":{"asc":"Vzestupně","desc":"Sestupně","az":"A–Z","za":"Z–A"}}}')
-  , GW = {
-    Polaris: qW
-}
-  , KW = JSON.parse('{"Avatar":{"label":"Avatar","labelWithInitials":"Avatar med initialer {initials}"},"Autocomplete":{"spinnerAccessibilityLabel":"Indlæser","ellipsis":"{content}…"},"Badge":{"PROGRESS_LABELS":{"incomplete":"Ufuldstændig","partiallyComplete":"Delvist fuldført","complete":"Fuldført"},"TONE_LABELS":{"info":"Oplysninger","success":"Gennemført","warning":"Advarsel","attention":"Bemærk","new":"Nyhed","critical":"Kritisk","readOnly":"Skrivebeskyttet","enabled":"Aktiveret"},"progressAndTone":"{toneLabel} {progressLabel}"},"Banner":{"dismissButton":"Afvis meddelelse"},"Button":{"spinnerAccessibilityLabel":"Indlæser"},"Common":{"checkbox":"afkrydsningsfelt","undo":"Fortryd","cancel":"Annuller","clear":"Ryd","close":"Luk","submit":"Send","more":"Mere"},"ContextualSaveBar":{"save":"Gem","discard":"Fortryd"},"DataTable":{"sortAccessibilityLabel":"sortér {direction} efter","navAccessibilityLabel":"Rul tabel én kolonne mod {direction}","totalsRowHeading":"I alt","totalRowHeading":"I alt"},"DatePicker":{"previousMonth":"Vis tidligere måned, {previousMonthName} {showPreviousYear}","nextMonth":"Vis næste måned, {nextMonth} {nextYear}","today":"I dag ","months":{"january":"Januar","february":"Februar","march":"Marts","april":"April","may":"Maj","june":"Juni","july":"Juli","august":"August","september":"September","october":"Oktober","november":"November","december":"December"},"daysAbbreviated":{"monday":"Ma","tuesday":"Ti","wednesday":"On","thursday":"To","friday":"Fr","saturday":"Lø","sunday":"Sø"},"days":{"monday":"Mandag","tuesday":"Tirsdag","wednesday":"Onsdag","thursday":"Torsdag","friday":"Fredag","saturday":"Lørdag","sunday":"Søndag"},"start":"Start af interval","end":"Slutning af interval"},"DiscardConfirmationModal":{"title":"Kassér alle ændringer, der ikke er gemt","message":"Hvis du kasserer ændringer, sletter du alle ændringer, du har foretaget, siden du gemte sidste gang.","primaryAction":"Kassér ændringer","secondaryAction":"Fortsæt redigering"},"DropZone":{"errorOverlayTextFile":"Filtype er ikke gyldig","errorOverlayTextImage":"Billedtype er ikke gyldig","single":{"overlayTextFile":"Slip fil for at uploade","overlayTextImage":"Slip billede for at uploade","actionTitleFile":"Tilføj fil","actionTitleImage":"Tilføj billede","actionHintFile":"eller slip filen for at uploade","actionHintImage":"eller slip billedet for at uploade","labelFile":"Upload fil","labelImage":"Upload billede","overlayTextVideo":"Slip video for at uploade","actionTitleVideo":"Tilføj video","actionHintVideo":"eller slip videoen for at uploade","labelVideo":"Upload video"},"allowMultiple":{"overlayTextFile":"Slip filer for at uploade","overlayTextImage":"Slip billeder for at uploade","actionTitleFile":"Tilføj filer","actionTitleImage":"Tilføj billeder","actionHintFile":"eller slip filer for at uploade","actionHintImage":"eller slip billeder for at uploade","labelFile":"Upload filer","labelImage":"Upload billeder","overlayTextVideo":"Slip videoer for at uploade","actionTitleVideo":"Tilføj videoer","actionHintVideo":"eller slip videoerne for at uploade","labelVideo":"Upload videoer"},"errorOverlayTextVideo":"Videotypen er ikke gyldig"},"EmptySearchResult":{"altText":"Tøm søgeresultater"},"Frame":{"skipToContent":"Gå til indhold","Navigation":{"closeMobileNavigationLabel":"Luk navigation"},"navigationLabel":"Navigation"},"ActionMenu":{"RollupActions":{"rollupButton":"Se handlinger","rollupButtonBreadcrumbs":"Se brødkrummer til {sectionName}","rollupNavigationName":"Brødkrummer til {sectionName}","defaultRollupName":"Brødkrummer"},"Actions":{"moreActions":"Flere handlinger"}},"Filters":{"moreFilters":"Flere filtre","filter":"Filtrer {resourceName}","noFiltersApplied":"Der blev ikke anvendt nogen filtre","cancel":"Annuller","done":"Udført","clearAllFilters":"Ryd alle filtre","clear":"Ryd","clearLabel":"Ryd {filterName}","moreFiltersWithCount":"Flere filtre: ({count})","addFilter":"Tilføj filter","clearFilters":"Ryd alt","searchInView":"i:{viewName}"},"Modal":{"iFrameTitle":"body markup","modalWarning":"Disse krævede egenskaber mangler fra modus: {missingProps}","unsavedChanges":"Ikke-gemte ændringer"},"Pagination":{"previous":"Forrige","next":"Næste","pagination":"Sideinddeling"},"ProgressBar":{"negativeWarningMessage":"Værdier, der overføres til statusegenskab, må ikke være negative. Nulstilling af {progress} til 0.","exceedWarningMessage":"Værdier, der overføres til statusegenskab, må ikke overstige 100. Indstilling af {progress} til 100."},"ResourceList":{"sortingLabel":"Sortér efter","defaultItemSingular":"vare","defaultItemPlural":"varer","showing":"Viser {itemsCount} {resource}","loading":"Indlæser {resource}","selected":"{selectedItemsCount} valgt","allItemsSelected":"Alle {itemsLength} + {resourceNamePlural} i din butik er valgt","selectAllItems":"Vælg alle {itemsLength} + {resourceNamePlural} i butikken","emptySearchResultTitle":"Ingen {resourceNamePlural} blev fundet","emptySearchResultDescription":"Prøv at ændre filtrene eller søgeordet","selectButtonText":"Vælg","a11yCheckboxDeselectAllSingle":"Fravælg {resourceNameSingular}","a11yCheckboxSelectAllSingle":"Vælg {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"Fravælg alle {itemsLength} {resourceNamePlural}","a11yCheckboxSelectAllMultiple":"Vælg alle {itemsLength} {resourceNamePlural}","Item":{"actionsDropdownLabel":"Handlinger for {accessibilityLabel}","actionsDropdown":"Rulleliste med handlinger","viewItem":"Se detaljer for {itemName}"},"BulkActions":{"actionsActivatorLabel":"Handlinger","moreActionsActivatorLabel":"Flere handlinger"},"showingTotalCount":"Viser {itemsCount} af {totalItemsCount} {resource}","allFilteredItemsSelected":"Alle mere end {itemsLength} {resourceNamePlural} i dette filter er valgt","selectAllFilteredItems":"Vælg alle mere end {itemsLength} {resourceNamePlural} i dette filter"},"SkeletonPage":{"loadingLabel":"Indlæser side"},"Tabs":{"toggleTabsLabel":"Flere visninger","newViewAccessibilityLabel":"Opret ny visning","newViewTooltip":"Opret visning","Tab":{"rename":"Omdøb visning","duplicate":"Dupliker visning","edit":"Rediger visning","editColumns":"Rediger kolonner","delete":"Slet visning","copy":"Kopi af {name}","deleteModal":{"title":"Vil du slette visningen?","description":"Dette kan ikke fortrydes. {viewName} visning vil ikke længere være tilgængelig i din administrator.","cancel":"Annuller","delete":"Slet visning"}},"RenameModal":{"title":"Omdøb visning","label":"Navn","cancel":"Annuller","create":"Gem","errors":{"sameName":"Der findes allerede en visning med dette navn. Vælg et andet navn."}},"DuplicateModal":{"title":"Dupliker visning","label":"Navn","cancel":"Annuller","create":"Opret visning","errors":{"sameName":"Der findes allerede en visning med dette navn. Vælg et andet navn."}},"CreateViewModal":{"title":"Opret ny visning","label":"Navn","cancel":"Annuller","create":"Opret visning","errors":{"sameName":"Der findes allerede en visning med dette navn. Vælg et andet navn."}}},"Tag":{"ariaLabel":"Fjern {children}"},"TextField":{"characterCount":"{count} tegn","characterCountWithMaxLength":"{count} af {limit} benyttede tegn"},"TopBar":{"toggleMenuLabel":"Åbn/luk menuen","SearchField":{"clearButtonLabel":"Ryd","search":"Søg"}},"MediaCard":{"popoverButton":"Handlinger","dismissButton":"Afvis"},"VideoThumbnail":{"playButtonA11yLabel":{"default":"Afspil video","defaultWithDuration":"Afspil video med en længde på {duration}","duration":{"hours":{"other":{"only":"{hourCount} timer","andMinutes":"{hourCount} timer og {minuteCount} minutter","andMinute":"{hourCount} timer og {minuteCount} minut","minutesAndSeconds":"{hourCount} timer, {minuteCount} minutter og {secondCount} sekunder","minutesAndSecond":"{hourCount} timer, {minuteCount} minutter og {secondCount} sekund","minuteAndSeconds":"{hourCount} timer, {minuteCount} minut og {secondCount} sekunder","minuteAndSecond":"{hourCount} timer, {minuteCount} minut og {secondCount} sekund","andSeconds":"{hourCount} timer og {secondCount} sekunder","andSecond":"{hourCount} timer og {secondCount} sekund"},"one":{"only":"{hourCount} time","andMinutes":"{hourCount} time og {minuteCount} minutter","andMinute":"{hourCount} time og {minuteCount} minut","minutesAndSeconds":"{hourCount} time, {minuteCount} minutter og {secondCount} sekunder","minutesAndSecond":"{hourCount} time, {minuteCount} minutter og {secondCount} sekund","minuteAndSeconds":"{hourCount} time, {minuteCount} minut og {secondCount} sekunder","minuteAndSecond":"{hourCount} time, {minuteCount} minut og {secondCount} sekund","andSeconds":"{hourCount} time og {secondCount} sekunder","andSecond":"{hourCount} time og {secondCount} sekund"}},"minutes":{"other":{"only":"{minuteCount} minutter","andSeconds":"{minuteCount} minutter og {secondCount} sekunder","andSecond":"{minuteCount} minutter og {secondCount} sekund"},"one":{"only":"{minuteCount} minut","andSeconds":"{minuteCount} minut og {secondCount} sekunder","andSecond":"{minuteCount} minut og {secondCount} sekund"}},"seconds":{"other":"{secondCount} sekunder","one":"{secondCount} sekund"}}}},"Loading":{"label":"Statuslinje for sideindlæsning"},"TooltipOverlay":{"accessibilityLabel":"Værktøjstip: {label}"},"IndexProvider":{"defaultItemSingular":"Vare","defaultItemPlural":"Varer","allItemsSelected":"Alle mere end {itemsLength} {resourceNamePlural} er valgt","selected":"{selectedItemsCount} valgt","a11yCheckboxDeselectAllSingle":"Fravælg {resourceNameSingular}","a11yCheckboxSelectAllSingle":"Vælg {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"Fravælg alle {itemsLength} {resourceNamePlural}","a11yCheckboxSelectAllMultiple":"Vælg alle {itemsLength} {resourceNamePlural}"},"IndexTable":{"emptySearchTitle":"Ingen {resourceNamePlural} blev fundet","emptySearchDescription":"Prøv at ændre filtrene eller søgeordet","onboardingBadgeText":"Nyhed","resourceLoadingAccessibilityLabel":"Indlæser {resourceNamePlural}…","selectAllLabel":"Vælg alle {resourceNamePlural}","selected":"{selectedItemsCount} valgt","undo":"Fortryd","selectAllItems":"Vælg alle {itemsLength}+ {resourceNamePlural}","selectItem":"Vælg {resourceName}","selectButtonText":"Vælg","sortAccessibilityLabel":"sortér {direction} efter"},"Page":{"Header":{"rollupActionsLabel":"Se handlinger for {title}","pageReadyAccessibilityLabel":"{title}. Denne side er klar"}},"FullscreenBar":{"back":"Tilbage","accessibilityLabel":"Afslut fuldskærmstilstand"},"FilterPill":{"clear":"Ryd","unsavedChanges":"Ikke gemte ændringer – {label}"},"IndexFilters":{"searchFilterTooltip":"Søg og filtrer","searchFilterTooltipWithShortcut":"Søg og filtrer (F)","searchFilterAccessibilityLabel":"Søg og filtrer resultater","sort":"Sortér dine resultater","addView":"Tilføj en ny visning","newView":"Tilpasset søgning","SortButton":{"ariaLabel":"Sortér resultaterne","tooltip":"Sortér","title":"Sortér efter","sorting":{"asc":"Stigende","desc":"Faldende","az":"A-Å","za":"Å-A"}},"UpdateButtons":{"cancel":"Annuller","update":"Opdater","save":"Gem","saveAs":"Gem som","modal":{"title":"Gem visning som","label":"Navn","sameName":"Der findes allerede en visning med dette navn. Vælg et andet navn.","save":"Gem","cancel":"Annuller"}},"EditColumnsButton":{"tooltip":"Rediger kolonner","accessibilityLabel":"Tilpas rækkefølgen og synligheden af tabelkolonner"}},"ActionList":{"SearchField":{"clearButtonLabel":"Ryd","search":"Søg","placeholder":"Søg efter handlinger"}},"AlphaTable":{"TableRowActions":{"heading":"Handlinger","activatorAccessibilityLabel":"Åbn rækkehandlinger","activatorLabel":"Handlinger"},"TableRowGroups":{"heading":"Slå rækkegrupper til/fra","toggle":"Slå synligheden for denne rækkegruppe til/fra"},"Sorting":{"sortAscending":"Sortér denne tabel efter {heading} i stigende rækkefølge","sortDescending":"Sortér denne tabel efter {heading} i faldende rækkefølge"},"Selection":{"select":"Vælg {id}","selectPage":"Vælg alle {count} på siden","selectAll":"Vælg alle i butikken","selectAllWithTotal":"Vælg alle {total} i butikken","selectionHeader":"Valg","unselectAll":"Fravælg alle","selectedPage":"{count} er valgt","selectedAll":"Alle i butikken er valgt","selectedAllWithTotal":"Alle {total} er valgt i butikken","selectedSome":"{count}/{total} er valgt","undoSelectAll":"Fortryd valget af alle i butikken","undoSelectAllWithTotal":"Fortryd valget af alle {total} i butikken","showSelectedToggle":"Vis valgte","showingOnlySelected":"Viser {count} valgte","paginationLabel":"Viser {start}–{end} af {total} valgte varer"},"TableCell":{"spansColumns":"spænder over {count} kolonner"},"BulkActions":{"activatorLabel":"Handlinger"}},"SortPopover":{"ariaLabel":"Sortér resultaterne","tooltip":"Sortér","title":"Sortér efter","sorting":{"asc":"Stigende","desc":"Faldende","az":"A-Å","za":"Å-A"}}}')
-  , QW = {
-    Polaris: KW
-}
-  , ZW = JSON.parse('{"Avatar":{"label":"Avatar","labelWithInitials":"Avatar mit Initialen {initials}"},"Autocomplete":{"spinnerAccessibilityLabel":"Wird geladen","ellipsis":"{content} …"},"Badge":{"PROGRESS_LABELS":{"incomplete":"Unvollständig","partiallyComplete":"Teilweise abgeschlossen","complete":"Abgeschlossen"},"TONE_LABELS":{"info":"Info","success":"Erfolg","warning":"Warnung","attention":"Achtung","new":"Neu","critical":"Kritisch","readOnly":"Schreibgeschützt","enabled":"Aktiviert"},"progressAndTone":"{toneLabel} {progressLabel}"},"Banner":{"dismissButton":"Benachrichtigung verwerfen"},"Button":{"spinnerAccessibilityLabel":"Wird geladen"},"Common":{"checkbox":"Kontrollkästchen","undo":"Rückgängig machen","cancel":"Abbrechen","clear":"Löschen","close":"Schließen","submit":"Senden","more":"Mehr"},"ContextualSaveBar":{"save":"Speichern","discard":"Verwerfen"},"DataTable":{"sortAccessibilityLabel":"von {direction} sortieren nach","navAccessibilityLabel":"Tabelle eine Spalte nach {direction} scrollen","totalsRowHeading":"Gesamt","totalRowHeading":"Gesamtsumme"},"DatePicker":{"previousMonth":"Vormonat anzeigen, {previousMonthName} {showPreviousYear}","nextMonth":"Nächsten Monat anzeigen, {nextMonth} {nextYear}","today":"Heute ","months":{"january":"Januar","february":"Februar","march":"März","april":"April","may":"Mai","june":"Juni","july":"Juli","august":"August","september":"September","october":"Oktober","november":"November","december":"Dezember"},"daysAbbreviated":{"monday":"Mo","tuesday":"Di","wednesday":"Mi","thursday":"Do","friday":"Fr","saturday":"Sa","sunday":"So"},"days":{"monday":"Montag","tuesday":"Dienstag","wednesday":"Mittwoch","thursday":"Donnerstag","friday":"Freitag","saturday":"Samstag","sunday":"Sonntag"},"start":"Beginn des Bereichs","end":"Ende des Bereichs"},"DiscardConfirmationModal":{"title":"Alle nicht gespeicherten Änderungen verwerfen","message":"Wenn du Änderungen verwirfst, werden alle Änderungen gelöscht, die du seit dem letzten Speichern vorgenommen hast.","primaryAction":"Änderungen verwerfen","secondaryAction":"Weiter bearbeiten"},"DropZone":{"errorOverlayTextFile":"Der Dateityp ist nicht gültig","errorOverlayTextImage":"Der Bildtyp ist nicht gültig","single":{"overlayTextFile":"Datei zum Hochladen ablegen","overlayTextImage":"Bild zum Hochladen ablegen","actionTitleFile":"Datei hinzufügen","actionTitleImage":"Bild hinzufügen","actionHintFile":"oder Datei zum Hochladen ablegen","actionHintImage":"oder Bild zum Hochladen ablegen","labelFile":"Datei hochladen","labelImage":"Bild hochladen","overlayTextVideo":"Video zum Hochladen ablegen","actionTitleVideo":"Video hinzufügen","actionHintVideo":"oder Video zum Hochladen ablegen","labelVideo":"Video hochladen"},"allowMultiple":{"overlayTextFile":"Dateien zum Hochladen ablegen","overlayTextImage":"Bilder zum Hochladen ablegen","actionTitleFile":"Dateien hinzufügen","actionTitleImage":"Bilder hinzufügen","actionHintFile":"oder Dateien zum Hochladen ablegen","actionHintImage":"oder Bilder zum Hochladen ablegen","labelFile":"Dateien hochladen","labelImage":"Bilder hochladen","overlayTextVideo":"Videos zum Hochladen ablegen","actionTitleVideo":"Videos hinzufügen","actionHintVideo":"oder Videos zum Hochladen ablegen","labelVideo":"Videos hochladen"},"errorOverlayTextVideo":"Der Videotyp ist nicht gültig"},"EmptySearchResult":{"altText":"Leere Suchergebnisse"},"Frame":{"skipToContent":"Direkt zum Inhalt","Navigation":{"closeMobileNavigationLabel":"Navigation schließen"},"navigationLabel":"Navigation"},"ActionMenu":{"RollupActions":{"rollupButton":"Aktionen anzeigen","rollupButtonBreadcrumbs":"Brotkrümel anzeigen für {sectionName}","rollupNavigationName":"Brotkrümel für {sectionName}","defaultRollupName":"Brotkrümel"},"Actions":{"moreActions":"Weitere Aktionen"}},"Filters":{"moreFilters":"Weitere Filter","filter":"{resourceName} filtern","noFiltersApplied":"Keine Filter angewendet","cancel":"Abbrechen","done":"Fertig","clearAllFilters":"Alle Filter löschen","clear":"Löschen","clearLabel":"{filterName} löschen","moreFiltersWithCount":"Weitere Filter ({count})","addFilter":"Filter hinzufügen","clearFilters":"Alles löschen","searchInView":"in: {viewName}"},"Modal":{"iFrameTitle":"Text-Markup","modalWarning":"Diese erforderlichen Eigenschaften fehlen im Modus: {missingProps}","unsavedChanges":"Nicht gespeicherte Änderungen"},"Pagination":{"previous":"Zurück","next":"Weiter","pagination":"Seitennummerierung"},"ProgressBar":{"negativeWarningMessage":"Werte, die an die Statusanzeige übergeben werden, sollten nicht negativ sein. {progress} wird auf 0 zurückgesetzt.","exceedWarningMessage":"Werte, die an die Statusanzeige übergeben werden, sollten 100 nicht überschreiten. {progress} wird auf 100 gesetzt."},"ResourceList":{"sortingLabel":"Sortieren nach","defaultItemSingular":"Artikel","defaultItemPlural":"Artikel","showing":"{itemsCount} {resource} werden angezeigt","loading":"{resource} wird geladen","selected":"{selectedItemsCount} ausgewählt","allItemsSelected":"Alle {itemsLength}+ {resourceNamePlural} in deinem Shop wurden ausgewählt","selectAllItems":"Wähle alle {itemsLength}+ {resourceNamePlural} in deinem Shop aus","emptySearchResultTitle":"Keine {resourceNamePlural} gefunden","emptySearchResultDescription":"Versuche, die Filter oder den Suchbegriff zu ändern","selectButtonText":"Auswählen","a11yCheckboxDeselectAllSingle":"Auswahl für {resourceNameSingular} aufheben","a11yCheckboxSelectAllSingle":"{resourceNameSingular} auswählen","a11yCheckboxDeselectAllMultiple":"Auswahl für alle {itemsLength} {resourceNamePlural} aufheben","a11yCheckboxSelectAllMultiple":"Alle {itemsLength} {resourceNamePlural} auswählen","Item":{"actionsDropdownLabel":"Aktionen für {accessibilityLabel}","actionsDropdown":"Dropdown-Liste mit Aktionen","viewItem":"Details für {itemName} anzeigen"},"BulkActions":{"actionsActivatorLabel":"Aktionen","moreActionsActivatorLabel":"Weitere Aktionen"},"showingTotalCount":"{itemsCount} von {totalItemsCount} {resource} werden angezeigt","allFilteredItemsSelected":"Alle {itemsLength}+ {resourceNamePlural} in diesem Filter wurden ausgewählt","selectAllFilteredItems":"Alle {itemsLength} und {resourceNamePlural} in diesem Filter auswählen"},"SkeletonPage":{"loadingLabel":"Seite wird geladen"},"Tabs":{"toggleTabsLabel":"Weitere Ansichten","newViewAccessibilityLabel":"Neue Ansicht erstellen","newViewTooltip":"Ansicht erstellen","Tab":{"rename":"Ansicht umbenennen","duplicate":"Ansicht duplizieren","edit":"Ansicht bearbeiten","editColumns":"Spalten bearbeiten","delete":"Ansicht löschen","copy":"Kopie von {name}","deleteModal":{"title":"Ansicht löschen?","description":"Diese Aktion kann nicht rückgängig gemacht werden. Die Ansicht \\"{viewName}\\" wird nicht länger in deinem Adminbereich zur Verfügung stehen.","cancel":"Abbrechen","delete":"Ansicht löschen"}},"RenameModal":{"title":"Ansicht umbenennen","label":"Name","cancel":"Abbrechen","create":"Speichern","errors":{"sameName":"Eine Ansicht mit diesem Namen ist bereits vorhanden. Bitte wähle einen anderen Namen aus."}},"DuplicateModal":{"title":"Ansicht duplizieren","label":"Name","cancel":"Abbrechen","create":"Ansicht erstellen","errors":{"sameName":"Eine Ansicht mit diesem Namen ist bereits vorhanden. Bitte wähle einen anderen Namen aus."}},"CreateViewModal":{"title":"Neue Ansicht erstellen","label":"Name","cancel":"Abbrechen","create":"Ansicht erstellen","errors":{"sameName":"Eine Ansicht mit diesem Namen ist bereits vorhanden. Bitte wähle einen anderen Namen aus."}}},"Tag":{"ariaLabel":"{children} entfernen"},"TextField":{"characterCount":"{count} Zeichen","characterCountWithMaxLength":"{count} von {limit} Zeichen verwendet"},"TopBar":{"toggleMenuLabel":"Menü ein/aus","SearchField":{"clearButtonLabel":"Löschen","search":"Suche"}},"MediaCard":{"popoverButton":"Aktionen","dismissButton":"Ignorieren"},"VideoThumbnail":{"playButtonA11yLabel":{"default":"Video abspielen","defaultWithDuration":"Video mit einer Länge von {duration} abspielen","duration":{"hours":{"other":{"only":"{hourCount} Stunden","andMinutes":"{hourCount} Stunden und {minuteCount} Minuten","andMinute":"{hourCount} Stunden und {minuteCount} Minute","minutesAndSeconds":"{hourCount} Stunden, {minuteCount} Minuten und {secondCount} Sekunden","minutesAndSecond":"{hourCount} Stunden, {minuteCount} Minuten und {secondCount} Sekunde","minuteAndSeconds":"{hourCount} Stunden, {minuteCount} Minute und {secondCount} Sekunden","minuteAndSecond":"{hourCount} Stunden, {minuteCount} Minute und {secondCount} Sekunde","andSeconds":"{hourCount} Stunden und {secondCount} Sekunden","andSecond":"{hourCount} Stunden und {secondCount} Sekunde"},"one":{"only":"{hourCount} Stunde","andMinutes":"{hourCount} Stunde und {minuteCount} Minuten","andMinute":"{hourCount} Stunde und {minuteCount} Minute","minutesAndSeconds":"{hourCount} Stunde, {minuteCount} Minuten und {secondCount} Sekunden","minutesAndSecond":"{hourCount} Stunde, {minuteCount} Minuten und {secondCount} Sekunde","minuteAndSeconds":"{hourCount} Stunde, {minuteCount} Minute und {secondCount} Sekunden","minuteAndSecond":"{hourCount} Stunde, {minuteCount} Minute und {secondCount} Sekunde","andSeconds":"{hourCount} Stunde und {secondCount} Sekunden","andSecond":"{hourCount} Stunde und {secondCount} Sekunde"}},"minutes":{"other":{"only":"{minuteCount} Minuten","andSeconds":"{minuteCount} Minuten und {secondCount} Sekunden","andSecond":"{minuteCount} Minuten und {secondCount} Sekunde"},"one":{"only":"{minuteCount} Minute","andSeconds":"{minuteCount} Minute und {secondCount} Sekunden","andSecond":"{minuteCount} Minute und {secondCount} Sekunde"}},"seconds":{"other":"{secondCount} Sekunden","one":"{secondCount} Sekunde"}}}},"Loading":{"label":"Seiten-Ladeleiste"},"TooltipOverlay":{"accessibilityLabel":"Tooltip: {label}"},"IndexProvider":{"defaultItemSingular":"Artikel","defaultItemPlural":"Artikel","allItemsSelected":"Alle {itemsLength}+ {resourceNamePlural} wurden ausgewählt","selected":"{selectedItemsCount} ausgewählt","a11yCheckboxDeselectAllSingle":"Auswahl für {resourceNameSingular} aufheben","a11yCheckboxSelectAllSingle":"{resourceNameSingular} auswählen","a11yCheckboxDeselectAllMultiple":"Auswahl für alle {itemsLength} {resourceNamePlural} aufheben","a11yCheckboxSelectAllMultiple":"Alle {itemsLength} {resourceNamePlural} auswählen"},"IndexTable":{"emptySearchTitle":"Keine {resourceNamePlural} gefunden","emptySearchDescription":"Versuche, die Filter oder den Suchbegriff zu ändern","onboardingBadgeText":"Neu","resourceLoadingAccessibilityLabel":"{resourceNamePlural} werden geladen ...","selectAllLabel":"Alle {resourceNamePlural} auswählen","selected":"{selectedItemsCount} ausgewählt","undo":"Rückgängig machen","selectAllItems":"Alle {itemsLength}+ {resourceNamePlural} auswählen","selectItem":"{resourceName} auswählen","selectButtonText":"Auswählen","sortAccessibilityLabel":"von {direction} sortieren nach"},"Page":{"Header":{"rollupActionsLabel":"Aktionen für {title} anzeigen","pageReadyAccessibilityLabel":"{title}. Diese Seite ist bereit"}},"FullscreenBar":{"back":"Zurück","accessibilityLabel":"Vollbildmodus beenden"},"FilterPill":{"clear":"Löschen","unsavedChanges":"Nicht gespeicherte Änderungen – {label}"},"IndexFilters":{"searchFilterTooltip":"Suchen und filtern","searchFilterTooltipWithShortcut":"Suchen und filtern (F)","searchFilterAccessibilityLabel":"Ergebnisse suchen und filtern","sort":"Ergebnisse sortieren","addView":"Eine neue Ansicht hinzufügen","newView":"Benutzerdefinierte Suche","SortButton":{"ariaLabel":"Ergebnisse sortieren","tooltip":"Sortieren","title":"Sortieren nach","sorting":{"asc":"Aufsteigend","desc":"Absteigend","az":"A–Z","za":"Z–A"}},"UpdateButtons":{"cancel":"Abbrechen","update":"Aktualisieren","save":"Speichern","saveAs":"Speichern unter","modal":{"title":"Ansicht speichern als","label":"Name","sameName":"Eine Ansicht mit diesem Namen ist bereits vorhanden. Bitte wähle einen anderen Namen aus.","save":"Speichern","cancel":"Abbrechen"}},"EditColumnsButton":{"tooltip":"Spalten bearbeiten","accessibilityLabel":"Reihenfolge und Sichtbarkeit der Tabellenspalten anpassen"}},"ActionList":{"SearchField":{"clearButtonLabel":"Löschen","search":"Suche","placeholder":"Aktionen durchsuchen"}},"AlphaTable":{"TableRowActions":{"heading":"Aktionen","activatorAccessibilityLabel":"Zeilenaktionen öffnen","activatorLabel":"Aktionen"},"TableRowGroups":{"heading":"Reihengruppen umschalten","toggle":"Sichtbarkeit dieser Reihengruppe umschalten"},"Sorting":{"sortAscending":"Tabelle nach {heading} in absteigender Reihenfolge sortieren","sortDescending":"Tabelle nach {heading} in aufsteigender Reihenfolge sortieren"},"Selection":{"select":"{id} auswählen","selectPage":"Alle {count} auf der Seite auswählen","selectAll":"Alle im Shop auswählen","selectAllWithTotal":"Alle {total} im Shop auswählen","selectionHeader":"Auswahl","unselectAll":"Alle abwählen","selectedPage":"{count} ausgewählt","selectedAll":"Alle im Shop ausgewählt","selectedAllWithTotal":"Alle {total} im Shop ausgewählt","selectedSome":"{count}/{total} ausgewählt","undoSelectAll":"Auswahl aller im Shop rückgängig machen","undoSelectAllWithTotal":"Auswahl von allen {total} im Shop rückgängig machen","showSelectedToggle":"Auswahl anzeigen","showingOnlySelected":"{count} ausgewählte werden angezeigt","paginationLabel":"{start}–{end} von {total} ausgewählten Artikeln werden angezeigt"},"TableCell":{"spansColumns":"erstreckt sich über {count} Spalten"},"BulkActions":{"activatorLabel":"Aktionen"}},"SortPopover":{"ariaLabel":"Ergebnisse sortieren","tooltip":"Sortieren","title":"Sortieren nach","sorting":{"asc":"Aufsteigend","desc":"Absteigend","az":"A–Z","za":"Z–A"}}}')
-  , YW = {
-    Polaris: ZW
-}
-  , JW = JSON.parse('{"ActionMenu":{"Actions":{"moreActions":"More actions"},"RollupActions":{"rollupButton":"View actions","rollupButtonBreadcrumbs":"View breadcrumbs for {sectionName}","rollupNavigationName":"Breadcrumbs for {sectionName}","defaultRollupName":"Breadcrumbs"}},"ActionList":{"SearchField":{"clearButtonLabel":"Clear","search":"Search","placeholder":"Search actions"}},"AlphaTable":{"TableRowActions":{"heading":"Actions","activatorAccessibilityLabel":"Open row actions","activatorLabel":"Actions"},"BulkActions":{"activatorLabel":"Actions"},"TableRowGroups":{"heading":"Toggle row groups","toggle":"Toggle visibility of this row group"},"Selection":{"select":"Select {id}","selectPage":"Select all {count} on page","selectAll":"Select all in store","selectAllWithTotal":"Select all {total} in store","undoSelectAll":"Undo select all in store","undoSelectAllWithTotal":"Undo select all {total} in store","selectionHeader":"Selection","unselectAll":"Unselect all","selectedPage":"{count} selected","selectedAll":"All selected in store","selectedAllWithTotal":"All {total} selected in store","selectedSome":"{count}/{total} selected","showSelectedToggle":"Show selected","showingOnlySelected":"Showing {count} selected","paginationLabel":"Showing {start}–{end} of {total} selected items"},"Sorting":{"sortAscending":"Sort this table by {heading} in ascending order","sortDescending":"Sort this table by {heading} in descending order"},"TableCell":{"spansColumns":"spans {count} columns"}},"Avatar":{"label":"Avatar","labelWithInitials":"Avatar with initials {initials}"},"Autocomplete":{"spinnerAccessibilityLabel":"Loading","ellipsis":"{content}…"},"Badge":{"PROGRESS_LABELS":{"incomplete":"Incomplete","partiallyComplete":"Partially complete","complete":"Complete"},"TONE_LABELS":{"info":"Info","success":"Success","warning":"Warning","critical":"Critical","attention":"Attention","new":"New","readOnly":"Read-only","enabled":"Enabled"},"progressAndTone":"{toneLabel} {progressLabel}"},"Banner":{"dismissButton":"Dismiss notification"},"Button":{"spinnerAccessibilityLabel":"Loading"},"Common":{"checkbox":"checkbox","undo":"Undo","cancel":"Cancel","clear":"Clear","close":"Close","submit":"Submit","more":"More"},"ContextualSaveBar":{"save":"Save","discard":"Discard"},"DataTable":{"sortAccessibilityLabel":"sort {direction} by","navAccessibilityLabel":"Scroll table {direction} one column","totalsRowHeading":"Totals","totalRowHeading":"Total"},"DatePicker":{"previousMonth":"Show previous month, {previousMonthName} {showPreviousYear}","nextMonth":"Show next month, {nextMonth} {nextYear}","today":"Today ","start":"Start of range","end":"End of range","months":{"january":"January","february":"February","march":"March","april":"April","may":"May","june":"June","july":"July","august":"August","september":"September","october":"October","november":"November","december":"December"},"days":{"monday":"Monday","tuesday":"Tuesday","wednesday":"Wednesday","thursday":"Thursday","friday":"Friday","saturday":"Saturday","sunday":"Sunday"},"daysAbbreviated":{"monday":"Mo","tuesday":"Tu","wednesday":"We","thursday":"Th","friday":"Fr","saturday":"Sa","sunday":"Su"}},"DiscardConfirmationModal":{"title":"Discard all unsaved changes","message":"If you discard changes, you’ll delete any edits you made since you last saved.","primaryAction":"Discard changes","secondaryAction":"Continue editing"},"DropZone":{"single":{"overlayTextFile":"Drop file to upload","overlayTextImage":"Drop image to upload","overlayTextVideo":"Drop video to upload","actionTitleFile":"Add file","actionTitleImage":"Add image","actionTitleVideo":"Add video","actionHintFile":"or drop file to upload","actionHintImage":"or drop image to upload","actionHintVideo":"or drop video to upload","labelFile":"Upload file","labelImage":"Upload image","labelVideo":"Upload video"},"allowMultiple":{"overlayTextFile":"Drop files to upload","overlayTextImage":"Drop images to upload","overlayTextVideo":"Drop videos to upload","actionTitleFile":"Add files","actionTitleImage":"Add images","actionTitleVideo":"Add videos","actionHintFile":"or drop files to upload","actionHintImage":"or drop images to upload","actionHintVideo":"or drop videos to upload","labelFile":"Upload files","labelImage":"Upload images","labelVideo":"Upload videos"},"errorOverlayTextFile":"File type is not valid","errorOverlayTextImage":"Image type is not valid","errorOverlayTextVideo":"Video type is not valid"},"EmptySearchResult":{"altText":"Empty search results"},"Frame":{"skipToContent":"Skip to content","navigationLabel":"Navigation","Navigation":{"closeMobileNavigationLabel":"Close navigation"}},"FullscreenBar":{"back":"Back","accessibilityLabel":"Exit fullscreen mode"},"Filters":{"moreFilters":"More filters","moreFiltersWithCount":"More filters ({count})","filter":"Filter {resourceName}","noFiltersApplied":"No filters applied","cancel":"Cancel","done":"Done","clearAllFilters":"Clear all filters","clear":"Clear","clearLabel":"Clear {filterName}","addFilter":"Add filter","clearFilters":"Clear all","searchInView":"in:{viewName}"},"FilterPill":{"clear":"Clear","unsavedChanges":"Unsaved changes - {label}"},"IndexFilters":{"searchFilterTooltip":"Search and filter","searchFilterTooltipWithShortcut":"Search and filter (F)","searchFilterAccessibilityLabel":"Search and filter results","sort":"Sort your results","addView":"Add a new view","newView":"Custom search","EditColumnsButton":{"tooltip":"Edit columns","accessibilityLabel":"Customize table column order and visibility"},"SortButton":{"ariaLabel":"Sort the results","tooltip":"Sort","title":"Sort by","sorting":{"asc":"Ascending","desc":"Descending","az":"A-Z","za":"Z-A"}},"UpdateButtons":{"cancel":"Cancel","update":"Update","save":"Save","saveAs":"Save as","modal":{"title":"Save view as","label":"Name","sameName":"A view with this name already exists. Please choose a different name.","save":"Save","cancel":"Cancel"}}},"IndexProvider":{"defaultItemSingular":"Item","defaultItemPlural":"Items","allItemsSelected":"All {itemsLength}+ {resourceNamePlural} are selected","selected":"{selectedItemsCount} selected","a11yCheckboxDeselectAllSingle":"Deselect {resourceNameSingular}","a11yCheckboxSelectAllSingle":"Select {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"Deselect all {itemsLength} {resourceNamePlural}","a11yCheckboxSelectAllMultiple":"Select all {itemsLength} {resourceNamePlural}"},"IndexTable":{"emptySearchTitle":"No {resourceNamePlural} found","emptySearchDescription":"Try changing the filters or search term","onboardingBadgeText":"New","resourceLoadingAccessibilityLabel":"Loading {resourceNamePlural}…","selectAllLabel":"Select all {resourceNamePlural}","selected":"{selectedItemsCount} selected","undo":"Undo","selectAllItems":"Select all {itemsLength}+ {resourceNamePlural}","selectItem":"Select {resourceName}","selectButtonText":"Select","sortAccessibilityLabel":"sort {direction} by"},"Loading":{"label":"Page loading bar"},"Modal":{"iFrameTitle":"body markup","modalWarning":"These required properties are missing from Modal: {missingProps}","unsavedChanges":"Unsaved changes"},"Page":{"Header":{"rollupActionsLabel":"View actions for {title}","pageReadyAccessibilityLabel":"{title}. This page is ready"}},"Pagination":{"previous":"Previous","next":"Next","pagination":"Pagination"},"ProgressBar":{"negativeWarningMessage":"Values passed to the progress prop shouldn’t be negative. Resetting {progress} to 0.","exceedWarningMessage":"Values passed to the progress prop shouldn’t exceed 100. Setting {progress} to 100."},"ResourceList":{"sortingLabel":"Sort by","defaultItemSingular":"item","defaultItemPlural":"items","showing":"Showing {itemsCount} {resource}","showingTotalCount":"Showing {itemsCount} of {totalItemsCount} {resource}","loading":"Loading {resource}","selected":"{selectedItemsCount} selected","allItemsSelected":"All {itemsLength}+ {resourceNamePlural} in your store are selected","allFilteredItemsSelected":"All {itemsLength}+ {resourceNamePlural} in this filter are selected","selectAllItems":"Select all {itemsLength}+ {resourceNamePlural} in your store","selectAllFilteredItems":"Select all {itemsLength}+ {resourceNamePlural} in this filter","emptySearchResultTitle":"No {resourceNamePlural} found","emptySearchResultDescription":"Try changing the filters or search term","selectButtonText":"Select","a11yCheckboxDeselectAllSingle":"Deselect {resourceNameSingular}","a11yCheckboxSelectAllSingle":"Select {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"Deselect all {itemsLength} {resourceNamePlural}","a11yCheckboxSelectAllMultiple":"Select all {itemsLength} {resourceNamePlural}","Item":{"actionsDropdownLabel":"Actions for {accessibilityLabel}","actionsDropdown":"Actions dropdown","viewItem":"View details for {itemName}"},"BulkActions":{"actionsActivatorLabel":"Actions","moreActionsActivatorLabel":"More actions"}},"SkeletonPage":{"loadingLabel":"Page loading"},"SortPopover":{"ariaLabel":"Sort the results","tooltip":"Sort","title":"Sort by","sorting":{"asc":"Ascending","desc":"Descending","az":"A-Z","za":"Z-A"}},"Tabs":{"newViewAccessibilityLabel":"Create new view","newViewTooltip":"Create view","toggleTabsLabel":"More views","Tab":{"rename":"Rename view","duplicate":"Duplicate view","edit":"Edit view","editColumns":"Edit columns","delete":"Delete view","copy":"Copy of {name}","deleteModal":{"title":"Delete view?","description":"This can’t be undone. {viewName} view will no longer be available in your admin.","cancel":"Cancel","delete":"Delete view"}},"RenameModal":{"title":"Rename view","label":"Name","cancel":"Cancel","create":"Save","errors":{"sameName":"A view with this name already exists. Please choose a different name."}},"DuplicateModal":{"title":"Duplicate view","label":"Name","cancel":"Cancel","create":"Create view","errors":{"sameName":"A view with this name already exists. Please choose a different name."}},"CreateViewModal":{"title":"Create new view","label":"Name","cancel":"Cancel","create":"Create view","errors":{"sameName":"A view with this name already exists. Please choose a different name."}}},"Tag":{"ariaLabel":"Remove {children}"},"TextField":{"characterCount":"{count} characters","characterCountWithMaxLength":"{count} of {limit} characters used"},"TooltipOverlay":{"accessibilityLabel":"Tooltip: {label}"},"TopBar":{"toggleMenuLabel":"Toggle menu","SearchField":{"clearButtonLabel":"Clear","search":"Search"}},"MediaCard":{"dismissButton":"Dismiss","popoverButton":"Actions"},"VideoThumbnail":{"playButtonA11yLabel":{"default":"Play video","defaultWithDuration":"Play video of length {duration}","duration":{"hours":{"other":{"only":"{hourCount} hours","andMinutes":"{hourCount} hours and {minuteCount} minutes","andMinute":"{hourCount} hours and {minuteCount} minute","minutesAndSeconds":"{hourCount} hours, {minuteCount} minutes, and {secondCount} seconds","minutesAndSecond":"{hourCount} hours, {minuteCount} minutes, and {secondCount} second","minuteAndSeconds":"{hourCount} hours, {minuteCount} minute, and {secondCount} seconds","minuteAndSecond":"{hourCount} hours, {minuteCount} minute, and {secondCount} second","andSeconds":"{hourCount} hours and {secondCount} seconds","andSecond":"{hourCount} hours and {secondCount} second"},"one":{"only":"{hourCount} hour","andMinutes":"{hourCount} hour and {minuteCount} minutes","andMinute":"{hourCount} hour and {minuteCount} minute","minutesAndSeconds":"{hourCount} hour, {minuteCount} minutes, and {secondCount} seconds","minutesAndSecond":"{hourCount} hour, {minuteCount} minutes, and {secondCount} second","minuteAndSeconds":"{hourCount} hour, {minuteCount} minute, and {secondCount} seconds","minuteAndSecond":"{hourCount} hour, {minuteCount} minute, and {secondCount} second","andSeconds":"{hourCount} hour and {secondCount} seconds","andSecond":"{hourCount} hour and {secondCount} second"}},"minutes":{"other":{"only":"{minuteCount} minutes","andSeconds":"{minuteCount} minutes and {secondCount} seconds","andSecond":"{minuteCount} minutes and {secondCount} second"},"one":{"only":"{minuteCount} minute","andSeconds":"{minuteCount} minute and {secondCount} seconds","andSecond":"{minuteCount} minute and {secondCount} second"}},"seconds":{"other":"{secondCount} seconds","one":"{secondCount} second"}}}}}')
-  , XW = {
-    Polaris: JW
-}
-  , eq = JSON.parse('{"Avatar":{"label":"Avatar","labelWithInitials":"Avatar con las iniciales {initials}"},"Autocomplete":{"spinnerAccessibilityLabel":"Cargando","ellipsis":"{content}…"},"Badge":{"PROGRESS_LABELS":{"incomplete":"Sin completar","partiallyComplete":"Parcialmente completado","complete":"Completado"},"TONE_LABELS":{"info":"Información","success":"Logrado","warning":"Advertencia","attention":"Atención","new":"Nuevo","critical":"Crítico","readOnly":"Solo lectura","enabled":"Activado"},"progressAndTone":"{toneLabel} {progressLabel}"},"Banner":{"dismissButton":"Descartar notificación"},"Button":{"spinnerAccessibilityLabel":"Cargando"},"Common":{"checkbox":"casilla de verificación","undo":"Deshacer","cancel":"Cancelar","clear":"Borrar","close":"Cerrar","submit":"Enviar","more":"Más"},"ContextualSaveBar":{"save":"Guardar","discard":"Descartar"},"DataTable":{"sortAccessibilityLabel":"ordenar {direction} por","navAccessibilityLabel":"Desplázate en la tabla una columna {direction}","totalsRowHeading":"Totales","totalRowHeading":"Total"},"DatePicker":{"previousMonth":"Mostrar el mes anterior, {previousMonthName} {showPreviousYear}","nextMonth":"Mostrar el mes siguiente, {nextMonth} {nextYear}","today":"Hoy ","months":{"january":"enero","february":"febrero","march":"marzo","april":"abril","may":"mayo","june":"junio","july":"julio","august":"agosto","september":"septiembre","october":"octubre","november":"noviembre","december":"diciembre"},"daysAbbreviated":{"monday":"LU","tuesday":"MA","wednesday":"MI","thursday":"JU","friday":"VI","saturday":"SA","sunday":"DO"},"days":{"monday":"lunes","tuesday":"martes","wednesday":"miércoles","thursday":"jueves","friday":"viernes","saturday":"sábado","sunday":"domingo"},"start":"Inicio del intervalo","end":"Fin del intervalo"},"DiscardConfirmationModal":{"title":"Descartar todos los cambios no guardados","message":"Si descartas los cambios, se eliminará cualquier edición que hayas realizado desde la última vez que guardaste.","primaryAction":"Descartar los cambios","secondaryAction":"Continuar editando"},"DropZone":{"errorOverlayTextFile":"El tipo de archivo no es válido","errorOverlayTextImage":"El tipo de imagen no es válido","single":{"overlayTextFile":"Suelta el archivo que quieres cargar","overlayTextImage":"Suelta la imagen que quieres cargar","actionTitleFile":"Agregar archivo","actionTitleImage":"Agregar imagen","actionHintFile":"o suelta el archivo que quieres cargar","actionHintImage":"o suelta la imagen que quieres cargar","labelFile":"Cargar archivo","labelImage":"Cargar imagen","overlayTextVideo":"Arrastrar y soltar un video para subirlo","actionTitleVideo":"Agregar video","actionHintVideo":"o arrastrar y soltar un video para subirlo","labelVideo":"Subir video"},"allowMultiple":{"overlayTextFile":"Suelta los archivos que quieres cargar","overlayTextImage":"Suelta las imágenes que quieres cargar","actionTitleFile":"Agregar archivos","actionTitleImage":"Agregar imágenes","actionHintFile":"o suelta los archivos que quieres cargar","actionHintImage":"o suelta las imágenes que quieres cargar","labelFile":"Cargar archivos","labelImage":"Cargar imágenes","overlayTextVideo":"Arrastrar y soltar videos para subirlos","actionTitleVideo":"Agregar videos","actionHintVideo":"o arrastrar y soltar videos para subirlos","labelVideo":"Subir videos"},"errorOverlayTextVideo":"El tipo de video no es válido."},"EmptySearchResult":{"altText":"Resultados de búsqueda vacíos"},"Frame":{"skipToContent":"Ir directamente al contenido","Navigation":{"closeMobileNavigationLabel":"Cerrar la navegación"},"navigationLabel":"Navegación"},"ActionMenu":{"RollupActions":{"rollupButton":"Ver acciones","rollupButtonBreadcrumbs":"Ver rutas para {sectionName}","rollupNavigationName":"Rutas para {sectionName}","defaultRollupName":"Rutas"},"Actions":{"moreActions":"Más acciones"}},"Filters":{"moreFilters":"Más filtros","filter":"Filtrar {resourceName}","noFiltersApplied":"No hay filtros aplicados","cancel":"Cancelar","done":"Listo","clearAllFilters":"Borrar todos los filtros","clear":"Borrar","clearLabel":"Borrar {filterName}","moreFiltersWithCount":"Más filtros ({count})","addFilter":"Agregar filtro","clearFilters":"Borrar todo","searchInView":"en:{viewName}"},"Modal":{"iFrameTitle":"marcado body","modalWarning":"Faltan estas propiedades necesarias en Modal: {missingProps}","unsavedChanges":"Cambios no guardados"},"Pagination":{"previous":"Anterior","next":"Siguiente","pagination":"Paginación"},"ProgressBar":{"negativeWarningMessage":"Los valores pasados a la propiedad de progreso no pueden ser negativos. Restableciendo {progress} a 0","exceedWarningMessage":"Los valores pasados a la propiedad de progreso no deben ser superiores a 100. Configurar {progress} en 100."},"ResourceList":{"sortingLabel":"Ordenar por","defaultItemSingular":"artículo","defaultItemPlural":"artículos","showing":"Se muestran {itemsCount} {resource}","loading":"Cargando {resource}","selected":"Seleccionados: {selectedItemsCount}","allItemsSelected":"Los más de {itemsLength} {resourceNamePlural} de la tienda están seleccionados.","selectAllItems":"Seleccionar los más de {itemsLength} recursos de {resourceNamePlural} de la tienda","emptySearchResultTitle":"No se encontró ningún recurso de {resourceNamePlural}","emptySearchResultDescription":"Prueba a cambiar los filtros o el término de búsqueda","selectButtonText":"Seleccionar","a11yCheckboxDeselectAllSingle":"Deseleccionar {resourceNameSingular}","a11yCheckboxSelectAllSingle":"Seleccionar {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"Deseleccionar {itemsLength} {resourceNamePlural}","a11yCheckboxSelectAllMultiple":"Seleccionar {itemsLength} {resourceNamePlural}","Item":{"actionsDropdownLabel":"Acciones para {accessibilityLabel}","actionsDropdown":"Menú desplegable de acciones","viewItem":"Ver detalles de {itemName}"},"BulkActions":{"actionsActivatorLabel":"Acciones","moreActionsActivatorLabel":"Más acciones"},"showingTotalCount":"Se muestran {itemsCount} de {totalItemsCount} {resource}","allFilteredItemsSelected":"Los más de {itemsLength} {resourceNamePlural} de este filtro están seleccionados.","selectAllFilteredItems":"Seleccionar los más de {itemsLength} recursos de {resourceNamePlural} de este filtro"},"SkeletonPage":{"loadingLabel":"Cargando página"},"Tabs":{"toggleTabsLabel":"Más vistas","newViewAccessibilityLabel":"Crear vista nueva","newViewTooltip":"Crear vista","Tab":{"rename":"Cambiar nombre de vista","duplicate":"Duplicar vista","edit":"Editar vista","editColumns":"Editar columnas","delete":"Eliminar vista","copy":"Copia de {name}","deleteModal":{"title":"¿Eliminar vista?","description":"Esta acción no se puede deshacer. La vista {viewName} ya no estará disponible en el panel de control.","cancel":"Cancelar","delete":"Eliminar vista"}},"RenameModal":{"title":"Renombrar vista","label":"Nombre","cancel":"Cancelar","create":"Guardar","errors":{"sameName":"Ya existe una vista con este nombre. Elige otro nombre."}},"DuplicateModal":{"title":"Duplicar vista","label":"Nombre","cancel":"Cancelar","create":"Crear vista","errors":{"sameName":"Ya existe una vista con este nombre. Elige otro nombre."}},"CreateViewModal":{"title":"Crear vista nueva","label":"Nombre","cancel":"Cancelar","create":"Crear vista","errors":{"sameName":"Ya existe una vista con este nombre. Elige otro nombre."}}},"Tag":{"ariaLabel":"Eliminar {children}"},"TextField":{"characterCount":"{count} caracteres","characterCountWithMaxLength":"{count} de {limit} caracteres utilizados"},"TopBar":{"toggleMenuLabel":"Abrir/cerrar menú","SearchField":{"clearButtonLabel":"Borrar","search":"Buscar"}},"MediaCard":{"popoverButton":"Acciones","dismissButton":"Descartar"},"VideoThumbnail":{"playButtonA11yLabel":{"default":"Reproducir el video","defaultWithDuration":"Reproducir video de {duration} de duración","duration":{"hours":{"other":{"only":"{hourCount} horas","andMinutes":"{hourCount} horas y {minuteCount} minutos","andMinute":"{hourCount} horas y {minuteCount} minuto","minutesAndSeconds":"{hourCount} horas, {minuteCount} minutos y {secondCount} segundos","minutesAndSecond":"{hourCount} horas, {minuteCount} minutos y {secondCount} segundo","minuteAndSeconds":"{hourCount} horas, {minuteCount} minuto y {secondCount} segundos","minuteAndSecond":"{hourCount} horas, {minuteCount} minuto y {secondCount} segundo","andSeconds":"{hourCount} horas y {secondCount} segundos","andSecond":"{hourCount} horas y {secondCount} segundo"},"one":{"only":"{hourCount} hora","andMinutes":"{hourCount} hora y {minuteCount} minutos","andMinute":"{hourCount} hora y {minuteCount} minuto","minutesAndSeconds":"{hourCount} hora, {minuteCount} minutos y {secondCount} segundos","minutesAndSecond":"{hourCount} hora, {minuteCount} minutos y {secondCount} segundo","minuteAndSeconds":"{hourCount} hora, {minuteCount} minuto y {secondCount} segundos","minuteAndSecond":"{hourCount} hora, {minuteCount} minuto y {secondCount} segundo","andSeconds":"{hourCount} hora y {secondCount} segundos","andSecond":"{hourCount} hora y {secondCount} segundo"}},"minutes":{"other":{"only":"{minuteCount} minutos","andSeconds":"{minuteCount} minutos y {secondCount} segundos","andSecond":"{minuteCount} minutos y {secondCount} segundo"},"one":{"only":"{minuteCount} minuto","andSeconds":"{minuteCount} minuto y {secondCount} segundos","andSecond":"{minuteCount} minuto y {secondCount} segundo"}},"seconds":{"other":"{secondCount} segundos","one":"{secondCount} segundo","many":"{secondCount} segundos"}}}},"Loading":{"label":"Barra de carga de la página"},"TooltipOverlay":{"accessibilityLabel":"Descripción emergente: {label}"},"IndexProvider":{"defaultItemSingular":"Artículo","defaultItemPlural":"Artículos","allItemsSelected":"Los más de {itemsLength} {resourceNamePlural} están seleccionados.","selected":"Seleccionados: {selectedItemsCount}","a11yCheckboxDeselectAllSingle":"Deseleccionar {resourceNameSingular}","a11yCheckboxSelectAllSingle":"Seleccionar {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"Deseleccionar {itemsLength} {resourceNamePlural}","a11yCheckboxSelectAllMultiple":"Seleccionar {itemsLength} {resourceNamePlural}"},"IndexTable":{"emptySearchTitle":"No se encontró ningún recurso de {resourceNamePlural}","emptySearchDescription":"Prueba a cambiar los filtros o el término de búsqueda","onboardingBadgeText":"Nuevo","resourceLoadingAccessibilityLabel":"Cargando {resourceNamePlural}...","selectAllLabel":"Seleccionar los recursos de {resourceNamePlural}","selected":"Seleccionados: {selectedItemsCount}","undo":"Deshacer","selectAllItems":"Seleccionar los más de {itemsLength} recursos de {resourceNamePlural}","selectItem":"Seleccionar {resourceName}","selectButtonText":"Seleccionar","sortAccessibilityLabel":"ordenar {direction} por"},"Page":{"Header":{"rollupActionsLabel":"Ver acciones para {title}","pageReadyAccessibilityLabel":"{title}. Esta página está lista"}},"FullscreenBar":{"back":"Atrás","accessibilityLabel":"Salir del modo de pantalla completa"},"FilterPill":{"clear":"Borrar","unsavedChanges":"Cambios no guardados: {label}"},"IndexFilters":{"searchFilterTooltip":"Buscar y filtrar","searchFilterTooltipWithShortcut":"Buscar y filtrar (F)","searchFilterAccessibilityLabel":"Buscar y filtrar resultados","sort":"Ordenar los resultados","addView":"Agregar una vista nueva","newView":"Búsqueda personalizada","SortButton":{"ariaLabel":"Ordenar los resultados","tooltip":"Ordenar","title":"Ordenar por","sorting":{"asc":"Ascendente","desc":"Descendente","az":"A-Z","za":"Z-A"}},"UpdateButtons":{"cancel":"Cancelar","update":"Modificar","save":"Guardar","saveAs":"Guardar como","modal":{"title":"Guardar vista como","label":"Nombre","sameName":"Ya existe una vista con este nombre. Elige otro nombre.","save":"Guardar","cancel":"Cancelar"}},"EditColumnsButton":{"tooltip":"Editar columnas","accessibilityLabel":"Personalizar el orden y la visibilidad de las columnas de la tabla"}},"ActionList":{"SearchField":{"clearButtonLabel":"Borrar","search":"Búsqueda","placeholder":"Buscar acciones"}},"AlphaTable":{"TableRowActions":{"heading":"Acciones","activatorAccessibilityLabel":"Abrir acciones de fila","activatorLabel":"Acciones"},"TableRowGroups":{"heading":"Activar/Desactivar grupos de filas","toggle":"Activar la visibilidad de este grupo de filas"},"Sorting":{"sortAscending":"Ordenar esta tabla por {heading} en orden ascendente","sortDescending":"Ordenar esta tabla por {heading} en orden descendente"},"Selection":{"select":"Seleccionar {id}","selectPage":"Seleccionar los {count} en la página","selectAll":"Seleccionar todo en la tienda","selectAllWithTotal":"Seleccionar los {total} en esta tienda","selectionHeader":"Selección","unselectAll":"Deseleccionar todo","selectedPage":"{count} seleccionado(s)","selectedAll":"Todo seleccionado en la tienda","selectedAllWithTotal":"{total} seleccionados en la tienda","selectedSome":"{count}/{total} seleccionados","undoSelectAll":"Deshacer seleccionar todo en la tienda","undoSelectAllWithTotal":"Quitar selección de los {total} en la tienda","showSelectedToggle":"Mostrar seleccionados","showingOnlySelected":"Mostrando {count} seleccionados","paginationLabel":"Mostrando {start}–{end} de {total} artículos seleccionados"},"BulkActions":{"activatorLabel":"Acciones"},"TableCell":{"spansColumns":"se extiende en {count} columnas"}},"SortPopover":{"ariaLabel":"Ordenar los resultados","tooltip":"Ordenar","title":"Ordenar por","sorting":{"asc":"Ascendente","desc":"Descendente","az":"A-Z","za":"Z-A"}}}')
-  , tq = {
-    Polaris: eq
-}
-  , nq = JSON.parse('{"Avatar":{"label":"Avatar","labelWithInitials":"Avatar alkukirjaimilla {initials}"},"Autocomplete":{"spinnerAccessibilityLabel":"Ladataan","ellipsis":"{content}…"},"Badge":{"PROGRESS_LABELS":{"incomplete":"Keskeneräinen","partiallyComplete":"Osittain valmis","complete":"Valmis"},"TONE_LABELS":{"info":"Tiedot","success":"Onnistui","warning":"Varoitus","attention":"Huomio","new":"Uusi","critical":"Kriittinen","readOnly":"Vain luku","enabled":"Otettu käyttöön"},"progressAndTone":"{toneLabel} {progressLabel}"},"Banner":{"dismissButton":"Ohita ilmoitus"},"Button":{"spinnerAccessibilityLabel":"Ladataan"},"Common":{"checkbox":"valintaruutu","undo":"Peru","cancel":"Peruuta","clear":"Tyhjennä","close":"Sulje","submit":"Lähetä","more":"Enemmän"},"ContextualSaveBar":{"save":"Tallenna","discard":"Hylkää"},"DataTable":{"sortAccessibilityLabel":"lajittele {direction}:","navAccessibilityLabel":"Selaa taulukkoa {direction} yksi sarake","totalsRowHeading":"Yhteenlasketut","totalRowHeading":"Yhteensä"},"DatePicker":{"previousMonth":"Näytä edellinen kuukausi, {previousMonthName} {showPreviousYear}","nextMonth":"Näytä seuraava kuukausi, {nextMonth} {nextYear}","today":"Tänään ","months":{"january":"Tammikuu","february":"Helmikuu","march":"Maaliskuu","april":"Huhtikuu","may":"Toukokuu","june":"Kesäkuu","july":"Heinäkuu","august":"Elokuu","september":"Syyskuu","october":"Lokakuu","november":"Marraskuu","december":"Joulukuu"},"daysAbbreviated":{"monday":"Ma","tuesday":"Ti","wednesday":"Ke","thursday":"To","friday":"Pe","saturday":"La","sunday":"Su"},"days":{"monday":"maanantai","tuesday":"tiistai","wednesday":"keskiviikko","thursday":"torstai","friday":"perjantai","saturday":"Lauantai","sunday":"Sunnuntai"},"start":"Alueen alku","end":"Alueen loppu"},"DiscardConfirmationModal":{"title":"Hylkää kaikki tallentamattomat muutokset","message":"Jos hylkäät muutokset, poistat kaikki edellisen tallennuksen jälkeen tekemäsi muokkaukset.","primaryAction":"Hylkää muutokset","secondaryAction":"Jatka muokkausta"},"DropZone":{"errorOverlayTextFile":"Tiedostotyyppi ei kelpaa","errorOverlayTextImage":"Kuvan tyyppi ei kelpaa","single":{"overlayTextFile":"Pudota ladattava tiedosto","overlayTextImage":"Lataa kuva pudottamalla","actionTitleFile":"Lisää tiedosto","actionTitleImage":"Lisää kuva","actionHintFile":"tai pudota tiedosto ladattavaksi","actionHintImage":"tai pudota kuva ladattavaksi","labelFile":"Lataa tiedosto","labelImage":"Lataa kuva","overlayTextVideo":"Pudota ladattava video","actionTitleVideo":"Lisää video","actionHintVideo":"tai pudota ladattava video","labelVideo":"Lataa videoita laitteeltasi"},"allowMultiple":{"overlayTextFile":"Pudota ladattavat tiedostot","overlayTextImage":"Pudota ladattavat kuvat","actionTitleFile":"Lisää tiedostoja","actionTitleImage":"Lisää kuvia","actionHintFile":"tai pudota ladattavat tiedostot","actionHintImage":"tai lataa kuvat pudottamalla","labelFile":"Lataa tiedostoja","labelImage":"Lataa kuvia","overlayTextVideo":"Lataa video pudottamalla","actionTitleVideo":"Lisää videoita","actionHintVideo":"tai pudota ladattavat videot","labelVideo":"Lataa videoita laitteeltasi"},"errorOverlayTextVideo":"Videon tiedostotyyppi ei kelpaa"},"EmptySearchResult":{"altText":"Tyhjennä hakutulokset"},"Frame":{"skipToContent":"Ohita ja siirry sisältöön","Navigation":{"closeMobileNavigationLabel":"Sulje navigointi"},"navigationLabel":"Navigointi"},"ActionMenu":{"RollupActions":{"rollupButton":"Tarkastele toimintoja","rollupButtonBreadcrumbs":"Näytä osion {sectionName} navigointipolut","rollupNavigationName":"Osion {sectionName} navigointipolut","defaultRollupName":"Navigointipolut"},"Actions":{"moreActions":"Lisää toimintoja"}},"Filters":{"moreFilters":"Lisää suodattimia","filter":"Suodata {resourceName}","noFiltersApplied":"Suodattimia ei ole käytetty","cancel":"Peruuta","done":"Valmis","clearAllFilters":"Tyhjennä kaikki suodattimet","clear":"Tyhjennä","clearLabel":"Tyhjennä {filterName}","moreFiltersWithCount":"Lisää suodattimia ({count})","addFilter":"Lisää suodatin","clearFilters":"Tyhjennä kaikki","searchInView":"kohde:{viewName}"},"Modal":{"iFrameTitle":"tekstin merkintä","modalWarning":"Nämä vaaditut ominaisuudet puuttuvat Modalista: {missingProps}","unsavedChanges":"Tallentamattomia muutoksia"},"Pagination":{"previous":"Edellinen","next":"Seuraava","pagination":"Sivunumerointi"},"ProgressBar":{"negativeWarningMessage":"Edistymistietoihin siirretyt arvot eivät saa olla negatiivisia. Palautetaan {progress} arvoon 0.","exceedWarningMessage":"Edistymistietoihin siirretyt arvot eivät saa olla suurempia kuin 100. Asetetaan {progress} arvoon 100."},"ResourceList":{"sortingLabel":"Lajitteluperuste","defaultItemSingular":"tuote","defaultItemPlural":"tuotetta","showing":"Näytetään {itemsCount} {resource}","loading":"Ladataan {resource}","selected":"{selectedItemsCount} valittu","allItemsSelected":"Kaikki {itemsLength} {resourceNamePlural} kaupassasi on valittu","selectAllItems":"Valitse kaikki {itemsLength} ja {resourceNamePlural} kaupassasi","emptySearchResultTitle":"{resourceNamePlural} ei löytynyt","emptySearchResultDescription":"Yritä vaihtaa suodattimia tai hakusanaa","selectButtonText":"Valitse","a11yCheckboxDeselectAllSingle":"Poista valinta kohteesta {resourceNameSingular}","a11yCheckboxSelectAllSingle":"Valitse {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"Poista valinta kaikista {itemsLength} {resourceNamePlural}","a11yCheckboxSelectAllMultiple":"Valitse kaikki {itemsLength} {resourceNamePlural}","Item":{"actionsDropdownLabel":"Kohdetta {accessibilityLabel} koskevat toimenpiteet","actionsDropdown":"Toiminnat-pudotusvalikko","viewItem":"Näytä tiedot kohteesta {itemName}"},"BulkActions":{"actionsActivatorLabel":"Toiminnat","moreActionsActivatorLabel":"Lisää toimintoja"},"showingTotalCount":"Näytetään {itemsCount}/{totalItemsCount} {resource}","allFilteredItemsSelected":"Kaikki tämän suodattimen {itemsLength} {resourceNamePlural} on valittu","selectAllFilteredItems":"Valitse kaikki tämän suodattimen {itemsLength} ja {resourceNamePlural}"},"SkeletonPage":{"loadingLabel":"Sivu latautuu"},"Tabs":{"toggleTabsLabel":"Enemmän näkymiä","newViewAccessibilityLabel":"Luo uusi näkymä","newViewTooltip":"Luo näkymä","Tab":{"rename":"Nimeä näkymä uudelleen","duplicate":"Kopioi näkymä","edit":"Muokkaa näkymää","editColumns":"Muokkaa sarakkeita","delete":"Poista näkymä","copy":"Kopio tiedostosta {name}","deleteModal":{"title":"Haluatko poistaa näkymän?","description":"Tätä ei voi kumota. Näkymä {viewName} ei ole enää käytettävissä Adminissasi.","cancel":"Peruuta","delete":"Poista näkymä"}},"RenameModal":{"title":"Nimeä näkymä uudelleen","label":"Nimi","cancel":"Peruuta","create":"Tallenna","errors":{"sameName":"Tämän niminen näkymä on jo olemassa. Valitse toinen nimi."}},"DuplicateModal":{"title":"Kopioi näkymä","label":"Nimi","cancel":"Peruuta","create":"Luo näkymä","errors":{"sameName":"Tämän niminen näkymä on jo olemassa. Valitse toinen nimi."}},"CreateViewModal":{"title":"Luo uusi näkymä","label":"Nimi","cancel":"Peruuta","create":"Luo näkymä","errors":{"sameName":"Tämän niminen näkymä on jo olemassa. Valitse toinen nimi."}}},"Tag":{"ariaLabel":"Poista {children}"},"TextField":{"characterCount":"{count} merkkiä","characterCountWithMaxLength":"{count}/{limit} merkkiä käytetty"},"TopBar":{"toggleMenuLabel":"Valikon vaihto","SearchField":{"clearButtonLabel":"Tyhjennä","search":"Hae"}},"MediaCard":{"popoverButton":"Toiminnat","dismissButton":"Hylkää"},"VideoThumbnail":{"playButtonA11yLabel":{"default":"Toista video","defaultWithDuration":"Toista video, joka on kestoltaan {duration}","duration":{"hours":{"other":{"only":"{hourCount} tuntia","andMinutes":"{hourCount} tuntia ja {minuteCount} minuuttia","andMinute":"{hourCount} tuntia ja {minuteCount} minuutti","minutesAndSeconds":"{hourCount} tuntia, {minuteCount} minuuttia ja {secondCount} sekuntia","minutesAndSecond":"{hourCount} tuntia, {minuteCount} minuuttia ja {secondCount} sekunti","minuteAndSeconds":"{hourCount} tuntia, {minuteCount} minuutti ja {secondCount} sekuntia","minuteAndSecond":"{hourCount} tuntia, {minuteCount} minuutti ja {secondCount} sekunti","andSeconds":"{hourCount} tuntia ja {secondCount} sekuntia","andSecond":"{hourCount} tuntia ja {secondCount} sekunti"},"one":{"only":"{hourCount} tunti","andMinutes":"{hourCount} tunti ja {minuteCount} minuuttia","andMinute":"{hourCount} tunti ja {minuteCount} minuutti","minutesAndSeconds":"{hourCount} tunti, {minuteCount} minuuttia ja {secondCount} sekuntia","minutesAndSecond":"{hourCount} tunti, {minuteCount} minuuttia ja {secondCount} sekunti","minuteAndSeconds":"{hourCount} tunti, {minuteCount} minuutti ja {secondCount} sekuntia","minuteAndSecond":"{hourCount} tunti, {minuteCount} minuutti ja {secondCount} sekunti","andSeconds":"{hourCount} tunti ja {secondCount} sekuntia","andSecond":"{hourCount} tunti ja {secondCount} sekunti"}},"minutes":{"other":{"only":"{minuteCount} minuuttia","andSeconds":"{minuteCount} minuuttia ja {secondCount} sekuntia","andSecond":"{minuteCount} minuuttia ja {secondCount} sekunti"},"one":{"only":"{minuteCount} minuutti","andSeconds":"{minuteCount} minuutti ja {secondCount} sekuntia","andSecond":"{minuteCount} minuutti ja {secondCount} sekunti"}},"seconds":{"other":"{secondCount} sekuntia","one":"{secondCount} sekunti"}}}},"Loading":{"label":"Sivun latautumisen palkki"},"TooltipOverlay":{"accessibilityLabel":"Työkaluvihje: {label}"},"IndexProvider":{"defaultItemSingular":"Tuote","defaultItemPlural":"Tuotteet","allItemsSelected":"Kaikki {itemsLength}+ {resourceNamePlural} on valittu","selected":"{selectedItemsCount} valittu","a11yCheckboxDeselectAllSingle":"Poista valinta kohteesta {resourceNameSingular}","a11yCheckboxSelectAllSingle":"Valitse {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"Poista kaikkien valinta: {itemsLength} x {resourceNamePlural}","a11yCheckboxSelectAllMultiple":"Valitse kaikki {itemsLength} {resourceNamePlural}"},"IndexTable":{"emptySearchTitle":"{resourceNamePlural} ei löytynyt","emptySearchDescription":"Yritä vaihtaa suodattimia tai hakusanaa","onboardingBadgeText":"Uusi","resourceLoadingAccessibilityLabel":"Ladataan {resourceNamePlural}…","selectAllLabel":"Valitse kaikki {resourceNamePlural}","selected":"{selectedItemsCount} valittu","undo":"Peru","selectAllItems":"Valitse kaikki {itemsLength} ja {resourceNamePlural}","selectItem":"Valitse {resourceName}","selectButtonText":"Valitse","sortAccessibilityLabel":"lajittele {direction}:"},"Page":{"Header":{"rollupActionsLabel":"Tarkastele nimikettä {title} koskevia toimintoja","pageReadyAccessibilityLabel":"{title}. Tämä sivu on valmis"}},"FullscreenBar":{"back":"Takaisin","accessibilityLabel":"Poistu koko näytön tilasta"},"FilterPill":{"clear":"Tyhjennä","unsavedChanges":"Tallentamattomat muutokset – {label}"},"IndexFilters":{"searchFilterTooltip":"Haku ja suodatus","searchFilterAccessibilityLabel":"Hae ja suodata tuloksia","sort":"Lajittele tuloksesi","addView":"Lisää uusi näkymä","newView":"Mukautettu haku","SortButton":{"ariaLabel":"Lajittele tulokset","tooltip":"Lajittele","title":"Lajitteluperuste","sorting":{"asc":"Nouseva","desc":"Laskeva","az":"A–Ö","za":"Ö–A"}},"UpdateButtons":{"cancel":"Peruuta","update":"Päivitä","save":"Tallenna","saveAs":"Tallenna nimellä","modal":{"title":"Tallenna näkymä nimellä","label":"Nimi","sameName":"Tämän niminen näkymä on jo olemassa. Valitse toinen nimi.","save":"Tallenna","cancel":"Peruuta"}},"searchFilterTooltipWithShortcut":"Hae ja suodata (F)","EditColumnsButton":{"tooltip":"Muokkaa sarakkeita","accessibilityLabel":"Muokkaa taulukon sarakkeiden järjestystä ja näkyvyyttä"}},"ActionList":{"SearchField":{"clearButtonLabel":"Tyhjennä","search":"Hae","placeholder":"Hae toimintoja"}},"AlphaTable":{"TableRowActions":{"heading":"Toiminnot","activatorAccessibilityLabel":"Avaa rivitoiminnot","activatorLabel":"Toiminnot"},"TableRowGroups":{"heading":"Vaihda riviryhmät käyttöön/pois käytöstä","toggle":"Vaihda tämän riviryhmän näkyvyys"},"Sorting":{"sortAscending":"Lajittele tämä taulukko {heading} mukaan nousevassa järjestyksessä","sortDescending":"Lajittele tämä taulukko {heading} mukaan laskevassa järjestyksessä"},"Selection":{"select":"Valitse {id}","selectPage":"Valitse kaikki {count} sivulta","selectAll":"Valitse kaikki kaupassa","selectAllWithTotal":"Valitse kaikki {total} kaupassa","selectionHeader":"Valinta","unselectAll":"Poista kaikkien valinta","selectedPage":"{count} valittu","selectedAll":"Kaikki valittu kaupassa","selectedAllWithTotal":"Kaikki {total} valittu kaupassa","selectedSome":"{count}/{total} valittu","undoSelectAll":"Poista kaikkien valinta kaupassa","undoSelectAllWithTotal":"Kumoa kaupan kaikkien {total} kohteen valinta","showSelectedToggle":"Näytä valitut","showingOnlySelected":"Näytetään {count} valittua","paginationLabel":"Näytetään {start}–{end} / {total} valitusta kohteesta"},"TableCell":{"spansColumns":"kattaa {count} saraketta"},"BulkActions":{"activatorLabel":"Toiminnot"}},"SortPopover":{"ariaLabel":"Lajittele tulokset","tooltip":"Lajittele","title":"Lajitteluperuste","sorting":{"asc":"Nouseva","desc":"Laskeva","az":"A–Ö","za":"Ö–A"}}}')
-  , iq = {
-    Polaris: nq
-}
-  , aq = JSON.parse('{"Avatar":{"label":"Avatar","labelWithInitials":"Avatar avec les initiales {initials}"},"Autocomplete":{"spinnerAccessibilityLabel":"Chargement en cours","ellipsis":"{content}…"},"Badge":{"PROGRESS_LABELS":{"incomplete":"Incomplet","partiallyComplete":"Partiellement terminé","complete":"Terminé"},"TONE_LABELS":{"info":"Informations","success":"Opération réussie","warning":"Avertissement","attention":"Attention","new":"Nouveau","critical":"Critique","readOnly":"Lecture seule","enabled":"Activé"},"progressAndTone":"{toneLabel} {progressLabel}"},"Banner":{"dismissButton":"Rejeter la notification"},"Button":{"spinnerAccessibilityLabel":"Chargement en cours"},"Common":{"checkbox":"case à cocher","undo":"Annuler","cancel":"Annuler","clear":"Effacer","close":"Fermer","submit":"Soumettre","more":"Plus"},"ContextualSaveBar":{"save":"Enregistrer","discard":"Supprimer"},"DataTable":{"sortAccessibilityLabel":"trier {direction} par","navAccessibilityLabel":"Faire défiler le tableau {direction} d’une colonne","totalsRowHeading":"Totaux","totalRowHeading":"Total"},"DatePicker":{"previousMonth":"Afficher le mois précédent, {previousMonthName} {showPreviousYear}","nextMonth":"Afficher le mois suivant, {nextMonth} {nextYear}","today":"Aujourd’hui ","months":{"january":"Janvier","february":"Février","march":"Mars","april":"Avril","may":"Mai","june":"Juin","july":"Juillet","august":"Août","september":"Septembre","october":"Octobre","november":"Novembre","december":"Décembre"},"daysAbbreviated":{"monday":"Lun","tuesday":"Mar","wednesday":"Mer","thursday":"Jeu","friday":"Ven","saturday":"Sam","sunday":"Dim"},"days":{"monday":"Lundi","tuesday":"Mardi","wednesday":"Mercredi","thursday":"Jeudi","friday":"Vendredi","saturday":"Samedi","sunday":"Dimanche"},"start":"Début de la période","end":"Fin de la période"},"DiscardConfirmationModal":{"title":"Annuler toutes les modifications non enregistrées","message":"Si vous annulez les modifications, vous supprimerez toutes les corrections effectuées depuis votre dernière sauvegarde.","primaryAction":"Annuler les modifications","secondaryAction":"Poursuivre les modifications"},"DropZone":{"errorOverlayTextFile":"Le type de fichier n’est pas valide","errorOverlayTextImage":"Le type d’image n’est pas valide","single":{"overlayTextFile":"Déposer le fichier à importer","overlayTextImage":"Déposer l’image à importer","actionTitleFile":"Ajouter un fichier","actionTitleImage":"Ajouter une image","actionHintFile":"ou déposer le fichier à importer","actionHintImage":"ou déposer l’image à importer","labelFile":"Importer un fichier","labelImage":"Importer une image","overlayTextVideo":"Déposer la vidéo à mettre en ligne","actionTitleVideo":"Ajouter la vidéo","actionHintVideo":"ou déposer la vidéo à mettre en ligne","labelVideo":"Mettre en ligne la vidéo"},"allowMultiple":{"overlayTextFile":"Déposer les fichiers à importer","overlayTextImage":"Déposer les images à importer","actionTitleFile":"Ajouter des fichiers","actionTitleImage":"Ajouter des images","actionHintFile":"ou déposer les fichiers à importer","actionHintImage":"ou déposer les images à importer","labelFile":"Importer des fichiers","labelImage":"Importer des images","overlayTextVideo":"Déposer les vidéos à mettre en ligne","actionTitleVideo":"Ajouter des vidéos","actionHintVideo":"ou déposer les vidéos à mettre en ligne","labelVideo":"Mettre en ligne les vidéos"},"errorOverlayTextVideo":"Le type de vidéo n’est pas valide"},"EmptySearchResult":{"altText":"Résultats de recherche vides"},"Frame":{"skipToContent":"Ignorer et passer au contenu","Navigation":{"closeMobileNavigationLabel":"Fermer la navigation"},"navigationLabel":"Navigation"},"ActionMenu":{"RollupActions":{"rollupButton":"Afficher les actions","rollupButtonBreadcrumbs":"Afficher les fils d’Ariane pour {sectionName}","rollupNavigationName":"Fils d’Ariane pour {sectionName}","defaultRollupName":"Fils d’Ariane"},"Actions":{"moreActions":"Autres actions"}},"Filters":{"moreFilters":"Plus de filtres","filter":"Filtrer {resourceName}","noFiltersApplied":"Aucun filtre appliqué","cancel":"Annuler","done":"Terminer","clearAllFilters":"Effacer tous les filtres","clear":"Effacer","clearLabel":"Effacer {filterName}","moreFiltersWithCount":"Plus de filtres ({count})","addFilter":"Ajouter un filtre","clearFilters":"Tout effacer","searchInView":"dans : {viewName}"},"Modal":{"iFrameTitle":"balisage du corps","modalWarning":"Ces propriétés obligatoires manquent dans la fenêtre modale : {missingProps}","unsavedChanges":"Modifications non enregistrées"},"Pagination":{"previous":"Précédent","next":"Suivant","pagination":"Pagination"},"ProgressBar":{"negativeWarningMessage":"Les valeurs transmises à l‘accessoire de progression ne doivent pas être négatives. Réinitialisation de {progress} à 0.","exceedWarningMessage":"Les valeurs transmises à l‘accessoire de progression ne doivent pas dépasser 100. Réglage de {progress} à 100."},"ResourceList":{"sortingLabel":"Trier par","defaultItemSingular":"article","defaultItemPlural":"articles","showing":"{itemsCount} {resource} sont affichés","loading":"Chargement de {resource} en cours","selected":"{selectedItemsCount} sélectionné(s)","allItemsSelected":"La totalité des {itemsLength}+ {resourceNamePlural} de votre boutique est sélectionnée","selectAllItems":"Sélectionner la totalité des {itemsLength}+ {resourceNamePlural} de votre boutique","emptySearchResultTitle":"{resourceNamePlural} introuvables","emptySearchResultDescription":"Essayez de changer les filtres ou le terme de recherche","selectButtonText":"Sélectionner","a11yCheckboxDeselectAllSingle":"Désélectionner {resourceNameSingular}","a11yCheckboxSelectAllSingle":"Sélectionner {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"Désélectionner la totalité des {itemsLength} {resourceNamePlural}","a11yCheckboxSelectAllMultiple":"Sélectionner la totalité des {itemsLength} {resourceNamePlural}","Item":{"actionsDropdownLabel":"Actions pour {accessibilityLabel}","actionsDropdown":"Actions de la liste déroulante","viewItem":"Afficher les détails de {itemName}"},"BulkActions":{"actionsActivatorLabel":"Actions","moreActionsActivatorLabel":"Autres actions"},"showingTotalCount":"{itemsCount} sur {totalItemsCount} {resource} sont affichés","allFilteredItemsSelected":"La totalité des {itemsLength}+ {resourceNamePlural} de ce filtre est sélectionnée","selectAllFilteredItems":"Sélectionner la totalité des éléments {resourceNamePlural}+ {itemsLength} de ce filtre"},"SkeletonPage":{"loadingLabel":"Chargement de la page"},"Tabs":{"toggleTabsLabel":"Plus de vues","newViewAccessibilityLabel":"Créer une nouvelle vue","newViewTooltip":"Créer une vue","Tab":{"rename":"Renommer la vue","duplicate":"Dupliquer la vue","edit":"Modifier la vue","editColumns":"Modifier les colonnes","delete":"Supprimer la vue","copy":"Copie de {name}","deleteModal":{"title":"Supprimer la vue ?","description":"Cette opération est irréversible. La vue {viewName} ne sera plus disponible dans votre interface administrateur Shopify.","cancel":"Annuler","delete":"Supprimer la vue"}},"RenameModal":{"title":"Renommer la vue","label":"Nom","cancel":"Annuler","create":"Enregistrer","errors":{"sameName":"Une vue portant ce nom existe déjà. Veuillez choisir un nom différent."}},"DuplicateModal":{"title":"Dupliquer la vue","label":"Nom","cancel":"Annuler","create":"Créer une vue","errors":{"sameName":"Une vue portant ce nom existe déjà. Veuillez choisir un nom différent."}},"CreateViewModal":{"title":"Créer une nouvelle vue","label":"Nom","cancel":"Annuler","create":"Créer une vue","errors":{"sameName":"Une vue portant ce nom existe déjà. Veuillez choisir un nom différent."}}},"Tag":{"ariaLabel":"Supprimer {children}"},"TextField":{"characterCount":"{count} caractères","characterCountWithMaxLength":"{count} sur {limit} caractères utilisés"},"TopBar":{"toggleMenuLabel":"Activer le menu","SearchField":{"clearButtonLabel":"Effacer","search":"Rechercher"}},"MediaCard":{"popoverButton":"Actions","dismissButton":"Rejeter"},"VideoThumbnail":{"playButtonA11yLabel":{"default":"Lire la vidéo","defaultWithDuration":"Lire une vidéo d’une durée de {duration}","duration":{"hours":{"other":{"only":"{hourCount} heures","andMinutes":"{hourCount} heures et {minuteCount} minutes","andMinute":"{hourCount} heures et {minuteCount} minute","minutesAndSeconds":"{hourCount} heures, {minuteCount} minutes et {secondCount} secondes","minutesAndSecond":"{hourCount} heures, {minuteCount} minutes et {secondCount} seconde","minuteAndSeconds":"{hourCount} heures, {minuteCount} minute et {secondCount} secondes","minuteAndSecond":"{hourCount} heures, {minuteCount} minute et {secondCount} seconde","andSeconds":"{hourCount} heures et {secondCount} secondes","andSecond":"{hourCount} heures et {secondCount} seconde"},"one":{"only":"{hourCount} heure","andMinutes":"{hourCount} heure et {minuteCount} minutes","andMinute":"{hourCount} heure et {minuteCount} minute","minutesAndSeconds":"{hourCount} heure, {minuteCount} minutes et {secondCount} secondes","minutesAndSecond":"{hourCount} heure, {minuteCount} minutes et {secondCount} seconde","minuteAndSeconds":"{hourCount} heure, {minuteCount} minute et {secondCount} secondes","minuteAndSecond":"{hourCount} heure, {minuteCount} minute et {secondCount} seconde","andSeconds":"{hourCount} heure et {secondCount} secondes","andSecond":"{hourCount} heure et {secondCount} seconde"}},"minutes":{"other":{"only":"{minuteCount} minutes","andSeconds":"{minuteCount} minutes et {secondCount} secondes","andSecond":"{minuteCount} minutes et {secondCount} seconde"},"one":{"only":"{minuteCount} minute","andSeconds":"{minuteCount} minute et {secondCount} secondes","andSecond":"{minuteCount} minute et {secondCount} seconde"}},"seconds":{"other":"{secondCount} secondes","one":"{secondCount} seconde","many":"{secondCount} secondes"}}}},"Loading":{"label":"Barre de chargement de la page"},"TooltipOverlay":{"accessibilityLabel":"Infobulle : {label}"},"IndexProvider":{"defaultItemSingular":"Article","defaultItemPlural":"Articles","allItemsSelected":"La totalité des {itemsLength}+ {resourceNamePlural} est sélectionnée","selected":"{selectedItemsCount} sélectionné(s)","a11yCheckboxDeselectAllSingle":"Désélectionner {resourceNameSingular}","a11yCheckboxSelectAllSingle":"Sélectionner {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"Désélectionner la totalité des {itemsLength} {resourceNamePlural}","a11yCheckboxSelectAllMultiple":"Sélectionner la totalité des {itemsLength} {resourceNamePlural}"},"IndexTable":{"emptySearchTitle":"{resourceNamePlural} introuvables","emptySearchDescription":"Essayez de changer les filtres ou le terme de recherche","onboardingBadgeText":"Nouveau","resourceLoadingAccessibilityLabel":"Chargement de {resourceNamePlural} en cours…","selectAllLabel":"Sélectionner la totalité des {resourceNamePlural}","selected":"{selectedItemsCount} sélectionné(s)","undo":"Annuler","selectAllItems":"Sélectionner la totalité des {itemsLength}+ {resourceNamePlural}","selectItem":"Sélectionner {resourceName}","selectButtonText":"Sélectionner","sortAccessibilityLabel":"trier {direction} par"},"Page":{"Header":{"rollupActionsLabel":"Afficher les actions pour {title}","pageReadyAccessibilityLabel":"{title}. Cette page est prête"}},"FullscreenBar":{"back":"Retour","accessibilityLabel":"Quitter le mode plein écran"},"FilterPill":{"clear":"Effacer","unsavedChanges":"Modifications non enregistrées - {label}"},"IndexFilters":{"searchFilterTooltip":"Rechercher et filtrer","searchFilterTooltipWithShortcut":"Rechercher et filtrer (F)","searchFilterAccessibilityLabel":"Rechercher et filtrer les résultats","sort":"Trier vos résultats","addView":"Ajouter une nouvelle vue","newView":"Recherche personnalisée","SortButton":{"ariaLabel":"Trier les résultats","tooltip":"Trier","title":"Trier par","sorting":{"asc":"Ordre croissant","desc":"Ordre décroissant","az":"A-Z","za":"Z-A"}},"UpdateButtons":{"cancel":"Annuler","update":"Actualiser","save":"Enregistrer","saveAs":"Enregistrer sous","modal":{"title":"Enregistrer la vue sous","label":"Nom","sameName":"Une vue portant ce nom existe déjà. Veuillez choisir un nom différent.","save":"Enregistrer","cancel":"Annuler"}},"EditColumnsButton":{"tooltip":"Modifier les colonnes","accessibilityLabel":"Personnaliser l’ordre et la visibilité des colonnes du tableau"}},"ActionList":{"SearchField":{"clearButtonLabel":"Effacer","search":"Rechercher","placeholder":"Rechercher des actions"}},"AlphaTable":{"TableRowActions":{"heading":"Actions","activatorAccessibilityLabel":"Ouvrir les actions de la rangée","activatorLabel":"Actions"},"TableRowGroups":{"heading":"Activer les groupes de lignes","toggle":"Activer la visibilité de ce groupe de lignes"},"Sorting":{"sortAscending":"Trier ce tableau par {heading} dans l’ordre croissant","sortDescending":"Trier ce tableau par {heading} dans l’ordre décroissant"},"Selection":{"select":"Sélectionner {id}","selectPage":"Sélectionner les {count} sur la page","selectAll":"Tout sélectionner dans la boutique","selectAllWithTotal":"Sélectionner la totalité des {total} dans la boutique","selectionHeader":"Sélection","unselectAll":"Tout désélectionner","selectedPage":"{count} sélectionné(s)","selectedAll":"Tous sélectionnés dans la boutique","selectedAllWithTotal":"Tous les {total} sélectionnés dans la boutique","selectedSome":"{count}/{total} sélectionné(s)","undoSelectAll":"Annuler la sélection de tous les articles dans la boutique","undoSelectAllWithTotal":"Annuler la sélection de tous les {total} en boutique","showSelectedToggle":"Afficher la sélection","showingOnlySelected":"Affichage de {count} élément(s) sélectionné(s)","paginationLabel":"Affichage de {start}–{end} sur {total} éléments sélectionnés"},"BulkActions":{"activatorLabel":"Actions"},"TableCell":{"spansColumns":"couvre {count} colonnes"}},"SortPopover":{"ariaLabel":"Trier les résultats","tooltip":"Trier","title":"Trier par","sorting":{"asc":"Croissant","desc":"Décroissant","az":"A-Z","za":"Z-A"}}}')
-  , rq = {
-    Polaris: aq
-}
-  , oq = JSON.parse(`{"Avatar":{"label":"Avatar","labelWithInitials":"Avatar con iniziali {initials}"},"Autocomplete":{"spinnerAccessibilityLabel":"Caricamento in corso","ellipsis":"{content}…"},"Badge":{"PROGRESS_LABELS":{"incomplete":"Incompleto","partiallyComplete":"Parzialmente completo","complete":"Completo"},"TONE_LABELS":{"info":"Info","success":"Operazione riuscita","warning":"Avvertimento","attention":"Attenzione","new":"Novità","critical":"Critico","readOnly":"Sola lettura","enabled":"Abilitato"},"progressAndTone":"{toneLabel} {progressLabel}"},"Banner":{"dismissButton":"Elimina notifica"},"Button":{"spinnerAccessibilityLabel":"Caricamento in corso"},"Common":{"checkbox":"casella di spunta","undo":"Annulla","cancel":"Annulla","clear":"Rimuovi","close":"Chiudi","submit":"Invia","more":"Altro"},"ContextualSaveBar":{"save":"Salva","discard":"Rimuovi"},"DataTable":{"sortAccessibilityLabel":"ordina {direction} per","navAccessibilityLabel":"Scorri la tabella {direction} di una colonna","totalsRowHeading":"Totali","totalRowHeading":"Totale"},"DatePicker":{"previousMonth":"Mostra il mese precedente, {previousMonthName} {showPreviousYear}","nextMonth":"Mostra il mese successivo, {nextMonth} {nextYear}","today":"Oggi ","months":{"january":"Gennaio","february":"Febbraio","march":"Marzo","april":"Aprile","may":"Maggio","june":"Giugno","july":"Luglio","august":"Agosto","september":"Settembre","october":"Ottobre","november":"Novembre","december":"Dicembre"},"daysAbbreviated":{"monday":"Lun","tuesday":"Mar","wednesday":"Mer","thursday":"Gio","friday":"Ven","saturday":"Sab","sunday":"Dom"},"days":{"monday":"lunedì","tuesday":"martedì","wednesday":"mercoledì","thursday":"giovedì","friday":"venerdì","saturday":"sabato","sunday":"domenica"},"start":"Inizio intervallo","end":"Fine intervallo"},"DiscardConfirmationModal":{"title":"Rimuovi tutte le modifiche non salvate","message":"Rimuovendo le modifiche, eliminerai tutte quelle apportate dopo l'ultimo salvataggio.","primaryAction":"Rimuovi modifiche","secondaryAction":"Continua a modificare"},"DropZone":{"errorOverlayTextFile":"Il tipo di file non è valido","errorOverlayTextImage":"Il tipo di immagine non è valido","single":{"overlayTextFile":"Rilascia il file per caricarlo","overlayTextImage":"Rilascia l'immagine per caricarla","actionTitleFile":"Aggiungi file","actionTitleImage":"Aggiungi immagine","actionHintFile":"o rilascia il file per caricarlo","actionHintImage":"o rilascia l'immagine per caricarla","labelFile":"Carica file","labelImage":"Carica immagine","overlayTextVideo":"Rilascia il video per caricarlo","actionTitleVideo":"Aggiungi video","actionHintVideo":"o rilascia il video per caricarlo","labelVideo":"Carica video"},"allowMultiple":{"overlayTextFile":"Rilascia i file per caricarli","overlayTextImage":"Rilascia le immagini per caricarle","actionTitleFile":"Aggiungi file","actionTitleImage":"Aggiungi immagini","actionHintFile":"o rilascia i file per caricarli","actionHintImage":"o rilascia le immagini per caricarle","labelFile":"Carica file","labelImage":"Carica immagini","overlayTextVideo":"Rilascia i video per caricarli","actionTitleVideo":"aggiungi video","actionHintVideo":"o rilascia i video per caricarli","labelVideo":"Carica video"},"errorOverlayTextVideo":"Il tipo di video non è valido"},"EmptySearchResult":{"altText":"Risultati di ricerca assenti"},"Frame":{"skipToContent":"Vai direttamente al contenuto","Navigation":{"closeMobileNavigationLabel":"Chiudi la navigazione"},"navigationLabel":"Navigazione"},"ActionMenu":{"RollupActions":{"rollupButton":"Visualizza azioni","rollupButtonBreadcrumbs":"Vedi navigazione tracciabile per {sectionName}","rollupNavigationName":"Navigazione tracciabile per {sectionName}","defaultRollupName":"Navigazione tracciabile"},"Actions":{"moreActions":"Altre azioni"}},"Filters":{"moreFilters":"Più filtri","filter":"Filtra {resourceName}","noFiltersApplied":"Nessun filtro applicato","cancel":"Annulla","done":"Fatto","clearAllFilters":"Rimuovi tutti i filtri","clear":"Rimuovi","clearLabel":"Rimuovi {filterName}","moreFiltersWithCount":"Altri filtri ({count})","addFilter":"Aggiungi filtro","clearFilters":"Cancella tutto","searchInView":"in:{viewName}"},"Modal":{"iFrameTitle":"markup del testo","modalWarning":"Le seguenti proprietà necessarie mancano da Modal: {missingProps}","unsavedChanges":"Modifiche non salvate"},"Pagination":{"previous":"Indietro","next":"Avanti","pagination":"Impaginazione"},"ProgressBar":{"negativeWarningMessage":"I valori passati alle proprietà di progresso non devono essere negativi. Ripristino di {progress} su 0.","exceedWarningMessage":"I valori passati alle proprietà di progresso non devono essere superiori a 100. Impostazione di {progress} su 100."},"ResourceList":{"sortingLabel":"Ordina per","defaultItemSingular":"articolo","defaultItemPlural":"articoli","showing":"Visualizzazione di {itemsCount} {resource}","loading":"Caricamento {resource}","selected":"{selectedItemsCount} selezionati","allItemsSelected":"Tutti i {itemsLength}+ {resourceNamePlural} nel tuo negozio sono selezionati","selectAllItems":"Seleziona tutti i {itemsLength}+ {resourceNamePlural} nel tuo negozio","emptySearchResultTitle":"Impossibile trovare {resourceNamePlural}","emptySearchResultDescription":"Prova a cambiare i filtri o il termine di ricerca","selectButtonText":"Seleziona","a11yCheckboxDeselectAllSingle":"Deseleziona {resourceNameSingular}","a11yCheckboxSelectAllSingle":"Seleziona {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"Deseleziona tutto: {itemsLength} {resourceNamePlural}","a11yCheckboxSelectAllMultiple":"Seleziona tutto: {itemsLength} {resourceNamePlural}","Item":{"actionsDropdownLabel":"Azioni per {accessibilityLabel}","actionsDropdown":"Menu a discesa azioni","viewItem":"Visualizza dettagli di {itemName}"},"BulkActions":{"actionsActivatorLabel":"Azioni","moreActionsActivatorLabel":"Altre azioni"},"showingTotalCount":"Visualizzazione di {itemsCount} su {totalItemsCount} {resource}","allFilteredItemsSelected":"Tutti i {itemsLength}+ {resourceNamePlural} in questo filtro sono selezionati","selectAllFilteredItems":"Seleziona tutti i {resourceNamePlural} {itemsLength}+ in questo filtro"},"SkeletonPage":{"loadingLabel":"Caricamento della pagina"},"Tabs":{"toggleTabsLabel":"Altre visualizzazioni","newViewAccessibilityLabel":"Crea nuova vista","newViewTooltip":"Crea vista","Tab":{"rename":"Rinomina vista","duplicate":"Duplica vista","edit":"Modifica vista","editColumns":"Modifica colonne","delete":"Elimina vista","copy":"Copia di {name}","deleteModal":{"title":"Eliminare la vista?","description":"L'operazione non può essere annullata. La vista {viewName} non sarà più disponibile nel pannello di controllo.","cancel":"Annulla","delete":"Elimina vista"}},"RenameModal":{"title":"Rinomina vista","label":"Nome","cancel":"Annulla","create":"Salva","errors":{"sameName":"Esiste già una vista con questo nome. Scegli un nome diverso."}},"DuplicateModal":{"title":"Duplica vista","label":"Nome","cancel":"Annulla","create":"Crea vista","errors":{"sameName":"Esiste già una vista con questo nome. Scegli un nome diverso."}},"CreateViewModal":{"title":"Crea nuova vista","label":"Nome","cancel":"Annulla","create":"Crea vista","errors":{"sameName":"Esiste già una vista con questo nome. Scegli un nome diverso."}}},"Tag":{"ariaLabel":"Rimuovi {children}"},"TextField":{"characterCount":"{count} caratteri","characterCountWithMaxLength":"{count} caratteri utilizzati su {limit}"},"TopBar":{"toggleMenuLabel":"Apri/chiudi menu","SearchField":{"clearButtonLabel":"Rimuovi","search":"Cerca"}},"MediaCard":{"popoverButton":"Azioni","dismissButton":"Ignora"},"VideoThumbnail":{"playButtonA11yLabel":{"default":"Riproduci video","defaultWithDuration":"Riproduci video della lunghezza di {duration}","duration":{"hours":{"other":{"only":"{hourCount} ore","andMinutes":"{hourCount} ore e {minuteCount} minuti","andMinute":"{hourCount} ore e {minuteCount} minuto","minutesAndSeconds":"{hourCount} ore, {minuteCount} minuti e {secondCount} secondi","minutesAndSecond":"{hourCount} ore, {minuteCount} minuti e {secondCount} secondo","minuteAndSeconds":"{hourCount} ore, {minuteCount} minuto e {secondCount} secondi","minuteAndSecond":"{hourCount} ore, {minuteCount} minuto e {secondCount} secondo","andSeconds":"{hourCount} ore e {secondCount} secondi","andSecond":"{hourCount} ore e {secondCount} secondo"},"one":{"only":"{hourCount} ora","andMinutes":"{hourCount} ora e {minuteCount} minuti","andMinute":"{hourCount} ora e {minuteCount} minuto","minutesAndSeconds":"{hourCount} ora, {minuteCount} minuti e {secondCount} secondi","minutesAndSecond":"{hourCount} ora, {minuteCount} minuti e {secondCount} secondo","minuteAndSeconds":"{hourCount} ora, {minuteCount} minuto e {secondCount} secondi","minuteAndSecond":"{hourCount} ora, {minuteCount} minuto e {secondCount} secondo","andSeconds":"{hourCount} ora e {secondCount} secondi","andSecond":"{hourCount} ora e {secondCount} secondo"}},"minutes":{"other":{"only":"{minuteCount} minuti","andSeconds":"{minuteCount} minuti e {secondCount} secondi","andSecond":"{minuteCount} minuti e {secondCount} secondo"},"one":{"only":"{minuteCount} minuto","andSeconds":"{minuteCount} minuto e {secondCount} secondi","andSecond":"{minuteCount} minuto e {secondCount} secondo"}},"seconds":{"other":"{secondCount} secondi","one":"{secondCount} secondo","many":"{secondCount} secondi"}}}},"Loading":{"label":"Barra di caricamento della pagina"},"TooltipOverlay":{"accessibilityLabel":"Suggerimento: {label}"},"IndexProvider":{"defaultItemSingular":"Articolo","defaultItemPlural":"Articoli","allItemsSelected":"Tutti i {itemsLength}+ {resourceNamePlural} sono selezionati","selected":"{selectedItemsCount} selezionati","a11yCheckboxDeselectAllSingle":"Deseleziona {resourceNameSingular}","a11yCheckboxSelectAllSingle":"Seleziona {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"Deseleziona tutto: {itemsLength} {resourceNamePlural}","a11yCheckboxSelectAllMultiple":"Seleziona tutto: {itemsLength} {resourceNamePlural}"},"IndexTable":{"emptySearchTitle":"Impossibile trovare {resourceNamePlural}","emptySearchDescription":"Prova a cambiare i filtri o il termine di ricerca","onboardingBadgeText":"Novità","resourceLoadingAccessibilityLabel":"Caricamento {resourceNamePlural} in corso","selectAllLabel":"Seleziona tutto: {resourceNamePlural}","selected":"{selectedItemsCount} selezionati","undo":"Annulla","selectAllItems":"Seleziona tutti i {itemsLength}+ {resourceNamePlural}","selectItem":"Seleziona {resourceName}","selectButtonText":"Seleziona","sortAccessibilityLabel":"ordina {direction} per"},"Page":{"Header":{"rollupActionsLabel":"Visualizza azioni per {title}","pageReadyAccessibilityLabel":"{title}. Questa pagina è pronta"}},"FullscreenBar":{"back":"Indietro","accessibilityLabel":"Esci dalla modalità schermo intero"},"FilterPill":{"clear":"Cancella","unsavedChanges":"Modifiche non salvate - {label}"},"IndexFilters":{"searchFilterTooltip":"Cerca e filtra","searchFilterTooltipWithShortcut":"Cerca e filtra (F)","searchFilterAccessibilityLabel":"Cerca e filtra risultati","sort":"Ordina i risultati","addView":"Aggiungi nuova vista","newView":"Ricerca personalizzata","SortButton":{"ariaLabel":"Ordina i risultati","tooltip":"Ordina","title":"Ordina per","sorting":{"asc":"Crescente","desc":"Decrescente","az":"A-Z","za":"Z-A"}},"UpdateButtons":{"cancel":"Annulla","update":"Aggiorna","save":"Salva","saveAs":"Salva con nome","modal":{"title":"Salva vista come","label":"Nome","sameName":"Esiste già una vista con questo nome. Scegli un nome diverso.","save":"Salva","cancel":"Annulla"}},"EditColumnsButton":{"tooltip":"Modifica colonne","accessibilityLabel":"Personalizza l'ordine e la visibilità delle colonne della tabella"}},"ActionList":{"SearchField":{"clearButtonLabel":"Cancella","search":"Cerca","placeholder":"Cerca azioni"}},"AlphaTable":{"TableRowActions":{"heading":"Azioni","activatorAccessibilityLabel":"Apri azioni per riga","activatorLabel":"Azioni"},"Selection":{"select":"Seleziona {id}","selectPage":"Seleziona tutti i {count} elementi nella pagina","selectAll":"Seleziona tutti nel negozio","selectAllWithTotal":"Seleziona tutti i {total} elementi in questo negozio","unselectAll":"Deseleziona tutto","selectedPage":"{count} selezionati","selectedAll":"Tutti gli articoli selezionati nel negozio","selectedAllWithTotal":"Tutti {total} elementi selezionati nel negozio","selectionHeader":"Selezione","selectedSome":"{count}/{total} selezionati","undoSelectAll":"Annulla Seleziona tutti nel negozio","undoSelectAllWithTotal":"Annulla Seleziona tutti i {total} elementi nel negozio","showSelectedToggle":"Mostra selezione","showingOnlySelected":"Mostrati {count} selezionati","paginationLabel":"Mostrati {start}–{end} di {total} elementi selezionati"},"TableRowGroups":{"heading":"Mostra/nascondi gruppi di righe","toggle":"Attiva/disattiva visibilità di questo gruppo di righe"},"Sorting":{"sortAscending":"Ordina questa tabella in ordine crescente per {heading}","sortDescending":"Ordina questa tabella in ordine decrescente per {heading}"},"TableCell":{"spansColumns":"si estende su {count} colonne"},"BulkActions":{"activatorLabel":"Azioni"}},"SortPopover":{"ariaLabel":"Ordina i risultati","tooltip":"Ordina","title":"Ordina per","sorting":{"asc":"Crescente","desc":"Decrescente","az":"A-Z","za":"Z-A"}}}`)
-  , sq = {
-    Polaris: oq
-}
-  , lq = JSON.parse('{"Avatar":{"label":"アバター","labelWithInitials":"頭文字が{initials}のアバター"},"Autocomplete":{"spinnerAccessibilityLabel":"読み込み中","ellipsis":"{content}..."},"Badge":{"PROGRESS_LABELS":{"incomplete":"未完了","partiallyComplete":"一部完了済み","complete":"完了"},"TONE_LABELS":{"info":"情報","success":"成功","warning":"警告","attention":"注意","new":"新規","critical":"重大","readOnly":"読み取り専用","enabled":"有効"},"progressAndTone":"{toneLabel} {progressLabel}"},"Banner":{"dismissButton":"通知を閉じる"},"Button":{"spinnerAccessibilityLabel":"読み込み中"},"Common":{"checkbox":"チェックボックス","undo":"元に戻す","cancel":"キャンセル","clear":"クリア","close":"閉じる","submit":"送信","more":"その他"},"ContextualSaveBar":{"save":"保存","discard":"破棄"},"DataTable":{"sortAccessibilityLabel":"で{direction}を並び替える","navAccessibilityLabel":"表{direction}を1列スクロールする","totalsRowHeading":"合計","totalRowHeading":"合計"},"DatePicker":{"previousMonth":"先月 ({showPreviousYear}{previousMonthName}) を表示","nextMonth":"来月 ({nextYear}{nextMonth}) を表示","today":"今日 ","months":{"january":"1月","february":"2月","march":"3月","april":"4月","may":"5月","june":"6月","july":"7月","august":"8月","september":"9月","october":"10月","november":"11月","december":"12月"},"daysAbbreviated":{"monday":"月曜日","tuesday":"火曜日","wednesday":"水曜日","thursday":"木曜日","friday":"金曜日","saturday":"土曜日","sunday":"日曜日"},"days":{"monday":"月曜日","tuesday":"火曜日","wednesday":"水曜日","thursday":"木曜日","friday":"金曜日","saturday":"土曜日","sunday":"日曜日"},"start":"範囲の開始","end":"範囲の終了"},"DiscardConfirmationModal":{"title":"保存されていないすべての変更を破棄","message":"変更を破棄すると、最後に保存した後に編集した内容が削除されます。","primaryAction":"変更を破棄","secondaryAction":"編集を続ける"},"DropZone":{"errorOverlayTextFile":"ファイルタイプが有効ではありません","errorOverlayTextImage":"画像タイプが有効ではありません","single":{"overlayTextFile":"ファイルをドロップしてアップロード","overlayTextImage":"画像をドロップしてアップロード","actionTitleFile":"ファイルを追加","actionTitleImage":"画像を追加","actionHintFile":"またはファイルをドロップしてアップロード","actionHintImage":"または、画像をドロップしてアップロード","labelFile":"ファイルをアップロード","labelImage":"画像をアップロード","overlayTextVideo":"ビデオをドロップしてアップロードする","actionTitleVideo":"ビデオを追加する","actionHintVideo":"または、ビデオをドロップしてアップロードする","labelVideo":"ビデオをアップロード"},"allowMultiple":{"overlayTextFile":"ファイルをドロップしてアップロード","overlayTextImage":"画像をドロップしてアップロード","actionTitleFile":"ファイルを追加する","actionTitleImage":"画像を追加","actionHintFile":"または、ファイルをドロップしてアップロードする","actionHintImage":"または、画像をドロップしてアップロード","labelFile":"ファイルをアップロード","labelImage":"画像をアップロード","overlayTextVideo":"ビデオをドロップしてアップロードする","actionTitleVideo":"ビデオを追加する","actionHintVideo":"または、ビデオをドロップしてアップロードする","labelVideo":"ビデオをアップロード"},"errorOverlayTextVideo":"ビデオタイプが有効ではありません"},"EmptySearchResult":{"altText":"空の検索結果"},"Frame":{"skipToContent":"コンテンツにスキップ","Navigation":{"closeMobileNavigationLabel":"メニューを閉じる"},"navigationLabel":"メニュー"},"ActionMenu":{"RollupActions":{"rollupButton":"アクションを表示","rollupButtonBreadcrumbs":"{sectionName}のパンくずリストを表示する","rollupNavigationName":"{sectionName}のパンくずリスト","defaultRollupName":"パンくず"},"Actions":{"moreActions":"その他の操作"}},"Filters":{"moreFilters":"詳細な絞り込み","filter":"フィルター{resourceName}","noFiltersApplied":"絞り込みが適用されていません","cancel":"キャンセル","done":"完了","clearAllFilters":"すべての絞り込みをクリアする","clear":"クリア","clearLabel":"{filterName}をクリアする","moreFiltersWithCount":"詳細な絞り込み ({count})","addFilter":"絞り込みを追加","clearFilters":"すべてクリア","searchInView":"{viewName}内"},"Modal":{"iFrameTitle":"body markup","modalWarning":"これらの必要なプロパティがモーダルにありません: {missingProps}","unsavedChanges":"未保存の変更"},"Pagination":{"previous":"前へ","next":"次へ","pagination":"ページネーション"},"ProgressBar":{"negativeWarningMessage":"進行中のプロパティに渡される値に負数は使用できません。{progress}を0にリセットする。","exceedWarningMessage":"進行中のプロパティに渡される値は100を超えることはできません。{progress}を100に設定する。"},"ResourceList":{"sortingLabel":"並び替え","defaultItemSingular":"個","defaultItemPlural":"アイテム","showing":"{itemsCount}個の{resource}を表示中","loading":"{resource}を読み込んでいます","selected":"{selectedItemsCount}を選択済み","allItemsSelected":"ストアにあるすべての{itemsLength}以上の{resourceNamePlural}が選択されています","selectAllItems":"ストアにあるすべての{itemsLength}以上の{resourceNamePlural}を選択する","emptySearchResultTitle":"{resourceNamePlural}が見つかりませんでした","emptySearchResultDescription":"絞り込みや検索ワードを変更してみてください","selectButtonText":"選択","a11yCheckboxDeselectAllSingle":"{resourceNameSingular}の選択を解除する","a11yCheckboxSelectAllSingle":"{resourceNameSingular}を選択する","a11yCheckboxDeselectAllMultiple":"すべての{itemsLength}の{resourceNamePlural}の選択を解除する","a11yCheckboxSelectAllMultiple":"すべての{itemsLength}の{resourceNamePlural}を選択する","Item":{"actionsDropdownLabel":"{accessibilityLabel}のアクション","actionsDropdown":"アクションドロップダウン","viewItem":"{itemName}の詳細を表示する"},"BulkActions":{"actionsActivatorLabel":"アクション","moreActionsActivatorLabel":"その他の操作"},"showingTotalCount":"{totalItemsCount}の{itemsCount}、{resource}を表示中","allFilteredItemsSelected":"この絞り込み内の{itemsLength}と{resourceNamePlural}がすべて選択されます","selectAllFilteredItems":"この絞り込みの{itemsLength}と{resourceNamePlural}をすべて選択する"},"SkeletonPage":{"loadingLabel":"ページを読み込み中"},"Tabs":{"toggleTabsLabel":"その他のビュー","newViewAccessibilityLabel":"新たなビューを作成","newViewTooltip":"ビューを作成","Tab":{"rename":"ビューの名前を変更","duplicate":"ビューを複製","edit":"ビューを編集","editColumns":"列を編集","delete":"ビューを削除","copy":"{name}のコピー","deleteModal":{"title":"ビューを削除しますか？","description":"これは元に戻せません。{viewName}ビューは管理画面で使用できなくなります。","cancel":"キャンセル","delete":"ビューを削除"}},"RenameModal":{"title":"ビューの名前を変更する","label":"名前","cancel":"キャンセル","create":"保存","errors":{"sameName":"この名前のビューはすでに存在しています。別の名前を選択してください。"}},"DuplicateModal":{"title":"ビューを複製する","label":"名前","cancel":"キャンセル","create":"ビューを作成","errors":{"sameName":"この名前のビューはすでに存在しています。別の名前を選択してください。"}},"CreateViewModal":{"title":"新たなビューを作成する","label":"名前","cancel":"キャンセル","create":"ビューを作成","errors":{"sameName":"この名前のビューはすでに存在しています。別の名前を選択してください。"}}},"Tag":{"ariaLabel":"{children}を削除"},"TextField":{"characterCount":"{count}文字","characterCountWithMaxLength":"{limit}中{count}の文字を使用"},"TopBar":{"toggleMenuLabel":"メニューを切り替える","SearchField":{"clearButtonLabel":"クリア","search":"検索"}},"MediaCard":{"popoverButton":"アクション","dismissButton":"閉じる"},"VideoThumbnail":{"playButtonA11yLabel":{"default":"ビデオを再生","defaultWithDuration":"長さ{duration}の動画を再生する","duration":{"hours":{"other":{"only":"{hourCount}時間","andMinutes":"{hourCount}時間{minuteCount}分","andMinute":"{hourCount}時間{minuteCount}分","minutesAndSeconds":"{hourCount}時間{minuteCount}分{secondCount}秒","minutesAndSecond":"{hourCount}時間{minuteCount}分{secondCount}秒","minuteAndSeconds":"{hourCount}時間{minuteCount}分{secondCount}秒","minuteAndSecond":"{hourCount}時間{minuteCount}分{secondCount}秒","andSeconds":"{hourCount}時間{secondCount}秒","andSecond":"{hourCount}時間{secondCount}秒"},"one":{"only":"{hourCount}時間","andMinutes":"{hourCount}時間{minuteCount}分","andMinute":"{hourCount}時間{minuteCount}分","minutesAndSeconds":"{hourCount}時間{minuteCount}分{secondCount}秒","minutesAndSecond":"{hourCount}時間{minuteCount}分{secondCount}秒","minuteAndSeconds":"{hourCount}時間{minuteCount}分{secondCount}秒","minuteAndSecond":"{hourCount}時間{minuteCount}分{secondCount}秒","andSeconds":"{hourCount}時間{secondCount}秒","andSecond":"{hourCount}時間{secondCount}秒"}},"minutes":{"other":{"only":"{minuteCount}分","andSeconds":"{minuteCount}分{secondCount}秒","andSecond":"{minuteCount}分{secondCount}秒"},"one":{"only":"{minuteCount}分","andSeconds":"{minuteCount}分{secondCount}秒","andSecond":"{minuteCount}分{secondCount}秒"}},"seconds":{"other":"{secondCount}秒","one":"{secondCount}秒"}}}},"Loading":{"label":"ページの読み込み表示バー"},"TooltipOverlay":{"accessibilityLabel":"ツールチップ: {label}"},"IndexProvider":{"defaultItemSingular":"アイテム","defaultItemPlural":"アイテム","allItemsSelected":"すべての{itemsLength}+{resourceNamePlural}が選択されています","selected":"{selectedItemsCount}を選択済み","a11yCheckboxDeselectAllSingle":"{resourceNameSingular}の選択を解除する","a11yCheckboxSelectAllSingle":"{resourceNameSingular}を選択する","a11yCheckboxDeselectAllMultiple":"すべての{itemsLength}の{resourceNamePlural}の選択を解除する","a11yCheckboxSelectAllMultiple":"すべての{itemsLength}の{resourceNamePlural}を選択する"},"IndexTable":{"emptySearchTitle":"{resourceNamePlural}が見つかりませんでした","emptySearchDescription":"絞り込みや検索ワードを変更してみてください","onboardingBadgeText":"新規","resourceLoadingAccessibilityLabel":"{resourceNamePlural}を読み込んでいます...","selectAllLabel":"すべての{resourceNamePlural}を選択する","selected":"{selectedItemsCount}を選択済み","undo":"元に戻す","selectAllItems":"すべての{itemsLength}+{resourceNamePlural}を選択する","selectItem":"{resourceName}を選択する","selectButtonText":"選択","sortAccessibilityLabel":"で{direction}を並び替える"},"Page":{"Header":{"rollupActionsLabel":"{title}のアクションを表示","pageReadyAccessibilityLabel":"{title}。このページの準備が整いました"}},"FullscreenBar":{"back":"戻る","accessibilityLabel":"フルスクリーンモードを閉じる"},"FilterPill":{"clear":"クリア","unsavedChanges":"未保存の変更 - {label}"},"IndexFilters":{"searchFilterTooltip":"検索と絞り込み","searchFilterTooltipWithShortcut":"検索と絞り込み (F)","searchFilterAccessibilityLabel":"検索と絞り込みの結果","sort":"検索結果を並べ替える","addView":"新たなビューを追加","newView":"カスタム検索","SortButton":{"ariaLabel":"検索結果を並べ替える","tooltip":"並び替え","title":"並び替え","sorting":{"asc":"昇順","desc":"降順","az":"A～Z","za":"Z～A"}},"UpdateButtons":{"cancel":"キャンセル","update":"アップデート","save":"保存","saveAs":"名前を付けて保存","modal":{"title":"表示内容を保存","label":"名前","sameName":"この名前のビューはすでに存在しています。別の名前を選択してください。","save":"保存","cancel":"キャンセル"}},"EditColumnsButton":{"tooltip":"列を編集","accessibilityLabel":"表の列の順序および表示をカスタマイズする"}},"ActionList":{"SearchField":{"clearButtonLabel":"クリア","search":"検索","placeholder":"アクションを検索"}},"AlphaTable":{"TableRowActions":{"heading":"アクション","activatorAccessibilityLabel":"ローアクションを開く","activatorLabel":"アクション"},"Selection":{"select":"{id}を選択","selectPage":"ページ上のすべて ({count})を選択","selectAll":"ストア内のすべてを選択する","selectAllWithTotal":"このストアにあるすべて ({total}) を選択","unselectAll":"すべての選択を解除","selectedPage":"{count}個を選択済み","selectedAll":"すべてストアで選択","selectedAllWithTotal":"ストアで選択済みのすべて ({total})","selectionHeader":"選択","selectedSome":"{count}/{total}を選択済み","undoSelectAll":"ストア内のすべての選択を元に戻す","undoSelectAllWithTotal":"ストア内の{total}のすべての選択を元に戻す","showSelectedToggle":"表示が選択されました","showingOnlySelected":"選択した{count}個を表示中","paginationLabel":"選択されたアイテム{total}点のうち、{start}-{end}を表示する"},"TableRowGroups":{"heading":"行グループを切り替える","toggle":"この行グループの表示/非表示を切り替える"},"Sorting":{"sortAscending":"この表を{heading}で昇順に並べ替える","sortDescending":"この表を{heading}で降順に並べ替える"},"TableCell":{"spansColumns":"{count}列にまたがります"},"BulkActions":{"activatorLabel":"アクション"}},"SortPopover":{"ariaLabel":"検索結果を並べ替える","tooltip":"並び替え","title":"並べ替え","sorting":{"asc":"昇順","desc":"降順","az":"A～Z","za":"Z～A"}}}')
-  , cq = {
-    Polaris: lq
-}
-  , uq = JSON.parse('{"Avatar":{"label":"아바타","labelWithInitials":"아바타(이니셜: {initials})"},"Autocomplete":{"spinnerAccessibilityLabel":"로드 중","ellipsis":"{content}…"},"Badge":{"PROGRESS_LABELS":{"incomplete":"미완료","partiallyComplete":"일부 완료","complete":"완료"},"TONE_LABELS":{"info":"정보","success":"성공","warning":"경고","attention":"수신자","new":"신규","critical":"중요","readOnly":"읽기 전용","enabled":"활성화됨"},"progressAndTone":"{toneLabel} {progressLabel}"},"Banner":{"dismissButton":"알림 무시"},"Button":{"spinnerAccessibilityLabel":"로드 중"},"Common":{"checkbox":"확인란","undo":"실행 취소","cancel":"취소","clear":"지우기","close":"닫기","submit":"제출","more":"자세히"},"ContextualSaveBar":{"save":"저장","discard":"폐기"},"DataTable":{"sortAccessibilityLabel":"{direction} 정렬 기준","navAccessibilityLabel":"표를 {direction} 방향으로 1열 스크롤","totalsRowHeading":"총계","totalRowHeading":"총계"},"DatePicker":{"previousMonth":"지난 달 표시, {showPreviousYear} {previousMonthName}","nextMonth":"다음 달 표시, {nextYear} {nextMonth}","today":"오늘 ","months":{"january":"1월","february":"2월","march":"3월","april":"4월","may":"5월","june":"6월","july":"7월","august":"8월","september":"9월","october":"10월","november":"11월","december":"12월"},"daysAbbreviated":{"monday":"월","tuesday":"화","wednesday":"수","thursday":"목","friday":"금","saturday":"토","sunday":"일"},"days":{"monday":"월요일","tuesday":"화요일","wednesday":"수요일","thursday":"목요일","friday":"금요일","saturday":"토요일","sunday":"일요일"},"start":"시작 범위","end":"끝 범위"},"DiscardConfirmationModal":{"title":"저장되지 않은 모든 변경 사항 폐기","message":"변경을 취소하면 마지막으로 저장한 이후에 편집한 내용이 삭제됩니다.","primaryAction":"변경 사항 버리기","secondaryAction":"계속 편집"},"DropZone":{"errorOverlayTextFile":"파일 형식이 유효하지 않습니다.","errorOverlayTextImage":"이미지 형식이 유효하지 않습니다.","single":{"overlayTextFile":"업로드할 파일 놓기","overlayTextImage":"업로드할 이미지 놓기","actionTitleFile":"파일 추가","actionTitleImage":"이미지 추가","actionHintFile":"또는 업로드할 파일 놓기","actionHintImage":"또는 업로드할 이미지 놓기","labelFile":"파일 업로드","labelImage":"이미지 업로드","overlayTextVideo":"업로드할 동영상 놓기","actionTitleVideo":"동영상 추가","actionHintVideo":"또는 업로드할 동영상 놓기","labelVideo":"동영상 업로드"},"allowMultiple":{"overlayTextFile":"업로드할 파일 놓기","overlayTextImage":"업로드할 이미지 놓기","actionTitleFile":"파일 추가","actionTitleImage":"이미지 추가","actionHintFile":"또는 업로드할 파일 놓기","actionHintImage":"또는 업로드할 이미지 놓기","labelFile":"파일 업로드","labelImage":"이미지 업로드","overlayTextVideo":"업로드할 동영상 놓기","actionTitleVideo":"동영상 추가","actionHintVideo":"또는 업로드할 동영상 놓기","labelVideo":"동영상 업로드"},"errorOverlayTextVideo":"동영상 형식이 유효하지 않음"},"EmptySearchResult":{"altText":"빈 검색 결과"},"Frame":{"skipToContent":"콘텐츠로 건너뛰기","Navigation":{"closeMobileNavigationLabel":"탐색 닫기"},"navigationLabel":"탐색"},"ActionMenu":{"RollupActions":{"rollupButton":"작업 보기","rollupButtonBreadcrumbs":"{sectionName}의 이동 경로 보기","rollupNavigationName":"{sectionName}의 이동 경로","defaultRollupName":"이동 경로"},"Actions":{"moreActions":"기타 작업"}},"Filters":{"moreFilters":"추가 필터","filter":"{resourceName} 필터","noFiltersApplied":"필터 적용 없음","cancel":"취소","done":"완료","clearAllFilters":"모든 필터 지우기","clear":"지우기","clearLabel":"{filterName} 지우기","moreFiltersWithCount":"추가 필터({count}개)","addFilter":"필터 추가","clearFilters":"모두 지우기","searchInView":"{viewName} 보기에서 검색 중"},"Modal":{"iFrameTitle":"본문 표시","modalWarning":"모달에서 누락된 필수 속성: {missingProps}","unsavedChanges":"저장되지 않은 변경 사항"},"Pagination":{"previous":"이전","next":"다음","pagination":"페이지 매김"},"ProgressBar":{"negativeWarningMessage":"progress 속성으로 전달되는 값은 음수일 수 없습니다. {progress}을(를) 0으로 재설정합니다.","exceedWarningMessage":"progress 속성으로 전달되는 값은 100을 초과할 수 없습니다. {progress}을(를) 100으로 설정합니다."},"ResourceList":{"sortingLabel":"정렬 기준","defaultItemSingular":"품목","defaultItemPlural":"품목","showing":"{itemsCount}개의 {resource} 표시 중","loading":"{resource} 로드 중","selected":"{selectedItemsCount}개 선택됨","allItemsSelected":"스토어에서 길이가 {itemsLength}보다 긴 {resourceNamePlural}을(를) 모두 선택했습니다.","selectAllItems":"스토어에서 길이가 {itemsLength}보다 긴 모든 {resourceNamePlural} 선택","emptySearchResultTitle":"{resourceNamePlural} 없음","emptySearchResultDescription":"필터나 검색어를 변경해 보십시오.","selectButtonText":"선택","a11yCheckboxDeselectAllSingle":"{resourceNameSingular} 선택 취소","a11yCheckboxSelectAllSingle":"{resourceNameSingular} 선택","a11yCheckboxDeselectAllMultiple":"길이가 {itemsLength}인 모든 {resourceNamePlural} 선택 취소","a11yCheckboxSelectAllMultiple":"길이가 {itemsLength}인 모든 {resourceNamePlural} 선택","Item":{"actionsDropdownLabel":"{accessibilityLabel}에 대한 작업","actionsDropdown":"작업 드롭다운","viewItem":"{itemName}의 세부 정보 보기"},"BulkActions":{"actionsActivatorLabel":"작업","moreActionsActivatorLabel":"기타 작업"},"showingTotalCount":"{resource} {totalItemsCount}개 중 {itemsCount}개 표시","allFilteredItemsSelected":"이 필터에서 길이가 {itemsLength}보다 긴 {resourceNamePlural}을(를) 모두 선택했습니다.","selectAllFilteredItems":"이 필터에서 길이가 {itemsLength}보다 긴 모든 {resourceNamePlural} 선택"},"SkeletonPage":{"loadingLabel":"페이지 로딩"},"Tabs":{"toggleTabsLabel":"더 보기","newViewAccessibilityLabel":"새 보기 생성","newViewTooltip":"보기 생성","Tab":{"rename":"보기 이름 바꾸기","duplicate":"보기 복제","edit":"보기 편집","editColumns":"열 편집","delete":"보기 삭제","copy":"{name}의 사본","deleteModal":{"title":"보기를 삭제하시겠습니까?","description":"이 작업은 취소할 수 없습니다. 관리자에서 더 이상 {viewName} 보기를 사용할 수 없습니다.","cancel":"취소","delete":"보기 삭제"}},"RenameModal":{"title":"보기 이름 바꾸기","label":"이름","cancel":"취소","create":"저장","errors":{"sameName":"이 이름을 가진 보기가 이미 있습니다. 다른 이름을 선택하십시오."}},"DuplicateModal":{"title":"보기 복제","label":"이름","cancel":"취소","create":"보기 생성","errors":{"sameName":"이 이름을 가진 보기가 이미 있습니다. 다른 이름을 선택하십시오."}},"CreateViewModal":{"title":"새 보기 생성","label":"이름","cancel":"취소","create":"보기 생성","errors":{"sameName":"이 이름을 가진 보기가 이미 있습니다. 다른 이름을 선택하십시오."}}},"Tag":{"ariaLabel":"{children} 제거"},"TextField":{"characterCount":"{count}자","characterCountWithMaxLength":"{count}/{limit}자 입력함"},"TopBar":{"toggleMenuLabel":"토글 메뉴","SearchField":{"clearButtonLabel":"지우기","search":"검색"}},"MediaCard":{"popoverButton":"작업","dismissButton":"무시"},"VideoThumbnail":{"playButtonA11yLabel":{"default":"동영상 재생","defaultWithDuration":"동영상 재생(길이: {duration})","duration":{"hours":{"other":{"only":"{hourCount}시간","andMinutes":"{hourCount}시간 {minuteCount}분","andMinute":"{hourCount}시간 {minuteCount}분","minutesAndSeconds":"{hourCount}시간 {minuteCount}분 {secondCount}초","minutesAndSecond":"{hourCount}시간 {minuteCount}분 {secondCount}초","minuteAndSeconds":"{hourCount}시간 {minuteCount}분 {secondCount}초","minuteAndSecond":"{hourCount}시간 {minuteCount}분 {secondCount}초","andSeconds":"{hourCount}시간 {secondCount}초","andSecond":"{hourCount}시간 {secondCount}초"},"one":{"only":"{hourCount}시간","andMinutes":"{hourCount}시간 {minuteCount}분","andMinute":"{hourCount}시간 {minuteCount}분","minutesAndSeconds":"{hourCount}시간 {minuteCount}분 {secondCount}초","minutesAndSecond":"{hourCount}시간 {minuteCount}분 {secondCount}초","minuteAndSeconds":"{hourCount}시간 {minuteCount}분 {secondCount}초","minuteAndSecond":"{hourCount}시간 {minuteCount}분 {secondCount}초","andSeconds":"{hourCount}시간 {secondCount}초","andSecond":"{hourCount}시간 {secondCount}초"}},"minutes":{"other":{"only":"{minuteCount}분","andSeconds":"{minuteCount}분 {secondCount}초","andSecond":"{minuteCount}분 {secondCount}초"},"one":{"only":"{minuteCount}분","andSeconds":"{minuteCount}분 {secondCount}초","andSecond":"{minuteCount}분 {secondCount}초"}},"seconds":{"other":"{secondCount}초","one":"{secondCount}초"}}}},"Loading":{"label":"페이지 로딩 표시줄"},"TooltipOverlay":{"accessibilityLabel":"툴팁: {label}"},"IndexProvider":{"defaultItemSingular":"품목","defaultItemPlural":"품목","allItemsSelected":"길이가 {itemsLength} 이상인 모든 {resourceNamePlural}이(가) 선택되었습니다.","selected":"{selectedItemsCount}개 선택됨","a11yCheckboxDeselectAllSingle":"{resourceNameSingular} 선택 취소","a11yCheckboxSelectAllSingle":"{resourceNameSingular} 선택","a11yCheckboxDeselectAllMultiple":"{itemsLength}개의 모든 {resourceNamePlural} 선택 취소","a11yCheckboxSelectAllMultiple":"길이가 {itemsLength}인 모든 {resourceNamePlural} 선택"},"IndexTable":{"emptySearchTitle":"{resourceNamePlural} 없음","emptySearchDescription":"필터나 검색어를 변경해 보십시오.","onboardingBadgeText":"신규","resourceLoadingAccessibilityLabel":"{resourceNamePlural} 로드 중...","selectAllLabel":"{resourceNamePlural} 모두 선택","selected":"{selectedItemsCount}개 선택됨","undo":"실행 취소","selectAllItems":"길이가 {itemsLength} 이상인 모든 {resourceNamePlural} 선택","selectItem":"{resourceName} 선택","selectButtonText":"선택","sortAccessibilityLabel":"{direction} 정렬 기준"},"Page":{"Header":{"rollupActionsLabel":"{title} 작업 보기","pageReadyAccessibilityLabel":"{title}. 이 페이지가 준비되었습니다"}},"FullscreenBar":{"back":"뒤로","accessibilityLabel":"전체 화면 모드 종료"},"FilterPill":{"clear":"지우기","unsavedChanges":"저장되지 않은 변경 사항 - {label}"},"IndexFilters":{"searchFilterTooltip":"검색 및 필터링","searchFilterTooltipWithShortcut":"검색 및 필터링(F)","searchFilterAccessibilityLabel":"결과 검색 및 필터링","sort":"결과 정렬","addView":"새 보기 추가","newView":"사용자 지정 검색","SortButton":{"ariaLabel":"결과 정렬","tooltip":"정렬","title":"정렬 기준","sorting":{"asc":"오름차순","desc":"내림차순","az":"A-Z","za":"Z-A"}},"UpdateButtons":{"cancel":"취소","update":"업데이트","save":"저장","saveAs":"다른 이름으로 저장","modal":{"title":"다른 이름으로 보기 저장","label":"이름","sameName":"이 이름을 가진 보기가 이미 있습니다. 다른 이름을 선택하십시오.","save":"저장","cancel":"취소"}},"EditColumnsButton":{"tooltip":"열 편집","accessibilityLabel":"표의 주문 열 및 표시 방법 사용자 지정"}},"ActionList":{"SearchField":{"clearButtonLabel":"지우기","search":"검색","placeholder":"작업 검색"}},"AlphaTable":{"TableRowActions":{"heading":"작업","activatorAccessibilityLabel":"행 작업 열기","activatorLabel":"작업"},"TableRowGroups":{"heading":"행 그룹 전환","toggle":"이 행 그룹의 표시 유형 전환"},"Sorting":{"sortAscending":"이 표를 {heading}을(를) 기준으로 오름차순으로 정렬","sortDescending":"이 표를 {heading}을(를) 기준으로 내림차순으로 정렬"},"Selection":{"select":"{id} 선택","selectPage":"페이지에서 {count}개 모두 선택","selectAll":"스토어에서 모두 선택","selectAllWithTotal":"스토어에서 {total}개 모두 선택","selectionHeader":"선택","unselectAll":"선택 모두 취소","selectedPage":"{count}개 선택됨","selectedAll":"스토어에서 모두 선택됨","selectedAllWithTotal":"스토어에서 {total}개 모두 선택됨","selectedSome":"{count}/{total}개 선택됨","undoSelectAll":"스토어에서 모두 선택 취소","undoSelectAllWithTotal":"스토어에서 {total}개 모두 선택 취소","showSelectedToggle":"선택 항목 표시","showingOnlySelected":"선택한 {count}개 항목 표시","paginationLabel":"선택 항목 {total}개 중 {start}~{end} 표시"},"TableCell":{"spansColumns":"{count}개 열에 걸쳐 있음"},"BulkActions":{"activatorLabel":"작업"}},"SortPopover":{"ariaLabel":"결과 정렬","tooltip":"정렬","title":"정렬 기준","sorting":{"asc":"오름차순","desc":"내림차순","az":"A-Z","za":"Z-A"}}}')
-  , dq = {
-    Polaris: uq
-}
-  , mq = JSON.parse('{"Avatar":{"label":"Avatar","labelWithInitials":"Avatar med initialene {initials}"},"Autocomplete":{"spinnerAccessibilityLabel":"Laster inn","ellipsis":"{content} …"},"Badge":{"PROGRESS_LABELS":{"incomplete":"Ufullstendig","partiallyComplete":"Delvis fullført","complete":"Ferdig"},"TONE_LABELS":{"info":"Informasjon","success":"Vellykket","warning":"Advarsel","attention":"Obs","new":"Ny","critical":"Kritisk","readOnly":"Skrivebeskyttet","enabled":"Aktivert"},"progressAndTone":"{toneLabel} {progressLabel}"},"Banner":{"dismissButton":"Avvis varsel"},"Button":{"spinnerAccessibilityLabel":"Laster inn"},"Common":{"checkbox":"avmerkingsboks","undo":"Angre","cancel":"Avbryt","clear":"Fjern","close":"Lukk","submit":"Send inn","more":"Mer"},"ContextualSaveBar":{"save":"Lagre","discard":"Forkast"},"DataTable":{"sortAccessibilityLabel":"sortere {direction} etter","navAccessibilityLabel":"Rull tabell {direction} en kolonne","totalsRowHeading":"Totalt","totalRowHeading":"Total"},"DatePicker":{"previousMonth":"Vis forrige måned, {previousMonthName} {showPreviousYear}","nextMonth":"Vis neste måned, {nextMonth} {nextYear}","today":"I dag ","months":{"january":"Januar","february":"Februar","march":"Mars","april":"April","may":"Mai","june":"Juni","july":"Juli","august":"August","september":"September","october":"Oktober","november":"November","december":"Desember"},"daysAbbreviated":{"monday":"man","tuesday":"tir","wednesday":"ons","thursday":"tor","friday":"fre","saturday":"lør","sunday":"søn"},"days":{"monday":"Mandag","tuesday":"Tirsdag","wednesday":"Onsdag","thursday":"Torsdag","friday":"Fredag","saturday":"Lørdag","sunday":"Søndag"},"start":"Start av intervall","end":"Slutt på intervall"},"DiscardConfirmationModal":{"title":"Forkast alle ulagrede endringer","message":"Hvis du forkaster endringer, sletter du alt du har gjort siden du sist gang du lagret.","primaryAction":"Forkast endringer","secondaryAction":"Fortsett redigering"},"DropZone":{"errorOverlayTextFile":"Filtypen er ikke gyldig","errorOverlayTextImage":"Bildetypen er ikke gyldig","single":{"overlayTextFile":"Slipp fil for å laste opp","overlayTextImage":"Slipp bilde for å laste opp","actionTitleFile":"Legg til en fil","actionTitleImage":"Legg til bilde","actionHintFile":"eller slipp filen for å laste den opp","actionHintImage":"eller slipp bildet for å laste opp","labelFile":"Last opp fil","labelImage":"Last opp bilde","overlayTextVideo":"Slipp video for å laste opp","actionTitleVideo":"Legg til video","actionHintVideo":"eller slipp video for å laste opp","labelVideo":"Last opp video"},"allowMultiple":{"overlayTextFile":"Slipp filer for å laste opp","overlayTextImage":"Slipp bilder for å laste opp","actionTitleFile":"Legg til filer","actionTitleImage":"Legg til bilder","actionHintFile":"eller slipp filer for å laste opp","actionHintImage":"eller slipp bilder for å laste opp","labelFile":"Last opp filer","labelImage":"Laste opp bilder","overlayTextVideo":"Slipp videoer for å laste opp","actionTitleVideo":"Legg til videoer","actionHintVideo":"eller slipp videoer for å laste opp","labelVideo":"Last opp videoer"},"errorOverlayTextVideo":"Videotypen er ugyldig"},"EmptySearchResult":{"altText":"Tøm søkeresultater"},"Frame":{"skipToContent":"Gå videre til innholdet","Navigation":{"closeMobileNavigationLabel":"Lukk navigasjon"},"navigationLabel":"Navigasjon"},"ActionMenu":{"RollupActions":{"rollupButton":"Vis handlinger","rollupButtonBreadcrumbs":"Vis søkebaner for {sectionName}","rollupNavigationName":"Søkebaner for {sectionName}","defaultRollupName":"Søkebaner"},"Actions":{"moreActions":"Flere handlinger"}},"Filters":{"moreFilters":"Flere filtre","filter":"Filter {resourceName}","noFiltersApplied":"Ingen filtre ble brukt","cancel":"Avbryt","done":"Ferdig","clearAllFilters":"Fjern alle filtre","clear":"Fjern","clearLabel":"Fjern {filterName}","moreFiltersWithCount":"Flere filtre ({count})","addFilter":"Legg til filter","clearFilters":"Fjern alle","searchInView":"i:{viewName}"},"Modal":{"iFrameTitle":"brødtekstpåslag","modalWarning":"Disse nødvendige egenskapene mangler fra Modal: {missingProps}","unsavedChanges":"Ulagrede endringer"},"Pagination":{"previous":"Forrige","next":"Neste","pagination":"Sideinndeling"},"ProgressBar":{"negativeWarningMessage":"Verdier som er overført til fremgangsrekvisitten, bør ikke være negative. Tilbakestiller {progress} til 0.","exceedWarningMessage":"Verdier som er overført til fremgangsrekvisitten, bør ikke overstige 100. Setter {progress} til 100."},"ResourceList":{"sortingLabel":"Sorter etter","defaultItemSingular":"vare","defaultItemPlural":"varer","showing":"Viser {itemsCount} {resource}","loading":"Laster inn {resource}","selected":"{selectedItemsCount} valgt","allItemsSelected":"Alle {itemsLength} + {resourceNamePlural} i butikken din er valgt","selectAllItems":"Velg alle {itemsLength}+ {resourceNamePlural} i butikken din","emptySearchResultTitle":"Fant ingen {resourceNamePlural}","emptySearchResultDescription":"Prøv å endre filtrene eller søkeord","selectButtonText":"Velg","a11yCheckboxDeselectAllSingle":"Opphev valg av {resourceNameSingular}","a11yCheckboxSelectAllSingle":"Velg {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"Opphev alle valg av {itemsLength} {resourceNamePlural}","a11yCheckboxSelectAllMultiple":"Velg alle {itemsLength} {resourceNamePlural}","Item":{"actionsDropdownLabel":"Handlinger for {accessibilityLabel}","actionsDropdown":"Handlinger-rullegardin","viewItem":"Vis detaljer for {itemName}"},"BulkActions":{"actionsActivatorLabel":"Handlinger","moreActionsActivatorLabel":"Flere handlinger"},"showingTotalCount":"Viser {itemsCount} av {totalItemsCount} {resource}","allFilteredItemsSelected":"Alle {itemsLength} + {resourceNamePlural} i dette filteret er valgt","selectAllFilteredItems":"Velg alle {itemsLength}+ {resourceNamePlural} i dette filteret"},"SkeletonPage":{"loadingLabel":"Siden laster"},"Tabs":{"toggleTabsLabel":"Flere visninger","newViewAccessibilityLabel":"Opprett en ny visning","newViewTooltip":"Opprett visning","Tab":{"rename":"Gi visning nytt navn","duplicate":"Dupliser visning","edit":"Rediger visning","editColumns":"Rediger kolonner","delete":"Slett visning","copy":"Kopi av {name}","deleteModal":{"title":"Slett visning?","description":"Dette kan ikke omgjøres i ettertid. {viewName}-visningen vil ikke lenger være tilgjengelig i administrator.","cancel":"Avbryt","delete":"Slett visning"}},"RenameModal":{"title":"Gi visning nytt navn","label":"Navn","cancel":"Avbryt","create":"Lagre","errors":{"sameName":"Det finnes allerede en visning med dette navnet. Velg et annet navn."}},"DuplicateModal":{"title":"Dupliser visning","label":"Navn","cancel":"Avbryt","create":"Opprett visning","errors":{"sameName":"Det finnes allerede en visning med dette navnet. Velg et annet navn."}},"CreateViewModal":{"title":"Opprett en ny visning","label":"Navn","cancel":"Avbryt","create":"Opprett visning","errors":{"sameName":"Det finnes allerede en visning med dette navnet. Velg et annet navn."}}},"Tag":{"ariaLabel":"Fjern {children}"},"TextField":{"characterCount":"{count} tegn","characterCountWithMaxLength":"{count} av {limit} tegn brukt"},"TopBar":{"toggleMenuLabel":"Aktiver/deaktiver meny","SearchField":{"clearButtonLabel":"Fjern","search":"Søk"}},"MediaCard":{"popoverButton":"Handlinger","dismissButton":"Avvis"},"VideoThumbnail":{"playButtonA11yLabel":{"default":"Spill av video","defaultWithDuration":"Spill video med lengde {duration}","duration":{"hours":{"other":{"only":"{hourCount} timer","andMinutes":"{hourCount} timer og {minuteCount} minutter","andMinute":"{hourCount} timer og {minuteCount} minutt","minutesAndSeconds":"{hourCount} timer, {minuteCount} minutter og {secondCount} sekunder","minutesAndSecond":"{hourCount} timer, {minuteCount} minutter og {secondCount} sekund","minuteAndSeconds":"{hourCount} timer, {minuteCount} minutt og {secondCount} sekunder","minuteAndSecond":"{hourCount} timer, {minuteCount} minutt og {secondCount} sekund","andSeconds":"{hourCount} timer og {secondCount} sekunder","andSecond":"{hourCount} timer og {secondCount} sekund"},"one":{"only":"{hourCount} time","andMinutes":"{hourCount} time og {minuteCount} minutter","andMinute":"{hourCount} time og {minuteCount} minutt","minutesAndSeconds":"{hourCount} time, {minuteCount} minutter og {secondCount} sekunder","minutesAndSecond":"{hourCount} time, {minuteCount} minutter og {secondCount} sekund","minuteAndSeconds":"{hourCount} time, {minuteCount} minutt og {secondCount} sekunder","minuteAndSecond":"{hourCount} time, {minuteCount} minutt og {secondCount} sekund","andSeconds":"{hourCount} time og {secondCount} sekunder","andSecond":"{hourCount} time og {secondCount} sekund"}},"minutes":{"other":{"only":"{minuteCount} minutter","andSeconds":"{minuteCount} minutter og {secondCount} sekunder","andSecond":"{minuteCount} minutter og {secondCount} sekund"},"one":{"only":"{minuteCount} minutt","andSeconds":"{minuteCount} minutt og {secondCount} sekunder","andSecond":"{minuteCount} minutt og {secondCount} sekund"}},"seconds":{"other":"{secondCount} sekunder","one":"{secondCount} sekund"}}}},"Loading":{"label":"Sidelastingslinje"},"TooltipOverlay":{"accessibilityLabel":"Verktøytips: {label}"},"IndexProvider":{"defaultItemSingular":"Vare","defaultItemPlural":"Varer","allItemsSelected":"Alle {itemsLength} + {resourceNamePlural} er valgt","selected":"{selectedItemsCount} valgt","a11yCheckboxDeselectAllSingle":"Opphev valg av {resourceNameSingular}","a11yCheckboxSelectAllSingle":"Velg {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"Opphev alle valg av {itemsLength} {resourceNamePlural}","a11yCheckboxSelectAllMultiple":"Velg alle {itemsLength} {resourceNamePlural}"},"IndexTable":{"emptySearchTitle":"Fant ingen {resourceNamePlural}","emptySearchDescription":"Prøv å endre filtrene eller søkeord","onboardingBadgeText":"Ny","resourceLoadingAccessibilityLabel":"Laster inn {resourceNamePlural} …","selectAllLabel":"Velg alle {resourceNamePlural}","selected":"{selectedItemsCount} valgt","undo":"Angre","selectAllItems":"Velg alle {itemsLength} {resourceNamePlural}","selectItem":"Velg {resourceName}","selectButtonText":"Velg","sortAccessibilityLabel":"sorter {direction} etter"},"Page":{"Header":{"rollupActionsLabel":"Vis handlinger for {title}","pageReadyAccessibilityLabel":"{title}. Denne siden er klar"}},"FullscreenBar":{"back":"Tilbake","accessibilityLabel":"Avslutt fullskjermmodus"},"FilterPill":{"clear":"Fjern","unsavedChanges":"Ulagrede endringer – {label}"},"IndexFilters":{"searchFilterTooltip":"Søk og filtrer","searchFilterTooltipWithShortcut":"Søk og filtrer (F)","searchFilterAccessibilityLabel":"Søk og filtrer resultater","sort":"Sorter resultatene","addView":"Legg til en ny visning","newView":"Tilpasset søk","SortButton":{"ariaLabel":"Sorter resultatene","tooltip":"Sorter","title":"Sorter etter","sorting":{"asc":"Stigende","desc":"Synkende","az":"A–Å","za":"Å–A"}},"UpdateButtons":{"cancel":"Avbryt","update":"Oppdater","save":"Lagre","saveAs":"Lagre som","modal":{"title":"Lagre visningen som","label":"Navn","sameName":"Det finnes allerede en visning med dette navnet. Velg et annet navn.","save":"Lagre","cancel":"Avbryt"}},"EditColumnsButton":{"tooltip":"Endre kolonner","accessibilityLabel":"Tilpass kolonnerekkefølge og -synlighet i tabellen"}},"ActionList":{"SearchField":{"clearButtonLabel":"Tøm","search":"Søk","placeholder":"Søk i handlinger"}},"AlphaTable":{"TableRowActions":{"heading":"Handlinger","activatorAccessibilityLabel":"Åpne handlinger for rad","activatorLabel":"Handlinger"},"TableRowGroups":{"heading":"Veksle mellom radgrupper","toggle":"Slå synligheten til denne radgruppen av og på"},"Sorting":{"sortAscending":"Sorter denne tabellen etter {heading} i stigende rekkefølge","sortDescending":"Sorter denne tabellen etter {heading} i synkende rekkefølge"},"Selection":{"select":"Velg {id}","selectPage":"Velg alle {count} på siden","selectAll":"Velg alt i butikken","selectAllWithTotal":"Velg alle {total} i butikken","selectionHeader":"Utvalg","unselectAll":"Opphev valget av alle","selectedPage":"{count} er valgt","selectedAll":"Alt er valgt i butikken","selectedAllWithTotal":"Alle {total} er valgt i butikken","selectedSome":"{count}/{total} er valgt","undoSelectAll":"Du kan angre markeringen av alt i butikken","undoSelectAllWithTotal":"Du kan angre markeringen av alle {total} i butikken","showSelectedToggle":"Vis valgte","showingOnlySelected":"Viser {count} valgt","paginationLabel":"Viser {start}–{end} av {total} valgte varer"},"TableCell":{"spansColumns":"dekker {count} kolonner"},"BulkActions":{"activatorLabel":"Handlinger"}},"SortPopover":{"ariaLabel":"Sorter resultatene","tooltip":"Sorter","title":"Sorter etter","sorting":{"asc":"Stigende","desc":"Synkende","az":"A–Å","za":"Å–A"}}}')
-  , pq = {
-    Polaris: mq
-}
-  , fq = JSON.parse(`{"Avatar":{"label":"Avatar","labelWithInitials":"Avatar met initialen {initials}"},"Autocomplete":{"spinnerAccessibilityLabel":"Laden","ellipsis":"{content}..."},"Badge":{"PROGRESS_LABELS":{"incomplete":"Onvolledig","partiallyComplete":"Gedeeltelijk voltooid","complete":"Voltooid"},"TONE_LABELS":{"info":"Info","success":"Geslaagd","warning":"Waarschuwing","attention":"Let op","new":"Nieuw","critical":"Kritiek","readOnly":"Alleen-lezen","enabled":"Ingeschakeld"},"progressAndTone":"{toneLabel} {progressLabel}"},"Banner":{"dismissButton":"Melding sluiten"},"Button":{"spinnerAccessibilityLabel":"Laden"},"Common":{"checkbox":"selectievakje","undo":"Ongedaan maken","cancel":"Annuleren","clear":"Wissen","close":"Sluiten","submit":"Indienen","more":"Meer"},"ContextualSaveBar":{"save":"Opslaan","discard":"Verwerpen"},"DataTable":{"sortAccessibilityLabel":"sorteer {direction} op","navAccessibilityLabel":"Scroll tabel {direction} één kolom","totalsRowHeading":"Totalen","totalRowHeading":"Totaal"},"DatePicker":{"previousMonth":"Vorige maand weergeven, {previousMonthName} {showPreviousYear}","nextMonth":"Volgende maand weergeven, {nextMonth} {nextYear}","today":"Vandaag ","months":{"january":"januari","february":"februari","march":"maart","april":"april","may":"mei","june":"juni","july":"juli","august":"augustus","september":"september","october":"oktober","november":"november","december":"december"},"daysAbbreviated":{"monday":"ma.","tuesday":"di.","wednesday":"wo.","thursday":"do.","friday":"vr.","saturday":"za.","sunday":"zo."},"days":{"monday":"maandag","tuesday":"dinsdag","wednesday":"woensdag","thursday":"donderdag","friday":"vrijdag","saturday":"zaterdag","sunday":"zondag"},"start":"Begin van reeks","end":"Einde van reeks"},"DiscardConfirmationModal":{"title":"Alle niet-opgeslagen wijzigingen verwerpen","message":"Als je wijzigingen verwerpt, worden alle wijzigingen sinds de laatste keer opslaan verwijderd.","primaryAction":"Wijzigingen verwerpen","secondaryAction":"Doorgaan met bewerken"},"DropZone":{"errorOverlayTextFile":"Ongeldig bestandstype","errorOverlayTextImage":"Ongeldig afbeeldingsbestand","single":{"overlayTextFile":"Zet een bestand neer om het te uploaden","overlayTextImage":"Zet een afbeelding neer om deze te uploaden","actionTitleFile":"Bestand toevoegen","actionTitleImage":"Afbeelding toevoegen","actionHintFile":"of zet een bestand neer om het te uploaden","actionHintImage":"of zet een afbeelding neer om deze te uploaden","labelFile":"Bestand uploaden","labelImage":"Afbeelding uploaden","overlayTextVideo":"Zet video neer om deze te uploaden","actionTitleVideo":"Voeg de video toe","actionHintVideo":"of zet de video neer om deze te uploaden","labelVideo":"Video uploaden"},"allowMultiple":{"overlayTextFile":"Zet bestanden neer om ze te uploaden","overlayTextImage":"Zet afbeeldingen neer om ze te uploaden","actionTitleFile":"Bestanden toevoegen","actionTitleImage":"Afbeeldingen toevoegen","actionHintFile":"of zet bestanden neer om ze te uploaden","actionHintImage":"of zet afbeeldingen neer om ze te uploaden","labelFile":"Bestanden uploaden","labelImage":"Afbeeldingen uploaden","overlayTextVideo":"Zet video's neer om ze te uploaden","actionTitleVideo":"Voeg de video's toe","actionHintVideo":"of zet ze neer om ze te uploaden","labelVideo":"Video's uploaden"},"errorOverlayTextVideo":"Ongeldig videotype"},"EmptySearchResult":{"altText":"Geen zoekresultaten"},"Frame":{"skipToContent":"Meteen naar de content","Navigation":{"closeMobileNavigationLabel":"Navigatie sluiten"},"navigationLabel":"Navigatie"},"ActionMenu":{"RollupActions":{"rollupButton":"Acties bekijken","rollupButtonBreadcrumbs":"Broodkruimels voor {sectionName} bekijken","rollupNavigationName":"Broodkruimels voor {sectionName}","defaultRollupName":"Broodkruimels"},"Actions":{"moreActions":"Meer acties"}},"Filters":{"moreFilters":"Meer filters","filter":"Filter {resourceName}","noFiltersApplied":"Geen filters toegepast","cancel":"Annuleren","done":"Gereed","clearAllFilters":"Alle filters wissen","clear":"Wissen","clearLabel":"{filterName} wissen","moreFiltersWithCount":"Meer filters ({count})","addFilter":"Filter toevoegen","clearFilters":"Alles wissen","searchInView":"in:{viewName}"},"Modal":{"iFrameTitle":"opmaak hoofdtekst","modalWarning":"Deze verplichte onderdelen ontbreken in het modale venster: {missingProps}","unsavedChanges":"Niet-opgeslagen wijzigingen"},"Pagination":{"previous":"Vorige","next":"Volgende","pagination":"Paginering"},"ProgressBar":{"negativeWarningMessage":"Waardes die worden doorgegeven naar de voortgangsinstelling mogen niet negatief zijn. {progress} opnieuw instellen op 0.","exceedWarningMessage":"Waardes die worden doorgegeven naar de voortgangsinstelling mogen niet de 100 overschrijden. {progress} instellen op 100."},"ResourceList":{"sortingLabel":"Sorteren op","defaultItemSingular":"artikel","defaultItemPlural":"artikelen","showing":"Weergave van {itemsCount} {resource}","loading":"{resource} aan het laden","selected":"{selectedItemsCount} geselecteerd","allItemsSelected":"Alle {itemsLength}+ {resourceNamePlural} in je winkel zijn geselecteerd","selectAllItems":"Selecteer alle {itemsLength}+ {resourceNamePlural} in je winkel","emptySearchResultTitle":"Geen {resourceNamePlural} gevonden","emptySearchResultDescription":"Probeer de filters of zoekterm te wijzigen","selectButtonText":"Selecteren","a11yCheckboxDeselectAllSingle":"{resourceNameSingular} deselecteren","a11yCheckboxSelectAllSingle":"{resourceNameSingular} selecteren","a11yCheckboxDeselectAllMultiple":"Alle {itemsLength} {resourceNamePlural} deselecteren","a11yCheckboxSelectAllMultiple":"Alle {itemsLength} {resourceNamePlural} selecteren","Item":{"actionsDropdownLabel":"Acties voor {accessibilityLabel}","actionsDropdown":"Acties vervolgkeuzelijst","viewItem":"Details weergeven voor {itemName}"},"BulkActions":{"actionsActivatorLabel":"Acties","moreActionsActivatorLabel":"Meer acties"},"showingTotalCount":"{itemsCount} van {totalItemsCount} {resource} zichtbaar","allFilteredItemsSelected":"Alle {itemsLength}+ {resourceNamePlural} in dit filter zijn geselecteerd","selectAllFilteredItems":"Selecteer alle {itemsLength}+ {resourceNamePlural} in dit filter."},"SkeletonPage":{"loadingLabel":"Pagina is aan het laden"},"Tabs":{"toggleTabsLabel":"Meer weergaven","newViewAccessibilityLabel":"Nieuwe weergave aanmaken","newViewTooltip":"Weergave aanmaken","Tab":{"rename":"Naam van weergave wijzigen","duplicate":"Weergave dupliceren","edit":"Weergave bewerken","editColumns":"Kolommen bewerken","delete":"Weergave verwijderen","copy":"Kopie van {name}","deleteModal":{"title":"Weergave verwijderen?","description":"Je kunt dit niet ongedaan maken. De {viewName}-weergave is niet meer beschikbaar in het Shopify-beheercentrum.","cancel":"Annuleren","delete":"Weergave verwijderen"}},"RenameModal":{"title":"Naam van weergave wijzigen","label":"Naam","cancel":"Annuleren","create":"Opslaan","errors":{"sameName":"Er bestaat al een weergave met deze naam. Kies een andere naam."}},"DuplicateModal":{"title":"Dubbele weergave","label":"Naam","cancel":"Annuleren","create":"Weergave aanmaken","errors":{"sameName":"Er bestaat al een weergave met deze naam. Kies een andere naam."}},"CreateViewModal":{"title":"Nieuwe weergave aanmaken","label":"Naam","cancel":"Annuleren","create":"Weergave aanmaken","errors":{"sameName":"Er bestaat al een weergave met deze naam. Kies een andere naam."}}},"Tag":{"ariaLabel":"{children} verwijderen"},"TextField":{"characterCount":"{count} tekens","characterCountWithMaxLength":"{count} van {limit} tekens gebruikt"},"TopBar":{"toggleMenuLabel":"Schakelen tussen menu's","SearchField":{"clearButtonLabel":"Wissen","search":"Zoeken"}},"MediaCard":{"popoverButton":"Acties","dismissButton":"Sluiten"},"VideoThumbnail":{"playButtonA11yLabel":{"default":"Video afspelen","defaultWithDuration":"Video van {duration} afspelen","duration":{"hours":{"other":{"only":"{hourCount} uur","andMinutes":"{hourCount} uur en {minuteCount} minuten","andMinute":"{hourCount} uur en {minuteCount} minuut","minutesAndSeconds":"{hourCount} uur, {minuteCount} minuten en {secondCount} seconden","minutesAndSecond":"{hourCount} uur, {minuteCount} minuten en {secondCount} seconde","minuteAndSeconds":"{hourCount} uur, {minuteCount} minuut en {secondCount} seconden","minuteAndSecond":"{hourCount} uur, {minuteCount} minuut en {secondCount} seconde","andSeconds":"{hourCount} uur en {secondCount} seconden","andSecond":"{hourCount} uur en {secondCount} seconde"},"one":{"only":"{hourCount} uur","andMinutes":"{hourCount} uur en {minuteCount} minuten","andMinute":"{hourCount} uur en {minuteCount} minuut","minutesAndSeconds":"{hourCount} uur, {minuteCount} minuten en {secondCount} seconden","minutesAndSecond":"{hourCount} uur, {minuteCount} minuten en {secondCount} seconde","minuteAndSeconds":"{hourCount} uur, {minuteCount} minuut en {secondCount} seconden","minuteAndSecond":"{hourCount} uur, {minuteCount} minuut en {secondCount} seconde","andSeconds":"{hourCount} uur en {secondCount} seconden","andSecond":"{hourCount} uur en {secondCount} seconde"}},"minutes":{"other":{"only":"{minuteCount} minuten","andSeconds":"{minuteCount} minuten en {secondCount} seconden","andSecond":"{minuteCount} minuten en {secondCount} seconde"},"one":{"only":"{minuteCount} minuut","andSeconds":"{minuteCount} minuut en {secondCount} seconden","andSecond":"{minuteCount} minuut en {secondCount} seconde"}},"seconds":{"other":"{secondCount} seconden","one":"{secondCount} seconde"}}}},"Loading":{"label":"Pagina laadbalk"},"TooltipOverlay":{"accessibilityLabel":"Tooltip: {label}"},"IndexProvider":{"defaultItemSingular":"Artikel","defaultItemPlural":"Artikelen","allItemsSelected":"Alle {itemsLength}+ {resourceNamePlural} zijn geselecteerd","selected":"{selectedItemsCount} geselecteerd","a11yCheckboxDeselectAllSingle":"{resourceNameSingular} deselecteren","a11yCheckboxSelectAllSingle":"{resourceNameSingular} selecteren","a11yCheckboxDeselectAllMultiple":"Alle {itemsLength} {resourceNamePlural} deselecteren","a11yCheckboxSelectAllMultiple":"Alle {itemsLength} {resourceNamePlural} selecteren"},"IndexTable":{"emptySearchTitle":"Geen {resourceNamePlural} gevonden","emptySearchDescription":"Probeer de filters of zoekterm te wijzigen","onboardingBadgeText":"Nieuw","resourceLoadingAccessibilityLabel":"{resourceNamePlural} laden...","selectAllLabel":"Alle {resourceNamePlural} selecteren","selected":"{selectedItemsCount} geselecteerd","undo":"Ongedaan maken","selectAllItems":"Alle {itemsLength}+ {resourceNamePlural} selecteren","selectItem":"{resourceName} selecteren","selectButtonText":"Selecteren","sortAccessibilityLabel":"{direction} sorteren op"},"Page":{"Header":{"rollupActionsLabel":"Acties voor {title} bekijken","pageReadyAccessibilityLabel":"{title}. Deze pagina is klaar"}},"FullscreenBar":{"back":"Terug","accessibilityLabel":"Volledig scherm-modus afsluiten"},"FilterPill":{"clear":"Wissen","unsavedChanges":"Niet-opgeslagen wijzigingen - {label}"},"IndexFilters":{"searchFilterTooltip":"Zoeken en filteren","searchFilterTooltipWithShortcut":"Zoeken en filteren (F)","searchFilterAccessibilityLabel":"Resultaten zoeken en filteren","sort":"Resultaten sorteren","addView":"Nieuwe weergave toevoegen","newView":"Aangepast zoeken","SortButton":{"ariaLabel":"Resultaten sorteren","tooltip":"Sorteren","title":"Sorteren op","sorting":{"asc":"Oplopend","desc":"Aflopend","az":"A-Z","za":"Z-A"}},"UpdateButtons":{"cancel":"Annuleren","update":"Bijwerken","save":"Opslaan","saveAs":"Opslaan als","modal":{"title":"Weergave opslaan als","label":"Naam","sameName":"Er bestaat al een weergave met deze naam. Kies een andere naam.","save":"Opslaan","cancel":"Annuleren"}},"EditColumnsButton":{"tooltip":"Kolommen bewerken","accessibilityLabel":"Kolomvolgorde en zichtbaarheid van tabel aanpassen"}},"ActionList":{"SearchField":{"clearButtonLabel":"Wissen","search":"Zoeken","placeholder":"Zoekacties"}},"AlphaTable":{"TableRowActions":{"heading":"Acties","activatorAccessibilityLabel":"Rijacties openen","activatorLabel":"Acties"},"TableRowGroups":{"heading":"Schakelen tussen rijgroepen","toggle":"Zichtbaarheid in-/uitschakelen van deze rijgroep"},"Sorting":{"sortAscending":"Sorteer deze tabel op {heading}, in oplopende volgorde","sortDescending":"Sorteer deze tabel op {heading}, in aflopende volgorde"},"Selection":{"select":"{id} selecteren","selectPage":"Alle {count} op pagina selecteren","selectAll":"Alles in winkel selecteren","selectAllWithTotal":"Alle {total} in winkel selecteren","selectionHeader":"Selectie","unselectAll":"Alles deselecteren","selectedPage":"{count} geselecteerd","selectedAll":"Alles geselecteerd in winkel","selectedAllWithTotal":"Alle {total} in winkel geselecteerd","selectedSome":"{count}/{total} geselecteerd","undoSelectAll":"Alles in winkel selecteren opheffen","undoSelectAllWithTotal":"Alle {total} in winkel selecteren ongedaan maken","showSelectedToggle":"Selectie weergeven","showingOnlySelected":"{count} geselecteerde getoond","paginationLabel":"{start}–{end} van {total} geselecteerde artikelen"},"TableCell":{"spansColumns":"omvat {count} kolommen"},"BulkActions":{"activatorLabel":"Acties"}},"SortPopover":{"ariaLabel":"Resultaten sorteren","tooltip":"Sorteren","title":"Sorteren op","sorting":{"asc":"Oplopend","desc":"Aflopend","az":"A-Z","za":"Z-A"}}}`)
-  , hq = {
-    Polaris: fq
-}
-  , gq = JSON.parse('{"Avatar":{"label":"Avatar","labelWithInitials":"Avatar z inicjałami {initials}"},"Autocomplete":{"spinnerAccessibilityLabel":"Ładowanie","ellipsis":"{content}…"},"Badge":{"PROGRESS_LABELS":{"incomplete":"Niekompletne","partiallyComplete":"Częściowo kompletne","complete":"Zakończ"},"TONE_LABELS":{"info":"Informacja","success":"Powodzenie","warning":"Ostrzeżenie","attention":"Uwaga","new":"Nowe","critical":"Krytyczne","readOnly":"Tylko do odczytu","enabled":"Włączone"},"progressAndTone":"{toneLabel} {progressLabel}"},"Banner":{"dismissButton":"Odrzuć powiadomienie"},"Button":{"spinnerAccessibilityLabel":"Ładowanie"},"Common":{"checkbox":"pole wyboru","undo":"Cofnij","cancel":"Anuluj","clear":"Wyczyść","close":"Zamknij","submit":"Prześlij","more":"Więcej"},"ContextualSaveBar":{"save":"Zapisz","discard":"Odrzuć"},"DataTable":{"sortAccessibilityLabel":"sortuj {direction} według","navAccessibilityLabel":"Przewiń tabelę {direction} - jedna kolumna","totalsRowHeading":"Sumy","totalRowHeading":"Suma"},"DatePicker":{"previousMonth":"Pokaż poprzedni miesiąc, {previousMonthName} {showPreviousYear}","nextMonth":"Pokaż następny miesiąc, {nextMonth} {nextYear}","today":"Dziś ","months":{"january":"Styczeń","february":"Luty","march":"Marzec","april":"Kwiecień","may":"Maj","june":"Czerwiec","july":"Lipiec","august":"Sierpień","september":"Wrzesień","october":"Październik","november":"Listopad","december":"Grudzień"},"daysAbbreviated":{"monday":"Pn","tuesday":"Wt","wednesday":"Śr","thursday":"Cz","friday":"Pt","saturday":"Sb","sunday":"Nd"},"days":{"monday":"Poniedziałek","tuesday":"Wtorek","wednesday":"Środa","thursday":"Czwartek","friday":"Piątek","saturday":"Sobota","sunday":"Niedziela"},"start":"Początek zakresu","end":"Koniec zakresu"},"DiscardConfirmationModal":{"title":"Odrzuć wszystkie niezapisane zmiany","message":"Jeśli odrzucisz zmiany, usuniesz wszelkie modyfikacje dokonane od ostatniego zapisu.","primaryAction":"Odrzuć zmiany","secondaryAction":"Kontynuuj edycję"},"DropZone":{"errorOverlayTextFile":"Nieprawidłowy typ pliku","errorOverlayTextImage":"Nieprawidłowy typ obrazu","single":{"overlayTextFile":"Upuść plik, aby załadować","overlayTextImage":"Upuść zdjęcie, aby załadować","actionTitleFile":"Dodaj plik","actionTitleImage":"Dodaj obraz","actionHintFile":"lub upuść plik do załadowania","actionHintImage":"lub upuść zdjęcie do załadowania","labelFile":"Prześlij plik","labelImage":"Prześlij obraz","overlayTextVideo":"Upuść film do załadowania","actionTitleVideo":"Dodaj film","actionHintVideo":"lub upuść film do załadowania","labelVideo":"Załaduj film"},"allowMultiple":{"overlayTextFile":"Upuść pliki, aby je załadować","overlayTextImage":"Upuść obrazy do załadowania","actionTitleFile":"Dodaj pliki","actionTitleImage":"Dodaj obrazy","actionHintFile":"lub upuść pliki, aby je załadować","actionHintImage":"lub upuść zdjęcia, aby załadować","labelFile":"Załaduj pliki","labelImage":"Prześlij zdjęcia","overlayTextVideo":"Upuść filmy do załadowania","actionTitleVideo":"Dodaj filmy","actionHintVideo":"lub upuść filmy do załadowania","labelVideo":"Załaduj filmy"},"errorOverlayTextVideo":"Nieprawidłowy typ filmu"},"EmptySearchResult":{"altText":"Wyczyść wyniki wyszukiwania"},"Frame":{"skipToContent":"Przejdź do treści","Navigation":{"closeMobileNavigationLabel":"Zamknij nawigację"},"navigationLabel":"Nawigacja"},"ActionMenu":{"RollupActions":{"rollupButton":"Wyświetl czynności","rollupButtonBreadcrumbs":"Wyświetl ścieżki nawigacji {sectionName}","rollupNavigationName":"Ścieżki nawigacji {sectionName}","defaultRollupName":"Ścieżki nawigacji"},"Actions":{"moreActions":"Więcej czynności"}},"Filters":{"moreFilters":"Więcej filtrów","filter":"Filtr {resourceName}","noFiltersApplied":"Nie zastosowano filtrów","cancel":"Anuluj","done":"Gotowe","clearAllFilters":"Wyczyść wszystkie filtry","clear":"Wyczyść","clearLabel":"Wyczyść {filterName}","moreFiltersWithCount":"Więcej filtrów ({count})","addFilter":"Dodaj filtr","clearFilters":"Wyczyść wszystko","searchInView":"w:{viewName}"},"Modal":{"iFrameTitle":"znacznik treści","modalWarning":"W oknie modalnym brakuje tych wymaganych właściwości: {missingProps}","unsavedChanges":"Niezapisane zmiany"},"Pagination":{"previous":"Powrót","next":"Dalej","pagination":"Paginacja"},"ProgressBar":{"negativeWarningMessage":"Wartości przekazywane do właściwości postępu nie powinny być negatywne. Resetowanie {progress} do 0.","exceedWarningMessage":"Wartości przekazywane do właściwości postępu nie powinny przekroczyć 100. Ustawianie {progress} na 100."},"ResourceList":{"sortingLabel":"Sortuj wg","defaultItemSingular":"pozycję","defaultItemPlural":"pozycje","showing":"Wyświetlanie {itemsCount} {resource}","loading":"Ładowanie {resource}","selected":"Wybrano {selectedItemsCount}","allItemsSelected":"Zaznaczono wszystkie {itemsLength}+ {resourceNamePlural} w Twoim sklepie","selectAllItems":"Zaznacz wszystkie {itemsLength}+ {resourceNamePlural} w swoim sklepie","emptySearchResultTitle":"Nie znaleziono {resourceNamePlural}","emptySearchResultDescription":"Spróbuj zmienić filtry lub szukany termin","selectButtonText":"Wybierz","a11yCheckboxDeselectAllSingle":"Usuń wybór {resourceNameSingular}","a11yCheckboxSelectAllSingle":"Wybierz {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"Odznacz wszystkie {itemsLength} {resourceNamePlural}","a11yCheckboxSelectAllMultiple":"Wybierz wszystkie {itemsLength} {resourceNamePlural}","Item":{"actionsDropdownLabel":"Czynności dla {accessibilityLabel}","actionsDropdown":"Lista rozwijana czynności","viewItem":"Wyświetl szczegóły dla {itemName}"},"BulkActions":{"actionsActivatorLabel":"Czynności","moreActionsActivatorLabel":"Więcej czynności"},"showingTotalCount":"Wyświetlanie {itemsCount} z {totalItemsCount} {resource}","allFilteredItemsSelected":"Zaznaczono wszystkie {itemsLength}+ {resourceNamePlural} w tym filtrze","selectAllFilteredItems":"Wybierz wszystkie {itemsLength}+ {resourceNamePlural} w tym filtrze"},"SkeletonPage":{"loadingLabel":"Ładowanie strony"},"Tabs":{"toggleTabsLabel":"Więcej widoków","newViewAccessibilityLabel":"Utwórz nowy widok","newViewTooltip":"Utwórz widok","Tab":{"rename":"Zmień nazwę widoku","duplicate":"Duplikuj widok","edit":"Edytuj widok","editColumns":"Edytuj kolumny","delete":"Usuń widok","copy":"Kopia {name}","deleteModal":{"title":"Czy usunąć widok?","description":"Tej czynności nie można cofnąć. Widok {viewName} nie będzie już dostępny w Twoim panelu administracyjnym.","cancel":"Anuluj","delete":"Usuń widok"}},"RenameModal":{"title":"Zmień nazwę widoku","label":"Nazwa","cancel":"Anuluj","create":"Zapisz","errors":{"sameName":"Widok o tej nazwie już istnieje. Wybierz inną nazwę."}},"DuplicateModal":{"title":"Duplikuj widok","label":"Nazwa","cancel":"Anuluj","create":"Utwórz widok","errors":{"sameName":"Widok o tej nazwie już istnieje. Wybierz inną nazwę."}},"CreateViewModal":{"title":"Utwórz nowy widok","label":"Nazwisko","cancel":"Anuluj","create":"Utwórz widok","errors":{"sameName":"Widok o tej nazwie już istnieje. Wybierz inną nazwę."}}},"Tag":{"ariaLabel":"Usuń {children}"},"TextField":{"characterCount":"{count} znaki(-ów)","characterCountWithMaxLength":"Użyto {count} z {limit} znaków"},"TopBar":{"toggleMenuLabel":"Przełącz menu","SearchField":{"clearButtonLabel":"Wyczyść","search":"Szukaj"}},"MediaCard":{"popoverButton":"Czynności","dismissButton":"Odrzuć"},"VideoThumbnail":{"playButtonA11yLabel":{"default":"Odtwórz film","defaultWithDuration":"Odtwórz film o długości {duration}","duration":{"hours":{"other":{"only":"{hourCount} godz.","andMinutes":"{hourCount} godz. i {minuteCount} min.","andMinute":"{hourCount} godz. i {minuteCount} min.","minutesAndSeconds":"{hourCount} godz., {minuteCount} min. i {secondCount} sek.","minutesAndSecond":"{hourCount} godz., {minuteCount} min. i {secondCount} sek.","minuteAndSeconds":"{hourCount} godz., {minuteCount} min. i {secondCount} sek.","minuteAndSecond":"{hourCount} godz., {minuteCount} min. i {secondCount} sek.","andSeconds":"{hourCount} godz. i {secondCount} sek.","andSecond":"{hourCount} godz. i {secondCount} sek."},"one":{"only":"{hourCount} godz.","andMinutes":"{hourCount} godz. i {minuteCount} min.","andMinute":"{hourCount} godz. i {minuteCount} min.","minutesAndSeconds":"{hourCount} godz., {minuteCount} min. i {secondCount} sek.","minutesAndSecond":"{hourCount} godz., {minuteCount} min. i {secondCount} sek.","minuteAndSeconds":"{hourCount} godz., {minuteCount} min. i {secondCount} sek.","minuteAndSecond":"{hourCount} godz., {minuteCount} min. i {secondCount} sek.","andSeconds":"{hourCount} godz. i {secondCount} sek.","andSecond":"{hourCount} godz. i {secondCount} sek."}},"minutes":{"other":{"only":"{minuteCount} min.","andSeconds":"{minuteCount} min. i {secondCount} sek.","andSecond":"{minuteCount} min. i {secondCount} sek."},"one":{"only":"{minuteCount} min.","andSeconds":"{minuteCount} min. i {secondCount} sek.","andSecond":"{minuteCount} min. i {secondCount} sek."}},"seconds":{"other":"{secondCount} sek.","one":"{secondCount} sekunda","few":"{secondCount} sek.","many":"{secondCount} sek."}}}},"Loading":{"label":"Pasek ładowania strony"},"TooltipOverlay":{"accessibilityLabel":"Podpowiedź: {label}"},"IndexProvider":{"defaultItemSingular":"Pozycja","defaultItemPlural":"Pozycje","allItemsSelected":"Wybrano wszystkie {itemsLength}+ {resourceNamePlural}","selected":"Wybrano {selectedItemsCount}","a11yCheckboxDeselectAllSingle":"Usuń wybór {resourceNameSingular}","a11yCheckboxSelectAllSingle":"Wybierz {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"Odznacz wszystkie {itemsLength} {resourceNamePlural}","a11yCheckboxSelectAllMultiple":"Wybierz wszystkie {itemsLength} {resourceNamePlural}"},"IndexTable":{"emptySearchTitle":"Nie znaleziono {resourceNamePlural}","emptySearchDescription":"Spróbuj zmienić filtry lub szukany termin","onboardingBadgeText":"Nowy","resourceLoadingAccessibilityLabel":"Ładowanie {resourceNamePlural}...","selectAllLabel":"Wybierz wszystkie {resourceNamePlural}","selected":"Wybrano {selectedItemsCount}","undo":"Cofnij","selectAllItems":"Wybierz wszystkie {itemsLength}+ {resourceNamePlural}","selectItem":"Wybierz {resourceName}","selectButtonText":"Wybierz","sortAccessibilityLabel":"sortuj {direction} według"},"Page":{"Header":{"rollupActionsLabel":"Wyświetl czynności dla {title}","pageReadyAccessibilityLabel":"{title}. Ta strona jest gotowa"}},"FullscreenBar":{"back":"Powrót","accessibilityLabel":"Zakończ tryb pełnoekranowy"},"FilterPill":{"clear":"Wyczyść","unsavedChanges":"Niezapisane zmiany – {label}"},"IndexFilters":{"searchFilterTooltip":"Wyszukaj i przefiltruj","searchFilterTooltipWithShortcut":"Wyszukaj i przefiltruj (F)","searchFilterAccessibilityLabel":"Wyszukaj i przefiltruj wyniki","sort":"Sortuj wyniki","addView":"Dodaj nowy widok","newView":"Niestandardowe wyszukiwanie","SortButton":{"ariaLabel":"Sortuj wyniki","tooltip":"Sortuj","title":"Sortuj wg","sorting":{"asc":"Rosnąco","desc":"Malejąco","az":"A–Z","za":"Z–A"}},"UpdateButtons":{"cancel":"Anuluj","update":"Aktualizuj","save":"Zapisz","saveAs":"Zapisz jako","modal":{"title":"Zapisz widok jako","label":"Nazwisko","sameName":"Widok o tej nazwie już istnieje. Wybierz inną nazwę.","save":"Zapisz","cancel":"Anuluj"}},"EditColumnsButton":{"tooltip":"Edytuj kolumny","accessibilityLabel":"Dostosuj kolejność i widoczność kolumn tabeli"}},"ActionList":{"SearchField":{"clearButtonLabel":"Wyczyść","search":"Szukaj","placeholder":"Szukaj czynności"}},"AlphaTable":{"TableRowActions":{"heading":"Czynności","activatorAccessibilityLabel":"Otwórz czynności dot. wierszy","activatorLabel":"Czynności"},"TableRowGroups":{"heading":"Przełącz grupy wierszy","toggle":"Przełącz widoczność tej grupy wierszy"},"Sorting":{"sortAscending":"Sortuj tę tabelę według {heading} w kolejności rosnącej","sortDescending":"Sortuj tę tabelę według {heading} w kolejności malejącej"},"Selection":{"select":"Wybierz {id}","selectPage":"Wybierz wszystkie {count} na stronie","selectAll":"Zaznacz wszystkie w sklepie","selectAllWithTotal":"Wybierz wszystkie {total} w sklepie","selectionHeader":"Wybór","unselectAll":"Odznacz wszystko","selectedPage":"Wybrano {count}","selectedAll":"Zaznaczono wszystkie w sklepie","selectedAllWithTotal":"Wybrano wszystkie {total} w sklepie","selectedSome":"Wybrano {count}/{total}","undoSelectAll":"Cofnij zaznaczenie wszystkich w sklepie","undoSelectAllWithTotal":"Cofnij zaznaczenie wszystkich {total} w sklepie","showSelectedToggle":"Pokaż wybrane","showingOnlySelected":"Wyświetlanie wybranych pozycji ({count})","paginationLabel":"Wyświetlono {start}–{end} z {total} wybranych pozycji"},"BulkActions":{"activatorLabel":"Czynności"},"TableCell":{"spansColumns":"obejmuje {count} kolumn(-y)"}},"SortPopover":{"ariaLabel":"Sortuj wyniki","tooltip":"Sortuj","title":"Sortuj wg","sorting":{"asc":"Rosnąco","desc":"Malejąco","az":"A–Z","za":"Z–A"}}}')
-  , vq = {
-    Polaris: gq
-}
-  , yq = JSON.parse('{"Avatar":{"label":"Avatar","labelWithInitials":"Avatar com as iniciais {initials}"},"Autocomplete":{"spinnerAccessibilityLabel":"Carregando","ellipsis":"{content}…"},"Badge":{"PROGRESS_LABELS":{"incomplete":"Incompleto","partiallyComplete":"Parcialmente completo","complete":"Concluir"},"TONE_LABELS":{"info":"Informações","success":"Sucesso","warning":"Aviso","attention":"Atenção","new":"Novo","critical":"Crítico","readOnly":"Somente de leitura","enabled":"Habilitado"},"progressAndTone":"{toneLabel} {progressLabel}"},"Banner":{"dismissButton":"Dispensar notificação"},"Button":{"spinnerAccessibilityLabel":"Carregando"},"Common":{"checkbox":"caixa de seleção","undo":"Desfazer","cancel":"Cancelar","clear":"Limpar","close":"Fechar","submit":"Enviar","more":"Mais"},"ContextualSaveBar":{"save":"Salvar","discard":"Descartar"},"DataTable":{"sortAccessibilityLabel":"ordenar {direction} por","navAccessibilityLabel":"Rolar a tabela uma coluna {direction}","totalsRowHeading":"Totais","totalRowHeading":"Total"},"DatePicker":{"previousMonth":"Exibir mês anterior, {previousMonthName} de {showPreviousYear}","nextMonth":"Exibir próximo mês, {nextMonth} {nextYear}","today":"Hoje ","months":{"january":"Janeiro","february":"Fevereiro","march":"Março","april":"Abril","may":"Maio","june":"Junho","july":"Julho","august":"Agosto","september":"Setembro","october":"Outubro","november":"Novembro","december":"Dezembro"},"daysAbbreviated":{"monday":"Seg","tuesday":"Ter","wednesday":"Qua","thursday":"Qui","friday":"Sex","saturday":"Sáb","sunday":"Dom"},"days":{"monday":"Segunda-feira","tuesday":"Terça-feira","wednesday":"Quarta-feira","thursday":"Quinta-feira","friday":"Sexta-feira","saturday":"Sábado","sunday":"Domingo"},"start":"Início do intervalo","end":"Final do intervalo"},"DiscardConfirmationModal":{"title":"Descartar todas as alterações não salvas","message":"Se você descartar as alterações, todas as edições feitas desde o último salvamento serão excluídas.","primaryAction":"Descartar alterações","secondaryAction":"Continuar editando"},"DropZone":{"errorOverlayTextFile":"O tipo de arquivo é inválido","errorOverlayTextImage":"O tipo de imagem é inválido","single":{"overlayTextFile":"Soltar arquivo para fazer upload","overlayTextImage":"Soltar imagem para fazer upload","actionTitleFile":"Adicionar arquivo","actionTitleImage":"Adicionar imagem","actionHintFile":"ou soltar arquivo para fazer upload","actionHintImage":"ou soltar imagem para fazer upload","labelFile":"Fazer upload de arquivo","labelImage":"Fazer upload de imagem","overlayTextVideo":"Soltar vídeo para fazer upload","actionTitleVideo":"Adicionar vídeo","actionHintVideo":"ou soltar vídeo para fazer upload","labelVideo":"Fazer upload de vídeo"},"allowMultiple":{"overlayTextFile":"Soltar arquivos para fazer upload","overlayTextImage":"Soltar imagens para fazer upload","actionTitleFile":"Adicionar arquivos","actionTitleImage":"Adicionar imagens","actionHintFile":"ou soltar arquivos para fazer upload","actionHintImage":"ou soltar as imagens para fazer upload","labelFile":"Fazer upload de arquivos","labelImage":"Fazer upload de imagens","overlayTextVideo":"Soltar vídeos para fazer upload","actionTitleVideo":"Adicionar vídeos","actionHintVideo":"ou soltar vídeos para fazer upload","labelVideo":"Fazer upload de vídeos"},"errorOverlayTextVideo":"O tipo de vídeo é inválido"},"EmptySearchResult":{"altText":"Resultados de pesquisa vazios"},"Frame":{"skipToContent":"Pular para o conteúdo","Navigation":{"closeMobileNavigationLabel":"Fechar a navegação"},"navigationLabel":"Navegação"},"ActionMenu":{"RollupActions":{"rollupButton":"Ver ações","rollupButtonBreadcrumbs":"Ver trilhas de navegação para {sectionName}","rollupNavigationName":"Trilha de navegação para {sectionName}","defaultRollupName":"Trilhas de navegação"},"Actions":{"moreActions":"Mais ações"}},"Filters":{"moreFilters":"Mais filtros","filter":"Filtrar {resourceName}","noFiltersApplied":"Nenhum filtro aplicado","cancel":"Cancelar","done":"Pronto","clearAllFilters":"Limpar todos os filtros","clear":"Limpar","clearLabel":"Limpar {filterName}","moreFiltersWithCount":"Mais filtros ({count})","addFilter":"Adicionar filtro","clearFilters":"Limpar tudo","searchInView":"in:{viewName}"},"Modal":{"iFrameTitle":"marcação de corpo","modalWarning":"Essas propriedades obrigatórias estão faltando na janela modal: {missingProps}","unsavedChanges":"Alterações não salvas"},"Pagination":{"previous":"Anterior","next":"Próximo","pagination":"Paginação"},"ProgressBar":{"negativeWarningMessage":"Os valores passados para o prop do progresso não devem ser negativos. Redefinindo {progress} para 0.","exceedWarningMessage":"Os valores passados para o prop do progresso não devem exceder 100. Configurando {progress} para 100."},"ResourceList":{"sortingLabel":"Ordenar por","defaultItemSingular":"item","defaultItemPlural":"itens","showing":"Mostrando {itemsCount}{resource}","loading":"Carregando {resource}","selected":"{selectedItemsCount} selecionados","allItemsSelected":"Todos os {resourceNamePlural} da loja maiores que {itemsLength} estão selecionados","selectAllItems":"Selecionar todos os {resourceNamePlural} da loja maiores do que {itemsLength}","emptySearchResultTitle":"Não foram encontrados {resourceNamePlural}","emptySearchResultDescription":"Tente alterar os filtros ou o termo de pesquisa","selectButtonText":"Selecionar","a11yCheckboxDeselectAllSingle":"Desmarcar {resourceNameSingular}","a11yCheckboxSelectAllSingle":"Selecionar {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"Desmarcar todos os {resourceNamePlural} com {itemsLength}","a11yCheckboxSelectAllMultiple":"Selecionar todos os {resourceNamePlural} com {itemsLength}","Item":{"actionsDropdownLabel":"Ações para {accessibilityLabel}","actionsDropdown":"Menu suspenso Ações","viewItem":"Ver informações de {itemName}"},"BulkActions":{"actionsActivatorLabel":"Ações","moreActionsActivatorLabel":"Mais ações"},"showingTotalCount":"Mostrando {itemsCount} de {totalItemsCount} {resource}","allFilteredItemsSelected":"Todos os {resourceNamePlural} maiores que {itemsLength} neste filtro estão selecionados","selectAllFilteredItems":"Selecionar todos os {resourceNamePlural} maiores que {itemsLength} neste filtro"},"SkeletonPage":{"loadingLabel":"Página carregando"},"Tabs":{"toggleTabsLabel":"Mais visualizações","newViewAccessibilityLabel":"Criar uma visualização","newViewTooltip":"Criar visualização","Tab":{"rename":"Renomear visualização","duplicate":"Duplicar visualização","edit":"Editar visualização","editColumns":"Editar colunas","delete":"Excluir visualização","copy":"Cópia de {name}","deleteModal":{"title":"Excluir visualização?","description":"Essa ação não pode ser desfeita. A visualização da aba {viewName} não estará mais disponível no admin.","cancel":"Cancelar","delete":"Excluir visualização"}},"RenameModal":{"title":"Renomear visualização","label":"Nome","cancel":"Cancelar","create":"Salvar","errors":{"sameName":"Uma visualização com esse nome já existe. Escolha outro."}},"DuplicateModal":{"title":"Duplicar visualização","label":"Nome","cancel":"Cancelar","create":"Criar visualização","errors":{"sameName":"Uma visualização com esse nome já existe. Escolha outro."}},"CreateViewModal":{"title":"Criar uma visualização","label":"Nome","cancel":"Cancelar","create":"Criar visualização","errors":{"sameName":"Uma visualização com esse nome já existe. Escolha outro."}}},"Tag":{"ariaLabel":"Remover {children}"},"TextField":{"characterCount":"{count} caracteres","characterCountWithMaxLength":"{count} de {limit} caracteres usados"},"TopBar":{"toggleMenuLabel":"Alternar menu","SearchField":{"clearButtonLabel":"Limpar","search":"Pesquisa"}},"MediaCard":{"popoverButton":"Ações","dismissButton":"Dispensar"},"VideoThumbnail":{"playButtonA11yLabel":{"default":"Reproduzir vídeo","defaultWithDuration":"Reproduzir vídeo com duração de {duration}","duration":{"hours":{"other":{"only":"{hourCount} horas","andMinutes":"{hourCount} horas e {minuteCount} minutos","andMinute":"{hourCount} horas e {minuteCount} minuto","minutesAndSeconds":"{hourCount} horas, {minuteCount} minutos e {secondCount} segundos","minutesAndSecond":"{hourCount} horas, {minuteCount} minutos e {secondCount} segundo","minuteAndSeconds":"{hourCount} horas, {minuteCount} minuto e {secondCount} segundos","minuteAndSecond":"{hourCount} horas, {minuteCount} minuto e {secondCount} segundo","andSeconds":"{hourCount} horas e {secondCount} segundos","andSecond":"{hourCount} horas e {secondCount} segundo"},"one":{"only":"{hourCount} hora","andMinutes":"{hourCount} hora e {minuteCount} minutos","andMinute":"{hourCount} hora e {minuteCount} minuto","minutesAndSeconds":"{hourCount} hora, {minuteCount} minutos e {secondCount} segundos","minutesAndSecond":"{hourCount} hora, {minuteCount} minutos e {secondCount} segundo","minuteAndSeconds":"{hourCount} hora, {minuteCount} minuto e {secondCount} segundos","minuteAndSecond":"{hourCount} hora, {minuteCount} minuto e {secondCount} segundo","andSeconds":"{hourCount} hora e {secondCount} segundos","andSecond":"{hourCount} hora e {secondCount} segundo"}},"minutes":{"other":{"only":"{minuteCount} minutos","andSeconds":"{minuteCount} minutos e {secondCount} segundos","andSecond":"{minuteCount} minutos e {secondCount} segundo"},"one":{"only":"{minuteCount} minuto","andSeconds":"{minuteCount} minuto e {secondCount} segundos","andSecond":"{minuteCount} minuto e {secondCount} segundo"}},"seconds":{"other":"{secondCount} segundos","one":"{secondCount} segundo","many":"{secondCount} segundos"}}}},"Loading":{"label":"Barra de carregamento da página"},"TooltipOverlay":{"accessibilityLabel":"Dica de ferramenta: {label}"},"IndexProvider":{"defaultItemSingular":"Item","defaultItemPlural":"Itens","allItemsSelected":"Todos os {resourceNamePlural} maiores que {itemsLength} estão selecionados","selected":"{selectedItemsCount} selecionados","a11yCheckboxDeselectAllSingle":"Desmarcar {resourceNameSingular}","a11yCheckboxSelectAllSingle":"Selecionar {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"Desmarcar todos os {itemsLength} {resourceNamePlural}","a11yCheckboxSelectAllMultiple":"Selecionar todos os {resourceNamePlural} com {itemsLength}"},"IndexTable":{"emptySearchTitle":"Não foram encontrados {resourceNamePlural}","emptySearchDescription":"Tente alterar os filtros ou o termo de pesquisa","onboardingBadgeText":"Novo","resourceLoadingAccessibilityLabel":"Carregando {resourceNamePlural}…","selectAllLabel":"Selecionar todos os {resourceNamePlural}","selected":"{selectedItemsCount} selecionados","undo":"Desfazer","selectAllItems":"Selecionar todos os {resourceNamePlural} maiores que {itemsLength}","selectItem":"Selecionar {resourceName}","selectButtonText":"Selecionar","sortAccessibilityLabel":"ordenar {direction} por"},"Page":{"Header":{"rollupActionsLabel":"Ver ações para {title}","pageReadyAccessibilityLabel":"{title}. A página está pronta"}},"FullscreenBar":{"back":"Voltar","accessibilityLabel":"Sair do modo de tela cheia"},"FilterPill":{"clear":"Limpar","unsavedChanges":"Alterações não salvas – {label}"},"IndexFilters":{"searchFilterTooltip":"Pesquisar e filtrar","searchFilterTooltipWithShortcut":"Pesquisar e filtrar (F)","searchFilterAccessibilityLabel":"Pesquisar e filtrar resultados","sort":"Ordenar os resultados","addView":"Adicionar uma nova visualização","newView":"Pesquisa personalizada","SortButton":{"ariaLabel":"Ordenar os resultados","tooltip":"Ordenar","title":"Ordenar por","sorting":{"asc":"Crescente","desc":"Decrescente","az":"A a Z","za":"Z a A"}},"UpdateButtons":{"cancel":"Cancelar","update":"Atualizar","save":"Salvar","saveAs":"Salvar como","modal":{"title":"Salvar visualização como","label":"Nome","sameName":"Uma visualização com esse nome já existe. Escolha outro.","save":"Salvar","cancel":"Cancelar"}},"EditColumnsButton":{"tooltip":"Editar colunas","accessibilityLabel":"Personalizar a ordem e a visibilidade das colunas da tabela"}},"ActionList":{"SearchField":{"clearButtonLabel":"Limpar","search":"Pesquisa","placeholder":"Pesquisar ações"}},"AlphaTable":{"TableRowActions":{"heading":"Ações","activatorAccessibilityLabel":"Abrir ações de linha","activatorLabel":"Ações"},"Selection":{"select":"Selecionar {id}","selectPage":"Selecionar todos os {count} na página","selectAll":"Selecionar tudo na loja","selectAllWithTotal":"Selecionar todos os {total} na loja","unselectAll":"Desmarcar todos","selectedPage":"{count} selecionado(s)","selectedAll":"Tudo selecionado na loja","selectedAllWithTotal":"Todos os {total} selecionados na loja","selectionHeader":"Seleção","selectedSome":"{count}/{total} selecionados","undoSelectAll":"Desfazer seleção de tudo na loja","undoSelectAllWithTotal":"Desfazer seleção de todos {total} na loja","showSelectedToggle":"Exibir selecionados","showingOnlySelected":"Exibindo {count} selecionado(s)","paginationLabel":"Exibindo {start}–{end} de {total} itens selecionados"},"TableRowGroups":{"heading":"Alternar grupos de linhas","toggle":"Alternar a visibilidade deste grupo de linhas"},"Sorting":{"sortAscending":"Organizar a tabela por {heading} em ordem crescente","sortDescending":"Organizar a tabela por {heading} em ordem decrescente"},"TableCell":{"spansColumns":"se estende por {count} colunas"},"BulkActions":{"activatorLabel":"Ações"}},"SortPopover":{"ariaLabel":"Ordenar os resultados","tooltip":"Ordenar","title":"Ordenar por","sorting":{"asc":"Crescente","desc":"Decrescente","az":"A a Z","za":"Z a A"}}}')
-  , bq = {
-    Polaris: yq
-}
-  , kq = JSON.parse('{"Avatar":{"label":"Avatar","labelWithInitials":"Avatar com as iniciais {initials}"},"Autocomplete":{"spinnerAccessibilityLabel":"A carregar","ellipsis":"{content}..."},"Badge":{"PROGRESS_LABELS":{"incomplete":"Incompleto","partiallyComplete":"Parcialmente concluído","complete":"Concluído"},"TONE_LABELS":{"info":"Informações","success":"Sucesso","warning":"Aviso","attention":"Atenção","new":"Novo","critical":"Crítico","readOnly":"Só de leitura","enabled":"Ativado"},"progressAndTone":"{toneLabel} {progressLabel}"},"Banner":{"dismissButton":"Ignorar notificação"},"Button":{"spinnerAccessibilityLabel":"A carregar"},"Common":{"checkbox":"caixa de verificação","undo":"Anular","cancel":"Cancelar","clear":"Limpar","close":"Fechar","submit":"Submeter","more":"Mais"},"ContextualSaveBar":{"save":"Guardar","discard":"Eliminar"},"DataTable":{"sortAccessibilityLabel":"ordenar {direction} por","navAccessibilityLabel":"Deslocar tabela {direction} de uma coluna","totalsRowHeading":"Totais","totalRowHeading":"Total"},"DatePicker":{"previousMonth":"Mostrar mês anterior, {previousMonthName} {showPreviousYear}","nextMonth":"Mostrar mês seguinte, {nextMonth} {nextYear}","today":"Hoje ","months":{"january":"Janeiro","february":"Fevereiro","march":"Março","april":"Abril","may":"Maio","june":"Junho","july":"Julho","august":"Agosto","september":"Setembro","october":"Outubro","november":"Novembro","december":"Dezembro"},"daysAbbreviated":{"monday":"Seg","tuesday":"Ter","wednesday":"Qua","thursday":"Qui","friday":"Sex","saturday":"Sáb","sunday":"Dom"},"days":{"monday":"Segunda-feira","tuesday":"Terça-feira","wednesday":"Quarta-feira","thursday":"Quinta-feira","friday":"Sexta-feira","saturday":"Sábado","sunday":"Domingo"},"start":"Início do intervalo","end":"Fim do intervalo"},"DiscardConfirmationModal":{"title":"Eliminar todas as alterações não guardadas","message":"Se eliminar as alterações, vai eliminar quaisquer edições feitas desde que guardou pela última vez.","primaryAction":"Eliminar alterações","secondaryAction":"Continuar a editar"},"DropZone":{"errorOverlayTextFile":"O tipo de ficheiro não é válido","errorOverlayTextImage":"O tipo de imagem é inválido","single":{"overlayTextFile":"Solte o ficheiro para carregar","overlayTextImage":"Solte a imagem para carregar","actionTitleFile":"Adicionar ficheiro","actionTitleImage":"Adicionar imagem","actionHintFile":"ou solte o ficheiro para carregar","actionHintImage":"ou solte a imagem para carregar","labelFile":"Carregar ficheiro","labelImage":"Carregar imagem","overlayTextVideo":"Largar vídeo para carregar","actionTitleVideo":"Adicionar vídeo","actionHintVideo":"ou largar para carregar","labelVideo":"Carregar vídeo"},"allowMultiple":{"overlayTextFile":"Solte os ficheiros para carregar","overlayTextImage":"Solte as imagens para carregar","actionTitleFile":"Adicionar ficheiros","actionTitleImage":"Adicionar imagens","actionHintFile":"ou solte os ficheiros para carregar","actionHintImage":"ou solte as imagens para carregar","labelFile":"Carregar ficheiros","labelImage":"Carregar imagens","overlayTextVideo":"Largar vídeos para carregar","actionTitleVideo":"Adicionar vídeos","actionHintVideo":"ou largar para carregar","labelVideo":"Carregar vídeos"},"errorOverlayTextVideo":"O tipo de vídeo não é válido"},"EmptySearchResult":{"altText":"Resultados de pesquisa vazios"},"Frame":{"skipToContent":"Saltar para o conteúdo","Navigation":{"closeMobileNavigationLabel":"Fechar a navegação"},"navigationLabel":"Navegação"},"ActionMenu":{"RollupActions":{"rollupButton":"Ver ações","rollupButtonBreadcrumbs":"Ver trilhos para {sectionName}","rollupNavigationName":"Trilhos para {sectionName}","defaultRollupName":"Trilhos"},"Actions":{"moreActions":"Mais ações"}},"Filters":{"moreFilters":"Mais filtros","filter":"Filtrar {resourceName}","noFiltersApplied":"Nenhum filtro aplicado","cancel":"Cancelar","done":"Concluído","clearAllFilters":"Limpar todos os filtros","clear":"Limpar","clearLabel":"Limpar {filterName}","moreFiltersWithCount":"Mais filtros ({count})","addFilter":"Adicionar filtro","clearFilters":"Limpar tudo","searchInView":"em:{viewName}"},"Modal":{"iFrameTitle":"marcação de corpo","modalWarning":"Estas propriedades necessárias estão em falta no Modal: {missingProps}","unsavedChanges":"Alterações não guardadas"},"Pagination":{"previous":"Anterior","next":"Seguinte","pagination":"Paginação"},"ProgressBar":{"negativeWarningMessage":"Os valores passados para propriedades do progresso não devem ser negativos. A repor {progress} para 0.","exceedWarningMessage":"Os valores passados para propriedades do progresso não devem exceder 100. A configurar {progress} para 100."},"ResourceList":{"sortingLabel":"Ordenar por","defaultItemSingular":"item","defaultItemPlural":"itens","showing":"A mostrar {itemsCount} {resource}","loading":"A carregar {resource}","selected":"{selectedItemsCount} selecionada","allItemsSelected":"Todos os {itemsLength}+ {resourceNamePlural} da sua loja estão selecionados","selectAllItems":"Selecione todos os {itemsLength}+ {resourceNamePlural} da sua loja","emptySearchResultTitle":"Nenhum {resourceNamePlural} encontrado","emptySearchResultDescription":"Tente alterar os filtros ou o termo de pesquisa","selectButtonText":"Selecionar","a11yCheckboxDeselectAllSingle":"Desselecionar {resourceNameSingular}","a11yCheckboxSelectAllSingle":"Selecionar {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"Desselecionar tudo {itemsLength} {resourceNamePlural}","a11yCheckboxSelectAllMultiple":"Selecionar tudo {itemsLength} {resourceNamePlural}","Item":{"actionsDropdownLabel":"Ações para {accessibilityLabel}","actionsDropdown":"Menu pendente de ações","viewItem":"Ver detalhes de {itemName}"},"BulkActions":{"actionsActivatorLabel":"Ações","moreActionsActivatorLabel":"Mais ações"},"showingTotalCount":"Mostrar {itemsCount} de {totalItemsCount} {resource}","allFilteredItemsSelected":"Todos os {itemsLength} + {resourceNamePlural} neste filtro estão selecionados","selectAllFilteredItems":"Selecionar todos os {itemsLength}+ {resourceNamePlural} neste filtro"},"SkeletonPage":{"loadingLabel":"Página a carregar"},"Tabs":{"toggleTabsLabel":"Mais visualizações","newViewAccessibilityLabel":"Criar uma nova visualização","newViewTooltip":"Criar visualização","Tab":{"rename":"Renomear visualização","duplicate":"Duplicar visualização","edit":"Editar visualização","editColumns":"Editar colunas","delete":"Eliminar visualização","copy":"Cópia de {name}","deleteModal":{"title":"Eliminar visualização?","description":"Esta ação não pode ser anulada. A vista de {viewName} deixará de estar disponível no seu admin.","cancel":"Cancelar","delete":"Eliminar visualização"}},"RenameModal":{"title":"Renomear visualização","label":"Nome","cancel":"Cancelar","create":"Guardar","errors":{"sameName":"Já existe uma visualização com este nome. Escolha um nome diferente."}},"DuplicateModal":{"title":"Duplicar visualização","label":"Nome","cancel":"Cancelar","create":"Criar visualização","errors":{"sameName":"Já existe uma visualização com este nome. Escolha um nome diferente."}},"CreateViewModal":{"title":"Criar uma nova visualização","label":"Nome","cancel":"Cancelar","create":"Criar visualização","errors":{"sameName":"Já existe uma visualização com este nome. Escolha um nome diferente."}}},"Tag":{"ariaLabel":"Remover {children}"},"TextField":{"characterCount":"{count} caracteres","characterCountWithMaxLength":"{count} de {limit} caracteres utilizados"},"TopBar":{"toggleMenuLabel":"Alternar menu","SearchField":{"clearButtonLabel":"Limpar","search":"Pesquisar"}},"MediaCard":{"popoverButton":"Ações","dismissButton":"Ignorar"},"VideoThumbnail":{"playButtonA11yLabel":{"default":"Reproduzir o vídeo","defaultWithDuration":"Reproduzir vídeo de {duration}","duration":{"hours":{"other":{"only":"{hourCount} horas","andMinutes":"{hourCount} horas e {minuteCount} minutos","andMinute":"{hourCount} horas e {minuteCount} minuto","minutesAndSeconds":"{hourCount} horas, {minuteCount} minutos e {secondCount} segundos","minutesAndSecond":"{hourCount} horas, {minuteCount} minutos e {secondCount} segundo","minuteAndSeconds":"{hourCount} horas, {minuteCount} minuto e {secondCount} segundos","minuteAndSecond":"{hourCount} horas, {minuteCount} minuto e {secondCount} segundo","andSeconds":"{hourCount} horas e {secondCount} segundos","andSecond":"{hourCount} horas e {secondCount} segundo"},"one":{"only":"{hourCount} hora","andMinutes":"{hourCount} hora e {minuteCount} minutos","andMinute":"{hourCount} hora e {minuteCount} minuto","minutesAndSeconds":"{hourCount} hora, {minuteCount} minutos e {secondCount} segundos","minutesAndSecond":"{hourCount} hora, {minuteCount} minutos e {secondCount} segundo","minuteAndSeconds":"{hourCount} hora, {minuteCount} minuto e {secondCount} segundos","minuteAndSecond":"{hourCount} hora, {minuteCount} minuto e {secondCount} segundo","andSeconds":"{hourCount} hora e {secondCount} segundos","andSecond":"{hourCount} hora e {secondCount} segundo"}},"minutes":{"other":{"only":"{minuteCount} minutos","andSeconds":"{minuteCount} minutos e {secondCount} segundos","andSecond":"{minuteCount} minutos e {secondCount} segundo"},"one":{"only":"{minuteCount} minuto","andSeconds":"{minuteCount} minuto e {secondCount} segundos","andSecond":"{minuteCount} minuto e {secondCount} segundo"}},"seconds":{"other":"{secondCount} segundos","one":"{secondCount} segundo","many":"{secondCount} segundos"}}}},"Loading":{"label":"Barra de carregamento da página"},"TooltipOverlay":{"accessibilityLabel":"Descrição: {label}"},"IndexProvider":{"defaultItemSingular":"Item","defaultItemPlural":"Itens","allItemsSelected":"Todos os {itemsLength}+ de {resourceNamePlural} foram selecionados","selected":"{selectedItemsCount} selecionada","a11yCheckboxDeselectAllSingle":"Desselecionar {resourceNameSingular}","a11yCheckboxSelectAllSingle":"Selecionar {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"Desselecionar tudo {itemsLength} {resourceNamePlural}","a11yCheckboxSelectAllMultiple":"Selecionar tudo {itemsLength} {resourceNamePlural}"},"IndexTable":{"emptySearchTitle":"Nenhum {resourceNamePlural} encontrado","emptySearchDescription":"Tente alterar os filtros ou o termo de pesquisa","onboardingBadgeText":"Novo","resourceLoadingAccessibilityLabel":"A carregar {resourceNamePlural}","selectAllLabel":"Selecionar tudo {resourceNamePlural}","selected":"{selectedItemsCount} selecionada","undo":"Anular","selectAllItems":"Selecionar todos os itens de {resourceNamePlural} de {itemsLength}+","selectItem":"Selecionar {resourceName}","selectButtonText":"Selecionar","sortAccessibilityLabel":"ordenar {direction} por"},"Page":{"Header":{"rollupActionsLabel":"Ver ações para {title}","pageReadyAccessibilityLabel":"{title}. Esta página está pronta"}},"FullscreenBar":{"back":"Voltar","accessibilityLabel":"Sair do modo ecrã inteiro"},"FilterPill":{"clear":"Limpar","unsavedChanges":"Alterações não guardadas - {label}"},"IndexFilters":{"searchFilterTooltip":"Pesquisar e filtrar","searchFilterTooltipWithShortcut":"Pesquisar e filtrar (F)","searchFilterAccessibilityLabel":"Resultados da pesquisa e do filtro","sort":"Ordenar os resultados","addView":"Adicionar uma nova visualização","newView":"Pesquisa personalizada","SortButton":{"ariaLabel":"Ordenar os resultados","tooltip":"Ordenar","title":"Ordenar por","sorting":{"asc":"Ascendente","desc":"Descendente","az":"A-Z","za":"Z-A"}},"UpdateButtons":{"cancel":"Cancelar","update":"Atualizar","save":"Guardar","saveAs":"Guardar como","modal":{"title":"Guardar visualização como","label":"Nome","sameName":"Já existe uma visualização com este nome. Escolha um nome diferente.","save":"Guardar","cancel":"Cancelar"}},"EditColumnsButton":{"tooltip":"Editar colunas","accessibilityLabel":"Personalizar visibilidade e ordem da coluna da tabela"}},"ActionList":{"SearchField":{"clearButtonLabel":"Limpar","search":"Pesquisar","placeholder":"Pesquisar ações"}},"AlphaTable":{"TableRowActions":{"heading":"Ações","activatorAccessibilityLabel":"Abrir ações de linha","activatorLabel":"Ações"},"TableRowGroups":{"heading":"Alternar grupos de linha","toggle":"Alternar a visibilidade deste grupo de linhas"},"Sorting":{"sortAscending":"Organizar esta tabela por {heading} em ordem crescente","sortDescending":"Organizar esta tabela por {heading} em ordem decrescente"},"Selection":{"select":"Selecionar {id}","selectPage":"Selecionar todos os {count} na página","selectAll":"Selecionar todos na loja","selectAllWithTotal":"Selecionar todos os {total} na loja","selectionHeader":"Seleção","unselectAll":"Anular a seleção de tudo","selectedPage":"{count} selecionado(s)","selectedAll":"Todos selecionados na loja","selectedAllWithTotal":"Todos os {total} selecionados na loja","selectedSome":"{count}/{total} selecionado(s)","undoSelectAll":"Anular seleção de todos na loja","undoSelectAllWithTotal":"Anular seleção de todos {total} na loja","showSelectedToggle":"Mostrar selecionados","showingOnlySelected":"A mostrar {count} selecionado(s)","paginationLabel":"A mostrar {start}–{end} de {total} itens selecionados"},"BulkActions":{"activatorLabel":"Ações"},"TableCell":{"spansColumns":"abrange {count} colunas"}},"SortPopover":{"ariaLabel":"Ordene os resultados","tooltip":"Ordenar","title":"Ordenar por","sorting":{"asc":"Ascendente","desc":"Descendente","az":"A-Z","za":"Z-A"}}}')
-  , Sq = {
-    Polaris: kq
-}
-  , Cq = JSON.parse('{"Avatar":{"label":"Avatar","labelWithInitials":"Avatar med initialer {initials}"},"Autocomplete":{"spinnerAccessibilityLabel":"Laddar","ellipsis":"{content}..."},"Badge":{"PROGRESS_LABELS":{"incomplete":"Ofullständig","partiallyComplete":"Delvis slutförd","complete":"Slutförd"},"TONE_LABELS":{"info":"Info","success":"Lyckades","warning":"Varning","attention":"Mottagare","new":"Ny","critical":"Kritisk","readOnly":"Skrivskyddad","enabled":"Aktiverad"},"progressAndTone":"{toneLabel} {progressLabel}"},"Banner":{"dismissButton":"Avvisa avisering"},"Button":{"spinnerAccessibilityLabel":"Laddar"},"Common":{"checkbox":"kryssruta","undo":"Ångra","cancel":"Avbryt","clear":"Rensa","close":"Stäng","submit":"Skicka","more":"Mer"},"ContextualSaveBar":{"save":"Spara","discard":"Avfärda"},"DataTable":{"sortAccessibilityLabel":"sortera {direction} efter","navAccessibilityLabel":"Skrolla tabellen {direction} en kolumn","totalsRowHeading":"Totalt","totalRowHeading":"Totalt"},"DatePicker":{"previousMonth":"Visa föregående månad {previousMonthName} {showPreviousYear}","nextMonth":"Visa nästa månad {nextMonth} {nextYear}","today":"I dag ","months":{"january":"januari","february":"februari","march":"mars","april":"april","may":"maj","june":"juni","july":"juli","august":"augusti","september":"september","october":"oktober","november":"november","december":"december"},"daysAbbreviated":{"monday":"mån","tuesday":"tis","wednesday":"ons","thursday":"tor","friday":"fre","saturday":"lör","sunday":"sön"},"days":{"monday":"Måndag","tuesday":"Tisdag","wednesday":"Onsdag","thursday":"Torsdag","friday":"Fredag","saturday":"Lördag","sunday":"Söndag"},"start":"Intervallets början","end":"Intervallets slut"},"DiscardConfirmationModal":{"title":"Ignorera alla ändringar som inte har sparats","message":"Om du ignorerar ändringar så raderar du alla ändringar som du har gjort efter att du sparade senast.","primaryAction":"Ignorera ändringar","secondaryAction":"Fortsätt redigera"},"DropZone":{"errorOverlayTextFile":"Filtypen är inte giltig","errorOverlayTextImage":"Bildtypen är inte giltig","single":{"overlayTextFile":"Släpp fil för uppladdning","overlayTextImage":"Släpp bild för uppladdning","actionTitleFile":"Lägg till fil","actionTitleImage":"Lägg till bild","actionHintFile":"eller släpp fil för uppladdning","actionHintImage":"eller släpp bild för att ladda upp","labelFile":"Ladda upp fil","labelImage":"Ladda upp bild","overlayTextVideo":"Släpp video för uppladdning","actionTitleVideo":"Lägg till video","actionHintVideo":"eller släpp video för uppladdning","labelVideo":"Ladda upp video"},"allowMultiple":{"overlayTextFile":"Släpp filer för uppladdning","overlayTextImage":"Släpp bilder för uppladdning","actionTitleFile":"Lägg till filer","actionTitleImage":"Lägg till bilder","actionHintFile":"eller släpp filer för uppladdning","actionHintImage":"eller släpp bilder för uppladdning","labelFile":"Ladda upp filer","labelImage":"Ladda upp bilder","overlayTextVideo":"Släpp videor för uppladdning","actionTitleVideo":"Lägg till videor","actionHintVideo":"eller släpp videor för uppladdning","labelVideo":"Ladda upp videor"},"errorOverlayTextVideo":"Videotyp är inte giltig"},"EmptySearchResult":{"altText":"Tomma sökresultat"},"Frame":{"skipToContent":"Gå vidare till innehåll","Navigation":{"closeMobileNavigationLabel":"Stäng navigering"},"navigationLabel":"Navigering"},"ActionMenu":{"RollupActions":{"rollupButton":"Visa åtgärder","rollupButtonBreadcrumbs":"Visa länkstigar för {sectionName}","rollupNavigationName":"Länkstigar för {sectionName}","defaultRollupName":"Länkstigar"},"Actions":{"moreActions":"Fler åtgärder"}},"Filters":{"moreFilters":"Fler filter","filter":"Filtrera {resourceName}","noFiltersApplied":"Inga filter tillämpas","cancel":"Avbryt","done":"Klar","clearAllFilters":"Rensa filter","clear":"Rensa","clearLabel":"Rensa {filterName}","moreFiltersWithCount":"Fler filter ({count})","addFilter":"Lägg till filter","clearFilters":"Rensa alla","searchInView":"i:{viewName}"},"Modal":{"iFrameTitle":"markering av brödtext","modalWarning":"Dessa nödvändiga egenskaper saknas från Modal: {missingProps}","unsavedChanges":"Ändringar som inte har sparats"},"Pagination":{"previous":"Föregående","next":"Nästa","pagination":"Paginering"},"ProgressBar":{"negativeWarningMessage":"Värden som skickas till framstegspropagering bör inte vara negativa. Återställning {progress} till 0.","exceedWarningMessage":"Värden som skickas till framsteget ska inte överstiga 100. Ställer in {progress} till 100."},"ResourceList":{"sortingLabel":"Sortera efter","defaultItemSingular":"artikel","defaultItemPlural":"artiklar","showing":"Visar {itemsCount} {resource}","loading":"Laddar {resource}","selected":"{selectedItemsCount} har valts","allItemsSelected":"Alla {itemsLength}+ {resourceNamePlural} i din butik har valts","selectAllItems":"Välj alla {itemsLength}+ {resourceNamePlural} i din butik","emptySearchResultTitle":"Inga {resourceNamePlural} hittades","emptySearchResultDescription":"Prova att byta filter eller sökord","selectButtonText":"Välj","a11yCheckboxDeselectAllSingle":"Avmarkera {resourceNameSingular}","a11yCheckboxSelectAllSingle":"Välj {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"Avmarkera alla {itemsLength} {resourceNamePlural}","a11yCheckboxSelectAllMultiple":"Markera alla {itemsLength} {resourceNamePlural}","Item":{"actionsDropdownLabel":"Åtgärder för {accessibilityLabel}","actionsDropdown":"Åtgärdsmeny","viewItem":"Visa mer information om {itemName}"},"BulkActions":{"actionsActivatorLabel":"Åtgärder","moreActionsActivatorLabel":"Fler åtgärder"},"showingTotalCount":"Visar {itemsCount} av {totalItemsCount} {resource}","allFilteredItemsSelected":"Alla {itemsLength} + {resourceNamePlural} i detta filter har valts","selectAllFilteredItems":"Välj alla {itemsLength} + {resourceNamePlural} i det här filtret"},"SkeletonPage":{"loadingLabel":"Sidan laddar"},"Tabs":{"toggleTabsLabel":"Fler vyer","newViewAccessibilityLabel":"Skapa ny vy","newViewTooltip":"Skapa vy","Tab":{"rename":"Döp om vy","duplicate":"Duplicera vy","edit":"Redigera vy","editColumns":"Redigera kolumner","delete":"Radera vy","copy":"Kopia av {name}","deleteModal":{"title":"Radera vy?","description":"Du kan inte ångra detta. {viewName}-visning kommer inte längre vara tillgänglig i din admin.","cancel":"Avbryt","delete":"Radera vy"}},"RenameModal":{"title":"Byt namn på vy","label":"Namn","cancel":"Avbryt","create":"Spara","errors":{"sameName":"En vy med detta namn finns redan. Välj ett annat namn."}},"DuplicateModal":{"title":"Duplicera vy","label":"Namn","cancel":"Avbryt","create":"Skapa vy","errors":{"sameName":"En vy med detta namn finns redan. Välj ett annat namn."}},"CreateViewModal":{"title":"Skapa ny vy","label":"Namn","cancel":"Avbryt","create":"Skapa vy","errors":{"sameName":"En vy med detta namn finns redan. Välj ett annat namn."}}},"Tag":{"ariaLabel":"Ta bort {children}"},"TextField":{"characterCount":"{count} tecken","characterCountWithMaxLength":"{count} av {limit} tecken har använts"},"TopBar":{"toggleMenuLabel":"Växla menyn","SearchField":{"clearButtonLabel":"Rensa","search":"Sök"}},"MediaCard":{"popoverButton":"Åtgärder","dismissButton":"Avvisa"},"VideoThumbnail":{"playButtonA11yLabel":{"default":"Spela video","defaultWithDuration":"Spela video som är {duration} lång","duration":{"hours":{"other":{"only":"{hourCount} timmar","andMinutes":"{hourCount} timmar och {minuteCount} minuter","andMinute":"{hourCount} timmar och {minuteCount} minut","minutesAndSeconds":"{hourCount} timme, {minuteCount} minuter och {secondCount} sekunder","minutesAndSecond":"{hourCount} timmar, {minuteCount} minuter och {secondCount} sekund","minuteAndSeconds":"{hourCount} timmar, {minuteCount} minut och {secondCount} sekunder","minuteAndSecond":"{hourCount} timmar, {minuteCount} minut och {secondCount} sekund","andSeconds":"{hourCount} timme och {secondCount} sekunder","andSecond":"{hourCount} timmar och {secondCount} sekund"},"one":{"only":"{hourCount} timme","andMinutes":"{hourCount} timme och {minuteCount} minuter","andMinute":"{hourCount} timme och {minuteCount} minut","minutesAndSeconds":"{hourCount} timme, {minuteCount} minuter och {secondCount} sekunder","minutesAndSecond":"{hourCount} timme, {minuteCount} minuter och {secondCount} sekund","minuteAndSeconds":"{hourCount} timme, {minuteCount} minut och {secondCount} sekunder","minuteAndSecond":"{hourCount} timme, {minuteCount} minut och {secondCount} sekund","andSeconds":"{hourCount} timme och {secondCount} sekunder","andSecond":"{hourCount} timme och {secondCount} sekund"}},"minutes":{"other":{"only":"{minuteCount} minuter","andSeconds":"{minuteCount} minuter och {secondCount} sekunder","andSecond":"{minuteCount} minuter och {secondCount} sekund"},"one":{"only":"{minuteCount} minut","andSeconds":"{minuteCount} minut och {secondCount} sekunder","andSecond":"{minuteCount} minut och {secondCount} sekund"}},"seconds":{"other":"{secondCount} sekunder","one":"{secondCount} sekund"}}}},"Loading":{"label":"Fält för att ladda sida"},"TooltipOverlay":{"accessibilityLabel":"Verktygstips: {label}"},"IndexProvider":{"defaultItemSingular":"Artikel","defaultItemPlural":"Artiklar","allItemsSelected":"Alla {itemsLength}+ {resourceNamePlural} har valts","selected":"{selectedItemsCount} har valts","a11yCheckboxDeselectAllSingle":"Avmarkera {resourceNameSingular}","a11yCheckboxSelectAllSingle":"Välj {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"Avmarkera alla {itemsLength} {resourceNamePlural}","a11yCheckboxSelectAllMultiple":"Markera alla {itemsLength} {resourceNamePlural}"},"IndexTable":{"emptySearchTitle":"Inga {resourceNamePlural} hittades","emptySearchDescription":"Prova att byta filter eller sökord","onboardingBadgeText":"Ny","resourceLoadingAccessibilityLabel":"Laddar {resourceNamePlural}","selectAllLabel":"Välj alla {resourceNamePlural}","selected":"{selectedItemsCount} har valts","undo":"Ångra","selectAllItems":"Välj alla {itemsLength}+ {resourceNamePlural}","selectItem":"Välj {resourceName}","selectButtonText":"Välj","sortAccessibilityLabel":"sortera {direction} efter"},"Page":{"Header":{"rollupActionsLabel":"Visa åtgärder för {title}","pageReadyAccessibilityLabel":"{title}. Den här sidan är redo"}},"FullscreenBar":{"back":"Tillbaka","accessibilityLabel":"Lämna helskärmsläget"},"FilterPill":{"clear":"Rensa","unsavedChanges":"Ej sparade ändringar – {label}"},"IndexFilters":{"searchFilterTooltip":"Sök och filtrera","searchFilterTooltipWithShortcut":"Sök och filtrera (F)","searchFilterAccessibilityLabel":"Sök och filtrera resultat","sort":"Sortera dina resultat","addView":"Lägg till en ny vy","newView":"Anpassad sökning","SortButton":{"ariaLabel":"Sortera resultatet","tooltip":"Sortera","title":"Sortera efter","sorting":{"asc":"Stigande","desc":"Fallande","az":"A–Ö","za":"Ö–A"}},"UpdateButtons":{"cancel":"Avbryt","update":"Uppdatera","save":"Spara","saveAs":"Spara som","modal":{"title":"Spara vy som","label":"Namn","sameName":"En vy med detta namn finns redan. Välj ett annat namn.","save":"Spara","cancel":"Avbryt"}},"EditColumnsButton":{"tooltip":"Redigera kolumner","accessibilityLabel":"Anpassa tabellkolumnernas ordning och synlighet"}},"ActionList":{"SearchField":{"clearButtonLabel":"Rensa","search":"Sök","placeholder":"Sök åtgärder"}},"AlphaTable":{"TableRowActions":{"heading":"Åtgärder","activatorAccessibilityLabel":"Öppna radåtgärder","activatorLabel":"Åtgärder"},"TableRowGroups":{"heading":"Växla radgrupper","toggle":"Växla synlighet för denna radgrupp"},"Sorting":{"sortAscending":"Sortera denna tabell efter {heading} i stigande ordning","sortDescending":"Sortera denna tabell efter {heading} i fallande ordning"},"Selection":{"select":"Markera {id}","selectPage":"Välj alla {count} på sidan","selectAll":"Välj alla i butiken","selectAllWithTotal":"Välj alla {total} i butiken","selectionHeader":"Val","unselectAll":"Avmarkera alla","selectedPage":"{count} har valts","selectedAll":"Alla har valts i butiken","selectedAllWithTotal":"Alla {total} har valts i butiken","selectedSome":"{count}/{total} har valts","undoSelectAll":"Ångra välj alla i butiken","undoSelectAllWithTotal":"Ångra Välj alla {total} i butik","showSelectedToggle":"Visa utvalda","showingOnlySelected":"Visar {count} valda","paginationLabel":"Visar {start}–{end} av {total} valda objekt"},"TableCell":{"spansColumns":"omfattar {count} kolumner"},"BulkActions":{"activatorLabel":"Åtgärder"}},"SortPopover":{"ariaLabel":"Sortera resultaten","tooltip":"Sortera","title":"Sortering","sorting":{"asc":"Stigande","desc":"Fallande","az":"A–Ö","za":"Ö–A"}}}')
-  , Aq = {
-    Polaris: Cq
-}
-  , xq = JSON.parse('{"Avatar":{"label":"ตัวแทน","labelWithInitials":"ตัวแทนพร้อมอักษรย่อ {initials}"},"Autocomplete":{"spinnerAccessibilityLabel":"กำลังโหลด","ellipsis":"{content}…"},"Badge":{"PROGRESS_LABELS":{"incomplete":"ยังไม่เสร็จสมบูรณ์","partiallyComplete":"เสร็จสมบูรณ์แล้วบางส่วน","complete":"เสร็จสมบูรณ์"},"TONE_LABELS":{"info":"ข้อมูล","success":"สำเร็จ","warning":"คำเตือน","attention":"ระวัง","new":"ใหม่","critical":"ร้ายแรง","readOnly":"อ่านอย่างเดียว","enabled":"เปิดใช้งานแล้ว"},"progressAndTone":"{toneLabel} {progressLabel}"},"Banner":{"dismissButton":"ปิดการแจ้งเตือน"},"Button":{"spinnerAccessibilityLabel":"กำลังโหลด"},"Common":{"checkbox":"ช่องทำเครื่องหมาย","undo":"เลิกทำ","cancel":"ยกเลิก","clear":"ล้าง","close":"ปิด","submit":"ส่ง","more":"อื่นๆ"},"ContextualSaveBar":{"save":"บันทึก","discard":"ละทิ้ง"},"DataTable":{"sortAccessibilityLabel":"จัดเรียง {direction} ตาม","navAccessibilityLabel":"เลื่อนตาราง {direction} หนึ่งคอลัมน์","totalsRowHeading":"ยอดทั้งหมด","totalRowHeading":"ยอดทั้งหมด"},"DatePicker":{"previousMonth":"แสดงเดือนก่อนหน้า ซึ่งคือ {previousMonthName} {showPreviousYear}","nextMonth":"แสดงเดือนถัดไป ซึ่งคือ {nextMonth} {nextYear}","today":"วันนี้ ","months":{"january":"มกราคม","february":"กุมภาพันธ์","march":"มีนาคม","april":"เมษายน","may":"พฤษภาคม","june":"มิถุนายน","july":"กรกฎาคม","august":"สิงหาคม","september":"กันยายน","october":"ตุลาคม","november":"พฤศจิกายน","december":"ธันวาคม"},"daysAbbreviated":{"monday":"จ.","tuesday":"อ.","wednesday":"พ.","thursday":"พฤ.","friday":"ศ.","saturday":"ส.","sunday":"อา."},"days":{"monday":"วันจันทร์","tuesday":"วันอังคาร","wednesday":"วันพุธ","thursday":"วันพฤหัสบดี","friday":"วันศุกร์","saturday":"วันเสาร์","sunday":"วันอาทิตย์"},"start":"จุดเริ่มของช่วง","end":"จุดสิ้นสุดของช่วง"},"DiscardConfirmationModal":{"title":"ละทิ้งการเปลี่ยนแปลงที่ไม่ได้บันทึกทั้งหมด","message":"หากคุณละทิ้งการเปลี่ยนแปลง คุณจะลบการแก้ไขทั้งหมดที่คุณทำหลังการบันทึกครั้งล่าสุด","primaryAction":"ละทิ้งการเปลี่ยนแปลง","secondaryAction":"ดำเนินการแก้ไขต่อ"},"DropZone":{"errorOverlayTextFile":"ประเภทของไฟล์ไม่ถูกต้อง","errorOverlayTextImage":"ประเภทของรูปภาพไม่ถูกต้อง","single":{"overlayTextFile":"วางไฟล์เพื่ออัปโหลด","overlayTextImage":"วางรูปภาพเพื่ออัปโหลด","actionTitleFile":"เพิ่มไฟล์","actionTitleImage":"เพิ่มรูปภาพ","actionHintFile":"หรือวางไฟล์เพื่ออัปโหลด","actionHintImage":"หรือวางรูปภาพเพื่ออัปโหลด","labelFile":"อัปโหลดไฟล์","labelImage":"อัปโหลดรูปภาพ","overlayTextVideo":"วางวิดีโอเพื่ออัปโหลด","actionTitleVideo":"เพิ่มวิดีโอ","actionHintVideo":"หรือวางวิดีโอเพื่ออัปโหลด","labelVideo":"อัปโหลดวิดีโอ"},"allowMultiple":{"overlayTextFile":"วางไฟล์เพื่ออัปโหลด","overlayTextImage":"วางรูปภาพเพื่ออัปโหลด","actionTitleFile":"เพิ่มไฟล์","actionTitleImage":"เพิ่มรูปภาพ","actionHintFile":"หรือวางไฟล์เพื่ออัปโหลด","actionHintImage":"หรือวางรูปภาพเพื่ออัปโหลด","labelFile":"อัปโหลดไฟล์","labelImage":"อัปโหลดรูปภาพ","overlayTextVideo":"วางวิดีโอเพื่ออัปโหลด","actionTitleVideo":"เพิ่มวิดีโอ","actionHintVideo":"หรือวางวิดีโอเพื่ออัปโหลด","labelVideo":"อัปโหลดวิดีโอ"},"errorOverlayTextVideo":"ประเภทวิดีโอไม่ถูกต้อง"},"EmptySearchResult":{"altText":"ล้างผลลัพธ์การค้นหา"},"Frame":{"skipToContent":"ข้ามไปยังเนื้อหา","Navigation":{"closeMobileNavigationLabel":"ปิดการนำทาง"},"navigationLabel":"การนำทาง"},"ActionMenu":{"RollupActions":{"rollupButton":"ดูการดำเนินการ","rollupButtonBreadcrumbs":"ดูร่องรอยเส้นทางสำหรับ {sectionName}","rollupNavigationName":"ร่องรอยเส้นทางสำหรับ {sectionName}","defaultRollupName":"ร่องรอยเส้นทาง"},"Actions":{"moreActions":"การดำเนินการเพิ่มเติม"}},"Filters":{"moreFilters":"ตัวกรองเพิ่มเติม","filter":"กรอง {resourceName}","noFiltersApplied":"ไม่ได้ใช้ตัวกรอง","cancel":"ยกเลิก","done":"เสร็จสิ้น","clearAllFilters":"ล้างตัวกรองทั้งหมด","clear":"ล้าง","clearLabel":"ล้าง {filterName}","moreFiltersWithCount":"ตัวกรองเพิ่มเติม ({count})","addFilter":"เพิ่มตัวกรอง","clearFilters":"ล้างทั้งหมด","searchInView":"ใน:{viewName}"},"Modal":{"iFrameTitle":"มาร์กอัปเนื้อหา","modalWarning":"คุณสมบัติที่จำเป็นเหล่านี้ไม่มีอยู่ใน Modal: {missingProps}","unsavedChanges":"การเปลี่ยนแปลงที่ยังไม่บันทึก"},"Pagination":{"previous":"ก่อนหน้า","next":"ถัดไป","pagination":"การแบ่งหน้า"},"ProgressBar":{"negativeWarningMessage":"ค่าที่ส่งไปยังคุณสมบัติความคืบหน้าไม่ควรเป็นลบ กำลังรีเซ็ต {progress} เป็น 0","exceedWarningMessage":"ค่าที่ส่งไปยังคุณสมบัติความคืบหน้าไม่ควรเกิน 100 กำลังตั้ง {progress} เป็น 100"},"ResourceList":{"sortingLabel":"จัดเรียงตาม","defaultItemSingular":"รายการ","defaultItemPlural":"รายการ","showing":"แสดง {resource} จำนวน {itemsCount} รายการ","loading":"กำลังโหลด {resource}","selected":"เลือกแล้ว {selectedItemsCount} รายการ","allItemsSelected":"เลือก {resourceNamePlural} ทั้ง {itemsLength}+ รายการในร้านค้าของคุณแล้ว","selectAllItems":"เลือก {resourceNamePlural} ทั้ง {itemsLength}+ รายการในร้านค้าของคุณ","emptySearchResultTitle":"ไม่พบ {resourceNamePlural}","emptySearchResultDescription":"ลองเปลี่ยนตัวกรองหรือคำค้นหา","selectButtonText":"เลือก","a11yCheckboxDeselectAllSingle":"ยกเลิกการเลือก {resourceNameSingular}","a11yCheckboxSelectAllSingle":"เลือก {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"ยกเลิกการเลือก {resourceNamePlural} ทั้ง {itemsLength} รายการ","a11yCheckboxSelectAllMultiple":"เลือก {resourceNamePlural} ทั้ง {itemsLength} รายการ","Item":{"actionsDropdownLabel":"การดำเนินการสำหรับ {accessibilityLabel}","actionsDropdown":"เมนูดรอปดาวน์ของการดำเนินการ","viewItem":"ดูรายละเอียดของ {itemName}"},"BulkActions":{"actionsActivatorLabel":"การดำเนินการ","moreActionsActivatorLabel":"การดำเนินการเพิ่มเติม"},"showingTotalCount":"แสดง {resource} จำนวน {itemsCount} จาก {totalItemsCount} รายการ","allFilteredItemsSelected":"เลือก {resourceNamePlural} ทั้ง {itemsLength}+ รายการในตัวกรองนี้แล้ว","selectAllFilteredItems":"เลือก {resourceNamePlural} ทั้ง {itemsLength}+ รายการทั้งหมดในตัวกรองนี้"},"SkeletonPage":{"loadingLabel":"กำลังโหลดหน้า"},"Tabs":{"toggleTabsLabel":"มุมมองเพิ่มเติม","newViewAccessibilityLabel":"สร้างมุมมองใหม่","newViewTooltip":"สร้างมุมมอง","Tab":{"rename":"เปลี่ยนชื่อมุมมอง","duplicate":"ทำซ้ำมุมมอง","edit":"แก้ไขมุมมอง","editColumns":"แก้ไขคอลัมน์","delete":"ลบมุมมอง","copy":"สำเนาของ {name}","deleteModal":{"title":"ต้องการลบมุมมองหรือไม่","description":"การดำเนินการนี้ไม่สามารถเลิกทำได้ ไม่สามารถใช้มุมมอง {viewName} ในส่วนผู้ดูแล Shopify ของคุณได้อีกต่อไป","cancel":"ยกเลิก","delete":"ลบมุมมอง"}},"RenameModal":{"title":"เปลี่ยนชื่อมุมมอง","label":"ชื่อ","cancel":"ยกเลิก","create":"บันทึก","errors":{"sameName":"มีมุมมองที่ใช้ชื่อนี้แล้ว โปรดเลือกชื่ออื่น"}},"DuplicateModal":{"title":"ทำซ้ำมุมมอง","label":"ชื่อ","cancel":"ยกเลิก","create":"สร้างมุมมอง","errors":{"sameName":"มีมุมมองที่ใช้ชื่อนี้แล้ว โปรดเลือกชื่ออื่น"}},"CreateViewModal":{"title":"สร้างมุมมองใหม่","label":"ชื่อ","cancel":"ยกเลิก","create":"สร้างมุมมอง","errors":{"sameName":"มีมุมมองที่ใช้ชื่อนี้แล้ว โปรดเลือกชื่ออื่น"}}},"Tag":{"ariaLabel":"ลบ {children} ออก"},"TextField":{"characterCount":"{count} อักขระ","characterCountWithMaxLength":"ใช้อักขระไปแล้ว {count} จาก {limit}"},"TopBar":{"toggleMenuLabel":"เมนูเปิด/ปิด","SearchField":{"clearButtonLabel":"ล้าง","search":"การค้นหา"}},"MediaCard":{"popoverButton":"การดำเนินการ","dismissButton":"ปิด"},"VideoThumbnail":{"playButtonA11yLabel":{"default":"เล่นวิดีโอ","defaultWithDuration":"เล่นวิดีโอความยาว {duration}","duration":{"hours":{"other":{"only":"{hourCount} ชั่วโมง","andMinutes":"{hourCount} ชั่วโมง {minuteCount} นาที","andMinute":"{hourCount} ชั่วโมง {minuteCount} นาที","minutesAndSeconds":"{hourCount} ชั่วโมง {minuteCount} นาที {secondCount} วินาที","minutesAndSecond":"{hourCount} ชั่วโมง {minuteCount} นาที {secondCount} วินาที","minuteAndSeconds":"{hourCount} ชั่วโมง {minuteCount} นาที {secondCount} วินาที","minuteAndSecond":"{hourCount} ชั่วโมง {minuteCount} นาที {secondCount} วินาที","andSeconds":"{hourCount} ชั่วโมง {secondCount} วินาที","andSecond":"{hourCount} ชั่วโมง {secondCount} วินาที"},"one":{"only":"{hourCount} ชั่วโมง","andMinutes":"{hourCount} ชั่วโมง {minuteCount} นาที","andMinute":"{hourCount} ชั่วโมง {minuteCount} นาที","minutesAndSeconds":"{hourCount} ชั่วโมง {minuteCount} นาที {secondCount} วินาที","minutesAndSecond":"{hourCount} ชั่วโมง {minuteCount} นาที {secondCount} วินาที","minuteAndSeconds":"{hourCount} ชั่วโมง {minuteCount} นาที {secondCount} วินาที","minuteAndSecond":"{hourCount} ชั่วโมง {minuteCount} นาที {secondCount} วินาที","andSeconds":"{hourCount} ชั่วโมง {secondCount} วินาที","andSecond":"{hourCount} ชั่วโมง {secondCount} วินาที"}},"minutes":{"other":{"only":"{minuteCount} นาที","andSeconds":"{minuteCount} นาที {secondCount} วินาที","andSecond":"{minuteCount} นาที {secondCount} วินาที"},"one":{"only":"{minuteCount} นาที","andSeconds":"{minuteCount} นาที {secondCount} วินาที","andSecond":"{minuteCount} นาที {secondCount} วินาที"}},"seconds":{"other":"{secondCount} วินาที","one":"{secondCount} วินาที"}}}},"Loading":{"label":"แถบแสดงการโหลดหน้า"},"TooltipOverlay":{"accessibilityLabel":"เคล็ดลับเกี่ยวกับเครื่องมือ: {label}"},"IndexProvider":{"defaultItemSingular":"รายการ","defaultItemPlural":"รายการ","allItemsSelected":"เลือก {resourceNamePlural} ทั้ง {itemsLength}+ รายการแล้ว","selected":"เลือกแล้ว {selectedItemsCount} รายการ","a11yCheckboxDeselectAllSingle":"ยกเลิกการเลือก {resourceNameSingular}","a11yCheckboxSelectAllSingle":"เลือก {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"ยกเลิกการเลือก {resourceNamePlural} ทั้ง {itemsLength} รายการ","a11yCheckboxSelectAllMultiple":"เลือก {resourceNamePlural} ทั้ง {itemsLength} รายการ"},"IndexTable":{"emptySearchTitle":"ไม่พบ {resourceNamePlural}","emptySearchDescription":"ลองเปลี่ยนตัวกรองหรือคำค้นหา","onboardingBadgeText":"ใหม่","resourceLoadingAccessibilityLabel":"กำลังโหลด {resourceNamePlural}…","selectAllLabel":"เลือก {resourceNamePlural} ทั้งหมด","selected":"เลือกแล้ว {selectedItemsCount} รายการ","undo":"เลิกทำ","selectAllItems":"เลือก {resourceNamePlural} ทั้ง {itemsLength}+ รายการ","selectItem":"เลือก {resourceName}","selectButtonText":"เลือก","sortAccessibilityLabel":"จัดเรียง {direction} ตาม"},"Page":{"Header":{"rollupActionsLabel":"ดูการดำเนินการสำหรับ {title}","pageReadyAccessibilityLabel":"{title} หน้านี้พร้อมแล้ว"}},"FullscreenBar":{"back":"ย้อนกลับ","accessibilityLabel":"ออกจากโหมดเต็มหน้าจอ"},"FilterPill":{"clear":"ล้าง","unsavedChanges":"การเปลี่ยนแปลงที่ไม่ได้บันทึก - {label}"},"IndexFilters":{"searchFilterTooltip":"ค้นหาและกรอง","searchFilterTooltipWithShortcut":"ค้นหาและกรอง (F)","searchFilterAccessibilityLabel":"ผลลัพธ์ของการค้นหาและกรอง","sort":"จัดเรียงผลลัพธ์ของคุณ","addView":"เพิ่มมุมมองใหม่","newView":"การค้นหาแบบกำหนดเอง","SortButton":{"ariaLabel":"จัดเรียงผลลัพธ์","tooltip":"จัดเรียง","title":"จัดเรียงตาม","sorting":{"asc":"น้อยไปมาก","desc":"มากไปน้อย","az":"A-Z","za":"Z-A"}},"UpdateButtons":{"cancel":"ยกเลิก","update":"อัปเดต","save":"บันทึก","saveAs":"บันทึกเป็น","modal":{"title":"บันทึกมุมมองเป็น","label":"ชื่อ","sameName":"มีมุมมองที่ใช้ชื่อนี้แล้ว โปรดเลือกชื่ออื่น","save":"บันทึก","cancel":"ยกเลิก"}},"EditColumnsButton":{"tooltip":"แก้ไขคอลัมน์","accessibilityLabel":"ปรับแต่งลำดับและการแสดงผลคอลัมน์ในตาราง"}},"ActionList":{"SearchField":{"clearButtonLabel":"ล้าง","search":"การค้นหา","placeholder":"ค้นหาการดำเนินการ"}},"AlphaTable":{"TableRowActions":{"heading":"การดำเนินการ","activatorAccessibilityLabel":"เปิดการดำเนินการแถว","activatorLabel":"การดำเนินการ"},"TableRowGroups":{"heading":"แสดง/ซ่อนกลุ่มของแถว","toggle":"แสดง/ซ่อนการแสดงผลกลุ่มของแถวนี้"},"Sorting":{"sortAscending":"จัดเรียงตารางนี้โดย {heading} จากน้อยไปหามาก","sortDescending":"จัดเรียงตารางนี้โดย {heading} จากมากไปหาน้อย"},"Selection":{"select":"เลือก {id}","selectPage":"เลือกทั้ง {count} รายการบนหน้า","selectAll":"เลือกทั้งหมดในร้านค้า","selectAllWithTotal":"เลือกทั้ง {total} รายการในร้านค้า","selectionHeader":"การเลือก","unselectAll":"ยกเลิกการเลือกทั้งหมด","selectedPage":"เลือกแล้ว {count} รายการ","selectedAll":"เลือกทั้งหมดในร้านค้าแล้ว","selectedAllWithTotal":"ทั้ง {total} รายการที่เลือกไว้ในร้านค้า","selectedSome":"เลือกแล้ว {count}/{total}","undoSelectAll":"ยกเลิกการเลือกทั้งหมดในร้านค้า","undoSelectAllWithTotal":"ยกเลิกการเลือกทั้งหมด {total} รายการในร้านค้า","showSelectedToggle":"แสดงรายการที่เลือก","showingOnlySelected":"แสดง {count} รายการที่เลือก","paginationLabel":"แสดง {start}–{end} จาก {total} รายการที่เลือก"},"TableCell":{"spansColumns":"ครอบคลุม {count} คอลัมน์"},"BulkActions":{"activatorLabel":"การดำเนินการ"}},"SortPopover":{"ariaLabel":"จัดเรียงผลลัพธ์","tooltip":"จัดเรียง","title":"จัดเรียงตาม","sorting":{"asc":"น้อยไปมาก","desc":"มากไปน้อย","az":"A-Z","za":"Z-A"}}}')
-  , _q = {
-    Polaris: xq
-}
-  , wq = JSON.parse(`{"Avatar":{"label":"Avatar","labelWithInitials":"Baş harfleri {initials} olan avatar"},"Autocomplete":{"spinnerAccessibilityLabel":"Yükleniyor:","ellipsis":"{content}…"},"Badge":{"PROGRESS_LABELS":{"incomplete":"Tamamlanmadı","partiallyComplete":"Kısmen tamamlandı","complete":"Tamamlandı"},"TONE_LABELS":{"info":"Bilgi","success":"Başarılı","warning":"Uyarı","attention":"Dikkat","new":"Yeni","critical":"Kritik","readOnly":"Salt okunur","enabled":"Etkinleştirildi"},"progressAndTone":"{toneLabel} {progressLabel}"},"Banner":{"dismissButton":"Bildirimi kapat"},"Button":{"spinnerAccessibilityLabel":"Yükleniyor"},"Common":{"checkbox":"onay kutusu","undo":"Geri al","cancel":"İptal et","clear":"Temizle","close":"Kapat","submit":"Gönder","more":"Daha fazla"},"ContextualSaveBar":{"save":"Kaydet","discard":"Sil"},"DataTable":{"sortAccessibilityLabel":"{direction} tarafı şuna göre sırala:","navAccessibilityLabel":"Tabloyu bir sütun {direction} tarafa kaydır","totalsRowHeading":"Toplamlar","totalRowHeading":"Toplam"},"DatePicker":{"previousMonth":"Önceki ayı ({previousMonthName} {showPreviousYear}) göster","nextMonth":"Sonraki ayı ({nextMonth} {nextYear}) göster","today":"Bugün ","months":{"january":"Ocak","february":"Şubat","march":"Mart","april":"Nisan","may":"Mayıs","june":"Haziran","july":"Temmuz","august":"Ağustos","september":"Eylül","october":"Ekim","november":"Kasım","december":"Aralık"},"daysAbbreviated":{"monday":"Pzt","tuesday":"Sal","wednesday":"Çar","thursday":"Per","friday":"Cum","saturday":"Cmt","sunday":"Paz"},"days":{"monday":"Pazartesi","tuesday":"Salı","wednesday":"Çarşamba","thursday":"Perşembe","friday":"Cuma","saturday":"Cumartesi","sunday":"Pazar"},"start":"Aralık başlangıcı","end":"Aralık bitişi"},"DiscardConfirmationModal":{"title":"Kaydedilmemiş tüm değişiklikleri silin","message":"Değişiklikleri silerseniz son kaydetme işleminizden itibaren yaptığınız düzenlemeler uygulanmaz.","primaryAction":"Değişiklikleri sil","secondaryAction":"Düzenlemeye devam et"},"DropZone":{"errorOverlayTextFile":"Dosya türü geçerli değil","errorOverlayTextImage":"Görsel türü geçerli değil","single":{"overlayTextFile":"Yüklenecek dosyayı sürükleyip bırakın","overlayTextImage":"Yüklenecek görseli sürükleyip bırakın","actionTitleFile":"Dosya ekleyin","actionTitleImage":"Görsel ekleyin","actionHintFile":"veya yüklenecek dosyayı sürükleyip bırakın","actionHintImage":"veya yüklenecek görseli sürükleyip bırakın","labelFile":"Dosya yükle","labelImage":"Görsel yükle","overlayTextVideo":"Yüklemek için videoyu sürükleyip bırakın","actionTitleVideo":"Video ekle","actionHintVideo":"veya yüklemek için videoyu sürükleyip bırakın","labelVideo":"Video yükle"},"allowMultiple":{"overlayTextFile":"Yüklenecek dosyaları sürükleyip bırakın","overlayTextImage":"Yüklenecek görselleri sürükleyip bırakın","actionTitleFile":"Dosya ekleyin","actionTitleImage":"Görsel ekleyin","actionHintFile":"veya yüklenecek dosyaları sürükleyip bırakın","actionHintImage":"veya yüklenecek görselleri sürükleyip bırakın","labelFile":"Dosya yükle","labelImage":"Görsel yükle","overlayTextVideo":"Yüklemek için videoları sürükleyip bırakın","actionTitleVideo":"Video ekle","actionHintVideo":"veya yüklemek için videoları sürükleyip bırakın","labelVideo":"Video yükle"},"errorOverlayTextVideo":"Video türü geçerli değil"},"EmptySearchResult":{"altText":"Boş arama sonuçları"},"Frame":{"skipToContent":"İçeriğe atla","Navigation":{"closeMobileNavigationLabel":"Gezinmeyi kapat"},"navigationLabel":"Gezinme"},"ActionMenu":{"RollupActions":{"rollupButton":"İşlemleri görüntüle","rollupButtonBreadcrumbs":"{sectionName} için içerik haritalarını görüntüle","rollupNavigationName":"{sectionName} için içerik haritaları","defaultRollupName":"İçerik haritaları"},"Actions":{"moreActions":"Diğer işlemler"}},"Filters":{"moreFilters":"Daha fazla filtre","filter":"Şunu filtrele: {resourceName}","noFiltersApplied":"Filtre uygulanmadı","cancel":"İptal et","done":"Bitti","clearAllFilters":"Tüm filtreleri temizle","clear":"Temizle","clearLabel":"{filterName} filtresini temizle","moreFiltersWithCount":"Daha fazla filtre ({count})","addFilter":"Filtre ekle","clearFilters":"Tümünü temizle","searchInView":"Şu görünümde: {viewName}"},"Modal":{"iFrameTitle":"gövde işaretlemesi","modalWarning":"Şu gerekli özellikler Modda yok: {missingProps}","unsavedChanges":"Kaydedilmeyen değişiklikler"},"Pagination":{"previous":"Önceki","next":"Sonraki","pagination":"Sayfalara ayırma"},"ProgressBar":{"negativeWarningMessage":"İlerleme özelliğine geçirilen değerler negatif olmamalıdır. {progress} sıfırlanıyor.","exceedWarningMessage":"İlerleme özelliğine geçirilen değerler 100'ü aşmamalıdır. {progress} 100 olarak ayarlanıyor."},"ResourceList":{"sortingLabel":"Sıralama ölçütü","defaultItemSingular":"ürün","defaultItemPlural":"ürünler","showing":"{itemsCount} {resource} gösteriliyor","loading":"{resource} yükleniyor","selected":"{selectedItemsCount} adet seçildi","allItemsSelected":"Mağazanızdaki {itemsLength}+ {resourceNamePlural} tümü seçildi","selectAllItems":"Mağazanızdaki şu kaynakların tümünü seçin: {itemsLength}+ {resourceNamePlural}","emptySearchResultTitle":"{resourceNamePlural} bulunamadı","emptySearchResultDescription":"Filtreleri veya arama terimini değiştirmeyi deneyin","selectButtonText":"Seç","a11yCheckboxDeselectAllSingle":"{resourceNameSingular} kaynağının seçimini kaldır","a11yCheckboxSelectAllSingle":"{resourceNameSingular} kaynağını seç","a11yCheckboxDeselectAllMultiple":"Şunların tümünün seçimini kaldır: {itemsLength} {resourceNamePlural}","a11yCheckboxSelectAllMultiple":"Şunların tümünü seç: {itemsLength} {resourceNamePlural}","Item":{"actionsDropdownLabel":"{accessibilityLabel} ile ilgili işlemler","actionsDropdown":"İşlemler açılır listesi","viewItem":"{itemName} ile ilgili ayrıntıları görüntüle"},"BulkActions":{"actionsActivatorLabel":"İşlemler","moreActionsActivatorLabel":"Diğer işlemler"},"showingTotalCount":"{totalItemsCount} {resource} içinden {itemsCount} tanesi gösteriliyor","allFilteredItemsSelected":"Bu filtredeki {itemsLength}+ {resourceNamePlural} tümü seçildi","selectAllFilteredItems":"Mevcut filtreyle gösterilen şu kaynakların tümünü seçin: {itemsLength}+ {resourceNamePlural}"},"SkeletonPage":{"loadingLabel":"Sayfa yükleniyor"},"Tabs":{"toggleTabsLabel":"Daha fazla görünüm","newViewAccessibilityLabel":"Yeni görünüm oluştur","newViewTooltip":"Görünüm oluştur","Tab":{"rename":"Görünümü yeniden adlandır","duplicate":"Görünümü çoğalt","edit":"Görünümü düzenle","editColumns":"Sütunları düzenle","delete":"Görünümü sil","copy":"{name} kopyası","deleteModal":{"title":"Görünüm silinsin mi?","description":"Bu işlem geri alınamaz. {viewName} görünümü artık yöneticinizde kullanılamayacak.","cancel":"İptal","delete":"Görünümü sil"}},"RenameModal":{"title":"Görünümü yeniden adlandır","label":"Ad","cancel":"İptal","create":"Kaydet","errors":{"sameName":"Bu ada sahip bir görünüm zaten var. Lütfen farklı bir ad seçin."}},"DuplicateModal":{"title":"Görünümü çoğalt","label":"Ad","cancel":"İptal","create":"Görünüm oluştur","errors":{"sameName":"Bu ada sahip bir görünüm zaten var. Lütfen farklı bir ad seçin."}},"CreateViewModal":{"title":"Yeni görünüm oluştur","label":"Ad","cancel":"İptal","create":"Görünüm oluştur","errors":{"sameName":"Bu ada sahip bir görünüm zaten var. Lütfen farklı bir ad seçin."}}},"Tag":{"ariaLabel":"Şunu kaldır: {children}"},"TextField":{"characterCount":"{count} karakter","characterCountWithMaxLength":"{count}/{limit} karakter kullanıldı"},"TopBar":{"toggleMenuLabel":"Menüyü aç/kapat","SearchField":{"clearButtonLabel":"Temizle","search":"Ara"}},"MediaCard":{"popoverButton":"İşlemler","dismissButton":"Kapat"},"VideoThumbnail":{"playButtonA11yLabel":{"default":"Videoyu oynat","defaultWithDuration":"{duration} uzunluğundaki videoyu oynat","duration":{"hours":{"other":{"only":"{hourCount} saat","andMinutes":"{hourCount} saat {minuteCount} dakika","andMinute":"{hourCount} saat {minuteCount} dakika","minutesAndSeconds":"{hourCount} saat {minuteCount} dakika {secondCount} saniye","minutesAndSecond":"{hourCount} saat {minuteCount} dakika {secondCount} saniye","minuteAndSeconds":"{hourCount} saat {minuteCount} dakika {secondCount} saniye","minuteAndSecond":"{hourCount} saat {minuteCount} dakika {secondCount} saniye","andSeconds":"{hourCount} saat {secondCount} saniye","andSecond":"{hourCount} saat {secondCount} saniye"},"one":{"only":"{hourCount} saat","andMinutes":"{hourCount} saat {minuteCount} dakika","andMinute":"{hourCount} saat {minuteCount} dakika","minutesAndSeconds":"{hourCount} saat {minuteCount} dakika {secondCount} saniye","minutesAndSecond":"{hourCount} saat {minuteCount} dakika {secondCount} saniye","minuteAndSeconds":"{hourCount} saat {minuteCount} dakika {secondCount} saniye","minuteAndSecond":"{hourCount} saat {minuteCount} dakika {secondCount} saniye","andSeconds":"{hourCount} saat {secondCount} saniye","andSecond":"{hourCount} saat {secondCount} saniye"}},"minutes":{"other":{"only":"{minuteCount} dakika","andSeconds":"{minuteCount} dakika {secondCount} saniye","andSecond":"{minuteCount} dakika {secondCount} saniye"},"one":{"only":"{minuteCount} dakika","andSeconds":"{minuteCount} dakika {secondCount} saniye","andSecond":"{minuteCount} dakika {secondCount} saniye"}},"seconds":{"other":"{secondCount} saniye","one":"{secondCount} saniye"}}}},"Loading":{"label":"Sayfa yüklenme çubuğu"},"TooltipOverlay":{"accessibilityLabel":"İpucu: {label}"},"IndexProvider":{"defaultItemSingular":"Ürün","defaultItemPlural":"Ürünler","allItemsSelected":"{itemsLength}+ {resourceNamePlural} tümü seçildi.","selected":"{selectedItemsCount} adet seçildi","a11yCheckboxDeselectAllSingle":"{resourceNameSingular} kaynağının seçimini kaldır","a11yCheckboxSelectAllSingle":"{resourceNameSingular} kaynağını seç","a11yCheckboxDeselectAllMultiple":"Şunların tümünün seçimini kaldır: {itemsLength} {resourceNamePlural}","a11yCheckboxSelectAllMultiple":"Şunların tümünü seç: {itemsLength} {resourceNamePlural}"},"IndexTable":{"emptySearchTitle":"{resourceNamePlural} bulunamadı","emptySearchDescription":"Filtreleri veya arama terimini değiştirmeyi deneyin","onboardingBadgeText":"Yeni","resourceLoadingAccessibilityLabel":"{resourceNamePlural} yükleniyor…","selectAllLabel":"{resourceNamePlural} kaynaklarının tümünü seç","selected":"{selectedItemsCount} adet seçildi","undo":"Geri al","selectAllItems":"Şunların tümünü seç: {itemsLength}+ {resourceNamePlural}","selectItem":"{resourceName} kaynağını seç","selectButtonText":"Seç","sortAccessibilityLabel":"{direction} öğesini şuna göre sırala:"},"Page":{"Header":{"rollupActionsLabel":"{title} ile ilgili işlemleri görüntüle","pageReadyAccessibilityLabel":"{title}. Bu sayfa hazır"}},"FullscreenBar":{"back":"Geri","accessibilityLabel":"Tam ekran modundan çık"},"FilterPill":{"clear":"Temizle","unsavedChanges":"Kaydedilmemiş değişiklikler - {label}"},"IndexFilters":{"searchFilterTooltip":"Arama ve filtreleme","searchFilterTooltipWithShortcut":"Arama ve filtreleme (F)","searchFilterAccessibilityLabel":"Arama ve sonuçları filtreleme","sort":"Sonuçlarınızı sıralayın","addView":"Yeni bir görünüm ekle","newView":"Özel arama","SortButton":{"ariaLabel":"Sonuçları sırala","tooltip":"Sırala","title":"Sıralama ölçütü:","sorting":{"asc":"Artan","desc":"Azalan","az":"A-Z","za":"Z-A"}},"UpdateButtons":{"cancel":"İptal","update":"Güncelle","save":"Kaydet","saveAs":"Farklı kaydet","modal":{"title":"Görünümü farklı kaydet","label":"Ad","sameName":"Bu ada sahip bir görünüm zaten var. Lütfen farklı bir ad seçin.","save":"Kaydet","cancel":"İptal"}},"EditColumnsButton":{"tooltip":"Sütunları düzenleyin","accessibilityLabel":"Tablonun sütun sırasını ve görünürlüğünü özelleştirin"}},"ActionList":{"SearchField":{"clearButtonLabel":"Temizle","search":"Ara","placeholder":"Eylemleri arayın"}},"AlphaTable":{"TableRowActions":{"heading":"İşlemler","activatorAccessibilityLabel":"Satır işlemlerini aç","activatorLabel":"İşlemler"},"TableRowGroups":{"heading":"Satır gruplarını aç/kapat","toggle":"Bu satır grubunun görünürlüğünü aç/kapat"},"Sorting":{"sortAscending":"Bu tabloyu {heading} ölçütünde artan değere göre sırala","sortDescending":"Bu tabloyu {heading} ölçütünde azalan değere göre sırala"},"Selection":{"select":"Seç: {id}","selectPage":"Sayfadaki {count} tanenin tümünü seç","selectAll":"Mağazadakilerin tümünü seç","selectAllWithTotal":"Mağazadaki tüm {total} öğe seç","selectionHeader":"Seçim","unselectAll":"Tümünün seçimini kaldır","selectedPage":"{count} tane seçildi","selectedAll":"Mağazadakilerin tümü seçildi","selectedAllWithTotal":"Mağazadaki tüm {total} öğe seçildi","selectedSome":"{count}/{total} seçildi","undoSelectAll":"Mağazadakilerin tümünün seçimini kaldır","undoSelectAllWithTotal":"Mağazada {total} adedin tümünün seçimini geri al","showSelectedToggle":"Seçilenleri göster","showingOnlySelected":"Seçilen {count} tane gösteriliyor","paginationLabel":"Seçilen {total} üründen {start} - {end} arası gösteriliyor"},"TableCell":{"spansColumns":"{count} sütuna yayılır"},"BulkActions":{"activatorLabel":"İşlemler"}},"SortPopover":{"ariaLabel":"Sonuçları sırala","tooltip":"Sırala","title":"Sıralama ölçütü","sorting":{"asc":"Artan","desc":"Azalan","az":"A-Z","za":"Z-A"}}}`)
-  , Nq = {
-    Polaris: wq
-}
-  , Tq = {
-    Avatar: {
-        label: "头像",
-        labelWithInitials: "头像和姓名缩写 {initials}"
-    },
-    Autocomplete: {
-        spinnerAccessibilityLabel: "正在加载",
-        ellipsis: "{content}…"
-    },
-    Badge: {
-        PROGRESS_LABELS: {
-            incomplete: "未完成",
-            partiallyComplete: "部分完成",
-            complete: "完成"
-        },
-        TONE_LABELS: {
-            info: "信息",
-            success: "成功",
-            warning: "警告",
-            attention: "注意",
-            new: "新",
-            critical: "重要",
-            readOnly: "只读",
-            enabled: "已启用"
-        },
-        progressAndTone: "{toneLabel} {progressLabel}"
-    },
-    Banner: {
-        dismissButton: "忽略通知"
-    },
-    Button: {
-        spinnerAccessibilityLabel: "正在加载"
-    },
-    Common: {
-        checkbox: "复选框",
-        undo: "撤销",
-        cancel: "取消",
-        clear: "清除",
-        close: "关闭",
-        submit: "提交",
-        more: "更多"
-    },
-    ContextualSaveBar: {
-        save: "保存",
-        discard: "放弃"
-    },
-    DataTable: {
-        sortAccessibilityLabel: "向 {direction} 排序",
-        navAccessibilityLabel: "将表向 {direction} 滚动一列",
-        totalsRowHeading: "总计",
-        totalRowHeading: "总计"
-    },
-    DatePicker: {
-        previousMonth: "显示上个月，{showPreviousYear} 年 {previousMonthName}",
-        nextMonth: "显示下个月，{nextYear} 年 {nextMonth}",
-        today: "今天 ",
-        months: {
-            january: "一月",
-            february: "二月",
-            march: "三月",
-            april: "四月",
-            may: "五月",
-            june: "六月",
-            july: "七月",
-            august: "八月",
-            september: "九月",
-            october: "十月",
-            november: "十一月",
-            december: "十二月"
-        },
-        daysAbbreviated: {
-            monday: "周一",
-            tuesday: "周二",
-            wednesday: "周三",
-            thursday: "周四",
-            friday: "周五",
-            saturday: "周六",
-            sunday: "周日"
-        },
-        days: {
-            monday: "星期一",
-            tuesday: "星期二",
-            wednesday: "星期三",
-            thursday: "星期四",
-            friday: "星期五",
-            saturday: "星期六",
-            sunday: "星期日"
-        },
-        start: "起始日期",
-        end: "结束日期"
-    },
-    DiscardConfirmationModal: {
-        title: "放弃所有未保存的更改",
-        message: "如果放弃更改，您将删除自上次保存以来所做的所有编辑。",
-        primaryAction: "放弃更改",
-        secondaryAction: "继续编辑"
-    },
-    DropZone: {
-        errorOverlayTextFile: "文件类型无效",
-        errorOverlayTextImage: "图片类型无效",
-        single: {
-            overlayTextFile: "拖放上传文件",
-            overlayTextImage: "拖放上传图片",
-            actionTitleFile: "添加文件",
-            actionTitleImage: "添加图片",
-            actionHintFile: "或拖放上传文件",
-            actionHintImage: "或拖放上传图片",
-            labelFile: "上传文件",
-            labelImage: "上传图片",
-            overlayTextVideo: "拖放上传视频",
-            actionTitleVideo: "添加视频",
-            actionHintVideo: "或拖放上传视频",
-            labelVideo: "上传视频"
-        },
-        allowMultiple: {
-            overlayTextFile: "拖放上传文件",
-            overlayTextImage: "拖放上传图片",
-            actionTitleFile: "添加文件",
-            actionTitleImage: "添加图片",
-            actionHintFile: "或拖放上传文件",
-            actionHintImage: "或拖放上传图片",
-            labelFile: "上传文件",
-            labelImage: "上传图片",
-            overlayTextVideo: "拖放上传视频",
-            actionTitleVideo: "添加视频",
-            actionHintVideo: "或拖放上传视频",
-            labelVideo: "上传视频"
-        },
-        errorOverlayTextVideo: "视频类型无效"
-    },
-    EmptySearchResult: {
-        altText: "没有搜索结果"
-    },
-    Frame: {
-        skipToContent: "跳到内容",
-        Navigation: {
-            closeMobileNavigationLabel: "关闭网站导航"
-        },
-        navigationLabel: "导航"
-    },
-    ActionMenu: {
-        RollupActions: {
-            rollupButton: "查看操作",
-            rollupButtonBreadcrumbs: "查看{sectionName}的页面路径",
-            rollupNavigationName: "{sectionName}的页面路径",
-            defaultRollupName: "页面路径"
-        },
-        Actions: {
-            moreActions: "其他操作"
-        }
-    },
-    Filters: {
-        moreFilters: "更多筛选条件",
-        filter: "筛选 {resourceName}",
-        noFiltersApplied: "未应用筛选条件",
-        cancel: "取消",
-        done: "完成",
-        clearAllFilters: "清除所有筛选条件",
-        clear: "清除",
-        clearLabel: "清除 {filterName}",
-        moreFiltersWithCount: "更多筛选条件（{count} 个）",
-        addFilter: "添加筛选条件",
-        clearFilters: "全部清除",
-        searchInView: "在:{viewName}"
-    },
-    Modal: {
-        iFrameTitle: "正文标记",
-        modalWarning: "模态窗口缺少这些必需的属性：{missingProps}",
-        unsavedChanges: "未保存的更改"
-    },
-    Pagination: {
-        previous: "上一页",
-        next: "下一步",
-        pagination: "分页"
-    },
-    ProgressBar: {
-        negativeWarningMessage: "传递给进度条的值不可为负数。将 {progress} 重置为 0。",
-        exceedWarningMessage: "传递给进度条的值不可超过 100。将 {progress} 设置为 100。"
-    },
-    ResourceList: {
-        sortingLabel: "排序依据",
-        defaultItemSingular: "项",
-        defaultItemPlural: "项",
-        showing: "显示 {itemsCount} 个 {resource}",
-        loading: "正在加载 {resource}",
-        selected: "已选择 {selectedItemsCount} 个",
-        allItemsSelected: "已选择您商店中所有 {itemsLength}+ 个{resourceNamePlural}。",
-        selectAllItems: "选择商店中所有 {itemsLength}+ 个 {resourceNamePlural}",
-        emptySearchResultTitle: "找不到 {resourceNamePlural}",
-        emptySearchResultDescription: "请尝试更改筛选条件或搜索词",
-        selectButtonText: "选择",
-        a11yCheckboxDeselectAllSingle: "取消选择 {resourceNameSingular}",
-        a11yCheckboxSelectAllSingle: "选择 {resourceNameSingular}",
-        a11yCheckboxDeselectAllMultiple: "取消选择所有 {itemsLength} 个 {resourceNamePlural}",
-        a11yCheckboxSelectAllMultiple: "选择所有 {itemsLength} 个 {resourceNamePlural}",
-        Item: {
-            actionsDropdownLabel: "{accessibilityLabel} 的操作",
-            actionsDropdown: "操作下拉菜单",
-            viewItem: "查看 {itemName} 的详细信息"
-        },
-        BulkActions: {
-            actionsActivatorLabel: "编辑",
-            moreActionsActivatorLabel: "其他操作"
-        },
-        showingTotalCount: "显示 {itemsCount} 个 {resource}（共 {totalItemsCount} 个）",
-        allFilteredItemsSelected: "已选择此筛选器中所有 {itemsLength}+ 个{resourceNamePlural}。",
-        selectAllFilteredItems: "选择此筛选器中的所有 {itemsLength}+ 个 {resourceNamePlural}"
-    },
-    SkeletonPage: {
-        loadingLabel: "页面加载"
-    },
-    Tabs: {
-        toggleTabsLabel: "更多视图",
-        newViewAccessibilityLabel: "创建新视图",
-        newViewTooltip: "创建视图",
-        Tab: {
-            rename: "重命名视图",
-            duplicate: "复制视图",
-            edit: "编辑视图",
-            editColumns: "编辑列",
-            delete: "删除视图",
-            copy: "{name} 的副本",
-            deleteModal: {
-                title: "删除视图？",
-                description: "此操作无法撤销。您的后台中将不再提供 {viewName} 视图。",
-                cancel: "取消",
-                delete: "删除视图"
-            }
-        },
-        RenameModal: {
-            title: "重命名视图",
-            label: "名称",
-            cancel: "取消",
-            create: "保存",
-            errors: {
-                sameName: "已存在具有此名称的视图。请选择其他名称。"
-            }
-        },
-        DuplicateModal: {
-            title: "复制视图",
-            label: "名称",
-            cancel: "取消",
-            create: "创建视图",
-            errors: {
-                sameName: "已存在具有此名称的视图。请选择其他名称。"
-            }
-        },
-        CreateViewModal: {
-            title: "创建新视图",
-            label: "名称",
-            cancel: "取消",
-            create: "创建视图",
-            errors: {
-                sameName: "已存在具有此名称的视图。请选择其他名称。"
-            }
-        }
-    },
-    Tag: {
-        ariaLabel: "删除 {children}"
-    },
-    TextField: {
-        characterCount: "{count} 个字符",
-        characterCountWithMaxLength: "已使用 {count}/{limit} 个字符"
-    },
-    TopBar: {
-        toggleMenuLabel: "切换菜单",
-        SearchField: {
-            clearButtonLabel: "清除",
-            search: "搜索"
-        }
-    },
-    MediaCard: {
-        popoverButton: "编辑",
-        dismissButton: "忽略"
-    },
-    VideoThumbnail: {
-        playButtonA11yLabel: {
-            default: "播放视频",
-            defaultWithDuration: "播放时长为 {duration} 的视频",
-            duration: {
-                hours: {
-                    other: {
-                        only: "{hourCount} 小时",
-                        andMinutes: "{hourCount} 小时 {minuteCount} 分",
-                        andMinute: "{hourCount} 小时 {minuteCount} 分",
-                        minutesAndSeconds: "{hourCount} 小时 {minuteCount} 分 {secondCount} 秒",
-                        minutesAndSecond: "{hourCount} 小时 {minuteCount} 分 {secondCount} 秒",
-                        minuteAndSeconds: "{hourCount} 小时 {minuteCount} 分 {secondCount} 秒",
-                        minuteAndSecond: "{hourCount} 小时 {minuteCount} 分 {secondCount} 秒",
-                        andSeconds: "{hourCount} 小时 {secondCount} 秒",
-                        andSecond: "{hourCount} 小时 {secondCount} 秒"
-                    },
-                    one: {
-                        only: "{hourCount} 小时",
-                        andMinutes: "{hourCount} 小时 {minuteCount} 分",
-                        andMinute: "{hourCount} 小时 {minuteCount} 分",
-                        minutesAndSeconds: "{hourCount} 小时 {minuteCount} 分 {secondCount} 秒",
-                        minutesAndSecond: "{hourCount} 小时 {minuteCount} 分 {secondCount} 秒",
-                        minuteAndSeconds: "{hourCount} 小时 {minuteCount} 分 {secondCount} 秒",
-                        minuteAndSecond: "{hourCount} 小时 {minuteCount} 分 {secondCount} 秒",
-                        andSeconds: "{hourCount} 小时 {secondCount} 秒",
-                        andSecond: "{hourCount} 小时 {secondCount} 秒"
-                    }
-                },
-                minutes: {
-                    other: {
-                        only: "{minuteCount} 分",
-                        andSeconds: "{minuteCount} 分 {secondCount} 秒",
-                        andSecond: "{minuteCount} 分 {secondCount} 秒"
-                    },
-                    one: {
-                        only: "{minuteCount} 分",
-                        andSeconds: "{minuteCount} 分 {secondCount} 秒",
-                        andSecond: "{minuteCount} 分 {secondCount} 秒"
-                    }
-                },
-                seconds: {
-                    other: "{secondCount} 秒",
-                    one: "{secondCount} 秒"
-                }
-            }
-        }
-    },
-    Loading: {
-        label: "页面加载条"
-    },
-    TooltipOverlay: {
-        accessibilityLabel: "工具提示：{label}"
-    },
-    IndexProvider: {
-        defaultItemSingular: "项",
-        defaultItemPlural: "项",
-        allItemsSelected: "已选择所有 {itemsLength}+ 个{resourceNamePlural}。",
-        selected: "已选择 {selectedItemsCount} 个",
-        a11yCheckboxDeselectAllSingle: "取消选择 {resourceNameSingular}",
-        a11yCheckboxSelectAllSingle: "选择 {resourceNameSingular}",
-        a11yCheckboxDeselectAllMultiple: "取消选择所有 {itemsLength} 个 {resourceNamePlural}",
-        a11yCheckboxSelectAllMultiple: "选择所有 {itemsLength} 个 {resourceNamePlural}"
-    },
-    IndexTable: {
-        emptySearchTitle: "找不到 {resourceNamePlural}",
-        emptySearchDescription: "请尝试更改筛选条件或搜索词",
-        onboardingBadgeText: "新",
-        resourceLoadingAccessibilityLabel: "正在加载 {resourceNamePlural}…",
-        selectAllLabel: "选择所有 {resourceNamePlural}",
-        selected: "已选择 {selectedItemsCount} 个",
-        undo: "撤销",
-        selectAllItems: "选择所有 {itemsLength}+ 个 {resourceNamePlural}",
-        selectItem: "选择 {resourceName}",
-        selectButtonText: "选择",
-        sortAccessibilityLabel: "向 {direction} 排序"
-    },
-    Page: {
-        Header: {
-            rollupActionsLabel: "查看用于 {title} 的操作",
-            pageReadyAccessibilityLabel: "{title}。此页面已就绪"
-        }
-    },
-    FullscreenBar: {
-        back: "上一步",
-        accessibilityLabel: "退出全屏模式"
-    },
-    FilterPill: {
-        clear: "清除",
-        unsavedChanges: "未保存的更改 - {label}"
-    },
-    IndexFilters: {
-        searchFilterTooltip: "搜索和筛选",
-        searchFilterTooltipWithShortcut: "搜索和筛选 (F)",
-        searchFilterAccessibilityLabel: "搜索和筛选结果",
-        sort: "对结果排序",
-        addView: "添加新视图",
-        newView: "自定义搜索",
-        SortButton: {
-            ariaLabel: "对结果排序",
-            tooltip: "排序",
-            title: "排序方式",
-            sorting: {
-                asc: "升序",
-                desc: "降序",
-                az: "A-Z",
-                za: "Z-A"
-            }
-        },
-        UpdateButtons: {
-            cancel: "取消",
-            update: "更新",
-            save: "保存",
-            saveAs: "另存为",
-            modal: {
-                title: "将视图另存为",
-                label: "名称",
-                sameName: "已存在具有此名称的视图。请选择其他名称。",
-                save: "保存",
-                cancel: "取消"
-            }
-        },
-        EditColumnsButton: {
-            tooltip: "编辑列",
-            accessibilityLabel: "自定义表列顺序和可见性"
-        }
-    },
-    ActionList: {
-        SearchField: {
-            clearButtonLabel: "清除",
-            search: "搜索",
-            placeholder: "搜索操作"
-        }
-    },
-    AlphaTable: {
-        TableRowActions: {
-            heading: "操作",
-            activatorAccessibilityLabel: "打开行操作",
-            activatorLabel: "操作"
-        },
-        Selection: {
-            select: "选择 {id}",
-            selectPage: "选择页面上的全部 {count} 个",
-            selectAll: "选择商店中的全部",
-            selectAllWithTotal: "选择商店中的全部 {total} 个",
-            unselectAll: "取消全选",
-            selectedPage: "已选择 {count} 个",
-            selectedAll: "已选择商店中的全部",
-            selectedAllWithTotal: "已选择商店中的全部 {total} 个",
-            selectionHeader: "选择",
-            selectedSome: "已选择 {count}/{total} 个",
-            undoSelectAll: "撤销选择商店中的全部",
-            undoSelectAllWithTotal: "撤销选择商店中的全部 {total} 个",
-            showSelectedToggle: "显示所选项",
-            showingOnlySelected: "显示 {count} 个已选项",
-            paginationLabel: "显示第 {start}–{end} 个所选项（共 {total} 个）"
-        },
-        TableRowGroups: {
-            heading: "切换行组",
-            toggle: "切换此行组的可见性"
-        },
-        Sorting: {
-            sortAscending: "按 {heading} 以升序为此表排序",
-            sortDescending: "按 {heading} 以降序为此表排序"
-        },
-        TableCell: {
-            spansColumns: "跨 {count} 列"
-        },
-        BulkActions: {
-            activatorLabel: "操作"
-        }
-    },
-    SortPopover: {
-        ariaLabel: "对结果排序",
-        tooltip: "排序",
-        title: "排序依据",
-        sorting: {
-            asc: "升序",
-            desc: "降序",
-            az: "A-Z",
-            za: "Z-A"
-        }
-    }
-}
-  , Pq = {
-    Polaris: Tq
-}
-  , Iq = {
-    Avatar: {
-        label: "大頭貼",
-        labelWithInitials: "姓名首字母為 {initials} 的大頭貼"
-    },
-    Autocomplete: {
-        spinnerAccessibilityLabel: "載入中",
-        ellipsis: "{content}......"
-    },
-    Badge: {
-        PROGRESS_LABELS: {
-            incomplete: "未完成",
-            partiallyComplete: "部分完成",
-            complete: "完成"
-        },
-        TONE_LABELS: {
-            info: "資訊",
-            success: "成功",
-            warning: "警告",
-            attention: "注意",
-            new: "全新",
-            critical: "重要",
-            readOnly: "唯讀",
-            enabled: "已啟用"
-        },
-        progressAndTone: "{toneLabel} {progressLabel}"
-    },
-    Banner: {
-        dismissButton: "關閉通知"
-    },
-    Button: {
-        spinnerAccessibilityLabel: "載入中"
-    },
-    Common: {
-        checkbox: "核取方塊",
-        undo: "復原",
-        cancel: "取消",
-        clear: "清除",
-        close: "關閉",
-        submit: "提交",
-        more: "更多"
-    },
-    ContextualSaveBar: {
-        save: "儲存",
-        discard: "捨棄"
-    },
-    DataTable: {
-        sortAccessibilityLabel: "向 {direction} 排序，依據",
-        navAccessibilityLabel: "向 {direction} 捲動表格一欄",
-        totalsRowHeading: "總計",
-        totalRowHeading: "總計"
-    },
-    DatePicker: {
-        previousMonth: "顯示上個月，{showPreviousYear} {previousMonthName}",
-        nextMonth: "顯示下個月，{nextYear} {nextMonth}",
-        today: "今天 ",
-        months: {
-            january: "一月",
-            february: "二月",
-            march: "三月",
-            april: "四月",
-            may: "五月",
-            june: "六月",
-            july: "七月",
-            august: "八月",
-            september: "九月",
-            october: "十月",
-            november: "十一月",
-            december: "十二月"
-        },
-        daysAbbreviated: {
-            monday: "星期一",
-            tuesday: "星期二",
-            wednesday: "星期三",
-            thursday: "星期四",
-            friday: "星期五",
-            saturday: "星期六",
-            sunday: "星期日"
-        },
-        days: {
-            monday: "星期一",
-            tuesday: "星期二",
-            wednesday: "星期三",
-            thursday: "星期四",
-            friday: "星期五",
-            saturday: "星期六",
-            sunday: "星期日"
-        },
-        start: "範圍起點",
-        end: "範圍終點"
-    },
-    DiscardConfirmationModal: {
-        title: "捨棄所有未儲存的變更內容",
-        message: "如果您捨棄變更內容，則會刪除所有從上次儲存以來所編輯過的內容。",
-        primaryAction: "捨棄變更內容",
-        secondaryAction: "繼續編輯"
-    },
-    DropZone: {
-        errorOverlayTextFile: "檔案類型無效",
-        errorOverlayTextImage: "圖片類型無效",
-        single: {
-            overlayTextFile: "拖放檔案以上傳",
-            overlayTextImage: "拖放圖片以上傳",
-            actionTitleFile: "新增檔案",
-            actionTitleImage: "新增圖片",
-            actionHintFile: "或拖放檔案即可上傳",
-            actionHintImage: "或拖放圖像即可上傳",
-            labelFile: "上傳檔案",
-            labelImage: "上傳圖片",
-            overlayTextVideo: "拖放影片以上傳",
-            actionTitleVideo: "新增影片",
-            actionHintVideo: "或拖放影片即可上傳",
-            labelVideo: "上傳影片"
-        },
-        allowMultiple: {
-            overlayTextFile: "拖放檔案以上傳",
-            overlayTextImage: "拖放圖片以上傳",
-            actionTitleFile: "新增檔案",
-            actionTitleImage: "新增圖片",
-            actionHintFile: "或拖放檔案以上傳",
-            actionHintImage: "或拖放圖像即可上傳",
-            labelFile: "上傳檔案",
-            labelImage: "上傳圖片",
-            overlayTextVideo: "拖放影片以上傳",
-            actionTitleVideo: "新增影片",
-            actionHintVideo: "或拖放影片以上傳",
-            labelVideo: "上傳影片"
-        },
-        errorOverlayTextVideo: "影片類型無效"
-    },
-    EmptySearchResult: {
-        altText: "清空搜尋結果"
-    },
-    Frame: {
-        skipToContent: "跳至內容",
-        Navigation: {
-            closeMobileNavigationLabel: "關閉導覽"
-        },
-        navigationLabel: "導覽"
-    },
-    ActionMenu: {
-        RollupActions: {
-            rollupButton: "檢視動作",
-            rollupButtonBreadcrumbs: "檢視 {sectionName} 的頁面路徑",
-            rollupNavigationName: "{sectionName} 的頁面路徑",
-            defaultRollupName: "頁面路徑"
-        },
-        Actions: {
-            moreActions: "更多動作"
-        }
-    },
-    Filters: {
-        moreFilters: "更多篩選條件",
-        filter: "篩選 {resourceName}",
-        noFiltersApplied: "未套用篩選條件",
-        cancel: "取消",
-        done: "完成",
-        clearAllFilters: "清除所有篩選條件",
-        clear: "清除",
-        clearLabel: "清除 {filterName}",
-        moreFiltersWithCount: "更多篩選條件 ({count})",
-        addFilter: "新增篩選條件",
-        clearFilters: "全部清除",
-        searchInView: "在：{viewName}"
-    },
-    Modal: {
-        iFrameTitle: "本文標記",
-        modalWarning: "互動視窗缺少以下必要屬性：{missingProps}",
-        unsavedChanges: "尚未儲存的變更"
-    },
-    Pagination: {
-        previous: "上一頁",
-        next: "下一頁",
-        pagination: "分頁"
-    },
-    ProgressBar: {
-        negativeWarningMessage: "傳送至處理道具的數值不應為負值。將 {progress} 重設為 0。",
-        exceedWarningMessage: "傳送至處理道具的數值不應超過 100。將 {progress} 設為 100。"
-    },
-    ResourceList: {
-        sortingLabel: "排序依據",
-        defaultItemSingular: "商品",
-        defaultItemPlural: "商品",
-        showing: "顯示 {itemsCount} {resource}",
-        loading: "正在載入 {resource}",
-        selected: "已選取 {selectedItemsCount} 項",
-        allItemsSelected: "已選取您商店中全部 {itemsLength}+ 個{resourceNamePlural}",
-        selectAllItems: "選取您商店中全部 {itemsLength}+ {resourceNamePlural}",
-        emptySearchResultTitle: "找不到 {resourceNamePlural}",
-        emptySearchResultDescription: "請嘗試變更篩選條件或搜尋詞彙",
-        selectButtonText: "選取",
-        a11yCheckboxDeselectAllSingle: "取消選取 {resourceNameSingular}",
-        a11yCheckboxSelectAllSingle: "選取 {resourceNameSingular}",
-        a11yCheckboxDeselectAllMultiple: "取消選取全部 {itemsLength} {resourceNamePlural}",
-        a11yCheckboxSelectAllMultiple: "選取全部 {itemsLength} {resourceNamePlural}",
-        Item: {
-            actionsDropdownLabel: "{accessibilityLabel} 的動作",
-            actionsDropdown: "動作下拉式選單",
-            viewItem: "檢視 {itemName} 的詳細資訊"
-        },
-        BulkActions: {
-            actionsActivatorLabel: "動作",
-            moreActionsActivatorLabel: "更多動作"
-        },
-        showingTotalCount: "顯示第 {itemsCount} 個 {resource}，共 {totalItemsCount} 個",
-        allFilteredItemsSelected: "已選取此篩選條件中全部 {itemsLength}+ 個{resourceNamePlural}",
-        selectAllFilteredItems: "選取套用此篩選條件後顯示的全部 {itemsLength}+ 個 {resourceNamePlural}"
-    },
-    SkeletonPage: {
-        loadingLabel: "頁面載入中"
-    },
-    Tabs: {
-        toggleTabsLabel: "更多檢視畫面",
-        newViewAccessibilityLabel: "建立新檢視畫面",
-        newViewTooltip: "建立檢視畫面",
-        Tab: {
-            rename: "重新命名檢視畫面",
-            duplicate: "複製檢視畫面",
-            edit: "編輯檢視畫面",
-            editColumns: "編輯欄",
-            delete: "刪除檢視畫面",
-            copy: "{name}的副本",
-            deleteModal: {
-                title: "是否要刪除檢視畫面？",
-                description: "此動作無法復原。{viewName} 檢視畫面已無法在您的管理介面中使用。",
-                cancel: "取消",
-                delete: "刪除檢視畫面"
-            }
-        },
-        RenameModal: {
-            title: "重新命名檢視畫面",
-            label: "名稱",
-            cancel: "取消",
-            create: "儲存",
-            errors: {
-                sameName: "已有其他檢視畫面使用此名稱。請使用其他名稱。"
-            }
-        },
-        DuplicateModal: {
-            title: "複製檢視畫面",
-            label: "名稱",
-            cancel: "取消",
-            create: "建立檢視畫面",
-            errors: {
-                sameName: "已有其他檢視畫面使用此名稱。請使用其他名稱。"
-            }
-        },
-        CreateViewModal: {
-            title: "建立新檢視畫面",
-            label: "名稱",
-            cancel: "取消",
-            create: "建立檢視畫面",
-            errors: {
-                sameName: "已有其他檢視畫面使用此名稱。請使用其他名稱。"
-            }
-        }
-    },
-    Tag: {
-        ariaLabel: "移除 {children}"
-    },
-    TextField: {
-        characterCount: "{count} 個字元",
-        characterCountWithMaxLength: "已使用 {count} 個字元，上限為 {limit} 個字元"
-    },
-    TopBar: {
-        toggleMenuLabel: "切換選單",
-        SearchField: {
-            clearButtonLabel: "清除",
-            search: "搜尋"
-        }
-    },
-    MediaCard: {
-        popoverButton: "動作",
-        dismissButton: "關閉"
-    },
-    VideoThumbnail: {
-        playButtonA11yLabel: {
-            default: "播放影片",
-            defaultWithDuration: "播放長度為 {duration} 的影片",
-            duration: {
-                hours: {
-                    other: {
-                        only: "{hourCount} 小時",
-                        andMinutes: "{hourCount} 小時 {minuteCount} 分鐘",
-                        andMinute: "{hourCount} 小時 {minuteCount} 分鐘",
-                        minutesAndSeconds: "{hourCount} 小時 {minuteCount} 分鐘 {secondCount} 秒",
-                        minutesAndSecond: "{hourCount} 小時 {minuteCount} 分鐘 {secondCount} 秒",
-                        minuteAndSeconds: "{hourCount} 小時 {minuteCount} 分鐘 {secondCount} 秒",
-                        minuteAndSecond: "{hourCount} 小時 {minuteCount} 分鐘 {secondCount} 秒",
-                        andSeconds: "{hourCount} 小時 {secondCount} 秒",
-                        andSecond: "{hourCount} 小時 {secondCount} 秒"
-                    },
-                    one: {
-                        only: "{hourCount} 小時",
-                        andMinutes: "{hourCount} 小時 {minuteCount} 分鐘",
-                        andMinute: "{hourCount} 小時 {minuteCount} 分鐘",
-                        minutesAndSeconds: "{hourCount} 小時 {minuteCount} 分鐘 {secondCount} 秒",
-                        minutesAndSecond: "{hourCount} 小時 {minuteCount} 分鐘 {secondCount} 秒",
-                        minuteAndSeconds: "{hourCount} 小時 {minuteCount} 分鐘 {secondCount} 秒",
-                        minuteAndSecond: "{hourCount} 小時 {minuteCount} 分鐘 {secondCount} 秒",
-                        andSeconds: "{hourCount} 小時 {secondCount} 秒",
-                        andSecond: "{hourCount} 小時 {secondCount} 秒"
-                    }
-                },
-                minutes: {
-                    other: {
-                        only: "{minuteCount} 分鐘",
-                        andSeconds: "{minuteCount} 分鐘 {secondCount} 秒",
-                        andSecond: "{minuteCount} 分鐘 {secondCount} 秒"
-                    },
-                    one: {
-                        only: "{minuteCount} 分鐘",
-                        andSeconds: "{minuteCount} 分鐘 {secondCount} 秒",
-                        andSecond: "{minuteCount} 分鐘 {secondCount} 秒"
-                    }
-                },
-                seconds: {
-                    other: "{secondCount} 秒",
-                    one: "{secondCount} 秒"
-                }
-            }
-        }
-    },
-    Loading: {
-        label: "頁面載入進度條"
-    },
-    TooltipOverlay: {
-        accessibilityLabel: "工具提示：{label}"
-    },
-    IndexProvider: {
-        defaultItemSingular: "品項",
-        defaultItemPlural: "品項",
-        allItemsSelected: "已選取全部 {itemsLength}+ 個{resourceNamePlural}",
-        selected: "已選取 {selectedItemsCount} 項",
-        a11yCheckboxDeselectAllSingle: "取消選取 {resourceNameSingular}",
-        a11yCheckboxSelectAllSingle: "選取 {resourceNameSingular}",
-        a11yCheckboxDeselectAllMultiple: "取消選取全部 {itemsLength} {resourceNamePlural}",
-        a11yCheckboxSelectAllMultiple: "選取全部 {itemsLength} {resourceNamePlural}"
-    },
-    IndexTable: {
-        emptySearchTitle: "找不到 {resourceNamePlural}",
-        emptySearchDescription: "請嘗試變更篩選條件或搜尋詞彙",
-        onboardingBadgeText: "全新功能",
-        resourceLoadingAccessibilityLabel: "正在載入 {resourceNamePlural}......",
-        selectAllLabel: "選取所有 {resourceNamePlural}",
-        selected: "已選取 {selectedItemsCount} 項",
-        undo: "復原",
-        selectAllItems: "選取全部 {itemsLength} + {resourceNamePlural}",
-        selectItem: "選取 {resourceName}",
-        selectButtonText: "選取",
-        sortAccessibilityLabel: "向 {direction} 排序，依據"
-    },
-    Page: {
-        Header: {
-            rollupActionsLabel: "檢視 {title} 的動作",
-            pageReadyAccessibilityLabel: "{title}。此頁面已準備就緒"
-        }
-    },
-    FullscreenBar: {
-        back: "返回",
-        accessibilityLabel: "退出全螢幕模式"
-    },
-    FilterPill: {
-        clear: "清除",
-        unsavedChanges: "尚未儲存的變更 - {label}"
-    },
-    IndexFilters: {
-        searchFilterTooltip: "搜尋及篩選",
-        searchFilterAccessibilityLabel: "搜尋及篩選結果",
-        sort: "排序搜尋結果",
-        addView: "新增檢視畫面",
-        newView: "自訂搜尋條件",
-        SortButton: {
-            ariaLabel: "排序搜尋結果",
-            tooltip: "排序",
-            title: "排序依據",
-            sorting: {
-                asc: "遞增",
-                desc: "遞減",
-                az: "由 A 到 Z",
-                za: "由 Z 到 A"
-            }
-        },
-        UpdateButtons: {
-            cancel: "取消",
-            update: "更新",
-            save: "儲存",
-            saveAs: "另存新檔",
-            modal: {
-                title: "將檢視畫面另存為",
-                label: "名稱",
-                sameName: "已有其他檢視畫面使用此名稱。請使用其他名稱。",
-                save: "儲存",
-                cancel: "取消"
-            }
-        },
-        searchFilterTooltipWithShortcut: "搜尋和篩選 (F)",
-        EditColumnsButton: {
-            tooltip: "編輯欄",
-            accessibilityLabel: "自訂表格欄順序和能見度"
-        }
-    },
-    ActionList: {
-        SearchField: {
-            clearButtonLabel: "清除",
-            search: "搜尋",
-            placeholder: "搜尋動作"
-        }
-    },
-    AlphaTable: {
-        TableRowActions: {
-            heading: "動作",
-            activatorAccessibilityLabel: "開啟資料列動作",
-            activatorLabel: "動作"
-        },
-        TableRowGroups: {
-            heading: "切換列群組",
-            toggle: "切換此列群組的可見性"
-        },
-        Sorting: {
-            sortAscending: "以 {heading} 遞增排序此表格",
-            sortDescending: "以 {heading} 遞減排序此表格"
-        },
-        Selection: {
-            select: "選取 {id}",
-            selectPage: "選取頁面上的全部 {count} 個項目",
-            selectAll: "選取商店中的所有項目",
-            selectAllWithTotal: "選取頁面上的全部 {total} 個項目",
-            selectionHeader: "選擇",
-            unselectAll: "取消全選",
-            selectedPage: "已選取 {count} 個",
-            selectedAll: "已選取商店中的所有項目",
-            selectedAllWithTotal: "已選取店內全部 {total} 件的項目",
-            selectedSome: "已選取 {count} 個，最多 {total} 個",
-            undoSelectAll: "取消選取商店中的所有項目",
-            undoSelectAllWithTotal: "取消選取商店中全部 {total} 筆訂單",
-            showSelectedToggle: "顯示所選項目",
-            showingOnlySelected: "顯示 {count} 個已選取",
-            paginationLabel: "顯示 {start}–{end} 的 {total} 選取項目"
-        },
-        BulkActions: {
-            activatorLabel: "動作"
-        },
-        TableCell: {
-            spansColumns: "跨 {count} 欄"
-        }
-    },
-    SortPopover: {
-        ariaLabel: "排序結果",
-        tooltip: "排序",
-        title: "排序依據",
-        sorting: {
-            asc: "遞增",
-            desc: "遞減",
-            az: "由 A 到 Z",
-            za: "由 Z 到 A"
-        }
-    }
-}
-  , Lq = {
-    Polaris: Iq
-}
-  , Rj = {
-    [Symbol.for("i18n-id")]: "Polaris",
-    en: XW,
-    cs: GW,
-    da: QW,
-    de: YW,
-    es: tq,
-    fi: iq,
-    fr: rq,
-    it: sq,
-    ja: cq,
-    ko: dq,
-    nb: pq,
-    nl: hq,
-    pl: vq,
-    "pt-BR": bq,
-    "pt-PT": Sq,
-    sv: Aq,
-    th: _q,
-    tr: Nq,
-    "zh-CN": Pq,
-    "zh-TW": Lq
-}
-  , Fq = {
-    Task: {
-        Status: {
-            tooltipComplete: "Označit jako nedokončeno",
-            tooltipIncomplete: "Označit jako dokončeno",
-            accessibilityComplete: "Označit úkol {task} jako nedokončený",
-            accessibilityIncomplete: "Označit úkol {task} jako dokončený"
-        }
-    },
-    Footer: {
-        Dismiss: "Zavřít průvodce"
-    },
-    Header: {
-        Badge: {
-            New: "Novinka",
-            Updated: "Aktualizováno"
-        },
-        Progress: {
-            TaskProgress: "Dokončeno: {completedTasks} / {totalTasks}",
-            TaskCompleted: "Hotovo"
-        },
-        Actions: {
-            Dismiss: "Zavřít",
-            Feedback: "Poskytnout zpětnou vazbu",
-            Options: "Nabídka Možnosti",
-            Collapse: "Sbalit průvodce",
-            Expand: "Rozbalit průvodce",
-            Snooze: "Odložit"
-        },
-        Label: "Záhlaví průvodce",
-        Loading: "Načítání..."
-    },
-    Guide: {
-        Categories: "Kategorie průvodce",
-        Tasks: "Úkoly průvodce"
-    }
-}
-  , Eq = {
-    Navigation: {
-        back: "Zpět",
-        next: "Další",
-        navAriaLabel: "Dotazník"
-    },
-    DisclosureIconButton: {
-        spinnerAccessibilityLabel: "Načítání"
-    },
-    QuestionnaireRedesign: {
-        next: "Další",
-        getStarted: "Začít",
-        iDontWantHelp: "Přeskočit vlastní nastavení",
-        skipAll: "Přeskočit vše"
-    }
-}
-  , Mq = {
-    Badge: {
-        newFeature: "Nová funkce"
-    }
-}
-  , Rq = {
-    dismissGuide: "Zavřít průvodce",
-    openGuide: "Otevřít průvodce",
-    TaskPreview: {
-        firstTaskLabel: "První úkol",
-        subsequentTaskLabel: "Další krok",
-        getStartedButton: "Začít",
-        resumeGuideButton: "Pokračovat dál v průvodci"
-    },
-    ProgressIndicator: {
-        incomplete_one: "Počet dokončených úkolů: {completedTasks} z 1",
-        incomplete_many: "Je dokončen tento počet úkolů: {completedTasks} z {totalTasks}",
-        complete: "Průvodce se dokončil"
-    }
-}
-  , jq = {
-    Guidance: Fq,
-    Questionnaire: Eq,
-    HomeCard: Mq,
-    GuideCard: Rq
-}
-  , Dq = {
-    Task: {
-        Status: {
-            tooltipComplete: "Markér som ikke-udført",
-            tooltipIncomplete: "Markér som udført",
-            accessibilityComplete: "Markér {task} som ikke-udført",
-            accessibilityIncomplete: "Markér {task} som udført"
-        }
-    },
-    Footer: {
-        Dismiss: "Afvis vejledning"
-    },
-    Header: {
-        Badge: {
-            New: "Ny",
-            Updated: "Opdateret"
-        },
-        Progress: {
-            TaskProgress: "{completedTasks}/{totalTasks} fuldført",
-            TaskCompleted: "Udført"
-        },
-        Actions: {
-            Dismiss: "Afvis",
-            Feedback: "Giv feedback",
-            Options: "Indstillingsmenu",
-            Collapse: "Skjul vejledning",
-            Expand: "Udvid guide",
-            Snooze: "Udsæt"
-        },
-        Label: "Guide sidehoved",
-        Loading: "Indlæser..."
-    },
-    Guide: {
-        Categories: "Guide kategorier",
-        Tasks: "Guide opgaver"
-    }
-}
-  , Oq = {
-    Navigation: {
-        back: "Tilbage",
-        next: "Næste",
-        navAriaLabel: "Spørgeskema"
-    },
-    DisclosureIconButton: {
-        spinnerAccessibilityLabel: "Indlæser"
-    },
-    QuestionnaireRedesign: {
-        next: "Næste",
-        getStarted: "Kom godt i gang",
-        iDontWantHelp: "Spring over tilpasset opsætning",
-        skipAll: "Spring alle over"
-    }
-}
-  , Bq = {
-    Badge: {
-        newFeature: "Ny funktion"
-    }
-}
-  , zq = {
-    dismissGuide: "Afvis vejledning",
-    openGuide: "Åbn vejledning",
-    TaskPreview: {
-        firstTaskLabel: "Første opgave",
-        subsequentTaskLabel: "Næste opgave",
-        getStartedButton: "Kom godt i gang",
-        resumeGuideButton: "Genoptag vejledning"
-    },
-    ProgressIndicator: {
-        incomplete_one: "{completedTasks} af 1 er blevet fuldført",
-        incomplete_many: "{completedTasks} af {totalTasks} opgaver er blevet fuldført",
-        complete: "Guiden er fuldført"
-    }
-}
-  , Vq = {
-    Guidance: Dq,
-    Questionnaire: Oq,
-    HomeCard: Bq,
-    GuideCard: zq
-}
-  , Uq = {
-    Task: {
-        Status: {
-            tooltipComplete: "Als nicht erledigt markieren",
-            tooltipIncomplete: "Als erledigt markieren",
-            accessibilityComplete: "{task} als nicht erledigt markieren",
-            accessibilityIncomplete: "{task} als erledigt markieren"
-        }
-    },
-    Footer: {
-        Dismiss: "Anleitung verwerfen"
-    },
-    Header: {
-        Badge: {
-            New: "Neu",
-            Updated: "Aktualisiert"
-        },
-        Progress: {
-            TaskProgress: "{completedTasks} von {totalTasks} abgeschlossen",
-            TaskCompleted: "Fertig"
-        },
-        Actions: {
-            Dismiss: "Verwerfen",
-            Feedback: "Feedback hinterlassen",
-            Options: "Optionsmenü",
-            Collapse: "Leitfaden minimieren",
-            Expand: "Leitfaden maximieren",
-            Snooze: "Stummschalten"
-        },
-        Label: "Leitfaden-Kopfzeile",
-        Loading: "Lädt …"
-    },
-    Guide: {
-        Categories: "Leitfaden-Kategorien",
-        Tasks: "Leitfaden-Ausgaben"
-    }
-}
-  , $q = {
-    Navigation: {
-        back: "Zurück",
-        next: "Weiter",
-        navAriaLabel: "Fragebogen"
-    },
-    DisclosureIconButton: {
-        spinnerAccessibilityLabel: "Wird geladen"
-    },
-    QuestionnaireRedesign: {
-        next: "Weiter",
-        getStarted: "Jetzt loslegen",
-        iDontWantHelp: "Benutzerdefiniertes Setup überspringen",
-        skipAll: "Alle überspringen"
-    }
-}
-  , Hq = {
-    Badge: {
-        newFeature: "Neue Funktion"
-    }
-}
-  , Wq = {
-    TaskPreview: {
-        firstTaskLabel: "Zuerst",
-        subsequentTaskLabel: "Anschließend",
-        getStartedButton: "Jetzt loslegen",
-        resumeGuideButton: "Mit Leitfaden fortfahren"
-    },
-    ProgressIndicator: {
-        incomplete_one: "{completedTasks} von 1 Aufgabe abgeschlossen",
-        incomplete_many: "{completedTasks} von {totalTasks} Aufgaben abgeschlossen",
-        complete: "Leitfaden abgeschlossen"
-    },
-    dismissGuide: "Leitfaden verwerfen",
-    openGuide: "Leitfaden öffnen"
-}
-  , qq = {
-    Guidance: Uq,
-    Questionnaire: $q,
-    HomeCard: Hq,
-    GuideCard: Wq
-}
-  , Gq = {
-    Badge: {
-        newFeature: "New feature"
-    }
-}
-  , Kq = {
-    Guide: {
-        Categories: "Guide categories",
-        Tasks: "Guide tasks"
-    },
-    Task: {
-        Status: {
-            tooltipComplete: "Mark as not done",
-            tooltipIncomplete: "Mark as done",
-            accessibilityComplete: "Mark {task} as not done",
-            accessibilityIncomplete: "Mark {task} as done"
-        }
-    },
-    Footer: {
-        Dismiss: "Dismiss guide"
-    },
-    Header: {
-        Label: "Guide header",
-        Badge: {
-            New: "New",
-            Updated: "Updated"
-        },
-        Loading: "Loading...",
-        Progress: {
-            TaskProgress: "{completedTasks} / {totalTasks} completed",
-            TaskCompleted: "Done"
-        },
-        Actions: {
-            Dismiss: "Dismiss",
-            Feedback: "Give Feedback",
-            Snooze: "Snooze",
-            Options: "Options menu",
-            Collapse: "Collapse guide",
-            Expand: "Expand guide"
-        }
-    }
-}
-  , Qq = {
-    Navigation: {
-        navAriaLabel: "Questionnaire",
-        back: "Back",
-        next: "Next"
-    },
-    DisclosureIconButton: {
-        spinnerAccessibilityLabel: "Loading"
-    },
-    QuestionnaireRedesign: {
-        next: "Next",
-        getStarted: "Get started",
-        iDontWantHelp: "Skip customized setup",
-        skipAll: "Skip all"
-    }
-}
-  , Zq = {
-    dismissGuide: "Dismiss guide",
-    openGuide: "Open guide",
-    TaskPreview: {
-        firstTaskLabel: "First task",
-        subsequentTaskLabel: "Up next",
-        getStartedButton: "Get started",
-        resumeGuideButton: "Resume guide"
-    },
-    ProgressIndicator: {
-        incomplete_one: "{completedTasks} of 1 task complete",
-        incomplete_many: "{completedTasks} of {totalTasks} tasks complete",
-        complete: "Guide complete"
-    }
-}
-  , Yq = {
-    HomeCard: Gq,
-    Guidance: Kq,
-    Questionnaire: Qq,
-    GuideCard: Zq
-}
-  , Jq = {
-    Task: {
-        Status: {
-            tooltipComplete: "Marcar como no completada",
-            tooltipIncomplete: "Marcar como completada",
-            accessibilityComplete: "Marcar {task} como no completada",
-            accessibilityIncomplete: "Marcar {task} como completada"
-        }
-    },
-    Footer: {
-        Dismiss: "Descartar guía"
-    },
-    Header: {
-        Badge: {
-            New: "Nuevo",
-            Updated: "Actualizado"
-        },
-        Progress: {
-            TaskProgress: "{completedTasks} de {totalTasks} completadas",
-            TaskCompleted: "Listo"
-        },
-        Actions: {
-            Dismiss: "Descartar",
-            Feedback: "Enviar comentarios",
-            Options: "Menú de opciones",
-            Collapse: "Contraer guía",
-            Expand: "Expandir guía",
-            Snooze: "Posponer"
-        },
-        Label: "Encabezado de guía",
-        Loading: "Cargando..."
-    },
-    Guide: {
-        Categories: "Categorías de guía",
-        Tasks: "Tareas de guía"
-    }
-}
-  , Xq = {
-    Navigation: {
-        back: "Atrás",
-        next: "Siguiente",
-        navAriaLabel: "Cuestionario"
-    },
-    DisclosureIconButton: {
-        spinnerAccessibilityLabel: "Cargando"
-    },
-    QuestionnaireRedesign: {
-        next: "Siguiente",
-        getStarted: "Empezar",
-        iDontWantHelp: "Omitir la configuración personalizada",
-        skipAll: "Omitir todo"
-    }
-}
-  , eG = {
-    Badge: {
-        newFeature: "Nueva función"
-    }
-}
-  , tG = {
-    ProgressIndicator: {
-        incomplete_one: "{completedTasks} de 1 tarea completada",
-        incomplete_many: "{completedTasks} de {totalTasks} tareas completadas",
-        complete: "Guía completa"
-    },
-    TaskPreview: {
-        firstTaskLabel: "Primera tarea",
-        subsequentTaskLabel: "Siguiente",
-        getStartedButton: "Empezar",
-        resumeGuideButton: "Retomar guía"
-    },
-    dismissGuide: "Descartar guía",
-    openGuide: "Abrir guía"
-}
-  , nG = {
-    Guidance: Jq,
-    Questionnaire: Xq,
-    HomeCard: eG,
-    GuideCard: tG
-}
-  , iG = {
-    Task: {
-        Status: {
-            tooltipComplete: "Merkitse vielä tekemättömäksi",
-            tooltipIncomplete: "Merkitse tehdyksi",
-            accessibilityComplete: "Merkitse {task} vielä tekemättömäksi",
-            accessibilityIncomplete: "Merkitse {task} tehdyksi"
-        }
-    },
-    Footer: {
-        Dismiss: "Ohita opas"
-    },
-    Header: {
-        Badge: {
-            New: "Uusi",
-            Updated: "Päivitetty"
-        },
-        Progress: {
-            TaskProgress: "{completedTasks}/{totalTasks} valmiina",
-            TaskCompleted: "Valmis"
-        },
-        Actions: {
-            Dismiss: "Hylkää",
-            Feedback: "Anna palautetta",
-            Options: "Valinnat-valikko",
-            Collapse: "Pienennä opas",
-            Expand: "Laajenna opas",
-            Snooze: "Siirrä myöhemmäksi"
-        },
-        Label: "Oppaan ylätunniste",
-        Loading: "Ladataan..."
-    },
-    Guide: {
-        Categories: "Oppaan luokat",
-        Tasks: "Oppaan tehtävät"
-    }
-}
-  , aG = {
-    Navigation: {
-        back: "Takaisin",
-        next: "Seuraava",
-        navAriaLabel: "Kyselylomake"
-    },
-    DisclosureIconButton: {
-        spinnerAccessibilityLabel: "Ladataan"
-    },
-    QuestionnaireRedesign: {
-        next: "Seuraava",
-        getStarted: "Aloita",
-        iDontWantHelp: "Ohita mukautettu asennus",
-        skipAll: "Ohita kaikki"
-    }
-}
-  , rG = {
-    Badge: {
-        newFeature: "Uusi ominaisuus"
-    }
-}
-  , oG = {
-    TaskPreview: {
-        firstTaskLabel: "Ensimmäinen tehtävä",
-        subsequentTaskLabel: "Seuraavaksi",
-        getStartedButton: "Aloita tästä",
-        resumeGuideButton: "Jatka opastusta"
-    },
-    ProgressIndicator: {
-        incomplete_one: "{completedTasks}/1 tehtävä suoritettu",
-        incomplete_many: "{completedTasks}/{totalTasks} tehtävää suoritettu",
-        complete: "Opastus on valmis"
-    },
-    dismissGuide: "Ohita opas",
-    openGuide: "Avaa opas"
-}
-  , sG = {
-    Guidance: iG,
-    Questionnaire: aG,
-    HomeCard: rG,
-    GuideCard: oG
-}
-  , lG = {
-    Task: {
-        Status: {
-            tooltipComplete: "Marquer comme non effectuée",
-            tooltipIncomplete: "Marquer comme effectuée",
-            accessibilityComplete: "Marquer {task} comme non effectuée",
-            accessibilityIncomplete: "Marquer {task} comme effectuée"
-        }
-    },
-    Footer: {
-        Dismiss: "Ignorer le guide"
-    },
-    Header: {
-        Badge: {
-            New: "Nouveau",
-            Updated: "Mis à jour"
-        },
-        Progress: {
-            TaskProgress: "{completedTasks} sur {totalTasks} effectuée(s)",
-            TaskCompleted: "Terminer"
-        },
-        Actions: {
-            Dismiss: "Rejeter",
-            Feedback: "Laisser un avis",
-            Options: "Menu des options",
-            Collapse: "Réduire le guide",
-            Expand: "Agrandir le guide",
-            Snooze: "Répéter"
-        },
-        Label: "En-tête de guide",
-        Loading: "Chargement..."
-    },
-    Guide: {
-        Categories: "Catégories de guide",
-        Tasks: "Tâches de guide"
-    }
-}
-  , cG = {
-    Navigation: {
-        back: "Retour",
-        next: "Suivant",
-        navAriaLabel: "Questionnaire"
-    },
-    DisclosureIconButton: {
-        spinnerAccessibilityLabel: "Chargement en cours"
-    },
-    QuestionnaireRedesign: {
-        next: "Suivant",
-        getStarted: "Démarrer",
-        iDontWantHelp: "Ignorer la configuration personnalisée",
-        skipAll: "Tout ignorer"
-    }
-}
-  , uG = {
-    Badge: {
-        newFeature: "Nouvelle fonctionnalité"
-    }
-}
-  , dG = {
-    TaskPreview: {
-        firstTaskLabel: "Première tâche",
-        subsequentTaskLabel: "Prochaine leçon",
-        getStartedButton: "Démarrer",
-        resumeGuideButton: "Reprendre le guide"
-    },
-    ProgressIndicator: {
-        incomplete_one: "{completedTasks} sur 1 tâche effectuée",
-        incomplete_many: "{completedTasks} sur {totalTasks} tâches effectuées",
-        complete: "Guide terminé"
-    },
-    dismissGuide: "Ignorer le guide",
-    openGuide: "Ouvrir le guide"
-}
-  , mG = {
-    Guidance: lG,
-    Questionnaire: cG,
-    HomeCard: uG,
-    GuideCard: dG
-}
-  , pG = {
-    Task: {
-        Status: {
-            tooltipComplete: "Contrassegna come non fatto",
-            tooltipIncomplete: "Contrassegna come fatto",
-            accessibilityComplete: "Contrassegna {task} come non fatto",
-            accessibilityIncomplete: "Contrassegna {task} come fatto"
-        }
-    },
-    Footer: {
-        Dismiss: "Ignora la guida"
-    },
-    Header: {
-        Badge: {
-            New: "Novità",
-            Updated: "Aggiornamento effettuato"
-        },
-        Progress: {
-            TaskProgress: "{completedTasks} di {totalTasks} completati",
-            TaskCompleted: "Fatto"
-        },
-        Actions: {
-            Dismiss: "Ignora",
-            Feedback: "Invia feedback",
-            Options: "Menu delle opzioni",
-            Collapse: "Comprimi guida",
-            Expand: "Espandi guida",
-            Snooze: "Posponi"
-        },
-        Label: "Guida header",
-        Loading: "Caricamento..."
-    },
-    Guide: {
-        Categories: "Guida categorie",
-        Tasks: "Guida attività"
-    }
-}
-  , fG = {
-    Navigation: {
-        back: "Indietro",
-        next: "Avanti",
-        navAriaLabel: "Questionario"
-    },
-    DisclosureIconButton: {
-        spinnerAccessibilityLabel: "Caricamento in corso"
-    },
-    QuestionnaireRedesign: {
-        next: "Avanti",
-        getStarted: "Inizia",
-        iDontWantHelp: "Salta configurazione personalizzata",
-        skipAll: "Salta tutto"
-    }
-}
-  , hG = {
-    Badge: {
-        newFeature: "Nuova funzionalità"
-    }
-}
-  , gG = {
-    dismissGuide: "Ignora la guida",
-    openGuide: "Apri guida",
-    TaskPreview: {
-        firstTaskLabel: "Prima attività",
-        subsequentTaskLabel: "Prossima attività",
-        getStartedButton: "Inizia",
-        resumeGuideButton: "Riprendi guida"
-    },
-    ProgressIndicator: {
-        incomplete_one: "{completedTasks} attività completata su 1",
-        incomplete_many: "{completedTasks} attività completata/e su {totalTasks}",
-        complete: "Guida completata"
-    }
-}
-  , vG = {
-    Guidance: pG,
-    Questionnaire: fG,
-    HomeCard: hG,
-    GuideCard: gG
-}
-  , yG = {
-    Task: {
-        Status: {
-            tooltipComplete: "未完了としてマーク",
-            tooltipIncomplete: "完了としてマーク",
-            accessibilityComplete: "{task}を未完了としてマーク",
-            accessibilityIncomplete: "{task}を完了としてマーク"
-        }
-    },
-    Footer: {
-        Dismiss: "ガイドを閉じる"
-    },
-    Header: {
-        Badge: {
-            New: "新規",
-            Updated: "更新済み"
-        },
-        Progress: {
-            TaskProgress: "{totalTasks}中{completedTasks}件が完了",
-            TaskCompleted: "完了"
-        },
-        Actions: {
-            Dismiss: "閉じる",
-            Feedback: "フィードバックを送信",
-            Options: "オプションメニュー",
-            Collapse: "ガイドを折りたたむ",
-            Expand: "ガイドを展開する",
-            Snooze: "スヌーズ"
-        },
-        Label: "ガイドヘッダー",
-        Loading: "読み込み中..."
-    },
-    Guide: {
-        Categories: "ガイドカテゴリー",
-        Tasks: "ガイドタスク"
-    }
-}
-  , bG = {
-    Navigation: {
-        back: "戻る",
-        next: "次へ",
-        navAriaLabel: "アンケート"
-    },
-    DisclosureIconButton: {
-        spinnerAccessibilityLabel: "読み込み中"
-    },
-    QuestionnaireRedesign: {
-        next: "次へ",
-        getStarted: "開始する",
-        iDontWantHelp: "カスタマイズ設定をスキップ",
-        skipAll: "すべてスキップ"
-    }
-}
-  , kG = {
-    Badge: {
-        newFeature: "新しい機能"
-    }
-}
-  , SG = {
-    TaskPreview: {
-        firstTaskLabel: "最初のタスク",
-        subsequentTaskLabel: "次へ",
-        getStartedButton: "開始する",
-        resumeGuideButton: "ガイドを再開"
-    },
-    ProgressIndicator: {
-        incomplete_one: "{completedTasks}/1件のタスクが完了",
-        incomplete_many: "{completedTasks}/{totalTasks}件のタスクが完了",
-        complete: "ガイドが完了"
-    },
-    dismissGuide: "ガイドを閉じる",
-    openGuide: "ガイドを開く"
-}
-  , CG = {
-    Guidance: yG,
-    Questionnaire: bG,
-    HomeCard: kG,
-    GuideCard: SG
-}
-  , AG = {
-    Task: {
-        Status: {
-            tooltipComplete: "완료되지 않음으로 표시",
-            tooltipIncomplete: "완료됨으로 표시",
-            accessibilityComplete: "{task}을(를) 완료되지 않음으로 표시",
-            accessibilityIncomplete: "{task}을(를) 완료됨으로 표시"
-        }
-    },
-    Footer: {
-        Dismiss: "가이드 무시"
-    },
-    Header: {
-        Badge: {
-            New: "신규",
-            Updated: "업데이트됨"
-        },
-        Progress: {
-            TaskProgress: "{completedTasks}/{totalTasks}건 완료",
-            TaskCompleted: "완료"
-        },
-        Actions: {
-            Dismiss: "무시",
-            Feedback: "피드백 보내기",
-            Options: "옵션 메뉴",
-            Collapse: "가이드 접기",
-            Expand: "가이드 펼치기",
-            Snooze: "다시 알림"
-        },
-        Label: "가이드 머리글",
-        Loading: "로드 중..."
-    },
-    Guide: {
-        Categories: "가이드 카테고리",
-        Tasks: "가이드 업무"
-    }
-}
-  , xG = {
-    Navigation: {
-        back: "뒤로",
-        next: "다음",
-        navAriaLabel: "설문지"
-    },
-    DisclosureIconButton: {
-        spinnerAccessibilityLabel: "로드 중"
-    },
-    QuestionnaireRedesign: {
-        next: "다음",
-        getStarted: "시작하기",
-        iDontWantHelp: "사용자 지정 건너뛰기",
-        skipAll: "모두 건너뛰기"
-    }
-}
-  , _G = {
-    Badge: {
-        newFeature: "새 기능"
-    }
-}
-  , wG = {
-    dismissGuide: "가이드 무시",
-    openGuide: "가이드 열기",
-    TaskPreview: {
-        firstTaskLabel: "첫 번째 작업",
-        subsequentTaskLabel: "다음",
-        getStartedButton: "시작하기",
-        resumeGuideButton: "가이드 재개"
-    },
-    ProgressIndicator: {
-        incomplete_one: "{completedTasks} / 1개 작업 완료",
-        incomplete_many: "{completedTasks} / {totalTasks}개 작업 완료",
-        complete: "가이드 완료"
-    }
-}
-  , NG = {
-    Guidance: AG,
-    Questionnaire: xG,
-    HomeCard: _G,
-    GuideCard: wG
-}
-  , TG = {
-    Task: {
-        Status: {
-            tooltipComplete: "Merk som ikke ferdig",
-            tooltipIncomplete: "Merk som ferdig",
-            accessibilityComplete: "Merk {task} som ikke ferdig",
-            accessibilityIncomplete: "Merk {task} som ferdig"
-        }
-    },
-    Footer: {
-        Dismiss: "Lukk veiledningen"
-    },
-    Header: {
-        Badge: {
-            New: "Nytt",
-            Updated: "Oppdatert"
-        },
-        Progress: {
-            TaskProgress: "{completedTasks}/{totalTasks} fullført",
-            TaskCompleted: "Ferdig"
-        },
-        Actions: {
-            Dismiss: "Avvis",
-            Feedback: "Gi tilbakemelding",
-            Options: "Alternativer-meny",
-            Collapse: "Lukk veiledning",
-            Expand: "Vis mer av veiledningen",
-            Snooze: "Utsett"
-        },
-        Label: "Veiledningsoverskrift",
-        Loading: "Laster inn …"
-    },
-    Guide: {
-        Categories: "Veiledningskategorier",
-        Tasks: "Veiledningsoppgaver"
-    }
-}
-  , PG = {
-    Navigation: {
-        back: "Tilbake",
-        next: "Neste",
-        navAriaLabel: "Spørreskjema"
-    },
-    DisclosureIconButton: {
-        spinnerAccessibilityLabel: "Laster inn"
-    },
-    QuestionnaireRedesign: {
-        next: "Neste",
-        getStarted: "Kom i gang",
-        iDontWantHelp: "Hopp over tilpasset oppsett",
-        skipAll: "Hopp over alle"
-    }
-}
-  , IG = {
-    Badge: {
-        newFeature: "Ny funksjon"
-    }
-}
-  , LG = {
-    TaskPreview: {
-        firstTaskLabel: "Første oppgave",
-        subsequentTaskLabel: "Neste",
-        getStartedButton: "Kom i gang",
-        resumeGuideButton: "Fortsett veiledningen"
-    },
-    ProgressIndicator: {
-        incomplete_one: "{completedTasks} av 1 oppgave er fullført",
-        incomplete_many: "{completedTasks} av {totalTasks} oppgaver er fullført",
-        complete: "Veiledningen er fullført"
-    },
-    dismissGuide: "Lukk veiledningen",
-    openGuide: "Åpne veiledningen"
-}
-  , FG = {
-    Guidance: TG,
-    Questionnaire: PG,
-    HomeCard: IG,
-    GuideCard: LG
-}
-  , EG = {
-    Task: {
-        Status: {
-            tooltipComplete: "Markeren als niet gereed",
-            tooltipIncomplete: "Markeren als gereed",
-            accessibilityComplete: "{task} markeren als niet gereed",
-            accessibilityIncomplete: "{task} markeren als gereed"
-        }
-    },
-    Footer: {
-        Dismiss: "Gids sluiten"
-    },
-    Header: {
-        Badge: {
-            New: "Nieuw",
-            Updated: "Bijgewerkt"
-        },
-        Progress: {
-            TaskProgress: "{completedTasks}/{totalTasks} voltooid",
-            TaskCompleted: "Gereed"
-        },
-        Actions: {
-            Dismiss: "Sluiten",
-            Feedback: "Feedback geven",
-            Options: "Menu met opties",
-            Collapse: "Gids inklappen",
-            Expand: "Gids uitvouwen",
-            Snooze: "Uitstellen"
-        },
-        Label: "Koptekst in gids",
-        Loading: "Bezig met laden..."
-    },
-    Guide: {
-        Categories: "Categorieën in gids",
-        Tasks: "Taken in gids"
-    }
-}
-  , MG = {
-    Navigation: {
-        back: "Terug",
-        next: "Volgende",
-        navAriaLabel: "Vragenlijst"
-    },
-    DisclosureIconButton: {
-        spinnerAccessibilityLabel: "Laden"
-    },
-    QuestionnaireRedesign: {
-        next: "Volgende",
-        getStarted: "Aan de slag",
-        iDontWantHelp: "Aangepaste configuratie overslaan",
-        skipAll: "Alles overslaan"
-    }
-}
-  , RG = {
-    Badge: {
-        newFeature: "Nieuwe functie"
-    }
-}
-  , jG = {
-    TaskPreview: {
-        firstTaskLabel: "Eerste taak",
-        subsequentTaskLabel: "Hierna",
-        getStartedButton: "Aan de slag",
-        resumeGuideButton: "Gids hervatten"
-    },
-    ProgressIndicator: {
-        incomplete_one: "{completedTasks} van 1 taak voltooid",
-        incomplete_many: "{completedTasks} van de {totalTasks} taken voltooid",
-        complete: "Gids voltooid"
-    },
-    dismissGuide: "Gids sluiten",
-    openGuide: "Gids openen"
-}
-  , DG = {
-    Guidance: EG,
-    Questionnaire: MG,
-    HomeCard: RG,
-    GuideCard: jG
-}
-  , OG = {
-    Task: {
-        Status: {
-            tooltipComplete: "Oznacz jako niewykonane",
-            tooltipIncomplete: "Oznacz jako wykonane",
-            accessibilityComplete: "Oznacz zadanie: {task} jako niewykonane",
-            accessibilityIncomplete: "Oznacz zadanie: {task} jako wykonane"
-        }
-    },
-    Footer: {
-        Dismiss: "Odrzuć przewodnik"
-    },
-    Header: {
-        Badge: {
-            New: "Nowe",
-            Updated: "Zaktualizowano"
-        },
-        Progress: {
-            TaskProgress: "Zrealizowano {completedTasks} / {totalTasks}",
-            TaskCompleted: "Gotowe"
-        },
-        Actions: {
-            Dismiss: "Odrzuć",
-            Feedback: "Przekaż opinię",
-            Options: "Menu opcji",
-            Collapse: "Zwiń przewodnik",
-            Expand: "Rozwiń przewodnik",
-            Snooze: "Odłóż"
-        },
-        Label: "Nagłówek przewodnika",
-        Loading: "Ładowanie..."
-    },
-    Guide: {
-        Categories: "Kategorie przewodnika",
-        Tasks: "Zadania przewodnika"
-    }
-}
-  , BG = {
-    Navigation: {
-        back: "Powrót",
-        next: "Dalej",
-        navAriaLabel: "Kwestionariusz"
-    },
-    DisclosureIconButton: {
-        spinnerAccessibilityLabel: "Ładowanie"
-    },
-    QuestionnaireRedesign: {
-        next: "Dalej",
-        getStarted: "Rozpocznij",
-        iDontWantHelp: "Pomiń niestandardową konfigurację",
-        skipAll: "Pomiń wszystko"
-    }
-}
-  , zG = {
-    Badge: {
-        newFeature: "Nowa funkcja"
-    }
-}
-  , VG = {
-    TaskPreview: {
-        firstTaskLabel: "Pierwsze zadanie",
-        subsequentTaskLabel: "Następny krok",
-        getStartedButton: "Rozpocznij",
-        resumeGuideButton: "Kontynuuj korzystanie z przewodnika"
-    },
-    ProgressIndicator: {
-        incomplete_one: "Zakończono {completedTasks} z 1 zadania",
-        incomplete_many: "Zakończono {completedTasks} z {totalTasks} zadań",
-        complete: "Zakończono korzystanie z przewodnika"
-    },
-    dismissGuide: "Odrzuć przewodnik",
-    openGuide: "Otwórz przewodnik"
-}
-  , UG = {
-    Guidance: OG,
-    Questionnaire: BG,
-    HomeCard: zG,
-    GuideCard: VG
-}
-  , $G = {
-    Task: {
-        Status: {
-            tooltipComplete: "Marcar como não concluído",
-            tooltipIncomplete: "Marcar como concluído",
-            accessibilityComplete: 'Marcar a tarefa "{task}" como não concluída',
-            accessibilityIncomplete: 'Marcar a tarefa "{task}" como concluída'
-        }
-    },
-    Footer: {
-        Dismiss: "Descartar guia"
-    },
-    Header: {
-        Badge: {
-            New: "Novo",
-            Updated: "Atualizado"
-        },
-        Progress: {
-            TaskProgress: "{completedTasks} de {totalTasks} tarefas concluídas",
-            TaskCompleted: "Pronto"
-        },
-        Actions: {
-            Dismiss: "Dispensar",
-            Feedback: "Enviar feedback",
-            Options: 'Menu "Opções"',
-            Collapse: "Recolher guia",
-            Expand: "Expandir guia",
-            Snooze: "Adiar"
-        },
-        Label: "Título do guia",
-        Loading: "Carregando..."
-    },
-    Guide: {
-        Categories: "Categorias do guia",
-        Tasks: "Tarefas do guia"
-    }
-}
-  , HG = {
-    Navigation: {
-        back: "Voltar",
-        next: "Avançar",
-        navAriaLabel: "Questionário"
-    },
-    DisclosureIconButton: {
-        spinnerAccessibilityLabel: "Carregando"
-    },
-    QuestionnaireRedesign: {
-        next: "Avançar",
-        getStarted: "Comece já",
-        iDontWantHelp: "Ignorar configuração personalizada",
-        skipAll: "Ignorar tudo"
-    }
-}
-  , WG = {
-    Badge: {
-        newFeature: "Novo recurso"
-    }
-}
-  , qG = {
-    dismissGuide: "Descartar guia",
-    openGuide: "Abrir guia",
-    ProgressIndicator: {
-        incomplete_one: "{completedTasks} de 1 tarefa concluída",
-        incomplete_many: "{completedTasks} tarefas concluídas de {totalTasks}",
-        complete: "Guia concluído"
-    },
-    TaskPreview: {
-        firstTaskLabel: "Primeira tarefa",
-        subsequentTaskLabel: "Seguinte",
-        getStartedButton: "Introdução",
-        resumeGuideButton: "Retomar guia"
-    }
-}
-  , GG = {
-    Guidance: $G,
-    Questionnaire: HG,
-    HomeCard: WG,
-    GuideCard: qG
-}
-  , KG = {
-    Task: {
-        Status: {
-            tooltipComplete: "Marcar como não concluído",
-            tooltipIncomplete: "Marcar como concluído",
-            accessibilityComplete: "Marcar {task} como não concluído",
-            accessibilityIncomplete: "Marcar {task} como concluído"
-        }
-    },
-    Footer: {
-        Dismiss: "Dispensar guia"
-    },
-    Header: {
-        Badge: {
-            New: "Novo",
-            Updated: "Atualizado"
-        },
-        Progress: {
-            TaskProgress: "{completedTasks}/{totalTasks} concluídos",
-            TaskCompleted: "Concluído"
-        },
-        Actions: {
-            Dismiss: "Dispensar",
-            Feedback: "Enviar feedback",
-            Options: 'Menu "Opções"',
-            Collapse: "Fechar guia",
-            Expand: "Expandir guia",
-            Snooze: "Adiar"
-        },
-        Label: "Título do guia",
-        Loading: "A carregar..."
-    },
-    Guide: {
-        Categories: "Categorias do guia",
-        Tasks: "Tarefas do guia"
-    }
-}
-  , QG = {
-    Navigation: {
-        back: "Voltar",
-        next: "Seguinte",
-        navAriaLabel: "Questionário"
-    },
-    DisclosureIconButton: {
-        spinnerAccessibilityLabel: "A carregar"
-    },
-    QuestionnaireRedesign: {
-        next: "Seguinte",
-        getStarted: "Começar",
-        iDontWantHelp: "Ignorar configuração personalizada",
-        skipAll: "Ignorar tudo"
-    }
-}
-  , ZG = {
-    Badge: {
-        newFeature: "Nova funcionalidade"
-    }
-}
-  , YG = {
-    TaskPreview: {
-        firstTaskLabel: "Primeira tarefa",
-        subsequentTaskLabel: "A seguir",
-        getStartedButton: "Começar",
-        resumeGuideButton: "Retomar guia"
-    },
-    ProgressIndicator: {
-        incomplete_one: "{completedTasks} de 1 tarefa concluída",
-        incomplete_many: "{completedTasks} tarefas concluídas de {totalTasks}",
-        complete: "Guia concluído"
-    },
-    dismissGuide: "Dispensar guia",
-    openGuide: "Abrir guia"
-}
-  , JG = {
-    Guidance: KG,
-    Questionnaire: QG,
-    HomeCard: ZG,
-    GuideCard: YG
-}
-  , XG = {
-    Task: {
-        Status: {
-            tooltipComplete: "Markera som ej klar",
-            tooltipIncomplete: "Markera som klar",
-            accessibilityComplete: "Markera {task} som ej klar",
-            accessibilityIncomplete: "Markera {task} som klar"
-        }
-    },
-    Footer: {
-        Dismiss: "Avvisa guide"
-    },
-    Header: {
-        Badge: {
-            New: "Ny",
-            Updated: "Uppdaterad"
-        },
-        Progress: {
-            TaskProgress: "{completedTasks}/{totalTasks} slutförda",
-            TaskCompleted: "Klar"
-        },
-        Actions: {
-            Dismiss: "Avvisa",
-            Feedback: "Lämna feedback",
-            Options: "Alternativ-meny",
-            Collapse: "Dölj guide",
-            Expand: "Öppna guide",
-            Snooze: "Snooza"
-        },
-        Label: "Guiderubrik",
-        Loading: "Laddar ..."
-    },
-    Guide: {
-        Categories: "Guide för kategorier",
-        Tasks: "Guideuppgifter"
-    }
-}
-  , eK = {
-    Navigation: {
-        back: "Tillbaka",
-        next: "Nästa",
-        navAriaLabel: "Frågeformulär"
-    },
-    DisclosureIconButton: {
-        spinnerAccessibilityLabel: "Laddar"
-    },
-    QuestionnaireRedesign: {
-        next: "Nästa",
-        getStarted: "Kom igång",
-        iDontWantHelp: "Hoppa över anpassad konfigurering",
-        skipAll: "Hoppa över alla"
-    }
-}
-  , tK = {
-    Badge: {
-        newFeature: "Ny funktion"
-    }
-}
-  , nK = {
-    TaskPreview: {
-        firstTaskLabel: "Första uppgiften",
-        subsequentTaskLabel: "Nästa",
-        getStartedButton: "Kom igång",
-        resumeGuideButton: "Återuppta guide"
-    },
-    ProgressIndicator: {
-        incomplete_one: "{completedTasks} av 1 uppgift är slutförd",
-        incomplete_many: "{completedTasks} av {totalTasks} uppgifter är slutförda",
-        complete: "Guide slutförd"
-    },
-    dismissGuide: "Avvisa guide",
-    openGuide: "Öppna guide"
-}
-  , iK = {
-    Guidance: XG,
-    Questionnaire: eK,
-    HomeCard: tK,
-    GuideCard: nK
-}
-  , aK = {
-    Task: {
-        Status: {
-            tooltipComplete: "ทำเครื่องหมายว่ายังไม่เสร็จสิ้น",
-            tooltipIncomplete: "ทำเครื่องหมายว่าเสร็จสิ้นแล้ว",
-            accessibilityComplete: "ทำเครื่องหมาย {task} ว่ายังไม่เสร็จสิ้น",
-            accessibilityIncomplete: "ทำเครื่องหมาย {task} ว่าเสร็จสิ้นแล้ว"
-        }
-    },
-    Footer: {
-        Dismiss: "ปิดคู่มือ"
-    },
-    Header: {
-        Badge: {
-            New: "ใหม่",
-            Updated: "อัปเดตแล้ว"
-        },
-        Progress: {
-            TaskProgress: "ดำเนินการเสร็จสิ้น {completedTasks} จาก {totalTasks} รายการ",
-            TaskCompleted: "เสร็จสิ้น"
-        },
-        Actions: {
-            Dismiss: "ปิด",
-            Feedback: "แสดงความคิดเห็น",
-            Options: "เมนูตัวเลือก",
-            Collapse: "ย่อคู่มือ",
-            Expand: "ขยายคู่มือ",
-            Snooze: "เลื่อน"
-        },
-        Label: "ส่วนหัวของคู่มือ",
-        Loading: "กำลังโหลด..."
-    },
-    Guide: {
-        Categories: "หมวดหมู่ของคู่มือ",
-        Tasks: "งานสำหรับคู่มือ"
-    }
-}
-  , rK = {
-    Navigation: {
-        back: "ย้อนกลับ",
-        next: "ถัดไป",
-        navAriaLabel: "แบบสอบถาม"
-    },
-    DisclosureIconButton: {
-        spinnerAccessibilityLabel: "กำลังโหลด"
-    },
-    QuestionnaireRedesign: {
-        next: "ถัดไป",
-        getStarted: "เริ่มต้นใช้งาน",
-        iDontWantHelp: "ข้ามการตั้งค่าที่ปรับแต่งแล้ว",
-        skipAll: "ข้ามทั้งหมด"
-    }
-}
-  , oK = {
-    Badge: {
-        newFeature: "ฟีเจอร์ใหม่"
-    }
-}
-  , sK = {
-    TaskPreview: {
-        firstTaskLabel: "งานแรก",
-        subsequentTaskLabel: "ถัดไป",
-        getStartedButton: "เริ่มใช้งาน",
-        resumeGuideButton: "ดูคู่มือต่อ"
-    },
-    ProgressIndicator: {
-        incomplete_one: "เสร็จสิ้นแล้ว {completedTasks} งานจากทั้งหมด 1 งาน",
-        incomplete_many: "เสร็จสิ้นแล้ว {completedTasks} งานจากทั้งหมด {totalTasks} งาน",
-        complete: "คำแนะนำเสร็จสิ้นแล้ว"
-    },
-    dismissGuide: "ปิดคู่มือ",
-    openGuide: "เปิดคู่มือ"
-}
-  , lK = {
-    Guidance: aK,
-    Questionnaire: rK,
-    HomeCard: oK,
-    GuideCard: sK
-}
-  , cK = {
-    Task: {
-        Status: {
-            tooltipComplete: "Tamamlanmadı olarak işaretle",
-            tooltipIncomplete: "Tamamlandı olarak işaretle",
-            accessibilityComplete: "{task} görevini tamamlanmadı olarak işaretle",
-            accessibilityIncomplete: "{task} görevini tamamlandı olarak işaretle"
-        }
-    },
-    Footer: {
-        Dismiss: "Kılavuzu kapat"
-    },
-    Header: {
-        Badge: {
-            New: "Yeni",
-            Updated: "Güncellendi"
-        },
-        Progress: {
-            TaskProgress: "{completedTasks}/{totalTasks} tamamlandı",
-            TaskCompleted: "Bitti"
-        },
-        Actions: {
-            Dismiss: "Kapat",
-            Feedback: "Geri Bildiriminizi Paylaşın",
-            Options: "Seçenekler menüsü",
-            Collapse: "Kılavuzu daralt",
-            Expand: "Kılavuzu genişlet",
-            Snooze: "Ertele"
-        },
-        Label: "Kılavuz üstbilgisi",
-        Loading: "Yükleniyor..."
-    },
-    Guide: {
-        Categories: "Kılavuz kategorileri",
-        Tasks: "Kılavuz görevleri"
-    }
-}
-  , uK = {
-    Navigation: {
-        back: "Geri",
-        next: "Sonraki",
-        navAriaLabel: "Anket"
-    },
-    DisclosureIconButton: {
-        spinnerAccessibilityLabel: "Yükleniyor"
-    },
-    QuestionnaireRedesign: {
-        next: "Sonraki",
-        getStarted: "Kullanmaya başlayın",
-        iDontWantHelp: "Kişiselleştirilmiş ayarlamayı atla",
-        skipAll: "Tümünü atla"
-    }
-}
-  , dK = {
-    Badge: {
-        newFeature: "Yeni özellik"
-    }
-}
-  , mK = {
-    TaskPreview: {
-        firstTaskLabel: "İlk görev",
-        subsequentTaskLabel: "Sonraki adım",
-        getStartedButton: "Başlayın",
-        resumeGuideButton: "Kılavuzu sürdür"
-    },
-    ProgressIndicator: {
-        incomplete_one: "{completedTasks}/1 görev tamamlandı",
-        incomplete_many: "{completedTasks}/{totalTasks} görev tamamlandı",
-        complete: "Kılavuz tamamlandı"
-    },
-    dismissGuide: "Kılavuzu kapat",
-    openGuide: "Kılavuzu aç"
-}
-  , pK = {
-    Guidance: cK,
-    Questionnaire: uK,
-    HomeCard: dK,
-    GuideCard: mK
-}
-  , fK = {
-    Task: {
-        Status: {
-            tooltipComplete: "标记为未完成",
-            tooltipIncomplete: "标记为已完成",
-            accessibilityComplete: "将 {task} 标记为未完成",
-            accessibilityIncomplete: "将 {task} 标记为已完成"
-        }
-    },
-    Footer: {
-        Dismiss: "忽略指南"
-    },
-    Header: {
-        Badge: {
-            New: "新",
-            Updated: "已更新"
-        },
-        Progress: {
-            TaskProgress: "已完成 {completedTasks} 个，共 {totalTasks} 个",
-            TaskCompleted: "完成"
-        },
-        Actions: {
-            Dismiss: "忽略",
-            Feedback: "提供反馈",
-            Options: "选项菜单",
-            Collapse: "折叠指南",
-            Expand: "展开指南",
-            Snooze: "暂停"
-        },
-        Label: "指南标头",
-        Loading: "正在加载…"
-    },
-    Guide: {
-        Categories: "指南类别",
-        Tasks: "指南任务"
-    }
-}
-  , hK = {
-    Navigation: {
-        back: "返回",
-        next: "下一步",
-        navAriaLabel: "问卷调查"
-    },
-    DisclosureIconButton: {
-        spinnerAccessibilityLabel: "正在加载"
-    },
-    QuestionnaireRedesign: {
-        next: "下一步",
-        getStarted: "开始体验",
-        iDontWantHelp: "跳过自定义设置",
-        skipAll: "全部跳过"
-    }
-}
-  , gK = {
-    Badge: {
-        newFeature: "新功能"
-    }
-}
-  , vK = {
-    TaskPreview: {
-        firstTaskLabel: "第一个任务",
-        subsequentTaskLabel: "下一步",
-        getStartedButton: "开始",
-        resumeGuideButton: "恢复指南"
-    },
-    ProgressIndicator: {
-        incomplete_one: "已完成 {completedTasks}/1 个任务",
-        incomplete_many: "已完成 {completedTasks}/{totalTasks} 个任务",
-        complete: "指南完成"
-    },
-    dismissGuide: "忽略指南",
-    openGuide: "展开指南"
-}
-  , yK = {
-    Guidance: fK,
-    Questionnaire: hK,
-    HomeCard: gK,
-    GuideCard: vK
-}
-  , bK = {
-    Task: {
-        Status: {
-            tooltipComplete: "標示為「未完成」",
-            tooltipIncomplete: "標示為「完成」",
-            accessibilityComplete: "將「{task}」標示為未完成",
-            accessibilityIncomplete: "將「{task}」標示為完成"
-        }
-    },
-    Footer: {
-        Dismiss: "關閉指南"
-    },
-    Header: {
-        Badge: {
-            New: "新選項",
-            Updated: "已更新"
-        },
-        Progress: {
-            TaskProgress: "已完成 {completedTasks} 項 (共 {totalTasks} 項)",
-            TaskCompleted: "完成"
-        },
-        Actions: {
-            Dismiss: "關閉",
-            Feedback: "提供意見回饋",
-            Options: "選項選單",
-            Collapse: "收合指南",
-            Expand: "展開指南",
-            Snooze: "延遲"
-        },
-        Label: "指南頁首",
-        Loading: "載入中..."
-    },
-    Guide: {
-        Categories: "指南類別",
-        Tasks: "指南任務"
-    }
-}
-  , kK = {
-    Navigation: {
-        back: "返回",
-        next: "下一步",
-        navAriaLabel: "問卷"
-    },
-    DisclosureIconButton: {
-        spinnerAccessibilityLabel: "載入中"
-    },
-    QuestionnaireRedesign: {
-        next: "下一步",
-        getStarted: "開始使用",
-        iDontWantHelp: "跳過自訂設定",
-        skipAll: "全部略過"
-    }
-}
-  , SK = {
-    Badge: {
-        newFeature: "新功能"
-    }
-}
-  , CK = {
-    dismissGuide: "關閉指南",
-    openGuide: "開啟指南",
-    TaskPreview: {
-        firstTaskLabel: "第一個任務",
-        subsequentTaskLabel: "接下來",
-        getStartedButton: "開始使用",
-        resumeGuideButton: "繼續進行指南"
-    },
-    ProgressIndicator: {
-        incomplete_one: "已完成 {completedTasks} 項任務，共 1 項",
-        incomplete_many: "已完成 {completedTasks} 項任務，共 {totalTasks} 項",
-        complete: "完成指南"
-    }
-}
-  , AK = {
-    Guidance: bK,
-    Questionnaire: kK,
-    HomeCard: SK,
-    GuideCard: CK
-}
-  , jj = {
-    [Symbol.for("i18n-id")]: "GuidanceUI",
-    en: Yq,
-    cs: jq,
-    da: Vq,
-    de: qq,
-    es: nG,
-    fi: sG,
-    fr: mG,
-    it: vG,
-    ja: CG,
-    ko: NG,
-    nb: FG,
-    nl: DG,
-    pl: UG,
-    "pt-BR": GG,
-    "pt-PT": JG,
-    sv: iK,
-    th: lK,
-    tr: pK,
-    "zh-CN": yK,
-    "zh-TW": AK
-}
-  , xK = JSON.parse('{"BenchmarksSummary":{"shopValue":"Váš obchod","benchmarksMedian":"Medián srovnávacího ukazatele","benchmarks25thPercentile":"25. percentil","benchmarks75thPercentile":"75. percentil","benchmarksTooltip":"Porovnejte výkonnost svého obchodu s podobnými obchody na základě prodaných produktů za posledních 30 dnů, země primárního trhu a objemu objednávek.","missingData":{"title":"Žádný srovnávací ukazatel","content":"K dispozici není dostatek dat z podobných obchodů"}},"CloseButton":{"delete":"Odstranit metriku"},"MetricCardEmpty":{"noResults":"Pro toto rozmezí kalendářních dat nebyla nalezena žádná data","noResultsCompact":"Žádná data","incorrectCardSize":"Jestliže chcete zobrazit data, změňte velikost této karty"},"MetricCardError":{"error":"Data se nepovedlo načíst"},"MetricLayout":{"ReportLinkAccessibilityLabel":"Zobrazit výkaz {reportTitle}"},"HorizontalNavigation":{"Forward":"Vpřed","Backward":"Zpět"},"TimeframePicker":{"today":"Dnes","todayHelp":"Srovnání se včerejším dnem až do aktuální hodiny","last7days":"7 dnů","last7daysHelp":"Srovnání s předchozími 7 dny","last30days":"30 dnů","last30daysHelp":"Srovnání s předchozími 30 dny","last90days":"90 dnů","last90daysHelp":"Srovnání s předchozími 90 dny","last365days":"365 dnů","last365daysHelp":"Srovnání s předchozími 365 dny"},"date":{"range":"{startDate}–{endDate}","sameMonthRange":"{startDay}.–{endDay}. {month} {year}","months":{"1":"led","2":"úno","3":"bře","4":"dub","5":"kvě","6":"čvn","7":"čvc","8":"srp","9":"zář","10":"říj","11":"lis","12":"pro"},"title":{"today":"Dnes","yesterday":"Včera","last7days":"Posledních 7 dnů","last30days":"Posledních 30 dnů","last90days":"Posledních 90 dnů","last365days":"Posledních 365 dnů","last12months":"Posledních 12 měsíců","this_week":"Tento týden","this_month":"Tento měsíc","this_quarter":"Toto čtvrtletí","this_year":"Letošní rok","last_week":"Minulý týden","last_month":"Minulý měsíc","last_quarter":"Minulé čtvrtletí","last_year":"Minulý rok","weekToDate":"Aktuální týden","monthToDate":"Aktuální měsíc","quarterToDate":"Aktuální čtvrtletí","yearToDate":"Aktuální rok","bfcm":"BFCM {year}","quarter":"Čt. {quarterNumber} {year}","previous_period":"Předchozí období","previous_second":"Předchozí sekunda","previous_minute":"Předchozí minuta","previous_hour":"Předchozí hodina","previous_day":"Předchozí den","previous_week":"Předchozí týden","previous_month":"Předchozí měsíc","previous_quarter":"Předchozí čtvrtletí","previous_year":"Předchozí rok","previous_year_match_day_of_week":"Předchozí rok (odpovídá dni v týdnu)"}},"MetricAnnotations":{"learnMoreLinkText":"Zjistit více","sessionsBackfill2022":{"label":"Začátek dat","description":"V rámci vylepšení dat nyní data pro relace začínají od října 2022."},"checkoutConversionRate2022":{"label":"Aktualizace metrik","description":"V rámci vylepšení dat nyní data pro relace začínají od října 2022. Od tohoto data jsme také upravili následující metriky: {affectedMetrics}.","banner":{"description":"Vylepšili jsme způsob, jakým počítáme, kdy byla spuštěna pokladna, takže budeme počítat více spuštěných pokladen. V důsledku toho se mohou následující metriky změnit: {affectedMetrics}. Aby bylo možné provést historické srovnání, upravili jsme počínaje říjnem 2022 tyto ukazatele."}}},"TrendIndicator":{"IncreaseOf":"Zvýšení o {change}","DecreaseOf":"Snížení o {change}","NoChange":"Beze změny"},"TimeFormatter":{"DayOrLonger":"{timeInDay} {timeInHour}","LessThanDay":"{timeInHour} {timeInMinute}","day":{"one":"{amount} d","other":"{amount} d","few":"{amount} d","many":"{amount} d"},"hour":{"one":"{amount} h","other":"{amount} h","few":"{amount} h","many":"{amount} h"},"minute":{"one":"{amount} min","other":"{amount} min","few":"{amount} min","many":"{amount} min"}},"useFormattedValue":{"none":"Žádné","boolean":{"true":"Ano","false":"Ne"},"quarters":{"short":{"q1":"1. čtvrtletí","q2":"2. čtvrtletí","q3":"3. čtvrtletí","q4":"4. čtvrtletí"},"long":{"q1":"1. čtvrtletí {year}","q2":"2. čtvrtletí {year}","q3":"3. čtvrtletí {year}","q4":"4. čtvrtletí {year}"}},"DAY_OF_WEEK":{"short":{"0":"Po","1":"Út","2":"St","3":"Čt","4":"Pá","5":"So","6":"Ne"},"long":{"0":"Pondělí","1":"Úterý","2":"Středa","3":"Čtvrtek","4":"Pátek","5":"Sobota","6":"Neděle"}}},"useFormatHistogram":{"days":{"one":"Počet dnů: {count}","other":"Počet dnů: {count}","few":"Počet dnů: {count}","many":"Počet dnů: {count}"}},"TooltipContent":{"fieldSuffixes":{"product_title":{"one":"Počet produktů: {count}","other":"Počet produktů: {count}","few":"Počet produktů: {count}","many":"Počet produktů: {count}"},"product_variant_title":{"one":"Počet variant produktu: {count}","other":"Počet variant produktu: {count}","few":"Počet variant produktu: {count}","many":"Počet variant produktu: {count}"},"product_variant_id":{"one":"Počet variant produktu: {count}","other":"Počet variant produktu: {count}","few":"Počet variant produktu: {count}","many":"Počet variant produktu: {count}"},"product_variant_sku":{"one":"Počet variant produktu: {count}","other":"Počet variant produktu: {count}","few":"Počet variant produktu: {count}","many":"Počet variant produktu: {count}"}}},"popover":{"learnMore":"Zjistit více"},"useFormatLineChartRelational":{"percentileLegend":"25. až 75. percentil","median":"Medián srovnávacího ukazatele","missingData":{"title":"Žádný srovnávací ukazatel","content":"K dispozici není dostatek dat z podobných obchodů"},"yourTotals":"Vaše celková prodejní částka"},"RFMGroups":{"previously_loyal":{"description":"Zákazníci bez posledních nákupů, ale s velmi bohatou historií objednávek a výdajů.","goal":"Cíl: přesun zákazníků do skupiny Věrní"},"at_risk":{"description":"Zákazníci bez posledních nákupů, ale s bohatou historií objednávek a výdajů.","goal":"Cíl: přesun zákazníků do skupiny Věrní nebo Vyžaduje pozornost"},"dormant":{"description":"Zákazníci bez posledních objednávek, s nepravidelnými objednávkami a s nízkými výdeji.","goal":"Cíl: přesun zákazníků do skupiny Téměř ztracení"},"loyal":{"description":"Zákazníci bez posledních nákupů, ale s velmi bohatou historií objednávek a výdajů.","goal":"Cíl: přesun zákazníků do skupiny Champions"},"needs_attention":{"description":"Zákazníci, kteří v poslední době nakupují méně, objednávají občas a utrácejí ve vašem obchodu střídmě.","goal":"Cíl: přesun zákazníků do skupiny Věrní nebo Aktivní"},"almost_lost":{"description":"Zákazníci bez posledních nákupů, s menším počtem objednávek a s nižšími výdaji.","goal":"Cíl: přesun zákazníků do skupiny Aktivní nebo Slibní"},"promising":{"description":"Zákazníci s nedávnými nákupy, malým počtem objednávek a nízkými výdaji.","goal":"Cíl: přesun zákazníků do skupiny Aktivní"},"active":{"description":"Zákazníci s nedávnými nákupy, několika objednávkami a mírnými výdaji.","goal":"Cíl: přesun zákazníků do skupiny Champions nebo Věrní"},"new":{"description":"Zákazníci s velmi nedávnými nákupy, malým počtem objednávek a nízkými výdaji.","goal":"Cíl: přesun zákazníků do skupiny Aktivní"},"champions":{"description":"Zákazníci s velmi nedávnými nákupy, mnoha objednávkami a největšími výdaji."},"metricInformation":{"value":"{formattedMetricValue}","percentage":"({formattedPercentValue} klientely)"},"previewSegment":"Zobrazit náhled segmentu","viewReport":"Zobrazit výkaz"},"CustomerCohortAnalysis":{"Tooltip":{"returned":"{percent} ({customers}) se vrátilo po {month} ({currentMonth})","returnedAcquisitionMonth":"{percent} ({customers}) se vrátilo během měsíce získání kohorty ({month})","firstOrder":"Kohorta {month}: {customers}","noOrders":"Žádný zákazník se nevrátil po {month} ({currentMonth})","noOrdersAcquisitionMonth":"Během měsíce získání kohorty ({currentMonth}) se nevrátili žádní zákazníci","month":{"one":"{count} měsíc","other":"{count} měsíců","few":"{count} měsíců","many":"{count} měsíců"},"customer":{"one":"{count} zákazník","other":"{count} zákazníků","few":"{count} zákazníků","many":"{count} zákazníků"}},"summaryRowDate":"Všechny kohorty","timeDimensionColumnDisplayName":"Kohorta"},"MetricTable":{"subtitle":"% změna","summary":"Shrnutí","EmptyState":{"text":"Pro tento výběr nejsou k dispozici žádná data"},"FooterRow":{"exportMessage":"Tento výkaz zobrazuje až {amount} výsledků. Pro přístup ke všem výsledkům můžete {export}","exportActionText":"výkaz vyexportovat.","message":{"one":"{count} výsledek","other":"Počet výsledků: {count}","few":"Počet výsledků: {count}","many":"Počet výsledků: {count}"}}},"FunnelChart":{"truncatedSessions":"{metric} (zkráceno)","truncatedSessionsDescription":"Metrika {metric} byla naškálována a vykreslena tak, aby lépe reprezentovala trychtýř"},"BasketPopover":{"noVariants":"• Žádné varianty","productsBoughtTogether":"Společně koupené produkty ({count})","variantsBoughtTogether":"Společně koupené varianty ({count})","variantsCount":{"one":"• {count} varianta","other":"• Počet variant: {count}","few":"• Počet variant: {count}","many":"• Počet variant: {count}"}},"BasketCell":{"hiddenProductCount":"a ještě {count}","none":"Žádné"},"BasketListWithActions":{"actions":"Akce","back":"Zpět"},"RowActions":{"previewSegment":"Zobrazit náhled segmentu"},"usePivotedColumnDisplayName":{"week":{"firstOrder":"První objednávka","greaterThanOne":"Týden {value}"},"month":{"firstOrder":"První objednávka","greaterThanOne":"Měsíc {value}"},"quarter":{"firstOrder":"První objednávka","greaterThanOne":"Čtvrtletí {value}"},"year":{"firstOrder":"První objednávka","greaterThanOne":"Rok {value}"}},"ShopifyQlDateControls":{"dateTextField":{"placeholderDateValue":"RRRR-MM-DD","sinceTextFieldLabel":"Začátek","untilTextFieldLabel":"Konec"},"actionButtons":{"apply":"Použít","cancel":"Zrušit","back":"Zpět"},"quickPicksSidebar":{"newBadge":"Nový"},"quickPicksDropdown":{"customDateRange":"Vlastní","label":"Rozmezí dat"},"compareTo":"Srovnat s: {dateRange}","noComparison":"Bez srovnání","sections":{"bfcm":"Black Friday Cyber Monday","quarters":"Čtvrtletí"}},"useFormatLineChart":{"allTime":"Za celou dobu"},"useGetPrimaryMetricBadge":{"webPerformance":{"success":"Dobré","attention":"Průměrné","critical":"Špatné"},"fraudRisk":{"attention":"V ohrožení","critical":"Zvýšené riziko"}},"RFMGridLabels":{"xAxis":"Skóre aktuálnosti","yAxis":"Frekvence + skóre peněžní hodnoty"},"useWebPerformanceAnnotations":{"good":"Dobré","poor":"Špatné","count":{"one":"{count} událost","other":"Události: {count}","few":"Události: {count}","many":"Události: {count}"}},"Polaris":{"Avatar":{"label":"Avatar","labelWithInitials":"Avatar s iniciálami {initials}"},"Autocomplete":{"spinnerAccessibilityLabel":"Načítání","ellipsis":"{content}…"},"Badge":{"PROGRESS_LABELS":{"incomplete":"Nedokončeno","partiallyComplete":"Částečně dokončeno","complete":"Dokončeno"},"TONE_LABELS":{"info":"Informace","success":"Zdařilo se","warning":"Varování","attention":"Upozornění","new":"Nové","critical":"Kritické","readOnly":"Pouze ke čtení","enabled":"Zapnuto"},"progressAndTone":"{toneLabel} {progressLabel}"},"Banner":{"dismissButton":"Zavřít notifikaci"},"Button":{"spinnerAccessibilityLabel":"Načítání"},"Common":{"checkbox":"zaškrtávací pole","undo":"Vrátit zpět","cancel":"Zrušit","clear":"Vymazat","close":"Zavřít","submit":"Odeslat","more":"Více"},"ContextualSaveBar":{"save":"Uložit","discard":"Zahodit"},"DataTable":{"sortAccessibilityLabel":"seřadit {direction} podle","navAccessibilityLabel":"Posunout tabulku {direction} o jeden sloupec","totalsRowHeading":"Celkem","totalRowHeading":"Celkem"},"DatePicker":{"previousMonth":"Zobrazit předchozí měsíc, {previousMonthName} {showPreviousYear}","nextMonth":"Zobrazit příští měsíc, {nextMonth} {nextYear}","today":"Dnes ","months":{"january":"Leden","february":"Únor","march":"Březen","april":"Duben","may":"Květen","june":"Červen","july":"Červenec","august":"Srpen","september":"Září","october":"Říjen","november":"Listopad","december":"Prosinec"},"daysAbbreviated":{"monday":"Po","tuesday":"Út","wednesday":"St","thursday":"Čt","friday":"Pá","saturday":"So","sunday":"Ne"},"days":{"monday":"Pondělí","tuesday":"Úterý","wednesday":"Středa","thursday":"Čtvrtek","friday":"Pátek","saturday":"Sobota","sunday":"Neděle"},"start":"Začátek rozmezí","end":"Konec rozmezí"},"ActionMenu":{"RollupActions":{"rollupButton":"Zobrazit akce"},"Actions":{"moreActions":"Další akce"}},"Modal":{"iFrameTitle":"kód hlavní části","modalWarning":"V modálním parametru chybí následující povinné vlastnosti: {missingProps}","unsavedChanges":"Změny nebyly uloženy"},"Pagination":{"previous":"Předchozí","next":"Další","pagination":"Stránkování"},"ProgressBar":{"negativeWarningMessage":"Hodnoty předané vlastnosti průběhu nesmí být záporné. Hodnota {progress} se resetuje na 0.","exceedWarningMessage":"Hodnoty předané vlastnosti průběhu nesmí být vyšší než 100. Hodnota {progress} se nastaví na 100."},"ResourceList":{"sortingLabel":"Seřadit podle","defaultItemSingular":"položka","defaultItemPlural":"položky","showing":"Zobrazuje se {itemsCount} {resource}","loading":"Načítá se {resource}","selected":"Vybráno: {selectedItemsCount}","allItemsSelected":"V obchodu byly vybrány všechny položky {itemsLength} a více {resourceNamePlural}","selectAllItems":"Vyberte ve svém obchodu všechny položky {itemsLength} a více {resourceNamePlural}","emptySearchResultTitle":"Nebyl nalezen žádný {resourceNamePlural}","emptySearchResultDescription":"Zkuste změnit filtry nebo hledaný termín","selectButtonText":"Vybrat","a11yCheckboxDeselectAllSingle":"Zrušit výběr {resourceNameSingular}","a11yCheckboxSelectAllSingle":"Vybrat {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"Zrušit výběr všech položek {itemsLength} {resourceNamePlural}","a11yCheckboxSelectAllMultiple":"Vybrat všechny položky {itemsLength} {resourceNamePlural}","Item":{"actionsDropdownLabel":"Akce pro {accessibilityLabel}","actionsDropdown":"Rozevírací nabídka akcí","viewItem":"Zobrazit podrobnosti pro {itemName}"},"BulkActions":{"actionsActivatorLabel":"Akce","moreActionsActivatorLabel":"Další akce"},"showingTotalCount":"Zobrazuje se {itemsCount} z {totalItemsCount} {resource}","allFilteredItemsSelected":"V tomto filtru byly vybrány všechny položky {itemsLength} a více {resourceNamePlural}","selectAllFilteredItems":"Vyberte v tomto filtru všechny položky {itemsLength} a více {resourceNamePlural}"},"SkeletonPage":{"loadingLabel":"Stránka se načítá"},"Tabs":{"toggleTabsLabel":"Více zobrazení","newViewAccessibilityLabel":"Vytvořit nové zobrazení","newViewTooltip":"Vytvořit zobrazení","Tab":{"rename":"Přejmenovat zobrazení","duplicate":"Duplikovat zobrazení","edit":"Upravit zobrazení","editColumns":"Upravit sloupce","delete":"Odstranit zobrazení","copy":"Kopie {name}","deleteModal":{"title":"Odstranit zobrazení?","description":"Tato akce je nevratná. Zobrazení {viewName} už nebude k dispozici ve vašem administrátoru.","cancel":"Zrušit","delete":"Odstranit zobrazení"}},"RenameModal":{"title":"Přejmenovat zobrazení","label":"Název","cancel":"Zrušit","create":"Uložit","errors":{"sameName":"Zobrazení s tímto názvem už existuje. Zvolte odlišný název."}},"DuplicateModal":{"title":"Duplikovat zobrazení","label":"Název","cancel":"Zrušit","create":"Vytvořit zobrazení","errors":{"sameName":"Zobrazení s tímto názvem už existuje. Zvolte odlišný název."}},"CreateViewModal":{"title":"Vytvořit nové zobrazení","label":"Název","cancel":"Zrušit","create":"Vytvořit zobrazení","errors":{"sameName":"Zobrazení s tímto názvem už existuje. Zvolte odlišný název."}}},"Tag":{"ariaLabel":"Odebrat {children}"},"TextField":{"characterCount":"Počet znaků: {count}","characterCountWithMaxLength":"Použito {count} z {limit} znaků"},"TopBar":{"toggleMenuLabel":"Přepnout nabídku","SearchField":{"clearButtonLabel":"Vymazat","search":"Hledat"}},"MediaCard":{"popoverButton":"Akce","dismissButton":"Zavřít"},"VideoThumbnail":{"playButtonA11yLabel":{"default":"Přehrát video","defaultWithDuration":"Přehrát video o délce {duration}","duration":{"hours":{"other":{"only":"{hourCount} h","andMinutes":"{hourCount} h a {minuteCount} min","andMinute":"{hourCount} h a {minuteCount} min","minutesAndSeconds":"{hourCount} h, {minuteCount} min a {secondCount} s","minutesAndSecond":"{hourCount} h, {minuteCount} min a {secondCount} s","minuteAndSeconds":"{hourCount} h, {minuteCount} min a {secondCount} s","minuteAndSecond":"{hourCount} h, {minuteCount} min a {secondCount} s","andSeconds":"{hourCount} h a {secondCount} s","andSecond":"{hourCount} h a {secondCount} s"},"one":{"only":"{hourCount} h","andMinutes":"{hourCount} h a {minuteCount} min","andMinute":"{hourCount} h a {minuteCount} min","minutesAndSeconds":"{hourCount} h, {minuteCount} min a {secondCount} s","minutesAndSecond":"{hourCount} h, {minuteCount} min a {secondCount} s","minuteAndSeconds":"{hourCount} h, {minuteCount} min a {secondCount} s","minuteAndSecond":"{hourCount} h, {minuteCount} min a {secondCount} s","andSeconds":"{hourCount} h a {secondCount} s","andSecond":"{hourCount} h a {secondCount} s"}},"minutes":{"other":{"only":"{minuteCount} min","andSeconds":"{minuteCount} min a {secondCount} s","andSecond":"{minuteCount} min a {secondCount} s"},"one":{"only":"{minuteCount} min","andSeconds":"{minuteCount} min a {secondCount} s","andSecond":"{minuteCount} min a {secondCount} s"}},"seconds":{"other":"{secondCount} s","one":"{secondCount} s","few":"{secondCount} s","many":"{secondCount} s"}}}},"Loading":{"label":"Panel načítání stránky"},"TooltipOverlay":{"accessibilityLabel":"Bublinová nápověda: {label}"},"Page":{"Header":{"rollupActionsLabel":"Zobrazit akce pro: {title}","pageReadyAccessibilityLabel":"{title}. Tato stránka je připravena"}},"ActionList":{"SearchField":{"clearButtonLabel":"Vymazat","search":"Hledat","placeholder":"Hledat akce"}},"AlphaTable":{"TableRowActions":{"heading":"Akce","activatorAccessibilityLabel":"Akce na otevřeném řádku","activatorLabel":"Akce"},"TableRowGroups":{"heading":"Přepnout skupiny řádků","toggle":"Přepnout viditelnost této skupiny řádků"},"Sorting":{"sortAscending":"Seřadit tuto tabulku vzestupně podle sloupce {heading}","sortDescending":"Seřadit tuto tabulku sestupně podle sloupce {heading}"},"Selection":{"select":"Vybrat {id}","selectPage":"Vybrat vše na stránce (celkem {count})","selectAll":"Vybrat vše v obchodu (více než {count})","selectAllWithTotal":"Vybrat vše v obchodu (celkem {total})","selectionHeader":"Výběr","unselectAll":"Zrušit výběr všech","selectedPage":"Vybráno: {count}","selectedAll":"Všechny vybrané v obchodu (více než {count})","selectedAllWithTotal":"Všechny vybrané v obchodu (celkem {total})","selectedSome":"Vybráno: {count}/{total}"},"BulkActions":{"activatorLabel":"Akce"},"TableCell":{"spansColumns":"zahrnuje počet sloupců: {count}"}},"SortPopover":{"ariaLabel":"Seřadit výsledky","tooltip":"Seřadit","title":"Seřadit podle","sorting":{"asc":"Vzestupně","desc":"Sestupně","az":"A–Z","za":"Z–A"}}},"DistributionChart":{"noData":"Nejsou k dispozici žádné údaje","title":"Distribuční graf","description":"Sloupcový graf zobrazující distribuční údaje: {data}.{percentiles}","highlightedPercentiles":" Mezi významné percentily patří: {percentiles}."},"PerformanceEventType":{"APP_INSTALL":{"title":"Aplikace nainstalována","content":"Nainstalováno: {appName}"},"APP_UNINSTALL":{"title":"Aplikace odinstalována","content":"Odinstalováno: {appName}"},"THEME_LIVE_EDIT":{"title":"Aktivní motivy upraveny","content":{"one":"Motiv {themeName} upraven, {count} krát","other":"Motiv {themeName} upraven, {count} krát","few":"Motiv {themeName} upraven, {count} krát","many":"Motiv {themeName} upraven, {count} krát"}},"THEME_PUBLICATION":{"title":"Motiv zveřejněn","content":"Zveřejněn motiv: {themeName}"}}}')
-  , _K = {
-    AnalyticsUIComponents: xK
-}
-  , wK = JSON.parse('{"BenchmarksSummary":{"shopValue":"Din butik","benchmarksMedian":"Míddelværdi for benchmark","benchmarks25thPercentile":"25. percentil","benchmarks75thPercentile":"75. percentil","benchmarksTooltip":"Benchmark din butiks effektivitet i forhold til lignende butikker baseret på produkter, der er solgt inden for de seneste 30 dage, det primære markedsland og ordremængden.","missingData":{"title":"Intet benchmark","content":"Ikke nok data fra lignende butikker"}},"CloseButton":{"delete":"Slet parameter"},"MetricCardEmpty":{"noResults":"Der blev ikke fundet data for dette datointerval","noResultsCompact":"Ingen data","incorrectCardSize":"Du skal ændre størrelsen på dette kort for at se data"},"MetricCardError":{"error":"Kunne ikke indlæse data"},"MetricLayout":{"ReportLinkAccessibilityLabel":"Se rapporten {reportTitle}"},"HorizontalNavigation":{"Forward":"Fremad","Backward":"Bagud"},"TimeframePicker":{"today":"I dag","todayHelp":"Sammenlignet med i går op til det aktuelle tidspunkt","last7days":"7 dage","last7daysHelp":"Sammenlignet med de forrige 7 dage","last30days":"30 dage","last30daysHelp":"Sammenlignet med de forrige 30 dage","last90days":"90 dage","last90daysHelp":"Sammenlignet med de forrige 90 dage","last365days":"365 dage","last365daysHelp":"Sammenlignet med de forrige 365 dage"},"date":{"range":"{startDate}–{endDate}","sameMonthRange":"{startDay}.-{endDay}. {month} {year}","months":{"1":"Jan","2":"Feb","3":"Mar","4":"Apr","5":"Maj","6":"Jun","7":"Jul","8":"Aug","9":"Sep","10":"Okt","11":"Nov","12":"Dec"},"title":{"today":"I dag","yesterday":"I går","last7days":"Seneste 7 dage","last30days":"Seneste 30 dage","last90days":"Seneste 90 dage","last365days":"Seneste 365 dage","last12months":"Seneste 12 måneder","this_week":"Denne uge","this_month":"Denne måned","this_quarter":"Dette kvartal","this_year":"Dette år","last_week":"Seneste uge","last_month":"Seneste måned","last_quarter":"Seneste kvartal","last_year":"Seneste år","weekToDate":"Uge til dato","monthToDate":"Måned til dato","quarterToDate":"Kvartal til dato","yearToDate":"År til dato","bfcm":"Black Friday/Cyber Monday {year}","quarter":"{quarterNumber}. kvartal {year}","previous_period":"Forrige periode","previous_second":"Forrige sekund","previous_minute":"Forrige minut","previous_hour":"Forrige time","previous_day":"Forrige dag","previous_week":"Forrige uge","previous_month":"Forrige måned","previous_quarter":"Forrige kvartal","previous_year":"Forrige år","previous_year_match_day_of_week":"Forrige år (match ugedag)"}},"MetricAnnotations":{"learnMoreLinkText":"Få mere at vide","sessionsBackfill2022":{"label":"Data starter","description":"Som en del af dataforbedringerne starter data for sessioner nu i oktober 2022."},"checkoutConversionRate2022":{"label":"Opdatering af mål","description":"Som en del af dataforbedringerne starter data for sessioner nu i oktober 2022. Fra den dato justerede vi også følgende mål: {affectedMetrics}.","banner":{"description":"Vi har forbedret den måde, vi tæller, hvornår en betaling er begyndt på, så vi tæller flere påbegyndte betalinger. Det medfører, at følgende mål sandsynligvis ændret sig: {affectedMetrics}. For at gøre historiske sammenligninger mulige har vi justeret disse mål fra oktober 2022."}}},"TrendIndicator":{"IncreaseOf":"Stigning på {change}","DecreaseOf":"Fald på {change}","NoChange":"Ingen ændring"},"TimeFormatter":{"DayOrLonger":"{timeInDay} {timeInHour}","LessThanDay":"{timeInHour} {timeInMinute}","day":{"one":"{amount} dag","other":"{amount} dage"},"hour":{"one":"{amount} t.","other":"{amount} t."},"minute":{"one":"{amount} min.","other":"{amount} min."}},"useFormattedValue":{"none":"Ingen","boolean":{"true":"Ja","false":"Nej"},"quarters":{"short":{"q1":"1. kvt.","q2":"2. kvt.","q3":"3. kvt.","q4":"4. kvt."},"long":{"q1":"1. kvt. {year}","q2":"2. kvt. {year}","q3":"3. kvt. {year}","q4":"4. kvt. {year}"}},"DAY_OF_WEEK":{"short":{"0":"Man.","1":"Tir.","2":"Ons.","3":"Tor.","4":"Fre.","5":"Lør.","6":"Søn."},"long":{"0":"Mandag","1":"Tirsdag","2":"Onsdag","3":"Torsdag","4":"Fredag","5":"Lørdag","6":"Søndag"}}},"useFormatHistogram":{"days":{"one":"{count} dag","other":"{count} dage"}},"TooltipContent":{"fieldSuffixes":{"product_title":{"one":"{count} produkt","other":"{count} produkter"},"product_variant_title":{"one":"{count} produktvariant","other":"{count} produktvarianter"},"product_variant_id":{"one":"{count} produktvariant","other":"{count} produktvarianter"},"product_variant_sku":{"one":"{count} produktvariant","other":"{count} produktvarianter"}}},"popover":{"learnMore":"Få mere at vide"},"useFormatLineChartRelational":{"percentileLegend":"25. ‑ 75. percentil","median":"Middelværdi for benchmark","missingData":{"title":"Intet benchmark","content":"Ikke nok data fra lignende butikker"},"yourTotals":"Dine samlede beløb"},"RFMGroups":{"previously_loyal":{"description":"Kunder uden nylige køb, men med en meget stærk ordre- og forbrugshistorik.","goal":"Mål: Flytte kunder til Loyal"},"at_risk":{"description":"Kunder uden nylige køb, men med en stærk ordre- og forbrugshistorik.","goal":"Mål: Flytte kunder til Loyal eller Kræver opmærksomhed"},"dormant":{"description":"Kunder uden nylige ordrer, med sjældne ordrer og et lavt forbrug.","goal":"Mål: Flytte kunder til Næsten mistet"},"loyal":{"description":"Kunder uden nylige køb, men med en meget stærk ordre- og forbrugshistorik.","goal":"Mål: Flytte kunder til Champions"},"needs_attention":{"description":"Kunder, der køber mindre på det seneste, bestiller nogle gange og har et moderat forbrug i din butik.","goal":"Mål: Flytte kunder til Loyal eller Aktiv"},"almost_lost":{"description":"Kunder uden nylige køb, med færre ordrer og lavere forbrug.","goal":"Mål: Flytte kunder til Aktiv eller Lovende"},"promising":{"description":"Kunder med nylige køb, få ordrer og lavt forbrug.","goal":"Mål: Flytte kunder til Aktiv"},"active":{"description":"Kunder med nylige køb, nogle ordrer og et moderat forbrug.","goal":"Mål: Flytte kunder til Champions eller Loyal"},"new":{"description":"Kunder med meget nylige køb, få ordrer og lavt forbrug.","goal":"Mål: Flytte kunder til Aktiv"},"champions":{"description":"Kunder med meget nylige køb, mange ordrer og det største forbrug."},"metricInformation":{"value":"{formattedMetricValue}","percentage":"({formattedPercentValue} af kundebasen)"},"previewSegment":"Forhåndsvis segment","viewReport":"Se rapport"},"CustomerCohortAnalysis":{"Tooltip":{"returned":"{percent} ({customers}) returneret efter {month} ({currentMonth})","returnedAcquisitionMonth":"{percent} ({customers}) returneret i kohorters anskaffelsesmåned ({month})","firstOrder":"{month} kohorte: {customers}","noOrders":"Ingen kunder returneret efter {month} ({currentMonth})","noOrdersAcquisitionMonth":"Ingen kunder returneret efter kohorters anskaffelsesmåned ({currentMonth})","month":{"one":"{count} måned","other":"{count} måneder"},"customer":{"one":"{count} kunde","other":"{count} kunder"}},"summaryRowDate":"Alle kohorter","timeDimensionColumnDisplayName":"Kohorte"},"MetricTable":{"subtitle":"Procentvis ændring","summary":"Oversigt","EmptyState":{"text":"Der er ingen data for dette valg"},"FooterRow":{"exportMessage":"Denne rapport viser op til {amount} resultater. Hvis du vil se alle resultater, kan du {export}","exportActionText":"eksportere rapporten.","message":{"one":"{count} resultat","other":"{count} resultater"}}},"FunnelChart":{"truncatedSessions":"{metric} er afkortet","truncatedSessionsDescription":"{metric} er tegnet i det rette størrelsesforhold for bedre at repræsentere tragten"},"BasketPopover":{"noVariants":"• Ingen varianter","productsBoughtTogether":"Produkter, der ofte købes sammen ({count})","variantsBoughtTogether":"Varianter, der ofte købes sammen ({count})","variantsCount":{"one":"• {count} variant","other":"• {count} varianter"}},"BasketCell":{"hiddenProductCount":"+ {count} mere","none":"Ingen"},"BasketListWithActions":{"actions":"Handlinger","back":"Tilbage"},"RowActions":{"previewSegment":"Forhåndsvis segment"},"usePivotedColumnDisplayName":{"week":{"firstOrder":"Første ordre","greaterThanOne":"Uge {value}"},"month":{"firstOrder":"Første ordre","greaterThanOne":"Måned {value}"},"quarter":{"firstOrder":"Første ordre","greaterThanOne":"Kvartal {value}"},"year":{"firstOrder":"Første ordre","greaterThanOne":"År {value}"}},"ShopifyQlDateControls":{"dateTextField":{"placeholderDateValue":"DD-MM-ÅÅÅÅ","sinceTextFieldLabel":"Starter","untilTextFieldLabel":"Slutter"},"actionButtons":{"apply":"Anvend","cancel":"Annuller","back":"Tilbage"},"quickPicksSidebar":{"newBadge":"Ny"},"quickPicksDropdown":{"customDateRange":"Tilpasset","label":"Datointerval"},"compareTo":"Sammenlign med: {dateRange}","noComparison":"Ingen sammenligning","sections":{"bfcm":"Black Friday/Cyber Monday","quarters":"Kvartaler"}},"useFormatLineChart":{"allTime":"Nogensinde"},"useGetPrimaryMetricBadge":{"webPerformance":{"success":"Godt","attention":"Middel","critical":"Dårligt"},"fraudRisk":{"attention":"I risikogruppen","critical":"Forhøjet risiko"}},"RFMGridLabels":{"xAxis":"Nylighedsscore","yAxis":"Score for hyppighed + monetær værdi"},"useWebPerformanceAnnotations":{"good":"Godt","poor":"Dårligt","count":{"one":"{count} hændelse","other":"{count} hændelser"}},"Polaris":{"Avatar":{"label":"Avatar","labelWithInitials":"Avatar med initialerne {initials}"},"Autocomplete":{"spinnerAccessibilityLabel":"Indlæser","ellipsis":"{content}…"},"Badge":{"PROGRESS_LABELS":{"incomplete":"Ikke fuldført","partiallyComplete":"Delvist fuldført","complete":"Fuldført"},"TONE_LABELS":{"info":"Info","success":"Succes","warning":"Advarsel","attention":"Bemærk","new":"Ny","critical":"Kritisk","readOnly":"Skrivebeskyttet","enabled":"Aktiveret"},"progressAndTone":"{toneLabel} {progressLabel}"},"Banner":{"dismissButton":"Luk notifikation"},"Button":{"spinnerAccessibilityLabel":"Indlæser"},"Common":{"checkbox":"afkrydsningsfelt","undo":"Fortryd","cancel":"Annuller","clear":"Ryd","close":"Luk","submit":"Send","more":"Mere"},"ContextualSaveBar":{"save":"Gem","discard":"Kassér"},"DataTable":{"sortAccessibilityLabel":"sortér {direction} efter","navAccessibilityLabel":"Rul tabel én kolonne mod {direction}","totalsRowHeading":"I alt","totalRowHeading":"I alt"},"DatePicker":{"previousMonth":"Vis tidligere måned, {previousMonthName} {showPreviousYear}","nextMonth":"Vis næste måned, {nextMonth} {nextYear}","today":"I dag ","months":{"january":"Januar","february":"Februar","march":"Marts","april":"April","may":"Maj","june":"Juni","july":"Juli","august":"August","september":"September","october":"Oktober","november":"November","december":"December"},"daysAbbreviated":{"monday":"Ma","tuesday":"Ti","wednesday":"On","thursday":"To","friday":"Fr","saturday":"Lø","sunday":"Sø"},"days":{"monday":"Mandag","tuesday":"Tirsdag","wednesday":"Onsdag","thursday":"Torsdag","friday":"Fredag","saturday":"Lørdag","sunday":"Søndag"},"start":"Start af interval","end":"Slutning af interval"},"ActionMenu":{"RollupActions":{"rollupButton":"Se handlinger"},"Actions":{"moreActions":"Flere handlinger"}},"Modal":{"iFrameTitle":"markering i brødtekst","modalWarning":"Disse krævede egenskaber mangler fra modus: {missingProps}","unsavedChanges":"Ikke-gemte ændringer"},"Pagination":{"previous":"Forrige","next":"Næste","pagination":"Sideinddeling"},"ProgressBar":{"negativeWarningMessage":"Værdier, der overføres til statusegenskaben, må ikke være negative. Nulstiller {progress} til 0.","exceedWarningMessage":"Værdier, der overføres til statusegenskaben, må ikke overstige 100. Indstiller {progress} til 100."},"ResourceList":{"sortingLabel":"Sortér efter","defaultItemSingular":"vare","defaultItemPlural":"varer","showing":"Viser {itemsCount} {resource}","loading":"Indlæser {resource}","selected":"{selectedItemsCount} er valgt","allItemsSelected":"Alle {itemsLength} eller flere {resourceNamePlural} i din butik er valgt","selectAllItems":"Vælg alle {itemsLength} eller flere {resourceNamePlural} i butikken","emptySearchResultTitle":"Der blev ikke fundet nogen {resourceNamePlural}","emptySearchResultDescription":"Prøv et andet filter eller søgeord","selectButtonText":"Vælg","a11yCheckboxDeselectAllSingle":"Fravælg {resourceNameSingular}","a11yCheckboxSelectAllSingle":"Vælg {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"Fravælg alle {itemsLength} {resourceNamePlural}","a11yCheckboxSelectAllMultiple":"Vælg alle {itemsLength} {resourceNamePlural}","Item":{"actionsDropdownLabel":"Handlinger for {accessibilityLabel}","actionsDropdown":"Rulleliste med handlinger","viewItem":"Se detaljer for {itemName}"},"BulkActions":{"actionsActivatorLabel":"Handlinger","moreActionsActivatorLabel":"Flere handlinger"},"showingTotalCount":"Viser {itemsCount} af {totalItemsCount} {resource}","allFilteredItemsSelected":"Alle {itemsLength} eller flere {resourceNamePlural} i dette filter er valgt","selectAllFilteredItems":"Vælg alle {itemsLength} eller flere {resourceNamePlural} i dette filter"},"SkeletonPage":{"loadingLabel":"Indlæser side"},"Tabs":{"toggleTabsLabel":"Flere visninger","newViewAccessibilityLabel":"Opret ny visning","newViewTooltip":"Opret visning","Tab":{"rename":"Omdøb visning","duplicate":"Dupliker visning","edit":"Rediger visning","editColumns":"Rediger kolonner","delete":"Slet visning","copy":"Kopi af {name}","deleteModal":{"title":"Vil du slette visningen?","description":"Dette kan ikke fortrydes. Visningen {viewName} vil ikke længere være tilgængelig i din administrator.","cancel":"Annuller","delete":"Slet visning"}},"RenameModal":{"title":"Omdøb visning","label":"Navn","cancel":"Annuller","create":"Gem","errors":{"sameName":"Der findes allerede en visning med dette navn. Vælg et andet navn."}},"DuplicateModal":{"title":"Dupliker visning","label":"Navn","cancel":"Annuller","create":"Opret visning","errors":{"sameName":"Der findes allerede en visning med dette navn. Vælg et andet navn."}},"CreateViewModal":{"title":"Opret ny visning","label":"Navn","cancel":"Annuller","create":"Opret visning","errors":{"sameName":"Der findes allerede en visning med dette navn. Vælg et andet navn."}}},"Tag":{"ariaLabel":"Fjern {children}"},"TextField":{"characterCount":"{count} tegn","characterCountWithMaxLength":"{count} af {limit} tegn er brugt"},"TopBar":{"toggleMenuLabel":"Åbn/luk menuen","SearchField":{"clearButtonLabel":"Ryd","search":"Søg"}},"MediaCard":{"popoverButton":"Handlinger","dismissButton":"Afvis"},"VideoThumbnail":{"playButtonA11yLabel":{"default":"Afspil video","defaultWithDuration":"Afspil video med en længde på {duration}","duration":{"hours":{"other":{"only":"{hourCount} timer","andMinutes":"{hourCount} timer og {minuteCount} minutter","andMinute":"{hourCount} timer og {minuteCount} minut","minutesAndSeconds":"{hourCount} timer, {minuteCount} minutter og {secondCount} sekunder","minutesAndSecond":"{hourCount} timer, {minuteCount} minutter og {secondCount} sekund","minuteAndSeconds":"{hourCount} timer, {minuteCount} minut og {secondCount} sekunder","minuteAndSecond":"{hourCount} timer, {minuteCount} minut og {secondCount} sekund","andSeconds":"{hourCount} timer og {secondCount} sekunder","andSecond":"{hourCount} timer og {secondCount} sekund"},"one":{"only":"{hourCount} time","andMinutes":"{hourCount} time og {minuteCount} minutter","andMinute":"{hourCount} time og {minuteCount} minut","minutesAndSeconds":"{hourCount} time, {minuteCount} minutter og {secondCount} sekunder","minutesAndSecond":"{hourCount} time, {minuteCount} minutter og {secondCount} sekund","minuteAndSeconds":"{hourCount} time, {minuteCount} minut og {secondCount} sekunder","minuteAndSecond":"{hourCount} time, {minuteCount} minut og {secondCount} sekund","andSeconds":"{hourCount} time og {secondCount} sekunder","andSecond":"{hourCount} time og {secondCount} sekund"}},"minutes":{"other":{"only":"{minuteCount} minutter","andSeconds":"{minuteCount} minutter og {secondCount} sekunder","andSecond":"{minuteCount} minutter og {secondCount} sekund"},"one":{"only":"{minuteCount} minut","andSeconds":"{minuteCount} minut og {secondCount} sekunder","andSecond":"{minuteCount} minut og {secondCount} sekund"}},"seconds":{"other":"{secondCount} sekunder","one":"{secondCount} sekund"}}}},"Loading":{"label":"Statuslinje for sideindlæsning"},"TooltipOverlay":{"accessibilityLabel":"Værktøjstip: {label}"},"Page":{"Header":{"rollupActionsLabel":"Se handlinger for {title}","pageReadyAccessibilityLabel":"{title}. Denne side er klar"}},"ActionList":{"SearchField":{"clearButtonLabel":"Ryd","search":"Søg","placeholder":"Søg efter handlinger"}},"AlphaTable":{"TableRowActions":{"heading":"Handlinger","activatorAccessibilityLabel":"Åbn rækkehandlinger","activatorLabel":"Handlinger"},"TableRowGroups":{"heading":"Slå rækkegrupper til/fra","toggle":"Slå synligheden for denne rækkegruppe til/fra"},"Sorting":{"sortAscending":"Sortér denne tabel efter {heading} i stigende rækkefølge","sortDescending":"Sortér denne tabel efter {heading} i faldende rækkefølge"},"Selection":{"select":"Vælg {id}","selectPage":"Vælg alle {count} på siden","selectAll":"Vælg alle {count} eller flere i butikken","selectAllWithTotal":"Vælg alle {total} i butikken","selectionHeader":"Valg","unselectAll":"Fravælg alle","selectedPage":"{count} er valgt","selectedAll":"Alle {count} eller flere er valgt i butikken","selectedAllWithTotal":"Alle {total} er valgt i butikken","selectedSome":"{count}/{total} er valgt"},"TableCell":{"spansColumns":"spænder over {count} kolonner"},"BulkActions":{"activatorLabel":"Handlinger"}},"SortPopover":{"ariaLabel":"Sortér resultaterne","tooltip":"Sortér","title":"Sortér efter","sorting":{"asc":"Stigende","desc":"Faldende","az":"A-Å","za":"Å-A"}}},"DistributionChart":{"noData":"Der er ingen tilgængelige data","title":"Fordelingsdiagram","description":"Et søjlediagram, der viser fordelingsdata: {data}.{percentiles}","highlightedPercentiles":" Interessante percentiler omfatter: {percentiles}."},"PerformanceEventType":{"APP_INSTALL":{"title":"Appen blev installeret","content":"Installerede {appName}"},"APP_UNINSTALL":{"title":"Appen er afinstalleret","content":"Afinstallerede {appName}"},"THEME_LIVE_EDIT":{"title":"Det anvendte tema blev redigeret","content":{"one":"Redigerede temaet {themeName} {count} gang","other":"Redigerede temaet {themeName} {count} gange"}},"THEME_PUBLICATION":{"title":"Temaet blev udgivet","content":"Udgav teamet {themeName}"}}}')
-  , NK = {
-    AnalyticsUIComponents: wK
-}
-  , TK = JSON.parse('{"BenchmarksSummary":{"shopValue":"Dein Shop","benchmarksMedian":"Benchmark-Median","benchmarks25thPercentile":"25. Perzentil","benchmarks75thPercentile":"75. Perzentil","benchmarksTooltip":"Vergleiche die Leistung deines Shops mit der Leistung ähnlicher Shops basierend auf Produkten, die in den letzten 30 Tagen verkauft wurden, dem Land des primären Marktes und dem Bestellvolumen.","missingData":{"title":"Keine Benchmark","content":"Keine ausreichenden Daten von ähnlichen Shops"}},"CloseButton":{"delete":"Metrik löschen"},"MetricCardEmpty":{"noResults":"Für diesen Zeitraum wurden keine Daten gefunden","noResultsCompact":"Keine Daten","incorrectCardSize":"Zum Anzeigen von Daten die Größe dieser Karte anpassen"},"MetricCardError":{"error":"Daten konnten nicht geladen werden"},"MetricLayout":{"ReportLinkAccessibilityLabel":"Bericht \\"{reportTitle}\\" anzeigen"},"HorizontalNavigation":{"Forward":"Weiter","Backward":"Zurück"},"TimeframePicker":{"today":"Heute","todayHelp":"Im Vergleich zu gestern bis zur aktuellen Stunde","last7days":"7 Tage","last7daysHelp":"Im Vergleich zu den vorherigen 7 Tagen","last30days":"30 Tage","last30daysHelp":"Im Vergleich zu den vorherigen 30 Tagen","last90days":"90 Tage","last90daysHelp":"Im Vergleich zu den vorherigen 90 Tagen","last365days":"365 Tage","last365daysHelp":"Im Vergleich zu den vorherigen 365 Tagen"},"date":{"range":"{startDate}–{endDate}","sameMonthRange":"{startDay}.–{endDay}. {month} {year}","months":{"1":"Jan","2":"Feb","3":"Mär","4":"Apr","5":"Mai","6":"Jun","7":"Jul","8":"Aug","9":"Sep","10":"Okt","11":"Nov","12":"Dez"},"title":{"today":"Heute","yesterday":"Gestern","last7days":"Letzte 7 Tage","last30days":"Letzte 30 Tage","last90days":"Letzte 90 Tage","last365days":"Letzte 365 Tage","last12months":"Letzte 12 Monate","this_week":"Aktuelle Woche","this_month":"Aktueller Monat","this_quarter":"Aktuelles Quartal","this_year":"Aktuelles Jahr","last_week":"Letzte Woche","last_month":"Letzter Monat","last_quarter":"Letztes Quartal","last_year":"Letztes Jahr","weekToDate":"Woche bis heute","monthToDate":"Monat bis heute","quarterToDate":"Quartal bis heute","yearToDate":"Jahr bis heute","bfcm":"BFCM {year}","quarter":"Q {quarterNumber} {year}","previous_period":"Vorheriger Zeitraum","previous_second":"Vorherige Sekunde","previous_minute":"Vorherige Minute","previous_hour":"Vorherige Stunde","previous_day":"Vorheriger Tag","previous_week":"Vorherige Woche","previous_month":"Vorheriger Monat","previous_quarter":"Vorheriges Quartal","previous_year":"Vorheriges Jahr","previous_year_match_day_of_week":"Vorheriges Jahr (gleicher Wochentag)"}},"MetricAnnotations":{"learnMoreLinkText":"Mehr Informationen","sessionsBackfill2022":{"label":"Verfügbarkeitsstart der Daten","description":"Im Rahmen der Datenverbesserungen beginnen die Daten für die Sitzungen nun im Oktober 2022."},"checkoutConversionRate2022":{"label":"Aktualisierung der Messung","description":"Im Rahmen der Datenverbesserungen beginnen die Daten für die Sitzungen nun im Oktober 2022. Ab diesem Datum haben wir auch die folgenden Kennzahlen angepasst: {affectedMetrics}.","banner":{"description":"Wir haben verbessert, wie wir zählen, wann ein Checkout begonnen hat, sodass wir mehr begonnene Checkouts zählen. Infolgedessen haben sich die folgenden Kennzahlen wahrscheinlich verändert: {affectedMetrics}. Um historische Vergleiche zu ermöglichen, haben wir diese Kennzahlen ab Oktober 2022 angepasst."}}},"TrendIndicator":{"IncreaseOf":"Steigerung um {change}","DecreaseOf":"Verringerung um {change}","NoChange":"Keine Änderung"},"TimeFormatter":{"DayOrLonger":"{timeInDay} {timeInHour}","LessThanDay":"{timeInHour} {timeInMinute}","day":{"one":"{amount} Tag","other":"{amount} Tage"},"hour":{"one":"{amount} Stunde","other":"{amount} Stunde"},"minute":{"one":"{amount} Min.","other":"{amount} Min."}},"useFormattedValue":{"none":"Keine","boolean":{"true":"Ja","false":"Nein"},"quarters":{"short":{"q1":"Q1","q2":"Q2","q3":"Q3","q4":"Q4"},"long":{"q1":"Q1 {year}","q2":"Q2 {year}","q3":"Q3 {year}","q4":"Q4 {year}"}},"DAY_OF_WEEK":{"short":{"0":"Mo","1":"Di","2":"Mi","3":"Do","4":"Fr","5":"Sa","6":"So"},"long":{"0":"Montag","1":"Dienstag","2":"Mittwoch","3":"Donnerstag","4":"Freitag","5":"Samstag","6":"Sonntag"}}},"useFormatHistogram":{"days":{"one":"{count} Tag","other":"{count} Tage"}},"TooltipContent":{"fieldSuffixes":{"product_title":{"one":"{count} Produkt","other":"{count} Produkte"},"product_variant_title":{"one":"{count} Produktvariante","other":"{count} Produktvarianten"},"product_variant_id":{"one":"{count} Produktvariante","other":"{count} Produktvarianten"},"product_variant_sku":{"one":"{count} Produktvariante","other":"{count} Produktvarianten"}}},"popover":{"learnMore":"Mehr Informationen"},"useFormatLineChartRelational":{"percentileLegend":"25.–75. Perzentil","median":"Benchmark-Median","missingData":{"title":"Keine Benchmark","content":"Keine ausreichenden Daten von ähnlichen Shops"},"yourTotals":"Deine Gesamtzahlen"},"RFMGroups":{"previously_loyal":{"description":"Kunden, die in letzter Zeit keine Käufe getätigt haben, deren Verlauf jedoch sehr viele Bestellungen und Ausgaben aufweist.","goal":"Ziel: Kunden in „Loyal“ verschieben"},"at_risk":{"description":"Kunden, die in letzter Zeit keine Käufe getätigt haben, deren Verlauf jedoch viele Bestellungen und Ausgaben aufweist.","goal":"Ziel: Kunden in „Loyal“ oder „Prüfung erforderlich“ verschieben"},"dormant":{"description":"Kunden, die in letzter Zeit keine Bestellungen getätigt haben, mit wenigen Bestellungen und geringen Ausgaben.","goal":"Ziel: Kunden in „Fast verloren“ verschieben"},"loyal":{"description":"Kunden, die in letzter Zeit keine Käufe getätigt haben, deren Verlauf jedoch sehr viele Bestellungen und Ausgaben aufweist.","goal":"Ziel: Kunden in „Champions“ verschieben"},"needs_attention":{"description":"Kunden, die in letzter Zeit weniger Käufe getätigt haben, mit einigen Bestellungen und mittleren Ausgaben in deinem Shop.","goal":"Ziel: Kunden in „Loyal“ oder „Aktiv“ verschieben"},"almost_lost":{"description":"Kunden, die in letzter Zeit keine Käufe getätigt haben, mit wenigen Bestellungen und geringeren Ausgaben.","goal":"Ziel: Kunden in „Loyal“ oder „Vielversprechend“ verschieben"},"promising":{"description":"Kunden mit aktuellen Käufen, wenigen Bestellungen und geringen Ausgaben.","goal":"Ziel: Kunden in „Aktiv“ verschieben"},"active":{"description":"Kunden mit aktuellen Käufen, einigen Bestellungen und mittleren Ausgaben.","goal":"Ziel: Kunden in „Champions“ oder „Loyal“ verschieben"},"new":{"description":"Kunden mit sehr aktuellen Käufen, wenigen Bestellungen und geringen Ausgaben.","goal":"Ziel: Kunden in „Aktiv“ verschieben"},"champions":{"description":"Kunden mit sehr aktuellen Käufen, vielen Bestellungen und den meisten Ausgaben."},"metricInformation":{"value":"{formattedMetricValue}","percentage":"({formattedPercentValue} des Kundenstamms)"},"previewSegment":"Segmentvorschau","viewReport":"Bericht anzeigen"},"CustomerCohortAnalysis":{"Tooltip":{"returned":"{percent} ({customers}) sind nach dem {month} ({currentMonth}) zurückgekehrt","returnedAcquisitionMonth":"{percent} ({customers}) sind im Akquisitionsmonat der Kohorte ({month}) zurückgekehrt","firstOrder":"{month}-Kohorte: {customers}","noOrders":"Keine Kunden sind nach dem {month} ({currentMonth}) zurückgekehrt","noOrdersAcquisitionMonth":"Keine Kunden sind im Akquisitionsmonat der Kohorte ({currentMonth}) zurückgekehrt","month":{"one":"{count} Monat","other":"{count} Monate"},"customer":{"one":"{count} Kunde","other":"{count} Kunden"}},"summaryRowDate":"Alle Kohorten","timeDimensionColumnDisplayName":"Kohorte"},"MetricTable":{"subtitle":"% Änderung","summary":"Übersicht","EmptyState":{"text":"Keine Daten für diese Auswahl"},"FooterRow":{"exportMessage":"Dieser Bericht zeigt maximal {amount} Ergebnisse an. Um auf alle Ergebnisse zuzugreifen, kannst du {export}","exportActionText":"den Bericht exportieren.","message":{"one":"{count} Ergebnis","other":"{count} Ergebnisse"}}},"FunnelChart":{"truncatedSessions":"Gekürzte {metric}","truncatedSessionsDescription":"{metric} wurden zur besseren Darstellung des Funnels in Skalierung gezeichnet."},"BasketPopover":{"noVariants":"• Keine Varianten","productsBoughtTogether":"Zusammen gekaufte Produkte ({count})","variantsBoughtTogether":"Zusammen gekaufte Varianten ({count})","variantsCount":{"one":"• {count} Variante","other":"• {count} Varianten"}},"BasketCell":{"hiddenProductCount":"+{count} mehr","none":"Keine"},"BasketListWithActions":{"actions":"Aktionen","back":"Zurück"},"RowActions":{"previewSegment":"Segmentvorschau"},"usePivotedColumnDisplayName":{"week":{"firstOrder":"Erste Bestellung","greaterThanOne":"Woche {value}"},"month":{"firstOrder":"Erste Bestellung","greaterThanOne":"Monat {value}"},"quarter":{"firstOrder":"Erste Bestellung","greaterThanOne":"Quartal {value}"},"year":{"firstOrder":"Erste Bestellung","greaterThanOne":"Jahr {value}"}},"ShopifyQlDateControls":{"dateTextField":{"placeholderDateValue":"TT-MM-JJJJ","sinceTextFieldLabel":"Beginn","untilTextFieldLabel":"Ende"},"actionButtons":{"apply":"Anwenden","cancel":"Abbrechen","back":"Zurück"},"quickPicksSidebar":{"newBadge":"Neu"},"quickPicksDropdown":{"customDateRange":"Benutzerdefiniert","label":"Datumsbereich"},"compareTo":"Vergleichen mit: {dateRange}","noComparison":"Kein Vergleich","sections":{"bfcm":"Black Friday Cyber Monday","quarters":"Quartale"}},"useFormatLineChart":{"allTime":"Gesamter Zeitraum"},"useGetPrimaryMetricBadge":{"webPerformance":{"success":"Gut","attention":"Moderat","critical":"Schlecht"},"fraudRisk":{"attention":"Gefährdet","critical":"Erhöhtes Risiko"}},"RFMGridLabels":{"xAxis":"Aktualitätswert","yAxis":"Häufigkeit + Geldwert"},"useWebPerformanceAnnotations":{"good":"Gut","poor":"Schlecht","count":{"one":"{count} Ereignis","other":"{count} Ereignisse"}},"Polaris":{"Avatar":{"label":"Avatar","labelWithInitials":"Avatar mit Initialen {initials}"},"Autocomplete":{"spinnerAccessibilityLabel":"Wird geladen","ellipsis":"{content} …"},"Badge":{"PROGRESS_LABELS":{"incomplete":"Unvollständig","partiallyComplete":"Teilweise abgeschlossen","complete":"Vollständig"},"TONE_LABELS":{"info":"Info","success":"Erfolg","warning":"Warnung","attention":"Zu Händen","new":"Neu","critical":"Kritisch","readOnly":"Nur-Lese","enabled":"Aktiviert"},"progressAndTone":"{toneLabel} {progressLabel}"},"Banner":{"dismissButton":"Benachrichtigung schließen"},"Button":{"spinnerAccessibilityLabel":"Wird geladen"},"Common":{"checkbox":"Kontrollkästchen","undo":"Rückgängig machen","cancel":"Schließen","clear":"Löschen","close":"Schließen","submit":"Senden","more":"Mehr"},"ContextualSaveBar":{"save":"Speichern","discard":"Verwerfen"},"DataTable":{"sortAccessibilityLabel":"von {direction} sortieren nach","navAccessibilityLabel":"In Tabelle eine Spalte nach {direction} scrollen","totalsRowHeading":"Gesamt","totalRowHeading":"Gesamt"},"DatePicker":{"previousMonth":"Vormonat anzeigen, {previousMonthName} {showPreviousYear}","nextMonth":"Nächsten Monat anzeigen, {nextMonth} {nextYear}","today":"Heute ","months":{"january":"Januar","february":"Februar","march":"März","april":"April","may":"Mai","june":"Juni","july":"Juli","august":"August","september":"September","october":"Oktober","november":"November","december":"Dezember"},"daysAbbreviated":{"monday":"Mo","tuesday":"Di","wednesday":"Mi","thursday":"Do","friday":"Fr","saturday":"Sa","sunday":"So"},"days":{"monday":"Montag","tuesday":"Dienstag","wednesday":"Mittwoch","thursday":"Donnerstag","friday":"Freitag","saturday":"Samstag","sunday":"Sonntag"},"start":"Beginn des Bereichs","end":"Ende des Bereichs"},"ActionMenu":{"RollupActions":{"rollupButton":"Aktionen anzeigen"},"Actions":{"moreActions":"Weitere Aktionen"}},"Modal":{"iFrameTitle":"Text-Markup","modalWarning":"Diese erforderlichen Eigenschaften fehlen im Modus: {missingProps}","unsavedChanges":"Nicht gespeicherte Änderungen"},"Pagination":{"previous":"Zurück","next":"Weiter","pagination":"Seitennummerierung"},"ProgressBar":{"negativeWarningMessage":"Werte, die an die Statusanzeige übergeben werden, sollten nicht negativ sein. {progress} wird auf 0 zurückgesetzt.","exceedWarningMessage":"Werte, die an die Statusanzeige übergeben werden, sollten 100 nicht überschreiten. {progress} wird auf 100 gesetzt."},"ResourceList":{"sortingLabel":"Sortieren nach","defaultItemSingular":"Artikel","defaultItemPlural":"Artikel","showing":"Zeige {itemsCount} {resource}","loading":"Lädt {resource}","selected":"{selectedItemsCount} ausgewählt","allItemsSelected":"Alle {itemsLength}+ {resourceNamePlural} in deinem Shop wurden ausgewählt","selectAllItems":"Wähle alle {itemsLength}+ {resourceNamePlural} in deinem Shop aus","emptySearchResultTitle":"Kein {resourceNamePlural} gefunden","emptySearchResultDescription":"Versuche, die Filter oder den Suchbegriff zu ändern","selectButtonText":"Auswählen","a11yCheckboxDeselectAllSingle":"{resourceNameSingular} abwählen","a11yCheckboxSelectAllSingle":"{resourceNameSingular} auswählen","a11yCheckboxDeselectAllMultiple":"Alle {itemsLength} {resourceNamePlural} abwählen","a11yCheckboxSelectAllMultiple":"Alle {itemsLength} {resourceNamePlural} auswählen","Item":{"actionsDropdownLabel":"Aktionen für {accessibilityLabel}","actionsDropdown":"Aktions-Dropdown","viewItem":"Details für {itemName} anzeigen"},"BulkActions":{"actionsActivatorLabel":"Aktionen","moreActionsActivatorLabel":"Weitere Aktionen"},"showingTotalCount":"Zeige {itemsCount} von {totalItemsCount} {resource}","allFilteredItemsSelected":"Alle {itemsLength}+ {resourceNamePlural} in diesem Filter wurden ausgewählt","selectAllFilteredItems":"Alle {itemsLength} und {resourceNamePlural} in diesem Filter auswählen"},"SkeletonPage":{"loadingLabel":"Seite wird geladen"},"Tabs":{"toggleTabsLabel":"Mehr Ansichten","newViewAccessibilityLabel":"Neue Ansicht erstellen","newViewTooltip":"Ansicht erstellen","Tab":{"rename":"Ansicht umbenennen","duplicate":"Ansicht duplizieren","edit":"Ansicht bearbeiten","editColumns":"Spalten bearbeiten","delete":"Ansicht löschen","copy":"Kopie von {name}","deleteModal":{"title":"Ansicht löschen?","description":"Diese Aktion kann nicht rückgängig gemacht werden. Die Ansicht „{viewName}“ wird nicht länger in deinem Adminbereich zur Verfügung stehen.","cancel":"Schließen","delete":"Ansicht löschen"}},"RenameModal":{"title":"Ansicht umbenennen","label":"Name","cancel":"Schließen","create":"Speichern","errors":{"sameName":"Eine Ansicht mit diesem Namen ist bereits vorhanden. Bitte wähle einen anderen Namen aus."}},"DuplicateModal":{"title":"Ansicht duplizieren","label":"Name","cancel":"Schließen","create":"Ansicht erstellen","errors":{"sameName":"Eine Ansicht mit diesem Namen ist bereits vorhanden. Bitte wähle einen anderen Namen aus."}},"CreateViewModal":{"title":"Neue Ansicht erstellen","label":"Name","cancel":"Schließen","create":"Ansicht erstellen","errors":{"sameName":"Eine Ansicht mit diesem Namen ist bereits vorhanden. Bitte wähle einen anderen Namen aus."}}},"Tag":{"ariaLabel":"{children} entfernen"},"TextField":{"characterCount":"{count} Zeichen","characterCountWithMaxLength":"{count} von {limit} Zeichen verwendet"},"TopBar":{"toggleMenuLabel":"Menü umschalten","SearchField":{"clearButtonLabel":"Löschen","search":"Suche"}},"MediaCard":{"popoverButton":"Aktionen","dismissButton":"Verwerfen"},"VideoThumbnail":{"playButtonA11yLabel":{"default":"Video abspielen","defaultWithDuration":"Video mit einer Länge von {duration} abspielen","duration":{"hours":{"other":{"only":"{hourCount} Stunden","andMinutes":"{hourCount} Stunden und {minuteCount} Minuten","andMinute":"{hourCount} Stunden und {minuteCount} Minute","minutesAndSeconds":"{hourCount} Stunden, {minuteCount} Minuten und {secondCount} Sekunden","minutesAndSecond":"{hourCount} Stunden, {minuteCount} Minuten und {secondCount} Sekunde","minuteAndSeconds":"{hourCount} Stunden, {minuteCount} Minute und {secondCount} Sekunden","minuteAndSecond":"{hourCount} Stunden, {minuteCount} Minute und {secondCount} Sekunde","andSeconds":"{hourCount} Stunden und {secondCount} Sekunden","andSecond":"{hourCount} Stunden und {secondCount} Sekunde"},"one":{"only":"{hourCount} Stunde","andMinutes":"{hourCount} Stunde und {minuteCount} Minuten","andMinute":"{hourCount} Stunde und {minuteCount} Minute","minutesAndSeconds":"{hourCount} Stunde, {minuteCount} Minuten und {secondCount} Sekunden","minutesAndSecond":"{hourCount} Stunde, {minuteCount} Minuten und {secondCount} Sekunde","minuteAndSeconds":"{hourCount} Stunde, {minuteCount} Minute und {secondCount} Sekunden","minuteAndSecond":"{hourCount} Stunde, {minuteCount} Minute und {secondCount} Sekunde","andSeconds":"{hourCount} Stunde und {secondCount} Sekunden","andSecond":"{hourCount} Stunde und {secondCount} Sekunde"}},"minutes":{"other":{"only":"{minuteCount} Minuten","andSeconds":"{minuteCount} Minuten und {secondCount} Sekunden","andSecond":"{minuteCount} Minuten und {secondCount} Sekunde"},"one":{"only":"{minuteCount} Minute","andSeconds":"{minuteCount} Minute und {secondCount} Sekunden","andSecond":"{minuteCount} Minute und {secondCount} Sekunde"}},"seconds":{"other":"{secondCount} Sekunden","one":"{secondCount} Sekunde"}}}},"Loading":{"label":"Seitenladeleiste"},"TooltipOverlay":{"accessibilityLabel":"Tooltip: {label}"},"Page":{"Header":{"rollupActionsLabel":"Aktionen für {title} anzeigen","pageReadyAccessibilityLabel":"{title}. Diese Seite ist bereit"}},"ActionList":{"SearchField":{"clearButtonLabel":"Löschen","search":"Suche","placeholder":"Aktionen durchsuchen"}},"AlphaTable":{"TableRowActions":{"heading":"Aktionen","activatorAccessibilityLabel":"Zeilenaktionen öffnen","activatorLabel":"Aktionen"},"TableRowGroups":{"heading":"Reihengruppen umschalten","toggle":"Sichtbarkeit dieser Reihengruppe umschalten"},"Sorting":{"sortAscending":"Tabelle nach {heading} in aufsteigender Reihenfolge sortieren","sortDescending":"Tabelle nach {heading} in absteigender Reihenfolge sortieren"},"Selection":{"select":"{id} auswählen","selectPage":"Alle {count} auf der Seite auswählen","selectAll":"Alle {count}+ im Shop auswählen","selectAllWithTotal":"Alle {total} im Shop auswählen","selectionHeader":"Auswahl","unselectAll":"Alle abwählen","selectedPage":"{count} ausgewählt","selectedAll":"Alle {count}+ im Shop ausgewählt","selectedAllWithTotal":"Alle {total} im Shop ausgewählt","selectedSome":"{count}/{total} ausgewählt"},"TableCell":{"spansColumns":"erstreckt sich über {count} Spalten"},"BulkActions":{"activatorLabel":"Aktionen"}},"SortPopover":{"ariaLabel":"Sortiere die Ergebnisse","tooltip":"Sortieren","title":"Sortieren nach","sorting":{"asc":"Aufsteigend","desc":"Absteigend","az":"A–Z","za":"Z–A"}}},"DistributionChart":{"noData":"Keine verfügbaren Daten","title":"Vertriebsgrafik","description":"Ein Balkendiagramm mit Vertriebsdaten: {data}.{percentiles}","highlightedPercentiles":" Beachtenswerte Perzentile sind: {percentiles}."},"PerformanceEventType":{"APP_INSTALL":{"title":"App installiert","content":"{appName} installiert"},"APP_UNINSTALL":{"title":"App deinstalliert","content":"{appName} deinstalliert"},"THEME_LIVE_EDIT":{"title":"Aktuelles Theme bearbeitet","content":{"one":"Theme {themeName} {count}-mal bearbeitet","other":"Theme {themeName} {count}-mal bearbeitet"}},"THEME_PUBLICATION":{"title":"Theme veröffentlicht","content":"Theme {themeName} veröffentlicht"}}}')
-  , PK = {
-    AnalyticsUIComponents: TK
-}
-  , IK = JSON.parse(`{"BenchmarksSummary":{"shopValue":"Your store","benchmarksMedian":"Benchmark median","benchmarks25thPercentile":"25th percentile","benchmarks75thPercentile":"75th percentile","benchmarksTooltip":"Benchmark your store's performance against similar stores based on products sold in the last 30 days, primary market country, and order volume.","missingData":{"title":"No benchmark","content":"Not enough data from similar stores"}},"CloseButton":{"delete":"Delete metric"},"MetricCardEmpty":{"noResults":"There was no data found for this date range","noResultsCompact":"No data","incorrectCardSize":"To see data, resize this card"},"MetricCardError":{"error":"Couldn’t load data"},"MetricLayout":{"ReportLinkAccessibilityLabel":"View the {reportTitle} report"},"MetricTable":{"subtitle":"% Change","summary":"Summary","EmptyState":{"text":"No data for this selection"},"FooterRow":{"message":{"one":"{count} result","other":"{count} results"},"exportMessage":"This report shows up to {amount} results. To access all results, you can {export}","exportActionText":"export the report."}},"HorizontalNavigation":{"Forward":"Forward","Backward":"Backward"},"useFormatHistogram":{"days":{"one":"{count} day","other":"{count} days"}},"useFormatLineChart":{"allTime":"All time"},"useFormatLineChartRelational":{"percentileLegend":"25th - 75th percentile","yourTotals":"Your totals","median":"Benchmark median","missingData":{"title":"No benchmark","content":"Not enough data from similar stores"}},"MetricAnnotations":{"learnMoreLinkText":"Learn more","sessionsBackfill2022":{"label":"Data starts","description":"As part of data improvements, the data for sessions now starts from October 2022."},"checkoutConversionRate2022":{"label":"Measurement update","description":"As part of data improvements, the data for sessions now starts from October 2022. From that date, too, we adjusted the following metrics: {affectedMetrics}.","banner":{"description":"We’ve improved how we count when a checkout has started, so we’ll count more started checkouts. As a result, the following metrics have likely shifted: {affectedMetrics}. To make historical comparisons possible, we adjusted those metrics starting October 2022."}}},"TooltipContent":{"fieldSuffixes":{"product_title":{"one":"{count} product","other":"{count} products"},"product_variant_title":{"one":"{count} product variant","other":"{count} product variants"},"product_variant_id":{"one":"{count} product variant","other":"{count} product variants"},"product_variant_sku":{"one":"{count} product variant","other":"{count} product variants"}}},"BasketPopover":{"variantsCount":{"one":"• {count} variant","other":"• {count} variants"},"noVariants":"• No variants","productsBoughtTogether":"Products bought together ({count})","variantsBoughtTogether":"Variants bought together ({count})"},"BasketCell":{"hiddenProductCount":"+{count} more","none":"None"},"BasketListWithActions":{"actions":"Actions","back":"Back"},"RowActions":{"previewSegment":"Preview segment"},"RFMGridLabels":{"xAxis":"Recency score","yAxis":"Frequency + Monetary value score"},"RFMGroups":{"previously_loyal":{"description":"Customers without recent purchases, but with a very strong history of orders and spend.","goal":"Goal: move customers to Loyal"},"at_risk":{"description":"Customers without recent purchases, but with a strong history of orders and spend.","goal":"Goal: move customers to Loyal or Needs Attention"},"dormant":{"description":"Customers without recent orders, with infrequent orders, and with low spend.","goal":"Goal: move customers to Almost lost"},"loyal":{"description":"Customers without recent purchases, but with a very strong history of orders and spend.","goal":"Goal: move customers to Champions"},"needs_attention":{"description":"Customers who buy less recently, order sometimes and spend moderately with your store.","goal":"Goal: move customers to Loyal or Active"},"almost_lost":{"description":"Customers without recent purchases, fewer orders, and with lower spend.","goal":"Goal: move customers to Active or Promising"},"promising":{"description":"Customers with recent purchases, few orders, and low spend.","goal":"Goal: move customers to Active"},"active":{"description":"Customers with recent purchases, some orders, and moderate spend.","goal":"Goal: move customers to Champions or Loyal"},"new":{"description":"Customers with very recent purchases, few orders, and low spend.","goal":"Goal: move customers to Active"},"champions":{"description":"Customers with very recent purchases, many orders, and the most spend."},"metricInformation":{"value":"{formattedMetricValue}","percentage":"({formattedPercentValue} of customer base)"},"previewSegment":"Preview segment","viewReport":"View report"},"TimeframePicker":{"today":"Today","todayHelp":"Compared to yesterday up to current hour","last7days":"7 days","last7daysHelp":"Compared to the previous 7 days","last30days":"30 days","last30daysHelp":"Compared to the previous 30 days","last90days":"90 days","last90daysHelp":"Compared to the previous 90 days","last365days":"365 days","last365daysHelp":"Compared to the previous 365 days"},"date":{"range":"{startDate}–{endDate}","sameMonthRange":"{month} {startDay}–{endDay}, {year}","months":{"1":"Jan","2":"Feb","3":"Mar","4":"Apr","5":"May","6":"Jun","7":"Jul","8":"Aug","9":"Sep","10":"Oct","11":"Nov","12":"Dec"},"title":{"today":"Today","yesterday":"Yesterday","last7days":"Last 7 days","last30days":"Last 30 days","last90days":"Last 90 days","last365days":"Last 365 days","last12months":"Last 12 months","this_week":"This week","this_month":"This month","this_quarter":"This quarter","this_year":"This year","last_week":"Last week","last_month":"Last month","last_quarter":"Last quarter","last_year":"Last year","weekToDate":"Week to date","monthToDate":"Month to date","quarterToDate":"Quarter to date","yearToDate":"Year to date","bfcm":"BFCM {year}","quarter":"Q{quarterNumber} {year}","previous_period":"Previous period","previous_second":"Previous second","previous_minute":"Previous minute","previous_hour":"Previous hour","previous_day":"Previous day","previous_week":"Previous week","previous_month":"Previous month","previous_quarter":"Previous quarter","previous_year":"Previous year","previous_year_match_day_of_week":"Previous year (match day of week)"}},"ShopifyQlDateControls":{"compareTo":"Compare to: {dateRange}","noComparison":"No comparison","dateTextField":{"placeholderDateValue":"YYYY-MM-DD","sinceTextFieldLabel":"Starting","untilTextFieldLabel":"Ending"},"actionButtons":{"apply":"Apply","cancel":"Cancel","back":"Back"},"quickPicksSidebar":{"newBadge":"New"},"quickPicksDropdown":{"customDateRange":"Custom","label":"Date range"},"sections":{"bfcm":"Black Friday Cyber Monday","quarters":"Quarters"}},"TrendIndicator":{"IncreaseOf":"Increase of {change}","DecreaseOf":"Decrease of {change}","NoChange":"No change"},"TimeFormatter":{"DayOrLonger":"{timeInDay} {timeInHour}","LessThanDay":"{timeInHour} {timeInMinute}","day":{"one":"{amount} day","other":"{amount} days"},"hour":{"one":"{amount} hr","other":"{amount} hr"},"minute":{"one":"{amount} min","other":"{amount} min"}},"useFormattedValue":{"none":"None","boolean":{"true":"Yes","false":"No"},"quarters":{"short":{"q1":"Q1","q2":"Q2","q3":"Q3","q4":"Q4"},"long":{"q1":"Q1 {year}","q2":"Q2 {year}","q3":"Q3 {year}","q4":"Q4 {year}"}},"DAY_OF_WEEK":{"short":{"0":"Mon","1":"Tue","2":"Wed","3":"Thu","4":"Fri","5":"Sat","6":"Sun"},"long":{"0":"Monday","1":"Tuesday","2":"Wednesday","3":"Thursday","4":"Friday","5":"Saturday","6":"Sunday"}}},"popover":{"learnMore":"Learn more"},"CustomerCohortAnalysis":{"summaryRowDate":"All cohorts","timeDimensionColumnDisplayName":"Cohort","Tooltip":{"month":{"one":"{count} month","other":"{count} months"},"customer":{"one":"{count} customer","other":"{count} customers"},"returned":"{percent} ({customers}) returned after {month} ({currentMonth})","returnedAcquisitionMonth":"{percent} ({customers}) returned in cohort's acquisition month ({month})","firstOrder":"{month} cohort: {customers}","noOrders":"No customers returned after {month} ({currentMonth})","noOrdersAcquisitionMonth":"No customers returned in cohort's acquisition month ({currentMonth})"}},"FunnelChart":{"truncatedSessions":"Truncated {metric}","truncatedSessionsDescription":"{metric} were drawn to scale to better represent the funnel"},"usePivotedColumnDisplayName":{"week":{"firstOrder":"First order","greaterThanOne":"Week {value}"},"month":{"firstOrder":"First order","greaterThanOne":"Month {value}"},"quarter":{"firstOrder":"First order","greaterThanOne":"Quarter {value}"},"year":{"firstOrder":"First order","greaterThanOne":"Year {value}"}},"useGetPrimaryMetricBadge":{"webPerformance":{"success":"Good","attention":"Moderate","critical":"Poor"},"fraudRisk":{"attention":"At risk","critical":"Elevated risk"}},"useWebPerformanceAnnotations":{"good":"Good","poor":"Poor","count":{"one":"{count} event","other":"{count} events"}},"DistributionChart":{"noData":"No available data","title":"Distribution chart","description":"A bar chart showing distribution data: {data}.{percentiles}","highlightedPercentiles":" Noteworthy percentiles include: {percentiles}."},"Polaris":{"ActionMenu":{"Actions":{"moreActions":"More actions"},"RollupActions":{"rollupButton":"View actions"}},"ActionList":{"SearchField":{"clearButtonLabel":"Clear","search":"Search","placeholder":"Search actions"}},"AlphaTable":{"TableRowActions":{"heading":"Actions","activatorAccessibilityLabel":"Open row actions","activatorLabel":"Actions"},"BulkActions":{"activatorLabel":"Actions"},"TableRowGroups":{"heading":"Toggle row groups","toggle":"Toggle visibility of this row group"},"Selection":{"select":"Select {id}","selectPage":"Select all {count} on page","selectAll":"Select all {count}+ in store","selectAllWithTotal":"Select all {total} in store","selectionHeader":"Selection","unselectAll":"Unselect all","selectedPage":"{count} selected","selectedAll":"All {count}+ selected in store","selectedAllWithTotal":"All {total} selected in store","selectedSome":"{count}/{total} selected"},"Sorting":{"sortAscending":"Sort this table by {heading} in ascending order","sortDescending":"Sort this table by {heading} in descending order"},"TableCell":{"spansColumns":"spans {count} columns"}},"Avatar":{"label":"Avatar","labelWithInitials":"Avatar with initials {initials}"},"Autocomplete":{"spinnerAccessibilityLabel":"Loading","ellipsis":"{content}…"},"Badge":{"PROGRESS_LABELS":{"incomplete":"Incomplete","partiallyComplete":"Partially complete","complete":"Complete"},"TONE_LABELS":{"info":"Info","success":"Success","warning":"Warning","critical":"Critical","attention":"Attention","new":"New","readOnly":"Read-only","enabled":"Enabled"},"progressAndTone":"{toneLabel} {progressLabel}"},"Banner":{"dismissButton":"Dismiss notification"},"Button":{"spinnerAccessibilityLabel":"Loading"},"Common":{"checkbox":"checkbox","undo":"Undo","cancel":"Cancel","clear":"Clear","close":"Close","submit":"Submit","more":"More"},"ContextualSaveBar":{"save":"Save","discard":"Discard"},"DataTable":{"sortAccessibilityLabel":"sort {direction} by","navAccessibilityLabel":"Scroll table {direction} one column","totalsRowHeading":"Totals","totalRowHeading":"Total"},"DatePicker":{"previousMonth":"Show previous month, {previousMonthName} {showPreviousYear}","nextMonth":"Show next month, {nextMonth} {nextYear}","today":"Today ","start":"Start of range","end":"End of range","months":{"january":"January","february":"February","march":"March","april":"April","may":"May","june":"June","july":"July","august":"August","september":"September","october":"October","november":"November","december":"December"},"days":{"monday":"Monday","tuesday":"Tuesday","wednesday":"Wednesday","thursday":"Thursday","friday":"Friday","saturday":"Saturday","sunday":"Sunday"},"daysAbbreviated":{"monday":"Mo","tuesday":"Tu","wednesday":"We","thursday":"Th","friday":"Fr","saturday":"Sa","sunday":"Su"}},"Loading":{"label":"Page loading bar"},"Modal":{"iFrameTitle":"body markup","modalWarning":"These required properties are missing from Modal: {missingProps}","unsavedChanges":"Unsaved changes"},"Page":{"Header":{"rollupActionsLabel":"View actions for {title}","pageReadyAccessibilityLabel":"{title}. This page is ready"}},"Pagination":{"previous":"Previous","next":"Next","pagination":"Pagination"},"ProgressBar":{"negativeWarningMessage":"Values passed to the progress prop shouldn’t be negative. Resetting {progress} to 0.","exceedWarningMessage":"Values passed to the progress prop shouldn’t exceed 100. Setting {progress} to 100."},"ResourceList":{"sortingLabel":"Sort by","defaultItemSingular":"item","defaultItemPlural":"items","showing":"Showing {itemsCount} {resource}","showingTotalCount":"Showing {itemsCount} of {totalItemsCount} {resource}","loading":"Loading {resource}","selected":"{selectedItemsCount} selected","allItemsSelected":"All {itemsLength}+ {resourceNamePlural} in your store are selected","allFilteredItemsSelected":"All {itemsLength}+ {resourceNamePlural} in this filter are selected","selectAllItems":"Select all {itemsLength}+ {resourceNamePlural} in your store","selectAllFilteredItems":"Select all {itemsLength}+ {resourceNamePlural} in this filter","emptySearchResultTitle":"No {resourceNamePlural} found","emptySearchResultDescription":"Try changing the filters or search term","selectButtonText":"Select","a11yCheckboxDeselectAllSingle":"Deselect {resourceNameSingular}","a11yCheckboxSelectAllSingle":"Select {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"Deselect all {itemsLength} {resourceNamePlural}","a11yCheckboxSelectAllMultiple":"Select all {itemsLength} {resourceNamePlural}","Item":{"actionsDropdownLabel":"Actions for {accessibilityLabel}","actionsDropdown":"Actions dropdown","viewItem":"View details for {itemName}"},"BulkActions":{"actionsActivatorLabel":"Actions","moreActionsActivatorLabel":"More actions"}},"SkeletonPage":{"loadingLabel":"Page loading"},"SortPopover":{"ariaLabel":"Sort the results","tooltip":"Sort","title":"Sort by","sorting":{"asc":"Ascending","desc":"Descending","az":"A-Z","za":"Z-A"}},"Tabs":{"newViewAccessibilityLabel":"Create new view","newViewTooltip":"Create view","toggleTabsLabel":"More views","Tab":{"rename":"Rename view","duplicate":"Duplicate view","edit":"Edit view","editColumns":"Edit columns","delete":"Delete view","copy":"Copy of {name}","deleteModal":{"title":"Delete view?","description":"This can’t be undone. {viewName} view will no longer be available in your admin.","cancel":"Cancel","delete":"Delete view"}},"RenameModal":{"title":"Rename view","label":"Name","cancel":"Cancel","create":"Save","errors":{"sameName":"A view with this name already exists. Please choose a different name."}},"DuplicateModal":{"title":"Duplicate view","label":"Name","cancel":"Cancel","create":"Create view","errors":{"sameName":"A view with this name already exists. Please choose a different name."}},"CreateViewModal":{"title":"Create new view","label":"Name","cancel":"Cancel","create":"Create view","errors":{"sameName":"A view with this name already exists. Please choose a different name."}}},"Tag":{"ariaLabel":"Remove {children}"},"TextField":{"characterCount":"{count} characters","characterCountWithMaxLength":"{count} of {limit} characters used"},"TooltipOverlay":{"accessibilityLabel":"Tooltip: {label}"},"TopBar":{"toggleMenuLabel":"Toggle menu","SearchField":{"clearButtonLabel":"Clear","search":"Search"}},"MediaCard":{"dismissButton":"Dismiss","popoverButton":"Actions"},"VideoThumbnail":{"playButtonA11yLabel":{"default":"Play video","defaultWithDuration":"Play video of length {duration}","duration":{"hours":{"other":{"only":"{hourCount} hours","andMinutes":"{hourCount} hours and {minuteCount} minutes","andMinute":"{hourCount} hours and {minuteCount} minute","minutesAndSeconds":"{hourCount} hours, {minuteCount} minutes, and {secondCount} seconds","minutesAndSecond":"{hourCount} hours, {minuteCount} minutes, and {secondCount} second","minuteAndSeconds":"{hourCount} hours, {minuteCount} minute, and {secondCount} seconds","minuteAndSecond":"{hourCount} hours, {minuteCount} minute, and {secondCount} second","andSeconds":"{hourCount} hours and {secondCount} seconds","andSecond":"{hourCount} hours and {secondCount} second"},"one":{"only":"{hourCount} hour","andMinutes":"{hourCount} hour and {minuteCount} minutes","andMinute":"{hourCount} hour and {minuteCount} minute","minutesAndSeconds":"{hourCount} hour, {minuteCount} minutes, and {secondCount} seconds","minutesAndSecond":"{hourCount} hour, {minuteCount} minutes, and {secondCount} second","minuteAndSeconds":"{hourCount} hour, {minuteCount} minute, and {secondCount} seconds","minuteAndSecond":"{hourCount} hour, {minuteCount} minute, and {secondCount} second","andSeconds":"{hourCount} hour and {secondCount} seconds","andSecond":"{hourCount} hour and {secondCount} second"}},"minutes":{"other":{"only":"{minuteCount} minutes","andSeconds":"{minuteCount} minutes and {secondCount} seconds","andSecond":"{minuteCount} minutes and {secondCount} second"},"one":{"only":"{minuteCount} minute","andSeconds":"{minuteCount} minute and {secondCount} seconds","andSecond":"{minuteCount} minute and {secondCount} second"}},"seconds":{"other":"{secondCount} seconds","one":"{secondCount} second"}}}}},"PerformanceEventType":{"APP_INSTALL":{"title":"App installed","content":"Installed {appName}"},"APP_UNINSTALL":{"title":"App uninstalled","content":"Uninstalled {appName}"},"THEME_LIVE_EDIT":{"title":"Live theme edited","content":{"one":"Edited {themeName} theme {count} time","other":"Edited {themeName} theme {count} times"}},"THEME_PUBLICATION":{"title":"Theme published","content":"Published {themeName} theme"}}}`)
-  , LK = {
-    AnalyticsUIComponents: IK
-}
-  , FK = JSON.parse('{"BenchmarksSummary":{"shopValue":"Tu tienda","benchmarksMedian":"Mediana de referencia","benchmarks25thPercentile":"Percentil 25","benchmarks75thPercentile":"Percentil 75","benchmarksTooltip":"Compara el rendimiento de tu tienda con el de otras tiendas similares en función de los productos vendidos en los últimos 30 días, el país del mercado principal y el volumen de pedidos.","missingData":{"title":"Sin punto de referencia","content":"No hay suficientes datos de tiendas similares"}},"CloseButton":{"delete":"Eliminar métrica"},"MetricCardEmpty":{"noResults":"No se encontraron datos para este intervalo de fechas","noResultsCompact":"Sin datos","incorrectCardSize":"Para ver los datos, ajusta el tamaño de esta tarjeta"},"MetricCardError":{"error":"No se han podido cargar los datos"},"MetricLayout":{"ReportLinkAccessibilityLabel":"Ver el informe {reportTitle}"},"HorizontalNavigation":{"Forward":"Adelante","Backward":"Atrás"},"TimeframePicker":{"today":"Hoy","todayHelp":"En comparación con ayer hasta la hora actual","last7days":"7 días","last7daysHelp":"En comparación con los 7 días anteriores","last30days":"30 días","last30daysHelp":"En comparación con los 30 días anteriores","last90days":"90 días","last90daysHelp":"Comparado con los 90 días anteriores","last365days":"365 días","last365daysHelp":"Comparado con los 365 días anteriores"},"date":{"range":"{startDate}–{endDate}","sameMonthRange":"{startDay}–{endDay} {month}, {year}","months":{"1":"Ene","2":"Feb","3":"Mar","4":"Abr","5":"May","6":"Jun","7":"Jul","8":"Ago","9":"Sep","10":"Oct","11":"Nov","12":"Dic"},"title":{"today":"Hoy","yesterday":"Ayer","last7days":"Últimos siete días","last30days":"Últimos 30 días","last90days":"Últimos 90 días","last365days":"Últimos 365 días","last12months":"Últimos 12 meses","this_week":"Esta semana","this_month":"Este mes","this_quarter":"Este trimestre","this_year":"Este año","last_week":"Semana pasada","last_month":"Mes pasado","last_quarter":"Trimestre pasado","last_year":"Año pasado","weekToDate":"Semana hasta hoy","monthToDate":"Mes hasta hoy","quarterToDate":"Trimestre hasta hoy","yearToDate":"Año hasta hoy","bfcm":"Black Friday y Ciber Monday {year}","quarter":"T{quarterNumber} {year}","previous_period":"Periodo anterior","previous_second":"Segundo anterior","previous_minute":"Minuto anterior","previous_hour":"Hora anterior","previous_day":"Día anterior","previous_week":"Semana anterior","previous_month":"Mes anterior","previous_quarter":"Trimestre anterior","previous_year":"Año anterior","previous_year_match_day_of_week":"Año anterior (mismo día de la semana)"}},"MetricAnnotations":{"learnMoreLinkText":"Más información","sessionsBackfill2022":{"label":"Inicio de los datos","description":"Como parte de las mejoras, los datos de las sesiones ahora comienzan a partir de octubre de 2022."},"checkoutConversionRate2022":{"label":"Actualización de la medición","description":"Como parte de las mejoras, los datos de las sesiones ahora comienzan a partir de octubre de 2022. A partir de esa fecha, también ajustaremos las siguientes métricas: {affectedMetrics}.","banner":{"description":"Mejoramos la forma de contar cuándo se inició un pago, por lo que contaremos más pagos iniciados. Como resultado, probablemente hayan cambiado las siguientes métricas: {affectedMetrics}. Para que sean posibles las comparaciones históricas, ajustamos las métricas a partir de octubre de 2022."}}},"TrendIndicator":{"IncreaseOf":"Aumento de {change}","DecreaseOf":"Reducción de {change}","NoChange":"Sin cambios"},"TimeFormatter":{"DayOrLonger":"{timeInDay} {timeInHour}","LessThanDay":"{timeInHour} {timeInMinute}","day":{"one":"{amount} día","other":"{amount} días","many":"{amount} días"},"hour":{"one":"{amount} h","other":"{amount} h","many":"{amount} h"},"minute":{"one":"{amount} min.","other":"{amount} min.","many":"{amount} min."}},"useFormattedValue":{"none":"Ninguno","boolean":{"true":"Sí","false":"No"},"quarters":{"short":{"q1":"T1","q2":"T2","q3":"T3","q4":"T4"},"long":{"q1":"T1 {year}","q2":"T2 {year}","q3":"T3 {year}","q4":"T4 {year}"}},"DAY_OF_WEEK":{"short":{"0":"Lun","1":"Mar","2":"Mié","3":"Jue","4":"Vie","5":"Sáb","6":"Dom"},"long":{"0":"lunes","1":"martes","2":"miércoles","3":"jueves","4":"viernes","5":"sábado","6":"domingo"}}},"useFormatHistogram":{"days":{"one":"{count} día","other":"{count} días","many":"{count} días"}},"TooltipContent":{"fieldSuffixes":{"product_title":{"one":"{count} producto","other":"{count} productos","many":"{count} productos"},"product_variant_title":{"one":"{count} variante de producto","other":"{count} variantes de producto","many":"{count} variantes de producto"},"product_variant_id":{"one":"{count} variante de producto","other":"{count} variantes de producto","many":"{count} variantes de producto"},"product_variant_sku":{"one":"{count} variante de producto","other":"{count} variantes de producto","many":"{count} variantes de producto"}}},"popover":{"learnMore":"Más información"},"useFormatLineChartRelational":{"percentileLegend":"Percentiles 25 y 75","median":"Mediana de referencia","missingData":{"title":"No existe ningún punto de referencia","content":"No existen datos suficientes de tiendas similares"},"yourTotals":"Tu total"},"RFMGroups":{"previously_loyal":{"description":"Clientes sin compras recientes, pero con un historial muy sólido de pedidos y gasto.","goal":"Objetivo: mover clientes al grupo Fieles"},"at_risk":{"description":"Clientes sin compras recientes, pero con un historial sólido de pedidos y gasto.","goal":"Objetivo: mover clientes a los grupos Fieles o Requieren atención"},"dormant":{"description":"Clientes sin pedidos recientes, con poca frecuencia de pedidos y gasto bajo.","goal":"Objetivo: mover clientes al grupo Casi perdidos"},"loyal":{"description":"Clientes sin compras recientes, pero con un historial muy sólido de pedidos y gasto.","goal":"Objetivo: mover clientes al grupo Champions"},"needs_attention":{"description":"Clientes con compras menos recientes, algunos pedidos y gasto moderado en tu tienda.","goal":"Objetivo: mover clientes a los grupos Fieles o Activos"},"almost_lost":{"description":"Clientes sin compras recientes, con muy pocos pedidos y gasto muy bajo.","goal":"Objetivo: mover clientes a los grupos Activos o Prometedores"},"promising":{"description":"Clientes con compras recientes, pocos pedidos y gasto bajo.","goal":"Objetivo: mover clientes al grupo Activos"},"active":{"description":"Clientes con compras recientes, algunos pedidos y gasto moderado.","goal":"Objetivo: mover clientes a los grupos Champions o Fieles"},"new":{"description":"Clientes con compras muy recientes, pocos pedidos y gasto bajo.","goal":"Objetivo: mover clientes al grupo Activos"},"champions":{"description":"Clientes con compras muy recientes, muchos pedidos y el mayor gasto."},"metricInformation":{"value":"{formattedMetricValue}","percentage":"({formattedPercentValue} de la clientela)"},"previewSegment":"Vista previa del segmento","viewReport":"Ver informe"},"CustomerCohortAnalysis":{"Tooltip":{"returned":"{percent} ({customers}) regresaron después de {month} ({currentMonth})","returnedAcquisitionMonth":"{percent} ({customers}) regresaron en el mes de adquisición de la cohorte ({month})","firstOrder":"Cohorte de {month}: {customers}","noOrders":"Ningún cliente regresó después de {month} ({currentMonth})","noOrdersAcquisitionMonth":"Ningún cliente regresó en el mes de adquisición de la cohorte ({currentMonth})","month":{"one":"{count} mes","other":"{count} meses","many":"{count} meses"},"customer":{"one":"{count} cliente","other":"{count} clientes","many":"{count} clientes"}},"summaryRowDate":"Todas las cohortes","timeDimensionColumnDisplayName":"Cohorte"},"MetricTable":{"subtitle":"Variación porcentual","summary":"Resumen","EmptyState":{"text":"No hay datos para esta selección"},"FooterRow":{"exportMessage":"Este informe muestra un máximo de {amount} resultados. Para acceder a todos los resultados, puedes {export}","exportActionText":"exportar el informe.","message":{"one":"{count} resultado","other":"{count} resultados","many":"{count} resultados"}}},"FunnelChart":{"truncatedSessions":"{metric} truncadas","truncatedSessionsDescription":"Las {metric} se han dibujado a escala para representar mejor el embudo"},"BasketPopover":{"noVariants":"• Sin variantes","productsBoughtTogether":"Productos comprados juntos ({count})","variantsBoughtTogether":"Variantes compradas juntas ({count})","variantsCount":{"one":"• {count} variante","other":"• {count} variantes","many":"• {count} variantes"}},"BasketCell":{"hiddenProductCount":"+{count} más","none":"Ninguno"},"BasketListWithActions":{"actions":"Acciones","back":"Atrás"},"RowActions":{"previewSegment":"Previsualizar segmento"},"usePivotedColumnDisplayName":{"week":{"firstOrder":"Primer pedido","greaterThanOne":"Semana {value}"},"month":{"firstOrder":"Primer pedido","greaterThanOne":"Mes {value}"},"quarter":{"firstOrder":"Primer pedido","greaterThanOne":"Trimestre {value}"},"year":{"firstOrder":"Primer pedido","greaterThanOne":"Año {value}"}},"ShopifyQlDateControls":{"dateTextField":{"placeholderDateValue":"AAAA-MM-DD","sinceTextFieldLabel":"Desde","untilTextFieldLabel":"Hasta"},"actionButtons":{"apply":"Aplicar","cancel":"Cancelar","back":"Atrás"},"quickPicksSidebar":{"newBadge":"Nuevo"},"quickPicksDropdown":{"customDateRange":"Personalizar","label":"Rango de fechas"},"compareTo":"Comparar con: {dateRange}","noComparison":"Sin comparación","sections":{"bfcm":"Black Friday y Cyber Monday","quarters":"Trimestres"}},"useFormatLineChart":{"allTime":"Todo el tiempo"},"useGetPrimaryMetricBadge":{"webPerformance":{"success":"Bueno","attention":"Moderado","critical":"Malo"},"fraudRisk":{"attention":"En riesgo","critical":"Riesgo elevado"}},"RFMGridLabels":{"xAxis":"Puntuación de actividad reciente","yAxis":"Puntuación de frecuencia y valor monetario"},"useWebPerformanceAnnotations":{"good":"Buena","poor":"Mala","count":{"one":"{count} evento","other":"{count} eventos","many":"{count} eventos"}},"Polaris":{"Avatar":{"label":"Avatar","labelWithInitials":"Avatar con las iniciales {initials}"},"Autocomplete":{"spinnerAccessibilityLabel":"Cargando","ellipsis":"{content}…"},"Badge":{"PROGRESS_LABELS":{"incomplete":"Incompleto","partiallyComplete":"Parcialmente completo","complete":"Completo"},"TONE_LABELS":{"info":"Información","success":"Éxito","warning":"Advertencia","attention":"Atención","new":"Nuevo","critical":"Crítico","readOnly":"Solo lectura","enabled":"Activado"},"progressAndTone":"{toneLabel} {progressLabel}"},"Banner":{"dismissButton":"Descartar notificación"},"Button":{"spinnerAccessibilityLabel":"Cargando"},"Common":{"checkbox":"casilla de verificación","undo":"Deshacer","cancel":"Cancelar","clear":"Borrar","close":"Cerrar","submit":"Enviar","more":"Más"},"ContextualSaveBar":{"save":"Guardar","discard":"Descartar"},"DataTable":{"sortAccessibilityLabel":"ordenar {direction} por","navAccessibilityLabel":"Desplazarse en la tabla {direction} una columna","totalsRowHeading":"Totales","totalRowHeading":"Total"},"DatePicker":{"previousMonth":"Mostrar el mes anterior, {previousMonthName} {showPreviousYear}","nextMonth":"Mostrar el mes siguiente, {nextMonth} {nextYear}","today":"Hoy ","months":{"january":"enero","february":"febrero","march":"marzo","april":"abril","may":"mayo","june":"junio","july":"julio","august":"agosto","september":"septiembre","october":"octubre","november":"noviembre","december":"diciembre"},"daysAbbreviated":{"monday":"lun.","tuesday":"mar.","wednesday":"miérc.","thursday":"juev.","friday":"vier.","saturday":"sáb.","sunday":"dom."},"days":{"monday":"lunes","tuesday":"martes","wednesday":"miércoles","thursday":"jueves","friday":"viernes","saturday":"sábado","sunday":"domingo"},"start":"Inicio del intervalo","end":"Fin del intervalo"},"ActionMenu":{"RollupActions":{"rollupButton":"Ver acciones"},"Actions":{"moreActions":"Más acciones"}},"Modal":{"iFrameTitle":"marcado del elemento body","modalWarning":"Faltan estas propiedades necesarias del Modal: {missingProps}","unsavedChanges":"Cambios no guardados"},"Pagination":{"previous":"Anterior","next":"Siguiente","pagination":"Paginación"},"ProgressBar":{"negativeWarningMessage":"Los valores pasados a la variable de progreso no pueden ser negativos. Restableciendo {progress} a 0","exceedWarningMessage":"Los valores pasados a la variable de progreso no deben ser superiores a 100. Configurar {progress} en 100."},"ResourceList":{"sortingLabel":"Ordenar por","defaultItemSingular":"artículo","defaultItemPlural":"artículos","showing":"Mostrando {itemsCount} {resource}","loading":"Cargando {resource}","selected":"{selectedItemsCount} seleccionados","allItemsSelected":"+{itemsLength} {resourceNamePlural} de tu tienda están seleccionados","selectAllItems":"Seleccionar +{itemsLength} recursos de {resourceNamePlural} de tu tienda","emptySearchResultTitle":"No se encontró ningún resultado para {resourceNamePlural}","emptySearchResultDescription":"Intenta cambiar los filtros o el término de búsqueda","selectButtonText":"Seleccionar","a11yCheckboxDeselectAllSingle":"Deseleccionar {resourceNameSingular}","a11yCheckboxSelectAllSingle":"Seleccionar {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"Deseleccionar todos los {itemsLength} {resourceNamePlural}","a11yCheckboxSelectAllMultiple":"Seleccionar todos los {itemsLength} {resourceNamePlural}","Item":{"actionsDropdownLabel":"Acciones para {accessibilityLabel}","actionsDropdown":"Menú desplegable de acciones","viewItem":"Ver información para {itemName}"},"BulkActions":{"actionsActivatorLabel":"Acciones","moreActionsActivatorLabel":"Más acciones"},"showingTotalCount":"Mostrando {itemsCount} de {totalItemsCount} {resource}","allFilteredItemsSelected":"+{itemsLength} {resourceNamePlural} de este filtro están seleccionados","selectAllFilteredItems":"Seleccionar +{itemsLength} recursos de {resourceNamePlural} de este filtro"},"SkeletonPage":{"loadingLabel":"Cargando página"},"Tabs":{"toggleTabsLabel":"Más vistas","newViewAccessibilityLabel":"Crear vista nueva","newViewTooltip":"Crear vista","Tab":{"rename":"Renombrar vista","duplicate":"Duplicar vista","edit":"Editar vista","editColumns":"Editar columnas","delete":"Eliminar vista","copy":"Copia de {name}","deleteModal":{"title":"¿Eliminar vista?","description":"Esta acción no se puede deshacer. La vista {viewName} ya no estará disponible en tu panel de control.","cancel":"Cancelar","delete":"Eliminar vista"}},"RenameModal":{"title":"Renombrar vista","label":"Nombrar","cancel":"Cancelar","create":"Guardar","errors":{"sameName":"Ya existe una vista con este nombre. Elige un nombre diferente."}},"DuplicateModal":{"title":"Duplicar vista","label":"Nombrar","cancel":"Cancelar","create":"Crear vista","errors":{"sameName":"Ya existe una vista con este nombre. Elige un nombre diferente."}},"CreateViewModal":{"title":"Crear vista nueva","label":"Nombrar","cancel":"Cancelar","create":"Crear vista","errors":{"sameName":"Ya existe una vista con este nombre. Elige un nombre diferente."}}},"Tag":{"ariaLabel":"Eliminar {children}"},"TextField":{"characterCount":"{count} caracteres","characterCountWithMaxLength":"{count} de {limit} caracteres utilizados"},"TopBar":{"toggleMenuLabel":"Activar menú","SearchField":{"clearButtonLabel":"Borrar","search":"Buscar"}},"MediaCard":{"popoverButton":"Acciones","dismissButton":"Descartar"},"VideoThumbnail":{"playButtonA11yLabel":{"default":"Reproducir vídeo","defaultWithDuration":"Reproducir vídeo que dura {duration}","duration":{"hours":{"other":{"only":"{hourCount} horas","andMinutes":"{hourCount} horas y {minuteCount} minutos","andMinute":"{hourCount} horas y {minuteCount} minuto","minutesAndSeconds":"{hourCount} horas, {minuteCount} minutos y {secondCount} segundos","minutesAndSecond":"{hourCount} horas, {minuteCount} minutos y {secondCount} segundo","minuteAndSeconds":"{hourCount} horas, {minuteCount} minuto y {secondCount} segundos","minuteAndSecond":"{hourCount} horas, {minuteCount} minuto y {secondCount} segundo","andSeconds":"{hourCount} horas y {secondCount} segundos","andSecond":"{hourCount} horas y {secondCount} segundo"},"one":{"only":"{hourCount} hora","andMinutes":"{hourCount} hora y {minuteCount} minutos","andMinute":"{hourCount} hora y {minuteCount} minuto","minutesAndSeconds":"{hourCount} hora, {minuteCount} minutos y {secondCount} segundos","minutesAndSecond":"{hourCount} hora, {minuteCount} minutos y {secondCount} segundo","minuteAndSeconds":"{hourCount} hora, {minuteCount} minuto y {secondCount} segundos","minuteAndSecond":"{hourCount} hora, {minuteCount} minuto y {secondCount} segundo","andSeconds":"{hourCount} hora y {secondCount} segundos","andSecond":"{hourCount} hora y {secondCount} segundo"}},"minutes":{"other":{"only":"{minuteCount} minutos","andSeconds":"{minuteCount} minutos y {secondCount} segundos","andSecond":"{minuteCount} minutos y {secondCount} segundo"},"one":{"only":"{minuteCount} minuto","andSeconds":"{minuteCount} minuto y {secondCount} segundos","andSecond":"{minuteCount} minuto y {secondCount} segundo"}},"seconds":{"other":"{secondCount} segundos","one":"{secondCount} segundo","many":"{secondCount} segundos"}}}},"Loading":{"label":"Barra de carga de la página"},"TooltipOverlay":{"accessibilityLabel":"Descripción emergente: {label}"},"Page":{"Header":{"rollupActionsLabel":"Ver acciones para {title}","pageReadyAccessibilityLabel":"{title}. Esta página está lista"}},"ActionList":{"SearchField":{"clearButtonLabel":"Borrar","search":"Buscar","placeholder":"Buscar acciones"}},"AlphaTable":{"TableRowActions":{"heading":"Acciones","activatorAccessibilityLabel":"Abrir acciones de fila","activatorLabel":"Acciones"},"TableRowGroups":{"heading":"Activar grupos de filas","toggle":"Activar la visibilidad de este grupo de filas"},"Sorting":{"sortAscending":"Ordenar esta tabla por {heading} en orden ascendente","sortDescending":"Ordenar esta tabla por {heading} en orden descendente"},"Selection":{"select":"Seleccionar {id}","selectPage":"Seleccionar los {count} de la página","selectAll":"Seleccionar +{count} en la tienda","selectAllWithTotal":"Seleccionar los {total} en la tienda","selectionHeader":"Selección","unselectAll":"Deseleccionar todo","selectedPage":"{count} seleccionados","selectedAll":"+{count} seleccionados en tienda","selectedAllWithTotal":"{total} seleccionados en tienda","selectedSome":"{count}/{total} seleccionados"},"BulkActions":{"activatorLabel":"Acciones"},"TableCell":{"spansColumns":"se extiende en {count} columnas"}},"SortPopover":{"ariaLabel":"Ordenar los resultados","tooltip":"Ordenar","title":"Ordenar por","sorting":{"asc":"Ascendente","desc":"Descendente","az":"A-Z","za":"Z-A"}}},"DistributionChart":{"noData":"Sin datos disponibles","title":"Gráfico de distribución","description":"Un gráfico de barras que muestra los datos de distribución: {data}.{percentiles}","highlightedPercentiles":" Entre los percentiles más destacados se incluyen: {percentiles}."},"PerformanceEventType":{"APP_INSTALL":{"title":"Aplicación instalada","content":"{appName} instalada"},"APP_UNINSTALL":{"title":"Aplicación desinstalada","content":"{appName} desinstalada"},"THEME_LIVE_EDIT":{"title":"Tema activo editado","content":{"one":"Tema {themeName} editado {count} vez","other":"Tema {themeName} editado {count} veces","many":"Tema {themeName} editado {count} veces"}},"THEME_PUBLICATION":{"title":"Tema publicado","content":"El tema {themeName} está publicado"}}}')
-  , EK = {
-    AnalyticsUIComponents: FK
-}
-  , MK = JSON.parse('{"BenchmarksSummary":{"shopValue":"Kauppasi","benchmarksMedian":"Vertailuarvojen mediaani","benchmarks25thPercentile":"25. prosenttipiste","benchmarks75thPercentile":"75. prosenttipiste","benchmarksTooltip":"Vertaa kauppasi tehokkuutta samankaltaisiin kauppoihin viimeisten 30 päivän aikana myytyjen tuotteiden, ensisijaisen markkinamaan ja tilausmäärän mukaan.","missingData":{"title":"Ei vertailuarvoa","content":"Ei riittävästi dataa samankaltaisista kaupoista"}},"CloseButton":{"delete":"Poista mittari"},"MetricCardEmpty":{"noResults":"Tälle ajanjaksolle ei löytynyt tietoja","noResultsCompact":"Ei tietoja","incorrectCardSize":"Muuta tämän kortin kokoa nähdäksesi sen tiedot"},"MetricCardError":{"error":"Tietoja ei voitu ladata"},"MetricLayout":{"ReportLinkAccessibilityLabel":"Näytä raportti: {reportTitle}"},"HorizontalNavigation":{"Forward":"Eteenpäin","Backward":"Taaksepäin"},"TimeframePicker":{"today":"Tänään","todayHelp":"Verrattuna eiliseen tämänhetkiseen tuntiin asti","last7days":"Seitsemän päivää","last7daysHelp":"Edelliseen seitsemään päivään verrattuna","last30days":"30 päivää","last30daysHelp":"Edelliseen 30 päivään verrattuna","last90days":"90 päivää","last90daysHelp":"Edelliseen 90 päivään verrattuna","last365days":"365 päivää","last365daysHelp":"Edelliseen 365 päivään verrattuna"},"date":{"range":"{startDate}–{endDate}","sameMonthRange":"{startDay}.–{endDay}.{month}.{year}","months":{"1":"1","2":"2","3":"3","4":"4","5":"5","6":"6","7":"7","8":"8","9":"9","10":"10","11":"11","12":"12"},"title":{"today":"Tänään","yesterday":"Eilen","last7days":"Viimeiset 7 päivää","last30days":"Viimeiset 30 päivää","last90days":"Viimeiset 90 päivää","last365days":"Viimeiset 365 päivää","last12months":"Viimeiset 12 kuukautta","this_week":"Tämä viikko","this_month":"Tämä kuukausi","this_quarter":"Tämä vuosineljännes","this_year":"Tämä vuosi","last_week":"Viime viikko","last_month":"Viime kuukausi","last_quarter":"Viime vuosineljännes","last_year":"Viime vuosi","weekToDate":"Viikko tähän asti","monthToDate":"Kuukausi tähän asti","quarterToDate":"Vuosineljännes tähän asti","yearToDate":"Vuosi tähän asti","bfcm":"BFCM {year}","quarter":"{quarterNumber}. vuosinelj. {year}","previous_period":"Edellinen jakso","previous_second":"Edellinen sekunti","previous_minute":"Edellinen minuutti","previous_hour":"Edellinen tunti","previous_day":"Edellinen päivä","previous_week":"Edellinen viikko","previous_month":"Edellinen kuukausi","previous_quarter":"Edellinen vuosineljännes","previous_year":"Edellinen vuosi","previous_year_match_day_of_week":"Edellinen vuosi (vastaava viikonpäivä)"}},"MetricAnnotations":{"learnMoreLinkText":"Lisätietoja","sessionsBackfill2022":{"label":"Datan alkamisajankohta","description":"Osana dataparannuksia istuntojen datan alkamisajankohta on nyt lokakuu 2022."},"checkoutConversionRate2022":{"label":"Mittareiden päivitys","description":"Osana dataparannuksia istuntojen datan alkamisajankohta on nyt lokakuu 2022. Säädimme siitä päivästä alkaen myös seuraavia mittareita: {affectedMetrics}.","banner":{"description":"Olemme parantaneet tapaa, jolla laskemme kassavaiheen alkamisajankohdan, joten aloitettuja kassavaiheita lasketaan olevan enemmän. Seuraavat mittarit ovat sen vuoksi todennäköisesti muuttuneet: {affectedMetrics}. Jotta historialliset vertailut ovat mahdollisia, säädimme kyseisiä mittareita lokakuusta 2022 alkaen."}}},"TrendIndicator":{"IncreaseOf":"{change} kasvua","DecreaseOf":"{change} laskua","NoChange":"Ei muutosta"},"TimeFormatter":{"DayOrLonger":"{timeInDay} {timeInHour}","LessThanDay":"{timeInHour} {timeInMinute}","day":{"one":"{amount} päivä","other":"{amount} päivää"},"hour":{"one":"{amount} t","other":"{amount} t"},"minute":{"one":"{amount} min","other":"{amount} min"}},"useFormattedValue":{"none":"Ei mitään","boolean":{"true":"Kyllä","false":"Ei"},"quarters":{"short":{"q1":"1. nelj.","q2":"2. nelj.","q3":"3. nelj.","q4":"4. nelj."},"long":{"q1":"1. nelj. {year}","q2":"2. nelj. {year}","q3":"3. nelj. {year}","q4":"4. nelj. {year}"}},"DAY_OF_WEEK":{"short":{"0":"Ma","1":"Ti","2":"Ke","3":"To","4":"Pe","5":"La","6":"Su"},"long":{"0":"Maanantai","1":"Tiistai","2":"Keskiviikko","3":"Torstai","4":"Perjantai","5":"Lauantai","6":"Sunnuntai"}}},"useFormatHistogram":{"days":{"one":"{count} päivä","other":"{count} päivää"}},"TooltipContent":{"fieldSuffixes":{"product_title":{"one":"{count} tuote","other":"{count} tuotetta"},"product_variant_title":{"one":"{count} tuoteversio","other":"{count} tuoteversiota"},"product_variant_id":{"one":"{count} tuoteversio","other":"{count} tuoteversiota"},"product_variant_sku":{"one":"{count} tuoteversio","other":"{count} tuoteversiota"}}},"popover":{"learnMore":"Lue lisää"},"useFormatLineChartRelational":{"percentileLegend":"25.–75. prosenttipiste","median":"Vertailuarvojen mediaani","missingData":{"title":"Ei vertailuarvoa","content":"Ei riittävästi dataa samankaltaisista kaupoista"},"yourTotals":"Omat yhteensä"},"RFMGroups":{"previously_loyal":{"description":"Asiakkaat, jotka eivät ole tehneet äskettäin ostoksia mutta joilla on erittäin merkittävä tilaus- ja kulutushistoria.","goal":"Tavoite: siirtää asiakkaat Kanta-asiakas-luokkaan"},"at_risk":{"description":"Asiakkaat, jotka eivät ole tehneet äskettäin ostoksia mutta joilla on merkittävä tilaus- ja kulutushistoria.","goal":"Tavoite: siirtää asiakkaat Kanta-asiakas- tai Tarvitsee huomiota -luokkaan"},"dormant":{"description":"Asiakkaat, jotka eivät ole tehneet äskettäin tilauksia, jotka tekevät vain harvoin tilauksia ja jotka kuluttavat vain vähän rahaa.","goal":"Tavoite: siirtää asiakkaat Lähes menetetty -luokkaan"},"loyal":{"description":"Asiakkaat, jotka eivät ole tehneet äskettäin ostoksia mutta joilla on erittäin merkittävä tilaus- ja kulutushistoria.","goal":"Tavoite: siirtää asiakkaat Champion-luokkaan"},"needs_attention":{"description":"Asiakkaat, jotka ovat ostaneet äskettäin vain vähän, jotka tilaavat tuotteita vain joskus ja kuluttavat vain maltillisesti rahaa kaupassasi.","goal":"Tavoite: siirtää asiakkaat Kanta-asiakas- tai Aktiivinen-luokkaan"},"almost_lost":{"description":"Asiakkaat, jotka eivät ole tehneet äskettäin ostoksia, ovat tilanneet vain vähän ja kuluttavat rahaa vain vähän.","goal":"Tavoite: siirtää asiakkaat Aktiivinen- tai Lupaava-luokkaan"},"promising":{"description":"Asiakkaat, jotka ovat tehneet äskettäin ostoksia, tilanneet vain vähän ja kuluttaneet vain vähän rahaa.","goal":"Tavoite: siirtää asiakkaat Aktiivinen-luokkaan"},"active":{"description":"Asiakkaat, jotka ovat tehneet äskettäin ostoksia, tehneet muutaman tilauksen ja kuluttaneet rahaa maltillisesti.","goal":"Tavoite: siirtää asiakkaat Champion- tai Kanta-asiakas-luokkaan"},"new":{"description":"Asiakkaat, jotka ovat tehneet ostoksia aivan äskettäin, tehneet muutaman tilauksen ja kuluttaneet rahaa vain vähän.","goal":"Tavoite: siirtää asiakkaat Aktiivinen-luokkaan"},"champions":{"description":"Asiakkaat, jotka ovat tehneet ostoksia aivan äskettäin, tilanneet paljon ja kuluttaneet rahaa eniten."},"metricInformation":{"value":"{formattedMetricValue}","percentage":"({formattedPercentValue} asiakaskunnasta)"},"previewSegment":"Esikatsele segmenttiä","viewReport":"Näytä raportti"},"CustomerCohortAnalysis":{"Tooltip":{"returned":"{percent} ({customers}) palasi kuukauden {month} jälkeen ({currentMonth})","returnedAcquisitionMonth":"{percent} ({customers}) palasi kohortin hankintakuukautena ({month})","firstOrder":"{month} kohortti: {customers}","noOrders":"Yksikään asiakas ei palannut kuukauden {month} jälkeen ({currentMonth})","noOrdersAcquisitionMonth":"Yksikään asiakas ei palannut kohortin hankintakuukautena ({currentMonth})","month":{"one":"{count} kuukausi","other":"{count} kuukautta"},"customer":{"one":"{count} asiakas","other":"{count} asiakasta"}},"summaryRowDate":"Kaikki kohortit","timeDimensionColumnDisplayName":"Kohortti"},"MetricTable":{"subtitle":"% muutosta","summary":"Yhteenveto","EmptyState":{"text":"Tälle valinnalle ei ole mitään tietoja"},"FooterRow":{"exportMessage":"Tämä raportti näyttää jopa {amount} tulosta. Jos haluat tarkastella kaikkia tuloksia, voit {export}","exportActionText":"viedä raportin.","message":{"one":"{count} tulos","other":"{count} tulosta"}}},"FunnelChart":{"truncatedSessions":"Tiivistetty {metric}","truncatedSessionsDescription":"{metric} piirrettiin skaalaan kuvaamaan suppiloa paremmin"},"BasketPopover":{"noVariants":"• Ei versioita","productsBoughtTogether":"Yhdessä ostetut tuotteet ({count})","variantsBoughtTogether":"Yhdessä ostetut tuoteversiot ({count})","variantsCount":{"one":"• {count} versio","other":"• {count} versiota"}},"BasketCell":{"hiddenProductCount":"+ {count} muuta","none":"Ei mitään"},"BasketListWithActions":{"actions":"Toiminnot","back":"Palaa"},"RowActions":{"previewSegment":"Esikatsele segmentti"},"usePivotedColumnDisplayName":{"week":{"firstOrder":"Ensimmäinen tilaus","greaterThanOne":"Viikko {value}"},"month":{"firstOrder":"Ensimmäinen tilaus","greaterThanOne":"Kuukausi {value}"},"quarter":{"firstOrder":"Ensimmäinen tilaus","greaterThanOne":"Vuosineljännes {value}"},"year":{"firstOrder":"Ensimmäinen tilaus","greaterThanOne":"Vuosi {value}"}},"ShopifyQlDateControls":{"dateTextField":{"placeholderDateValue":"VVVV-KK-PP","sinceTextFieldLabel":"Alku","untilTextFieldLabel":"Loppu"},"actionButtons":{"apply":"Käytä","cancel":"Peruuta","back":"Takaisin"},"quickPicksSidebar":{"newBadge":"Uusi"},"quickPicksDropdown":{"customDateRange":"Mukautettu","label":"Aikaväli"},"compareTo":"Vertaa ajanjaksoon: {dateRange}","noComparison":"Ei vertailua","sections":{"bfcm":"Black Friday Cyber Monday","quarters":"Vuosineljännekset"}},"useFormatLineChart":{"allTime":"Koko ajalta"},"useGetPrimaryMetricBadge":{"webPerformance":{"success":"Hyvä","attention":"Kohtalainen","critical":"Huono"},"fraudRisk":{"attention":"Vaarassa","critical":"Kohonnut riski"}},"RFMGridLabels":{"xAxis":"Tuoreuspisteet","yAxis":"Tiheyden ja rahamääräisen arvon pisteet"},"useWebPerformanceAnnotations":{"good":"Hyvä","poor":"Huono","count":{"one":"{count} tapahtuma","other":"{count} tapahtumaa"}},"Polaris":{"Avatar":{"label":"Avatar","labelWithInitials":"Avatar alkukirjaimilla {initials}"},"Autocomplete":{"spinnerAccessibilityLabel":"Ladataan","ellipsis":"{content}…"},"Badge":{"PROGRESS_LABELS":{"incomplete":"Keskeneräinen","partiallyComplete":"Osittain valmis","complete":"Valmis"},"TONE_LABELS":{"info":"Tiedot","success":"Onnistui","warning":"Varoitus","attention":"Huomio","new":"Uusi","critical":"Kriittinen","readOnly":"Vain luku","enabled":"Otettu käyttöön"},"progressAndTone":"{toneLabel} {progressLabel}"},"Banner":{"dismissButton":"Ohita ilmoitus"},"Button":{"spinnerAccessibilityLabel":"Ladataan"},"Common":{"checkbox":"valintaruutu","undo":"Peru","cancel":"Peruuta","clear":"Tyhjennä","close":"Sulje","submit":"Lähetä","more":"Lisää"},"ContextualSaveBar":{"save":"Tallenna","discard":"Hylkää"},"DataTable":{"sortAccessibilityLabel":"lajittele {direction}:","navAccessibilityLabel":"Selaa taulukkoa {direction} yksi sarake","totalsRowHeading":"Yhteenlasketut","totalRowHeading":"Yhteensä"},"DatePicker":{"previousMonth":"Näytä edellinen kuukausi, {previousMonthName} {showPreviousYear}","nextMonth":"Näytä seuraava kuukausi, {nextMonth} {nextYear}","today":"Tänään ","months":{"january":"Tammikuu","february":"Helmikuu","march":"Maaliskuu","april":"Huhtikuu","may":"Toukokuu","june":"Kesäkuu","july":"Heinäkuu","august":"Elokuu","september":"Syyskuu","october":"Lokakuu","november":"Marraskuu","december":"Joulukuu"},"daysAbbreviated":{"monday":"Ma","tuesday":"Ti","wednesday":"Ke","thursday":"To","friday":"Pe","saturday":"La","sunday":"Su"},"days":{"monday":"Maanantai","tuesday":"Tiistai","wednesday":"Keskiviikko","thursday":"Torstai","friday":"Perjantai","saturday":"Lauantai","sunday":"Sunnuntai"},"start":"Alueen alku","end":"Alueen loppu"},"ActionMenu":{"RollupActions":{"rollupButton":"Tarkastele toimintoja"},"Actions":{"moreActions":"Lisää toimintoja"}},"Modal":{"iFrameTitle":"tekstin merkintä","modalWarning":"Nämä vaaditut ominaisuudet puuttuvat Modalista: {missingProps}","unsavedChanges":"Tallentamattomia muutoksia"},"Pagination":{"previous":"Edellinen","next":"Seuraava","pagination":"Sivunumerointi"},"ProgressBar":{"negativeWarningMessage":"Edistymistietoihin siirretyt arvot eivät saa olla negatiivisia. Palautetaan {progress} arvoon 0.","exceedWarningMessage":"Edistymistietoihin siirretyt arvot eivät saa olla suurempia kuin 100. Asetetaan {progress} arvoon 100."},"ResourceList":{"sortingLabel":"Lajitteluperuste","defaultItemSingular":"tuote","defaultItemPlural":"tuotetta","showing":"Näytetään {itemsCount} {resource}","loading":"Ladataan kohdetta {resource}","selected":"{selectedItemsCount} valittu","allItemsSelected":"Kaikki {itemsLength}+ {resourceNamePlural} kaupassasi on valittu","selectAllItems":"Valitse kaikki {itemsLength}+ {resourceNamePlural} kaupassasi","emptySearchResultTitle":"{resourceNamePlural}: ei löydy","emptySearchResultDescription":"Yritä vaihtaa suodattimia tai hakuehtoa","selectButtonText":"Valitse","a11yCheckboxDeselectAllSingle":"Poista valinta kohteesta {resourceNameSingular}","a11yCheckboxSelectAllSingle":"Valitse {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"Poista valinta kaikista {itemsLength} {resourceNamePlural}","a11yCheckboxSelectAllMultiple":"Valitse kaikki {itemsLength} {resourceNamePlural}","Item":{"actionsDropdownLabel":"Henkilöä {accessibilityLabel} koskevat toiminnot","actionsDropdown":"Toiminnot-pudotusvalikko","viewItem":"Näytä tiedot: {itemName}"},"BulkActions":{"actionsActivatorLabel":"Toiminnot","moreActionsActivatorLabel":"Lisää toimintoja"},"showingTotalCount":"Näytetään {itemsCount}/{totalItemsCount} {resource}","allFilteredItemsSelected":"Kaikki tämän suodattimen {itemsLength}+ {resourceNamePlural} on valittu","selectAllFilteredItems":"Valitse kaikki tämän suodattimen {itemsLength}+ {resourceNamePlural}"},"SkeletonPage":{"loadingLabel":"Sivu latautuu"},"Tabs":{"toggleTabsLabel":"Enemmän katseluja","newViewAccessibilityLabel":"Luo uusi näkymä","newViewTooltip":"Luo näkymä","Tab":{"rename":"Nimeä näkymä uudelleen","duplicate":"Kopioi näkymä","edit":"Muokkaa näkymää","editColumns":"Muokkaa sarakkeita","delete":"Poista näkymä","copy":"Kopio: {name}","deleteModal":{"title":"Haluatko poistaa näkymän?","description":"Tätä ei voi kumota. Näkymä {viewName} ei ole enää käytettävissä adminissasi.","cancel":"Peruuta","delete":"Poista näkymä"}},"RenameModal":{"title":"Nimeä näkymä uudelleen","label":"Nimi","cancel":"Peruuta","create":"Tallenna","errors":{"sameName":"Tämän niminen näkymä on jo olemassa. Valitse toinen nimi."}},"DuplicateModal":{"title":"Kopioi näkymä","label":"Nimi","cancel":"Peruuta","create":"Luo näkymä","errors":{"sameName":"Tämän niminen näkymä on jo olemassa. Valitse toinen nimi."}},"CreateViewModal":{"title":"Luo uusi näkymä","label":"Nimi","cancel":"Peruuta","create":"Luo näkymä","errors":{"sameName":"Tämän niminen näkymä on jo olemassa. Valitse toinen nimi."}}},"Tag":{"ariaLabel":"Poista {children}"},"TextField":{"characterCount":"{count} merkkiä","characterCountWithMaxLength":"{count} / {limit} merkistä käytetty"},"TopBar":{"toggleMenuLabel":"Vaihda valikko päälle/pois","SearchField":{"clearButtonLabel":"Tyhjennä","search":"Haku"}},"MediaCard":{"popoverButton":"Toiminnot","dismissButton":"Hylkää"},"VideoThumbnail":{"playButtonA11yLabel":{"default":"Toista video","defaultWithDuration":"Toista video, joka on kestoltaan {duration}","duration":{"hours":{"other":{"only":"{hourCount} tuntia","andMinutes":"{hourCount} tuntia ja {minuteCount} minuuttia","andMinute":"{hourCount} tuntia ja {minuteCount} minuutti","minutesAndSeconds":"{hourCount} tuntia, {minuteCount} minuuttia ja {secondCount} sekuntia","minutesAndSecond":"{hourCount} tuntia, {minuteCount} minuuttia ja {secondCount} sekunti","minuteAndSeconds":"{hourCount} tuntia, {minuteCount} minuutti ja {secondCount} sekuntia","minuteAndSecond":"{hourCount} tuntia, {minuteCount} minuutti ja {secondCount} sekunti","andSeconds":"{hourCount} tuntia ja {secondCount} sekuntia","andSecond":"{hourCount} tuntia ja {secondCount} sekunti"},"one":{"only":"{hourCount} tunti","andMinutes":"{hourCount} tunti ja {minuteCount} minuuttia","andMinute":"{hourCount} tunti ja {minuteCount} minuutti","minutesAndSeconds":"{hourCount} tunti, {minuteCount} minuuttia ja {secondCount} sekuntia","minutesAndSecond":"{hourCount} tunti, {minuteCount} minuuttia ja {secondCount} sekunti","minuteAndSeconds":"{hourCount} tunti, {minuteCount} minuutti ja {secondCount} sekuntia","minuteAndSecond":"{hourCount} tunti, {minuteCount} minuutti ja {secondCount} sekunti","andSeconds":"{hourCount} tunti ja {secondCount} sekuntia","andSecond":"{hourCount} tunti ja {secondCount} sekunti"}},"minutes":{"other":{"only":"{minuteCount} minuuttia","andSeconds":"{minuteCount} minuuttia ja {secondCount} sekuntia","andSecond":"{minuteCount} minuuttia ja {secondCount} sekunti"},"one":{"only":"{minuteCount} minuutti","andSeconds":"{minuteCount} minuutti ja {secondCount} sekuntia","andSecond":"{minuteCount} minuutti ja {secondCount} sekunti"}},"seconds":{"other":"{secondCount} sekuntia","one":"{secondCount} sekunti"}}}},"Loading":{"label":"Sivun latautumisen palkki"},"TooltipOverlay":{"accessibilityLabel":"Työkaluvihje: {label}"},"Page":{"Header":{"rollupActionsLabel":"Tarkastele teeman {title} toimintoja","pageReadyAccessibilityLabel":"{title}. Tämä sivu on valmis"}},"ActionList":{"SearchField":{"clearButtonLabel":"Tyhjennä","search":"Haku","placeholder":"Hae toimintoja"}},"AlphaTable":{"TableRowActions":{"heading":"Toiminnot","activatorAccessibilityLabel":"Avaa rivitoiminnot","activatorLabel":"Toiminnot"},"TableRowGroups":{"heading":"Vaihda riviryhmät käyttöön/pois käytöstä","toggle":"Vaihda tämän riviryhmän näkyvyys"},"Sorting":{"sortAscending":"Lajittele tämä taulukko {heading} mukaan nousevassa järjestyksessä","sortDescending":"Lajittele tämä taulukko {heading} mukaan laskevassa järjestyksessä"},"Selection":{"select":"Valitse {id}","selectPage":"Valitse kaikki {count} sivulta","selectAll":"Valitse kaikki {count}+ kaupassa","selectAllWithTotal":"Valitse kaikki {total} kaupassa","selectionHeader":"Valinta","unselectAll":"Poista kaikkien valinta","selectedPage":"{count} valittu","selectedAll":"Kaikki {count}+ valittu kaupassa","selectedAllWithTotal":"Kaikki {total} valittu kaupassa","selectedSome":"{count}/{total} valittu"},"TableCell":{"spansColumns":"kattaa {count} saraketta"},"BulkActions":{"activatorLabel":"Toiminnot"}},"SortPopover":{"ariaLabel":"Lajittele tulokset","tooltip":"Lajittele","title":"Lajitteluperuste","sorting":{"asc":"Nouseva","desc":"Laskeva","az":"A–Ö","za":"Ö–A"}}},"DistributionChart":{"noData":"Tietoja ei saatavilla","title":"Jakelukaavio","description":"Pylväskaavio, jossa on jakelutiedot: {data}.{percentiles}","highlightedPercentiles":" Huomionarvoisia prosenttipisteitä: {percentiles}."},"PerformanceEventType":{"APP_INSTALL":{"title":"Sovellus asennettu","content":"{appName} asennettu"},"APP_UNINSTALL":{"title":"Sovelluksen asennus poistettu","content":"{appName} poistettu"},"THEME_LIVE_EDIT":{"title":"Live-teemaa muokattu","content":{"one":"Teemaa {themeName} muokattu {count} kerta","other":"Teemaa {themeName} muokattu {count} kertaa"}},"THEME_PUBLICATION":{"title":"Teema julkaistu","content":"Teema {themeName} julkaistu"}}}')
-  , RK = {
-    AnalyticsUIComponents: MK
-}
-  , jK = JSON.parse('{"BenchmarksSummary":{"shopValue":"Votre boutique","benchmarksMedian":"Médiane de référence","benchmarks25thPercentile":"25e centile","benchmarks75thPercentile":"75e centile","benchmarksTooltip":"Comparez la performance de votre boutique à celle de boutiques similaires en fonction des produits vendus au cours des 30 derniers jours, du pays correspondant au marché principal et du volume des commandes.","missingData":{"title":"Aucune référence","content":"Pas assez de données provenant de boutiques similaires"}},"CloseButton":{"delete":"Supprimer l’indicateur"},"MetricCardEmpty":{"noResults":"Aucune donnée n’a été trouvée pour cette plage de dates","noResultsCompact":"Aucune donnée","incorrectCardSize":"Pour voir les données, redimensionnez cette carte"},"MetricCardError":{"error":"Impossible de charger les données"},"MetricLayout":{"ReportLinkAccessibilityLabel":"Voir le rapport {reportTitle}"},"HorizontalNavigation":{"Forward":"Suivant","Backward":"Précédent"},"TimeframePicker":{"today":"Aujourd’hui","todayHelp":"Par rapport à hier jusqu’à l’heure actuelle","last7days":"7 jours","last7daysHelp":"Par rapport aux 7 derniers jours","last30days":"30 jours","last30daysHelp":"Par rapport aux 30 derniers jours","last90days":"90 jours","last90daysHelp":"Par rapport aux 90 jours précédents","last365days":"365 jours","last365daysHelp":"Par rapport aux 365 jours précédents"},"date":{"range":"{startDate} – {endDate}","sameMonthRange":"{startDay}–{endDay} {month}, {year}","months":{"1":"Janv","2":"Fév","3":"Mars","4":"Avr","5":"Mai","6":"Juin","7":"Juil","8":"Août","9":"Sept","10":"Oct","11":"Nov","12":"Déc"},"title":{"today":"Aujourd’hui","yesterday":"Hier","last7days":"7 derniers jours","last30days":"30 derniers jours","last90days":"90 derniers jours","last365days":"365 derniers jours","last12months":"12 derniers mois","this_week":"Cette semaine","this_month":"Ce mois-ci","this_quarter":"Ce trimestre","this_year":"Cette année","last_week":"La semaine dernière","last_month":"Le mois dernier","last_quarter":"Le trimestre dernier","last_year":"L’année dernière","weekToDate":"Semaine en cours","monthToDate":"Mois en cours","quarterToDate":"Trimestre en cours","yearToDate":"Année en cours","bfcm":"BFCM {year}","quarter":"T{quarterNumber} {year}","previous_period":"Période précédente","previous_second":"Seconde précédente","previous_minute":"Minute précédente","previous_hour":"Heure précédente","previous_day":"Jour précédent","previous_week":"Semaine précédente","previous_month":"Mois précédent","previous_quarter":"Trimestre précédent","previous_year":"Année précédente","previous_year_match_day_of_week":"Année précédente (associer le jour de la semaine)"}},"MetricAnnotations":{"learnMoreLinkText":"En savoir plus","sessionsBackfill2022":{"label":"Début des données","description":"Dans le cadre de l’amélioration des données, les données des visites commencent maintenant à partir d’octobre 2022."},"checkoutConversionRate2022":{"label":"Mise à jour des mesures","description":"Dans le cadre de l’amélioration des données, les données des visites commencent maintenant à partir d’octobre 2022. Depuis cette date, nous avons également ajusté les indicateurs suivants : {affectedMetrics}.","banner":{"description":"Nous avons amélioré la façon dont nous déterminons le début d’un paiement, ce qui nous permet de comptabiliser un plus grand nombre de paiements entamés. Par conséquent, les indicateurs suivants ont probablement changé : {affectedMetrics}. Pour permettre des comparaisons historiques, nous avons ajusté ces indicateurs à partir d’octobre 2022."}}},"TrendIndicator":{"IncreaseOf":"Augmentation de {change}","DecreaseOf":"Diminution de {change}","NoChange":"Aucun changement"},"TimeFormatter":{"DayOrLonger":"{timeInDay} {timeInHour}","LessThanDay":"{timeInHour} {timeInMinute}","day":{"one":"{amount} jour","other":"{amount} jours","many":"{amount} jours"},"hour":{"one":"{amount} h","other":"{amount} h","many":"{amount} h"},"minute":{"one":"{amount} min","other":"{amount} min","many":"{amount} min"}},"useFormattedValue":{"none":"Aucun(e)","boolean":{"true":"Oui","false":"Non"},"quarters":{"short":{"q1":"T1","q2":"T2","q3":"T3","q4":"T4"},"long":{"q1":"T1 {year}","q2":"T2 {year}","q3":"T3 {year}","q4":"T4 {year}"}},"DAY_OF_WEEK":{"short":{"0":"Lun","1":"Mar","2":"Mer","3":"Jeu","4":"Ven","5":"Sam","6":"Dim"},"long":{"0":"Lundi","1":"Mardi","2":"Mercredi","3":"Jeudi","4":"Vendredi","5":"Samedi","6":"Dimanche"}}},"useFormatHistogram":{"days":{"one":"{count} jour","other":"{count} jours","many":"{count} jours"}},"TooltipContent":{"fieldSuffixes":{"product_title":{"one":"{count} produit","other":"{count} produits","many":"{count} produits"},"product_variant_title":{"one":"{count} variante de produit","other":"{count} variantes de produit","many":"{count} variantes de produit"},"product_variant_id":{"one":"{count} variante de produit","other":"{count} variantes de produit","many":"{count} variantes de produit"},"product_variant_sku":{"one":"{count} variante de produit","other":"{count} variantes de produit","many":"{count} variantes de produit"}}},"popover":{"learnMore":"En savoir plus"},"useFormatLineChartRelational":{"percentileLegend":"25e – 75e centile","median":"Médiane de référence","missingData":{"title":"Aucune référence","content":"Données insuffisantes provenant de boutiques similaires"},"yourTotals":"Vos totaux"},"RFMGroups":{"previously_loyal":{"description":"Client(e)s n’ayant pas effectué d’achats récents, mais avec un historique de commandes et de dépenses très important.","goal":"Objectif : déplacer les client(e)s vers la section Fidèles"},"at_risk":{"description":"Client(e)s n’ayant pas effectué d’achats récents, mais avec un historique de commandes et de dépenses important.","goal":"Objectif : déplacer les client(e)s vers la section Fidèles ou Nécessite votre attention"},"dormant":{"description":"Client(e)s n’ayant pas passé de commandes récentes, passant peu de commandes et dépensant peu.","goal":"Objectif : déplacer les client(e)s vers la section Presque perdus"},"loyal":{"description":"Client(e)s n’ayant pas effectué d’achats récents, mais avec un historique de commandes et de dépenses très important.","goal":"Objectif : déplacer les client(e)s vers la section Champions"},"needs_attention":{"description":"Client(e)s qui achètent moins récemment, commandent parfois et dépensent modérément dans votre boutique.","goal":"Objectif : déplacer les client(e)s vers la section Fidèles ou Actifs"},"almost_lost":{"description":"Client(e)s n’ayant pas effectué d’achats récents, avec moins de commandes et dépensant moins d’argent.","goal":"Objectif : déplacer les client(e)s vers la section Actifs ou Prometteurs"},"promising":{"description":"Client(e)s ayant effectué des achats récemment, ayant passé peu de commandes et ayant dépensé peu d’argent.","goal":"Objectif : déplacer les client(e)s vers la section Actifs"},"active":{"description":"Client(e)s ayant effectué des achats récemment, ayant passé quelques commandes et dépensant modérément.","goal":"Objectif : déplacer les client(e)s vers la section Champions ou Fidèles"},"new":{"description":"Client(e)s ayant effectué des achats très récemment, ayant passé peu de commandes et ayant dépensé peu d’argent.","goal":"Objectif : déplacer les client(e)s vers la section Actifs"},"champions":{"description":"Client(e)s ayant effectué des achats très récemment, ayant passé de nombreuses commandes et ayant dépensé le plus d’argent."},"metricInformation":{"value":"{formattedMetricValue}","percentage":"({formattedPercentValue} de votre clientèle)"},"previewSegment":"Aperçu du segment","viewReport":"Voir le rapport"},"CustomerCohortAnalysis":{"Tooltip":{"returned":"{percent} de retours ({customers}) après {month} ({currentMonth})","returnedAcquisitionMonth":"{percent} de retours ({customers}) au cours du mois d’acquisition de la cohorte ({month})","firstOrder":"Cohorte de {month} : {customers}","noOrders":"Aucun retour de client(e) après {month} ({currentMonth})","noOrdersAcquisitionMonth":"Aucun retour de client(e) au cours du mois de la cohorte ({currentMonth})","month":{"one":"{count} mois","other":"{count} mois","many":"{count} mois"},"customer":{"one":"{count} client(e)","other":"{count} client(e)s","many":"{count} client(e)s"}},"summaryRowDate":"Toutes les cohortes","timeDimensionColumnDisplayName":"Cohorte"},"MetricTable":{"subtitle":"% de changement","summary":"Résumé","EmptyState":{"text":"Aucune donnée pour cette sélection"},"FooterRow":{"exportMessage":"Ce rapport affiche jusqu’à {amount} résultats. Pour accéder à tous les résultats, vous pouvez {export}","exportActionText":"exporter le rapport.","message":{"one":"{count} résultat","other":"{count} résultats","many":"{count} résultats"}}},"FunnelChart":{"truncatedSessions":"{metric} tronqués","truncatedSessionsDescription":"Les {metric} ont été dessinés à l’échelle pour mieux représenter l’entonnoir"},"BasketPopover":{"noVariants":"• Aucune variante","productsBoughtTogether":"Produits achetés ensemble ({count})","variantsBoughtTogether":"Variantes achetées ensemble ({count})","variantsCount":{"one":"• {count} variante","other":"• {count} variantes","many":"• {count} variantes"}},"BasketCell":{"hiddenProductCount":"+{count} de plus","none":"Aucun(e)"},"BasketListWithActions":{"actions":"Actions","back":"Retour"},"RowActions":{"previewSegment":"Aperçu du segment"},"usePivotedColumnDisplayName":{"week":{"firstOrder":"Première commande","greaterThanOne":"Semaine {value}"},"month":{"firstOrder":"Première commande","greaterThanOne":"Mois {value}"},"quarter":{"firstOrder":"Première commande","greaterThanOne":"Trimestre {value}"},"year":{"firstOrder":"Première commande","greaterThanOne":"Année {value}"}},"ShopifyQlDateControls":{"dateTextField":{"placeholderDateValue":"AAAA-MM-JJ","sinceTextFieldLabel":"Début","untilTextFieldLabel":"Fin"},"actionButtons":{"apply":"Appliquer","cancel":"Annuler","back":"Retour"},"quickPicksSidebar":{"newBadge":"Nouveau"},"quickPicksDropdown":{"customDateRange":"Personnalisée","label":"Plage de dates"},"compareTo":"Comparer à : {dateRange}","noComparison":"Pas de comparaison","sections":{"bfcm":"Black Friday Cyber Monday","quarters":"Trimestres"}},"useFormatLineChart":{"allTime":"Tout le temps"},"useGetPrimaryMetricBadge":{"webPerformance":{"success":"Bon","attention":"Modéré","critical":"Médiocre"},"fraudRisk":{"attention":"À risque","critical":"Risque élevé"}},"RFMGridLabels":{"xAxis":"Score de récence","yAxis":"Score Fréquence + Valeur monétaire"},"useWebPerformanceAnnotations":{"good":"Bien","poor":"Médiocre","count":{"one":"{count} événement","other":"{count} événements","many":"{count} événements"}},"Polaris":{"Avatar":{"label":"Avatar","labelWithInitials":"Avatar avec les initiales {initials}"},"Autocomplete":{"spinnerAccessibilityLabel":"Chargement","ellipsis":"{content}…"},"Badge":{"PROGRESS_LABELS":{"incomplete":"Incomplet","partiallyComplete":"Partiellement complet","complete":"Complet"},"TONE_LABELS":{"info":"Info","success":"Succès","warning":"Avertissement","attention":"À l’attention de","new":"Nouveau","critical":"Critique","readOnly":"Lecture seule","enabled":"Activé(e)"},"progressAndTone":"{toneLabel} {progressLabel}"},"Banner":{"dismissButton":"Ignorer la notification"},"Button":{"spinnerAccessibilityLabel":"Chargement"},"Common":{"checkbox":"case à cocher","undo":"Annuler","cancel":"Annuler","clear":"Effacer","close":"Fermer","submit":"Soumettre","more":"Plus"},"ContextualSaveBar":{"save":"Enregistrer","discard":"Annuler"},"DataTable":{"sortAccessibilityLabel":"trier {direction} par","navAccessibilityLabel":"Faire défiler le tableau {direction} d’une colonne","totalsRowHeading":"Totaux","totalRowHeading":"Total"},"DatePicker":{"previousMonth":"Afficher le mois précédent, {previousMonthName} {showPreviousYear}","nextMonth":"Afficher le mois suivant, {nextMonth} {nextYear}","today":"Aujourd’hui ","months":{"january":"Janvier","february":"Février","march":"Mars","april":"Avril","may":"Mai","june":"Juin","july":"Juillet","august":"Août","september":"Septembre","october":"Octobre","november":"Novembre","december":"Décembre"},"daysAbbreviated":{"monday":"Lun","tuesday":"Mar","wednesday":"Mer","thursday":"Jeu","friday":"Ven","saturday":"Sam","sunday":"Dim"},"days":{"monday":"Lundi","tuesday":"Mardi","wednesday":"Mercredi","thursday":"Jeudi","friday":"Vendredi","saturday":"Samedi","sunday":"Dimanche"},"start":"Début de la période","end":"Fin de la période"},"ActionMenu":{"RollupActions":{"rollupButton":"Afficher les actions"},"Actions":{"moreActions":"Plus d’actions"}},"Modal":{"iFrameTitle":"balisage du corps","modalWarning":"Ces propriétés obligatoires manquent dans la fenêtre modale : {missingProps}","unsavedChanges":"Modifications non enregistrées"},"Pagination":{"previous":"Précédent","next":"Suivant","pagination":"Pagination"},"ProgressBar":{"negativeWarningMessage":"Les valeurs transmises à l‘accessoire de progression ne doivent pas être négatives. Réinitialisation de {progress} à 0.","exceedWarningMessage":"Les valeurs transmises à l‘accessoire de progression ne doivent pas dépasser 100. Réglage de {progress} à 100."},"ResourceList":{"sortingLabel":"Trier par","defaultItemSingular":"article","defaultItemPlural":"articles","showing":"Affichage de {itemsCount} {resource}","loading":"Chargement de {resource}","selected":"{selectedItemsCount} sélectionné(s)","allItemsSelected":"La totalité des {itemsLength}+ {resourceNamePlural} de votre boutique est sélectionnée","selectAllItems":"Sélectionner la totalité des {itemsLength}+ {resourceNamePlural} de votre boutique","emptySearchResultTitle":"Aucun {resourceNamePlural} trouvé","emptySearchResultDescription":"Essayez de modifier les filtres ou le terme de recherche","selectButtonText":"Sélectionner","a11yCheckboxDeselectAllSingle":"Désélectionner {resourceNameSingular}","a11yCheckboxSelectAllSingle":"Sélectionner {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"Désélectionner tous les {itemsLength} {resourceNamePlural}","a11yCheckboxSelectAllMultiple":"Sélectionner tous les {itemsLength} {resourceNamePlural}","Item":{"actionsDropdownLabel":"Actions pour {accessibilityLabel}","actionsDropdown":"Menu déroulant des actions","viewItem":"Afficher les détails pour {itemName}"},"BulkActions":{"actionsActivatorLabel":"Actions","moreActionsActivatorLabel":"Plus d’actions"},"showingTotalCount":"Affichage de {itemsCount} sur {totalItemsCount} {resource}","allFilteredItemsSelected":"La totalité des {itemsLength}+ {resourceNamePlural} de ce filtre est sélectionnée","selectAllFilteredItems":"Sélectionner tous les {itemsLength} + {resourceNamePlural} de ce filtre"},"SkeletonPage":{"loadingLabel":"Chargement de la page"},"Tabs":{"toggleTabsLabel":"Plus de vues","newViewAccessibilityLabel":"Créer une nouvelle vue","newViewTooltip":"Créer une vue","Tab":{"rename":"Renommer la vue","duplicate":"Dupliquer la vue","edit":"Modifier la vue","editColumns":"Modifier les colonnes","delete":"Supprimer la vue","copy":"Copie de {name}","deleteModal":{"title":"Supprimer la vue ?","description":"Cette opération est irréversible. La vue {viewName} ne sera plus disponible dans votre interface administrateur.","cancel":"Annuler","delete":"Supprimer la vue"}},"RenameModal":{"title":"Renommer la vue","label":"Nom","cancel":"Annuler","create":"Enregistrer","errors":{"sameName":"Une vue portant ce nom existe déjà. Veuillez choisir un nom différent."}},"DuplicateModal":{"title":"Dupliquer la vue","label":"Nom","cancel":"Annuler","create":"Créer une vue","errors":{"sameName":"Une vue portant ce nom existe déjà. Veuillez choisir un nom différent."}},"CreateViewModal":{"title":"Créer une nouvelle vue","label":"Nom","cancel":"Annuler","create":"Créer une vue","errors":{"sameName":"Une vue portant ce nom existe déjà. Veuillez choisir un nom différent."}}},"Tag":{"ariaLabel":"Supprimer {children}"},"TextField":{"characterCount":"{count} caractères","characterCountWithMaxLength":"Caractères utilisés : {count} sur {limit}"},"TopBar":{"toggleMenuLabel":"Activer le menu","SearchField":{"clearButtonLabel":"Effacer","search":"Rechercher"}},"MediaCard":{"popoverButton":"Actions","dismissButton":"Ignorer"},"VideoThumbnail":{"playButtonA11yLabel":{"default":"Lire la vidéo","defaultWithDuration":"Lire une vidéo d’une durée de {duration}","duration":{"hours":{"other":{"only":"{hourCount} heures","andMinutes":"{hourCount} heures et {minuteCount} minutes","andMinute":"{hourCount} heures et {minuteCount} minute","minutesAndSeconds":"{hourCount} heures, {minuteCount} minutes et {secondCount} secondes","minutesAndSecond":"{hourCount} heures, {minuteCount} minutes et {secondCount} seconde","minuteAndSeconds":"{hourCount} heures, {minuteCount} minute et {secondCount} secondes","minuteAndSecond":"{hourCount} heures, {minuteCount} minute et {secondCount} seconde","andSeconds":"{hourCount} heures et {secondCount} secondes","andSecond":"{hourCount} heures et {secondCount} seconde"},"one":{"only":"{hourCount} heure","andMinutes":"{hourCount} heure et {minuteCount} minutes","andMinute":"{hourCount} heure et {minuteCount} minute","minutesAndSeconds":"{hourCount} heure, {minuteCount} minutes et {secondCount} secondes","minutesAndSecond":"{hourCount} heure, {minuteCount} minutes et {secondCount} seconde","minuteAndSeconds":"{hourCount} heure, {minuteCount} minute et {secondCount} secondes","minuteAndSecond":"{hourCount} heure, {minuteCount} minute et {secondCount} seconde","andSeconds":"{hourCount} heure et {secondCount} secondes","andSecond":"{hourCount} heure et {secondCount} seconde"}},"minutes":{"other":{"only":"{minuteCount} minutes","andSeconds":"{minuteCount} minutes et {secondCount} secondes","andSecond":"{minuteCount} minutes et {secondCount} seconde"},"one":{"only":"{minuteCount} minute","andSeconds":"{minuteCount} minute et {secondCount} secondes","andSecond":"{minuteCount} minute et {secondCount} seconde"}},"seconds":{"other":"{secondCount} secondes","one":"{secondCount} seconde","many":"{secondCount} secondes"}}}},"Loading":{"label":"Barre de chargement de la page"},"TooltipOverlay":{"accessibilityLabel":"Infobulle : {label}"},"Page":{"Header":{"rollupActionsLabel":"Afficher les actions pour {title}","pageReadyAccessibilityLabel":"{title}. Cette page est prête"}},"ActionList":{"SearchField":{"clearButtonLabel":"Effacer","search":"Rechercher","placeholder":"Rechercher des actions"}},"AlphaTable":{"TableRowActions":{"heading":"Actions","activatorAccessibilityLabel":"Ouvrir les actions de la rangée","activatorLabel":"Actions"},"TableRowGroups":{"heading":"Activer les groupes de lignes","toggle":"Activer la visibilité de ce groupe de lignes"},"Sorting":{"sortAscending":"Trier ce tableau par {heading} dans l’ordre croissant","sortDescending":"Trier ce tableau par {heading} dans l’ordre décroissant"},"Selection":{"select":"Sélectionner {id}","selectPage":"Sélectionner les {count} sur la page","selectAll":"Sélectionner les plus de {count} dans la boutique","selectAllWithTotal":"Sélectionner la totalité des {total} dans la boutique","selectionHeader":"Sélection","unselectAll":"Tout désélectionner","selectedPage":"{count} sélectionné(s)","selectedAll":"Tous les plus de {count} sélectionnés dans la boutique","selectedAllWithTotal":"Tous les {total} sélectionnés dans la boutique","selectedSome":"{count}/{total} sélectionné(s)"},"BulkActions":{"activatorLabel":"Actions"},"TableCell":{"spansColumns":"couvre {count} colonnes"}},"SortPopover":{"ariaLabel":"Trier les résultats","tooltip":"Trier","title":"Trier par","sorting":{"asc":"Croissant","desc":"Décroissant","az":"A-Z","za":"Z-A"}}},"DistributionChart":{"noData":"Aucune donnée disponible","title":"Graphique de répartition","description":"Un graphique à barres illustrant les données de répartition : {data}.{percentiles}","highlightedPercentiles":" Percentiles remarquables : {percentiles}."},"PerformanceEventType":{"APP_INSTALL":{"title":"Application installée","content":"L’application {appName} a bien été installée"},"APP_UNINSTALL":{"title":"Application désinstallée","content":"L’application {appName} a bien été désinstallée"},"THEME_LIVE_EDIT":{"title":"Thème utilisé modifié","content":{"one":"Thème {themeName} modifié {count} fois","other":"Thème {themeName} modifié {count} fois","many":"Thème {themeName} modifié {count} fois"}},"THEME_PUBLICATION":{"title":"Thème publié","content":"Thème {themeName} publié"}}}')
-  , DK = {
-    AnalyticsUIComponents: jK
-}
-  , OK = JSON.parse(`{"BenchmarksSummary":{"shopValue":"Il tuo negozio","benchmarksMedian":"Mediana di riferimento","benchmarks25thPercentile":"25° percentile","benchmarks75thPercentile":"75° percentile","benchmarksTooltip":"Esegui uno studio comparativo della performance del tuo negozio paragonandolo con negozi simili, in base ai prodotti venduti negli ultimi 30 giorni, al paese del mercato primario e al volume degli ordini.","missingData":{"title":"Nessun indice di riferimento","content":"Dati insufficienti da negozi simili"}},"CloseButton":{"delete":"Elimina metriche"},"MetricCardEmpty":{"noResults":"Nessun dato trovato per questo intervallo di date","noResultsCompact":"Nessun dato","incorrectCardSize":"Per vedere i dati ridimensiona questa carta"},"MetricCardError":{"error":"Impossibile caricare i dati"},"MetricLayout":{"ReportLinkAccessibilityLabel":"Visualizza report {reportTitle}"},"HorizontalNavigation":{"Forward":"Avanti","Backward":"Indietro"},"TimeframePicker":{"today":"Oggi","todayHelp":"Rispetto a ieri fino all'ora attuale","last7days":"7 giorni","last7daysHelp":"Rispetto ai 7 giorni precedenti","last30days":"30 giorni","last30daysHelp":"Rispetto ai 30 giorni precedenti","last90days":"90 giorni","last90daysHelp":"Rispetto ai 90 giorni precedenti","last365days":"365 giorni","last365daysHelp":"Rispetto ai 365 giorni precedenti"},"date":{"range":"{startDate}–{endDate}","sameMonthRange":"{startDay} – {endDay} {month} {year}","months":{"1":"Gen","2":"Feb","3":"Mar","4":"Apr","5":"Mag","6":"Giu","7":"Lug","8":"Ago","9":"Set","10":"Ott","11":"Nov","12":"Dic"},"title":{"today":"Oggi","yesterday":"Ieri","last7days":"Ultimi 7 giorni","last30days":"Ultimi 30 giorni","last90days":"Ultimi 90 giorni","last365days":"Ultimi 365 giorni","last12months":"Ultimi 12 mesi","this_week":"Questa settimana","this_month":"Questo mese","this_quarter":"Questo trimestre","this_year":"Quest'anno","last_week":"Settimana scorsa","last_month":"Mese scorso","last_quarter":"Trimestre scorso","last_year":"Anno scorso","weekToDate":"Settimana corrente","monthToDate":"Mese corrente","quarterToDate":"Trimestre corrente","yearToDate":"Anno corrente","bfcm":"Black Friday Cyber Monday {year}","quarter":"T{quarterNumber} {year}","previous_period":"Periodo precedente","previous_second":"Secondo precedente","previous_minute":"Minuto precedente","previous_hour":"Ora precedente","previous_day":"Giorno precedente","previous_week":"Settimana precedente","previous_month":"Mese precedente","previous_quarter":"Trimestre precedente","previous_year":"Anno precedente","previous_year_match_day_of_week":"Anno precedente (stesso giorno della settimana)"}},"MetricAnnotations":{"learnMoreLinkText":"Maggiori informazioni","sessionsBackfill2022":{"label":"Inizio dati","description":"In un quadro di miglioramento, ora i dati per le sessioni iniziano da ottobre 2022."},"checkoutConversionRate2022":{"label":"Aggiornamento misurazioni","description":"In un quadro di miglioramento, ora i dati per le sessioni iniziano da ottobre 2022. A partire sempre da tale data, abbiamo adeguato le seguenti metriche: {affectedMetrics}.","banner":{"description":"Abbiamo migliorato la modalità di conteggio di avviamento di un check-out. In questo modo conteggeremo più check-out avviati. Di conseguenza, è probabile che le seguenti metriche siano cambiate: {affectedMetrics}. Per rendere possibili confronti storici, abbiamo regolato tali metriche a partire da ottobre 2022."}}},"TrendIndicator":{"IncreaseOf":"Aumento di {change}","DecreaseOf":"Diminuzione di {change}","NoChange":"Nessuna variazione"},"TimeFormatter":{"DayOrLonger":"{timeInDay} {timeInHour}","LessThanDay":"{timeInHour} {timeInMinute}","day":{"one":"{amount} giorno","other":"{amount} giorni","many":"{amount} giorni"},"hour":{"one":"{amount} ora","other":"{amount} ore","many":"{amount} ore"},"minute":{"one":"{amount} minuto","other":"{amount} minuti","many":"{amount} minuti"}},"useFormattedValue":{"none":"Nessuna","boolean":{"true":"Sì","false":"No"},"quarters":{"short":{"q1":"T1","q2":"T2","q3":"T3","q4":"T4"},"long":{"q1":"T1 {year}","q2":"T2 {year}","q3":"T3 {year}","q4":"T4 {year}"}},"DAY_OF_WEEK":{"short":{"0":"Lun","1":"Mar","2":"Mer","3":"Gio","4":"Ven","5":"Sab","6":"Dom"},"long":{"0":"Lunedì","1":"Martedì","2":"Mercoledì","3":"Giovedì","4":"Venerdì","5":"Sabato","6":"Domenica"}}},"useFormatHistogram":{"days":{"one":"{count} giorno","other":"{count} giorni","many":"{count} giorni"}},"TooltipContent":{"fieldSuffixes":{"product_title":{"one":"{count} prodotto","other":"{count} prodotti","many":"{count} prodotti"},"product_variant_title":{"one":"{count} variante di prodotto","other":"{count} varianti di prodotto","many":"{count} varianti di prodotto"},"product_variant_id":{"one":"{count} variante di prodotto","other":"{count} varianti di prodotto","many":"{count} varianti di prodotto"},"product_variant_sku":{"one":"{count} variante di prodotto","other":"{count} varianti di prodotto","many":"{count} varianti di prodotto"}}},"popover":{"learnMore":"Maggiori informazioni"},"useFormatLineChartRelational":{"percentileLegend":"25°-75° percentile","median":"Mediana di riferimento","missingData":{"title":"Nessun indice di riferimento","content":"Dati non sufficienti da negozi simili"},"yourTotals":"I tuoi totali"},"RFMGroups":{"previously_loyal":{"description":"Clienti senza acquisti recenti, ma con una cronologia molto solida di ordini e spesa.","goal":"Obiettivo: spostare i clienti nel segmento \\"Fedeli\\""},"at_risk":{"description":"Clienti senza acquisti recenti, ma con una cronologia solida di ordini e spesa.","goal":"Obiettivo: spostare i clienti nel segmento \\"Fedeli\\" o \\"Richiedono attenzione\\""},"dormant":{"description":"Clienti senza ordini recenti, con ordini poco frequenti e spesa ridotta.","goal":"Obiettivo: spostare i clienti nel segmento \\"Quasi persi\\""},"loyal":{"description":"Clienti senza acquisti recenti, ma con una cronologia molto solida di ordini e spesa.","goal":"Obiettivo: spostare i clienti nel segmento \\"Campioni\\""},"needs_attention":{"description":"Clienti che ultimamente hanno acquistato meno, ordinano occasionalmente e spendono cifre modeste nel tuo negozio.","goal":"Obiettivo: spostare i clienti nel segmento \\"Fedeli\\" o \\"Attivi\\""},"almost_lost":{"description":"Clienti senza acquisti recenti, con meno ordini e spesa inferiore.","goal":"Obiettivo: spostare i clienti nel segmento \\"Attivi\\" o \\"Promettenti\\""},"promising":{"description":"Clienti con acquisti recenti, pochi ordini e spesa ridotta.","goal":"Obiettivo: spostare i clienti nel segmento \\"Attivi\\""},"active":{"description":"Clienti con acquisti recenti, qualche ordine e spesa moderata.","goal":"Obiettivo: spostare i clienti nel segmento \\"Campioni\\" o \\"Fedeli\\""},"new":{"description":"Clienti con acquisti molto recenti, pochi ordini e spesa ridotta.","goal":"Obiettivo: spostare i clienti nel segmento \\"Attivi\\""},"champions":{"description":"Clienti con acquisti molto recenti, molti ordini e la spesa più elevata."},"metricInformation":{"value":"{formattedMetricValue}","percentage":"({formattedPercentValue} della clientela)"},"previewSegment":"Anteprima segmento","viewReport":"Visualizza report"},"CustomerCohortAnalysis":{"Tooltip":{"returned":"Il {percent} ({customers}) è tornato dopo {month} ({currentMonth})","returnedAcquisitionMonth":"{percent} ({customers}) è tornato ad acquistare nel mese di acquisizione del campione ({month})","firstOrder":"{month} campione: {customers}","noOrders":"Nessun cliente è tornato dopo {month} ({currentMonth})","noOrdersAcquisitionMonth":"Nessun cliente è tornato ad acquistare nel mese di acquisizione del campione ({currentMonth})","month":{"one":"{count} mese","other":"{count} mesi","many":"{count} mesi"},"customer":{"one":"{count} cliente","other":"{count} clienti","many":"{count} clienti"}},"summaryRowDate":"Tutte le coorti","timeDimensionColumnDisplayName":"Coorte"},"MetricTable":{"subtitle":"% variazione","summary":"Riepilogo","EmptyState":{"text":"Non ci sono dati per questa selezione"},"FooterRow":{"exportMessage":"Questo report mostra fino a {amount} risultati. Per accedere a tutti i risultati, puoi {export}","exportActionText":"esportare il report.","message":{"one":"{count} risultato","other":"{count} risultati","many":"{count} risultati"}}},"FunnelChart":{"truncatedSessions":"{metric} troncate","truncatedSessionsDescription":"Le {metric} sono state ridimensionate per rappresentare meglio il funnel"},"BasketPopover":{"noVariants":"• Nessuna variante","productsBoughtTogether":"Prodotti acquistati insieme ({count})","variantsBoughtTogether":"Varianti acquistate insieme ({count})","variantsCount":{"one":"• {count} variante","other":"• {count} varianti","many":"• {count} varianti"}},"BasketCell":{"hiddenProductCount":"+ {count}","none":"Nessuno"},"BasketListWithActions":{"actions":"Azioni","back":"Indietro"},"RowActions":{"previewSegment":"Anteprima segmento"},"usePivotedColumnDisplayName":{"week":{"firstOrder":"Primo ordine","greaterThanOne":"Settimana {value}"},"month":{"firstOrder":"Primo ordine","greaterThanOne":"Mese {value}"},"quarter":{"firstOrder":"Primo ordine","greaterThanOne":"Trimestre {value}"},"year":{"firstOrder":"Primo ordine","greaterThanOne":"Anno {value}"}},"ShopifyQlDateControls":{"dateTextField":{"placeholderDateValue":"AAAA-MM-GG","sinceTextFieldLabel":"Inizio","untilTextFieldLabel":"Fine"},"actionButtons":{"apply":"Applica","cancel":"Annulla","back":"Indietro"},"quickPicksSidebar":{"newBadge":"Novità"},"quickPicksDropdown":{"customDateRange":"Personalizzato","label":"Intervallo di date"},"compareTo":"Confronta con: {dateRange}","noComparison":"Nessun confronto","sections":{"bfcm":"Black Friday Cyber Monday","quarters":"Trimestri"}},"useFormatLineChart":{"allTime":"Sempre"},"useGetPrimaryMetricBadge":{"webPerformance":{"success":"Buono","attention":"Medio","critical":"Mediocre"},"fraudRisk":{"attention":"A rischio","critical":"Rischio elevato"}},"RFMGridLabels":{"xAxis":"Punteggio di ricorrenza","yAxis":"Punteggio di Frequenza + Valore monetario"},"useWebPerformanceAnnotations":{"good":"Buono","poor":"Mediocre","count":{"one":"{count} evento","other":"{count} eventi","many":"{count} eventi"}},"Polaris":{"Avatar":{"label":"Avatar","labelWithInitials":"Avatar con iniziali {initials}"},"Autocomplete":{"spinnerAccessibilityLabel":"Caricamento","ellipsis":"{content}…"},"Badge":{"PROGRESS_LABELS":{"incomplete":"Incompleto","partiallyComplete":"Parzialmente completo","complete":"Completo"},"TONE_LABELS":{"info":"Info","success":"Operazione riuscita","warning":"Avviso","attention":"Attenzione","new":"Nuovo","critical":"Critico","readOnly":"Sola lettura","enabled":"Abilitato"},"progressAndTone":"{toneLabel} {progressLabel}"},"Banner":{"dismissButton":"Ignora notifica"},"Button":{"spinnerAccessibilityLabel":"Caricamento"},"Common":{"checkbox":"casella di controllo","undo":"Annulla","cancel":"Annulla","clear":"Cancella","close":"Chiudi","submit":"Invia","more":"Altro"},"ContextualSaveBar":{"save":"Salva","discard":"Rimuovi"},"DataTable":{"sortAccessibilityLabel":"ordina {direction} per","navAccessibilityLabel":"Scorri la tabella {direction} di una colonna","totalsRowHeading":"Totali","totalRowHeading":"Totale"},"DatePicker":{"previousMonth":"Mostra il mese precedente, {previousMonthName} {showPreviousYear}","nextMonth":"Mostra il mese successivo, {nextMonth} {nextYear}","today":"Oggi ","months":{"january":"Gennaio","february":"Febbraio","march":"Marzo","april":"Aprile","may":"Maggio","june":"Giugno","july":"Luglio","august":"Agosto","september":"Settembre","october":"Ottobre","november":"Novembre","december":"Dicembre"},"daysAbbreviated":{"monday":"Lun","tuesday":"Mar","wednesday":"Mer","thursday":"Gio","friday":"Ven","saturday":"Sab","sunday":"Dom"},"days":{"monday":"Lunedì","tuesday":"Martedì","wednesday":"Mercoledì","thursday":"Giovedì","friday":"Venerdì","saturday":"Sabato","sunday":"Domenica"},"start":"Inizio intervallo","end":"Fine intervallo"},"ActionMenu":{"RollupActions":{"rollupButton":"Visualizza azioni"},"Actions":{"moreActions":"Altre azioni"}},"Modal":{"iFrameTitle":"markup del testo","modalWarning":"Le seguenti proprietà necessarie mancano da Modal: {missingProps}","unsavedChanges":"Modifiche non salvate"},"Pagination":{"previous":"Indietro","next":"Avanti","pagination":"Impaginazione"},"ProgressBar":{"negativeWarningMessage":"I valori passati alle proprietà di progresso non devono essere negativi. Ripristino di {progress} su 0.","exceedWarningMessage":"I valori passati alle proprietà di progresso non devono essere superiori a 100. Impostazione di {progress} su 100."},"ResourceList":{"sortingLabel":"Ordina per","defaultItemSingular":"articolo","defaultItemPlural":"articoli","showing":"Mostrando {itemsCount} {resource}","loading":"Caricamento di {resource}","selected":"{selectedItemsCount} selezionati","allItemsSelected":"Tutti i {itemsLength}+ {resourceNamePlural} nel tuo negozio sono selezionati","selectAllItems":"Seleziona tutti i {itemsLength}+ {resourceNamePlural} nel tuo negozio","emptySearchResultTitle":"Nessun {resourceNamePlural} trovato","emptySearchResultDescription":"Prova a cambiare i filtri o il termine di ricerca","selectButtonText":"Seleziona","a11yCheckboxDeselectAllSingle":"Deseleziona {resourceNameSingular}","a11yCheckboxSelectAllSingle":"Seleziona {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"Deseleziona tutti i {itemsLength} {resourceNamePlural}","a11yCheckboxSelectAllMultiple":"Seleziona tutti i {itemsLength} {resourceNamePlural}","Item":{"actionsDropdownLabel":"Azioni per {accessibilityLabel}","actionsDropdown":"Menu a discesa delle azioni","viewItem":"Visualizza dettagli per {itemName}"},"BulkActions":{"actionsActivatorLabel":"Azioni","moreActionsActivatorLabel":"Altre azioni"},"showingTotalCount":"Mostrando {itemsCount} di {totalItemsCount} {resource}","allFilteredItemsSelected":"Tutti i {itemsLength}+ {resourceNamePlural} in questo filtro sono selezionati","selectAllFilteredItems":"Seleziona tutti i {resourceNamePlural} {itemsLength}+ in questo filtro"},"SkeletonPage":{"loadingLabel":"Caricamento della pagina"},"Tabs":{"toggleTabsLabel":"Altre viste","newViewAccessibilityLabel":"Crea nuova vista","newViewTooltip":"Crea vista","Tab":{"rename":"Rinomina vista","duplicate":"Duplica vista","edit":"Modifica vista","editColumns":"Modifica colonne","delete":"Elimina vista","copy":"Copia di {name}","deleteModal":{"title":"Eliminare la vista?","description":"L'operazione non può essere annullata. La vista {viewName} non sarà più disponibile nel pannello di controllo.","cancel":"Annulla","delete":"Elimina vista"}},"RenameModal":{"title":"Rinomina vista","label":"Nome","cancel":"Annulla","create":"Salva","errors":{"sameName":"Esiste già una vista con questo nome. Scegli un nome diverso."}},"DuplicateModal":{"title":"Duplica vista","label":"Nome","cancel":"Annulla","create":"Crea vista","errors":{"sameName":"Esiste già una vista con questo nome. Scegli un nome diverso."}},"CreateViewModal":{"title":"Crea nuova vista","label":"Nome","cancel":"Annulla","create":"Crea vista","errors":{"sameName":"Esiste già una vista con questo nome. Scegli un nome diverso."}}},"Tag":{"ariaLabel":"Rimuovi {children}"},"TextField":{"characterCount":"{count} caratteri","characterCountWithMaxLength":"Usati {count} caratteri di {limit}"},"TopBar":{"toggleMenuLabel":"Attiva/disattiva menu","SearchField":{"clearButtonLabel":"Cancella","search":"Ricerca"}},"MediaCard":{"popoverButton":"Azioni","dismissButton":"Ignora"},"VideoThumbnail":{"playButtonA11yLabel":{"default":"Riproduci video","defaultWithDuration":"Riproduci video della lunghezza di {duration}","duration":{"hours":{"other":{"only":"{hourCount} ore","andMinutes":"{hourCount} ore e {minuteCount} minuti","andMinute":"{hourCount} ore e {minuteCount} minuto","minutesAndSeconds":"{hourCount} ore, {minuteCount} minuti e {secondCount} secondi","minutesAndSecond":"{hourCount} ore, {minuteCount} minuti e {secondCount} secondo","minuteAndSeconds":"{hourCount} ore, {minuteCount} minuto e {secondCount} secondi","minuteAndSecond":"{hourCount} ore, {minuteCount} minuto e {secondCount} secondo","andSeconds":"{hourCount} ore e {secondCount} secondi","andSecond":"{hourCount} ore e {secondCount} secondo"},"one":{"only":"{hourCount} ora","andMinutes":"{hourCount} ora e {minuteCount} minuti","andMinute":"{hourCount} ora e {minuteCount} minuto","minutesAndSeconds":"{hourCount} ora, {minuteCount} minuti e {secondCount} secondi","minutesAndSecond":"{hourCount} ora, {minuteCount} minuti e {secondCount} secondo","minuteAndSeconds":"{hourCount} ora, {minuteCount} minuto e {secondCount} secondi","minuteAndSecond":"{hourCount} ora, {minuteCount} minuto e {secondCount} secondo","andSeconds":"{hourCount} ora e {secondCount} secondi","andSecond":"{hourCount} ora e {secondCount} secondo"}},"minutes":{"other":{"only":"{minuteCount} minuti","andSeconds":"{minuteCount} minuti e {secondCount} secondi","andSecond":"{minuteCount} minuti e {secondCount} secondo"},"one":{"only":"{minuteCount} minuto","andSeconds":"{minuteCount} minuto e {secondCount} secondi","andSecond":"{minuteCount} minuto e {secondCount} secondo"}},"seconds":{"other":"{secondCount} secondi","one":"{secondCount} secondo","many":"{secondCount} secondi"}}}},"Loading":{"label":"Barra di caricamento della pagina"},"TooltipOverlay":{"accessibilityLabel":"Suggerimento: {label}"},"Page":{"Header":{"rollupActionsLabel":"Visualizza azioni per {title}","pageReadyAccessibilityLabel":"{title}. Questa pagina è pronta"}},"ActionList":{"SearchField":{"clearButtonLabel":"Cancella","search":"Ricerca","placeholder":"Cerca azioni"}},"AlphaTable":{"TableRowActions":{"heading":"Azioni","activatorAccessibilityLabel":"Apri azioni per riga","activatorLabel":"Azioni"},"Selection":{"select":"Seleziona {id}","selectPage":"Seleziona tutti i {count} elementi nella pagina","selectAll":"Seleziona tutti i {count} e più elementi in questo negozio","selectAllWithTotal":"Seleziona tutti i {total} elementi in questo negozio","unselectAll":"Deseleziona tutto","selectedPage":"{count} selezionati","selectedAll":"Tutti i {count} e più elementi selezionati nel negozio","selectedAllWithTotal":"Tutti i {total} elementi selezionati nel negozio","selectionHeader":"Selezione","selectedSome":"{count}/{total} selezionati"},"TableRowGroups":{"heading":"Mostra/nascondi gruppi di righe","toggle":"Attiva/disattiva visibilità di questo gruppo di righe"},"Sorting":{"sortAscending":"Ordina questa tabella in ordine crescente per {heading}","sortDescending":"Ordina questa tabella in ordine decrescente per {heading}"},"TableCell":{"spansColumns":"si estende su {count} colonne"},"BulkActions":{"activatorLabel":"Azioni"}},"SortPopover":{"ariaLabel":"Ordina i risultati","tooltip":"Ordina","title":"Ordina per","sorting":{"asc":"Ascendente","desc":"Discendente","az":"A-Z","za":"Z-A"}}},"DistributionChart":{"noData":"Nessun dato disponibile","title":"Grafico di distribuzione","description":"Grafico a barre che mostra i dati della distribuzione: {data}.{percentiles}","highlightedPercentiles":" I percentili degni di nota includono: {percentiles}."},"PerformanceEventType":{"APP_INSTALL":{"title":"App installata","content":"{appName} installata"},"APP_UNINSTALL":{"title":"App disinstallata","content":"{appName} disinstallata"},"THEME_LIVE_EDIT":{"title":"Tema attivo modificato","content":{"one":"Tema {themeName} modificato {count} volte","other":"Tema {themeName} modificato {count} volte","many":"Tema {themeName} modificato {count} volte"}},"THEME_PUBLICATION":{"title":"Tema pubblicato","content":"Tema {themeName} pubblicato"}}}`)
-  , BK = {
-    AnalyticsUIComponents: OK
-}
-  , zK = JSON.parse('{"BenchmarksSummary":{"shopValue":"あなたのストア","benchmarksMedian":"ベンチマーク中央値","benchmarks25thPercentile":"25パーセンタイル","benchmarks75thPercentile":"75パーセンタイル","benchmarksTooltip":"過去30日間に販売された商品、主要マーケットの国、および注文量に基づき、類似ストアに対するあなたのストアのパフォーマンスをベンチマークします。","missingData":{"title":"ベンチマークなし","content":"類似ストアのデータが不十分です"}},"CloseButton":{"delete":"指標を削除"},"MetricCardEmpty":{"noResults":"この日付範囲に該当するデータは見つかりませんでした","noResultsCompact":"データなし","incorrectCardSize":"データを表示するには、このカードのサイズを変更します"},"MetricCardError":{"error":"データを読み込めませんでした"},"MetricLayout":{"ReportLinkAccessibilityLabel":"{reportTitle}レポートを表示"},"HorizontalNavigation":{"Forward":"進む","Backward":"戻る"},"TimeframePicker":{"today":"今日","todayHelp":"昨日から現在の時間までとの比較","last7days":"7日","last7daysHelp":"前の7日間と比較","last30days":"30日","last30daysHelp":"前の30日間と比較","last90days":"90日","last90daysHelp":"過去90日間と比較","last365days":"365日","last365daysHelp":"前の365日間と比較"},"date":{"range":"{startDate}～{endDate}","sameMonthRange":"{year}年{month}月{startDay}日～{endDay}日","months":{"1":"1月","2":"2月","3":"3月","4":"4月","5":"5月","6":"6月","7":"7月","8":"8月","9":"9月","10":"10月","11":"11月","12":"12月"},"title":{"today":"今日","yesterday":"昨日","this_week":"今週","this_month":"今月","this_quarter":"今四半期","this_year":"今年","last_week":"先週","last_month":"先月","last_quarter":"前四半期","last_year":"昨年","bfcm":"{year}のBFCM","quarter":"第{quarterNumber}四半期 ({year})","previous_period":"前期","previous_second":"前の秒","previous_minute":"前の分","previous_hour":"前の時間","previous_day":"前日","previous_week":"前週","previous_month":"前月","previous_quarter":"前四半期","previous_year":"前年","last7days":"過去7日間","last30days":"過去30日間","last90days":"過去90日間","last365days":"過去365日間","last12months":"過去12か月","weekToDate":"今週頭から今日まで","monthToDate":"今月頭から今日まで","quarterToDate":"四半期頭から今日まで","yearToDate":"今年頭から今日まで","previous_year_match_day_of_week":"去年 (曜日に一致する)"}},"MetricAnnotations":{"learnMoreLinkText":"詳しくはこちら","sessionsBackfill2022":{"label":"データが利用可能になります","description":"データ改善の一貫として、セッションのデータが2022年10月からスタートします。"},"checkoutConversionRate2022":{"label":"測定の更新","description":"データ改善の一貫として、セッションのデータが2022年10月からスタートします。その日以降、さらに、次の指標を調整しました：{affectedMetrics}。","banner":{"description":"チェックアウト開始時の計算方法を改善したため、開始されたチェックアウト数をより多く数えることになります。その結果、次の指標が変化している可能性があります：{affectedMetrics}。過去データの比較を可能にするため、これらの指標を2022年10月から調整しました。"}}},"TrendIndicator":{"IncreaseOf":"{change}の増加","DecreaseOf":"{change}の減少","NoChange":"変化なし"},"TimeFormatter":{"DayOrLonger":"{timeInDay} {timeInHour}","LessThanDay":"{timeInHour} {timeInMinute}","day":{"one":"{amount}日","other":"{amount}日"},"hour":{"one":"{amount}時間","other":"{amount}時間"},"minute":{"one":"{amount}分","other":"{amount}分"}},"useFormattedValue":{"none":"なし","boolean":{"true":"はい","false":"いいえ"},"quarters":{"short":{"q1":"年第1四半期","q2":"年第2四半期","q3":"年第3四半期","q4":"年第4四半期"},"long":{"q1":"{year}年第1四半期","q2":"{year}年第2四半期","q3":"{year}年第3四半期","q4":"{year}年第4四半期"}},"DAY_OF_WEEK":{"short":{"0":"月","1":"火","2":"水","3":"木","4":"金","5":"土","6":"日"},"long":{"0":"月曜日","1":"火曜日","2":"水曜日","3":"木曜日","4":"金曜日","5":"土曜日","6":"日曜日"}}},"useFormatHistogram":{"days":{"one":"{count}日","other":"{count}日"}},"TooltipContent":{"fieldSuffixes":{"product_title":{"one":"{count}個の商品","other":"{count}個の商品"},"product_variant_title":{"one":"{count}個の商品バリエーション","other":"{count}個の商品バリエーション"},"product_variant_id":{"one":"{count}個の商品バリエーション","other":"{count}個の商品バリエーション"},"product_variant_sku":{"one":"{count}個の商品バリエーション","other":"{count}個の商品バリエーション"}}},"popover":{"learnMore":"詳しくはこちら"},"useFormatLineChartRelational":{"percentileLegend":"25～75パーセンタイル","median":"ベンチマーク中央値","missingData":{"title":"ベンチマークなし","content":"類似ストアのデータが不十分です"},"yourTotals":"合計金額"},"RFMGroups":{"previously_loyal":{"description":"最近の購入がないものの、過去の注文と支出が非常に多いお客様。","goal":"目的：お客様を「ロイヤル」に移動させる"},"at_risk":{"description":"最近の購入がないものの、過去の注文と支出が多いお客様。","goal":"目的：お客様を「ロイヤル」または「注意が必要」に移動させる"},"dormant":{"description":"最近の注文がなく、注文がまれで、支出が少ないお客様。","goal":"目的：お客様を「ほぼ離脱」に移動させる"},"loyal":{"description":"最近の購入がないものの、過去の注文と支出が非常に多いお客様。","goal":"目的：お客様を「チャンピオン」に移動させる"},"needs_attention":{"description":"最近の購入が少ないものの、時々注文しており、ストアでの支出が中程度のお客様。","goal":"目的：お客様を「ロイヤル」または「アクティブ」に移動させる"},"almost_lost":{"description":"最近の購入がなく、注文数が少なく、支出が少ないお客様。","goal":"目的：お客様を「アクティブ」または「有望」に移動させる"},"promising":{"description":"最近の購入があり、注文数が少なく、支出が少ないお客様。","goal":"目的：お客様を「アクティブ」に移動させる"},"active":{"description":"最近の購入があり、注文数が一定程度で、支出が中程度のお客様。","goal":"目的：お客様を「チャンピオン」または「ロイヤル」に移動させる"},"new":{"description":"ごく最近の購入があり、注文数が少なく、支出が少ないお客様。","goal":"目的：お客様を「アクティブ」に移動させる"},"champions":{"description":"ごく最近の購入があり、注文数が多く、支出が非常に多いお客様。"},"metricInformation":{"value":"{formattedMetricValue}","percentage":"(顧客ベースの{formattedPercentValue})"},"previewSegment":"セグメントをプレビューする","viewReport":"レポートを表示"},"CustomerCohortAnalysis":{"Tooltip":{"returned":"{month} ({currentMonth}) 後に{percent} ({customers}) が戻ってきました","returnedAcquisitionMonth":"コホートの取得月 ({month}) に {percent} ({customers}) が戻ってきました","firstOrder":"{month}のコホート：{customers}","noOrders":"{month} ({currentMonth}) 後に戻ってきたお客様はいません","noOrdersAcquisitionMonth":"コホートの取得月 ({currentMonth}) に戻ってきたお客様はいません","month":{"one":"{count}か月","other":"{count}か月"},"customer":{"one":"{count}人のお客様","other":"{count}人のお客様"}},"summaryRowDate":"すべてのコーホート","timeDimensionColumnDisplayName":"コホート"},"MetricTable":{"subtitle":"%変化","summary":"サマリー","EmptyState":{"text":"この選択にはデータがありません"},"FooterRow":{"exportMessage":"このレポートには{amount}件までの結果が表示されます。すべての結果にアクセスするには、{export}します。","exportActionText":"レポートをエクスポート","message":{"one":"{count}件の結果","other":"{count}件の結果"}}},"FunnelChart":{"truncatedSessions":"切り詰められた{metric}","truncatedSessionsDescription":"{metric}はファネルをより良く表すように拡大して描かれています"},"BasketPopover":{"noVariants":"•バリエーションなし","productsBoughtTogether":"一緒に購入された商品 ({count})","variantsBoughtTogether":"一緒に購入されたバリエーション ({count})","variantsCount":{"one":"•{count}個のバリエーション","other":"•{count}個のバリエーション"}},"BasketCell":{"hiddenProductCount":"さらに{count}個","none":"なし"},"BasketListWithActions":{"actions":"アクション","back":"戻る"},"RowActions":{"previewSegment":"セグメントをプレビューする"},"usePivotedColumnDisplayName":{"week":{"firstOrder":"初回注文","greaterThanOne":"週 ({value})"},"month":{"firstOrder":"初回注文","greaterThanOne":"月 ({value})"},"quarter":{"firstOrder":"初回注文","greaterThanOne":"四半期 ({value})"},"year":{"firstOrder":"初回注文","greaterThanOne":"年 ({value})"}},"ShopifyQlDateControls":{"dateTextField":{"placeholderDateValue":"YYYY-MM-DD","sinceTextFieldLabel":"開始","untilTextFieldLabel":"終了"},"actionButtons":{"apply":"適用","cancel":"キャンセル","back":"戻る"},"quickPicksSidebar":{"newBadge":"新規"},"quickPicksDropdown":{"customDateRange":"カスタム","label":"日付範囲"},"compareTo":"比較する日付範囲：{dateRange}","noComparison":"比較なし","sections":{"bfcm":"ブラックフライデー・サイバーマンデー","quarters":"四半期"}},"useFormatLineChart":{"allTime":"全期間"},"useGetPrimaryMetricBadge":{"webPerformance":{"success":"良い","attention":"普通","critical":"悪い"},"fraudRisk":{"attention":"リスクがある","critical":"リスクの上昇"}},"RFMGridLabels":{"xAxis":"直近スコア","yAxis":"頻度＋金銭的価値スコア"},"useWebPerformanceAnnotations":{"good":"良い","poor":"悪い","count":{"one":"{count}件のイベント","other":"{count}件のイベント"}},"Polaris":{"Avatar":{"label":"Avatar","labelWithInitials":"頭文字が{initials}のAvatar"},"Autocomplete":{"spinnerAccessibilityLabel":"読み込み中","ellipsis":"{content}"},"Badge":{"PROGRESS_LABELS":{"incomplete":"未完了","partiallyComplete":"一部完了済み","complete":"完了"},"TONE_LABELS":{"info":"情報","success":"成功","warning":"警告","attention":"注意","new":"新","critical":"重大","readOnly":"読み取り専用","enabled":"有効"},"progressAndTone":"{toneLabel} {progressLabel}"},"Banner":{"dismissButton":"通知を閉じる"},"Button":{"spinnerAccessibilityLabel":"読み込み中"},"Common":{"checkbox":"チェックボックス","undo":"元に戻す","cancel":"キャンセル","clear":"クリア","close":"閉じる","submit":"送信","more":"さらに表示する"},"ContextualSaveBar":{"save":"保存","discard":"破棄"},"DataTable":{"sortAccessibilityLabel":"次で{direction}に並び替え：","navAccessibilityLabel":"表を{direction}に1列スクロール","totalsRowHeading":"合計","totalRowHeading":"合計"},"DatePicker":{"previousMonth":"先月 ({showPreviousYear}{previousMonthName}) を表示","nextMonth":"来月 ({nextYear}{nextMonth}) を表示","today":"今日 ","months":{"january":"1月","february":"2月","march":"3月","april":"4月","may":"5月","june":"6月","july":"7月","august":"8月","september":"9月","october":"10月","november":"11月","december":"12月"},"daysAbbreviated":{"monday":"月曜日","tuesday":"火曜日","wednesday":"水曜日","thursday":"木曜日","friday":"金曜日","saturday":"土曜日","sunday":"日曜日"},"days":{"monday":"月曜日","tuesday":"火曜日","wednesday":"水曜日","thursday":"木曜日","friday":"金曜日","saturday":"土曜日","sunday":"日曜日"},"start":"範囲の開始","end":"範囲の終了"},"ActionMenu":{"RollupActions":{"rollupButton":"アクションを表示"},"Actions":{"moreActions":"その他の操作"}},"Modal":{"iFrameTitle":"本文マークアップ","modalWarning":"これらの必要なプロパティがモーダルにありません：{missingProps}","unsavedChanges":"未保存の変更"},"Pagination":{"previous":"前へ","next":"次へ","pagination":"ページネーション"},"ProgressBar":{"negativeWarningMessage":"進行propに渡される値に負数は使用できません。{progress}を0にリセットしています。","exceedWarningMessage":"進行propに渡される値は100を超えることはできません。{progress}を100に設定しています。"},"ResourceList":{"sortingLabel":"次で並び替え：","defaultItemSingular":"アイテム","defaultItemPlural":"アイテム","showing":"{itemsCount}個の{resource}を表示中","loading":"{resource}を読み込み中","selected":"{selectedItemsCount}個を選択済み","allItemsSelected":"ストアにある{itemsLength}以上の{resourceNamePlural}がすべて選択されています","selectAllItems":"ストアにある{itemsLength}以上の{resourceNamePlural}をすべて選択","emptySearchResultTitle":"{resourceNamePlural}が見つかりませんでした","emptySearchResultDescription":"フィルターや検索用語を変更してください","selectButtonText":"選択","a11yCheckboxDeselectAllSingle":"{resourceNameSingular}の選択を解除","a11yCheckboxSelectAllSingle":"{resourceNameSingular}を選択","a11yCheckboxDeselectAllMultiple":"{itemsLength}の{resourceNamePlural}の選択をすべて解除","a11yCheckboxSelectAllMultiple":"{itemsLength}の{resourceNamePlural}をすべて選択","Item":{"actionsDropdownLabel":"{accessibilityLabel}のアクション","actionsDropdown":"アクションのドロップダウン","viewItem":"{itemName}の詳細を見る"},"BulkActions":{"actionsActivatorLabel":"アクション","moreActionsActivatorLabel":"その他の操作"},"showingTotalCount":"{totalItemsCount}件の{resource}中、{itemsCount}件を表示中","allFilteredItemsSelected":"このフィルター内の{itemsLength}以上の{resourceNamePlural}がすべて選択されています","selectAllFilteredItems":"このフィルター内の{itemsLength}以上の{resourceNamePlural}をすべて選択"},"SkeletonPage":{"loadingLabel":"ページを読み込み中"},"Tabs":{"toggleTabsLabel":"その他のビュー","newViewAccessibilityLabel":"新たなビューを作成","newViewTooltip":"ビューを作成","Tab":{"rename":"ビューの名前を変更","duplicate":"ビューを複製","edit":"ビューを編集","editColumns":"列を編集","delete":"ビューを削除","copy":"{name}のコピー","deleteModal":{"title":"表示内容を削除しますか？","description":"これは元に戻せません。{viewName}ビューは管理画面パネルで使用できなくなります。","cancel":"キャンセル","delete":"ビューを削除"}},"RenameModal":{"title":"ビューの名前を変更","label":"名前","cancel":"キャンセル","create":"保存","errors":{"sameName":"この名前のビューはすでに存在しています。別の名前を選択してください。"}},"DuplicateModal":{"title":"ビューを複製","label":"名前","cancel":"キャンセル","create":"ビューを作成","errors":{"sameName":"この名前のビューはすでに存在しています。別の名前を選択してください。"}},"CreateViewModal":{"title":"新たなビューを作成","label":"名前","cancel":"キャンセル","create":"ビューを作成","errors":{"sameName":"この名前のビューはすでに存在しています。別の名前を選択してください。"}}},"Tag":{"ariaLabel":"{children}を削除"},"TextField":{"characterCount":"{count}文字","characterCountWithMaxLength":"{limit}文字中{count}文字を使用しました"},"TopBar":{"toggleMenuLabel":"メニューを切り替える","SearchField":{"clearButtonLabel":"クリア","search":"検索"}},"MediaCard":{"popoverButton":"アクション","dismissButton":"閉じる"},"VideoThumbnail":{"playButtonA11yLabel":{"default":"動画を再生","defaultWithDuration":"{duration}の動画を再生","duration":{"hours":{"other":{"only":"{hourCount}時間","andMinutes":"{hourCount}時間{minuteCount}分","andMinute":"{hourCount}時間{minuteCount}分","minutesAndSeconds":"{hourCount}時間{minuteCount}分{secondCount}秒","minutesAndSecond":"{hourCount}時間{minuteCount}分{secondCount}秒","minuteAndSeconds":"{hourCount}時間{minuteCount}分{secondCount}秒","minuteAndSecond":"{hourCount}時間{minuteCount}分{secondCount}秒","andSeconds":"{hourCount}時間{secondCount}秒","andSecond":"{hourCount}時間{secondCount}秒"},"one":{"only":"{hourCount}時間","andMinutes":"{hourCount}時間{minuteCount}分","andMinute":"{hourCount}時間{minuteCount}分","minutesAndSeconds":"{hourCount}時間{minuteCount}分{secondCount}秒","minutesAndSecond":"{hourCount}時間{minuteCount}分{secondCount}秒","minuteAndSeconds":"{hourCount}時間{minuteCount}分{secondCount}秒","minuteAndSecond":"{hourCount}時間{minuteCount}分{secondCount}秒","andSeconds":"{hourCount}時間{secondCount}秒","andSecond":"{hourCount}時間{secondCount}秒"}},"minutes":{"other":{"only":"{minuteCount}分","andSeconds":"{minuteCount}分{secondCount}秒","andSecond":"{minuteCount}分{secondCount}秒"},"one":{"only":"{minuteCount}分","andSeconds":"{minuteCount}分{secondCount}秒","andSecond":"{minuteCount}分{secondCount}秒"}},"seconds":{"other":"{secondCount}秒","one":"{secondCount}秒"}}}},"Loading":{"label":"ページの読み込み表示バー"},"TooltipOverlay":{"accessibilityLabel":"ツールチップ：{label}"},"Page":{"Header":{"rollupActionsLabel":"{title}のアクションを表示","pageReadyAccessibilityLabel":"{title}。このページの準備が整いました"}},"ActionList":{"SearchField":{"clearButtonLabel":"クリア","search":"検索","placeholder":"アクションを検索"}},"AlphaTable":{"TableRowActions":{"heading":"アクション","activatorAccessibilityLabel":"行アクションを開く","activatorLabel":"アクション"},"Selection":{"select":"{id}を選択","selectPage":"ページにある{count}個すべてを選択","selectAll":"ストアにある{count}+個すべてを選択","selectAllWithTotal":"ストアにある{total}個すべてを選択","unselectAll":"すべての選択を解除","selectedPage":"{count}個を選択済み","selectedAll":"ストアにある{count}+個すべてを選択済み","selectedAllWithTotal":"ストアにある{total}個すべてを選択済み","selectionHeader":"選択","selectedSome":"{total}個中{count}個を選択済み"},"TableRowGroups":{"heading":"行グループを切り替える","toggle":"この行グループの表示/非表示を切り替える"},"Sorting":{"sortAscending":"この表を{heading}で昇順に並べ替える","sortDescending":"この表を{heading}で降順に並べ替える"},"TableCell":{"spansColumns":"{count}列にまたがります"},"BulkActions":{"activatorLabel":"アクション"}},"SortPopover":{"ariaLabel":"検索結果を並べ替える","tooltip":"並び替え","title":"次で並び替え：","sorting":{"asc":"昇順","desc":"降順","az":"A～Z","za":"Z～A"}}},"DistributionChart":{"noData":"利用可能なデータがありません","title":"分布図","description":"分布データを示す棒グラフ: {data}.{percentiles}","highlightedPercentiles":" 注目すべきパーセンタイルは次のとおりです: {percentiles}。"},"PerformanceEventType":{"APP_INSTALL":{"title":"アプリがインストールされました","content":"インストール済の{appName}"},"APP_UNINSTALL":{"title":"アプリをアンインストール","content":"{appName}をアンインストールしました"},"THEME_LIVE_EDIT":{"title":"編集されたライブテーマ","content":{"one":"{themeName} テーマを {count} 回編集しました","other":"{themeName} テーマを {count} 回編集しました"}},"THEME_PUBLICATION":{"title":"テーマを公開しました","content":"{themeName} テーマを公開しました"}}}')
-  , VK = {
-    AnalyticsUIComponents: zK
-}
-  , UK = JSON.parse('{"BenchmarksSummary":{"shopValue":"스토어","benchmarksMedian":"벤치마크 중앙값","benchmarks25thPercentile":"25번째 백분위수","benchmarks75thPercentile":"75번째 백분위수","benchmarksTooltip":"지난 30일 동안 판매된 제품, 주요 시장 국가 및 주문량을 기반으로 유사한 스토어와 비교하여 스토어의 실적을 벤치마크합니다.","missingData":{"title":"벤치마크 없음","content":"유사 스토어의 데이터가 부족함"}},"CloseButton":{"delete":"메트릭 삭제"},"MetricCardEmpty":{"noResults":"이 날짜 범위에 해당하는 데이터를 찾을 수 없습니다","noResultsCompact":"데이터 없음","incorrectCardSize":"데이터를 보려면 이 카드의 크기를 조정하세요"},"MetricCardError":{"error":"데이터를 로드할 수 없습니다"},"MetricLayout":{"ReportLinkAccessibilityLabel":"{reportTitle} 보고서 보기"},"HorizontalNavigation":{"Forward":"앞으로","Backward":"뒤로"},"TimeframePicker":{"today":"오늘","todayHelp":"현재 시간까지 어제와 비교한 수치","last7days":"7일","last7daysHelp":"지난 7일과 비교한 수치","last30days":"30일","last30daysHelp":"이전 30일과 비교한 수치","last90days":"90일","last90daysHelp":"이전 90일과 비교한 수치","last365days":"365일","last365daysHelp":"이전 365일과 비교한 수치"},"date":{"range":"{startDate}~{endDate}","sameMonthRange":"{year} {month} {startDay}~{endDay}","months":{"1":"1월","2":"2월","3":"3월","4":"4월","5":"5월","6":"6월","7":"7월","8":"8월","9":"9월","10":"10월","11":"11월","12":"12월"},"title":{"today":"오늘","yesterday":"어제","last7days":"지난 7일","last30days":"지난 30일","last90days":"지난 90일","last365days":"지난 365일","last12months":"지난 12개월","this_week":"이번 주","this_month":"이번 달","this_quarter":"이번 분기","this_year":"올해","last_week":"지난주","last_month":"지난달","last_quarter":"지난 분기","last_year":"작년","weekToDate":"이번 주(오늘까지)","monthToDate":"이번 달(오늘까지)","quarterToDate":"이번 분기(오늘까지)","yearToDate":"올해(오늘까지)","bfcm":"BFCM {year}","quarter":"{year} {quarterNumber}분기","previous_period":"이전 기간","previous_second":"이전 초","previous_minute":"이전 분","previous_hour":"이전 시간","previous_day":"전날","previous_week":"이전 주","previous_month":"이전 달","previous_quarter":"이전 분기","previous_year":"전년도","previous_year_match_day_of_week":"이전 연도(일치하는 요일)"}},"MetricAnnotations":{"learnMoreLinkText":"자세히 알아보기","sessionsBackfill2022":{"label":"데이터 시작","description":"데이터 개선 사항의 일환으로 세션 데이터는 이제 2022년 10월부터 시작됩니다."},"checkoutConversionRate2022":{"label":"규격 업데이트","description":"데이터 개선 사항의 일환으로 세션 데이터는 이제 2022년 10월부터 시작됩니다. 해당 날짜부터 다음 지표도 조정되었습니다({affectedMetrics}).","banner":{"description":"시작된 결제가 더 많이 집계되도록 결제가 시작된 시점을 집계하는 방식을 개선했습니다. 따라서 다음과 같은 지표가 변경되었을 수 있습니다({affectedMetrics}). 기록 비교를 가능하게 하기 위해 해당 지표는 2022년 10월부터 시작하도록 조정되었습니다."}}},"TrendIndicator":{"IncreaseOf":"{change} 증가","DecreaseOf":"{change} 감소","NoChange":"변경 없음"},"TimeFormatter":{"DayOrLonger":"{timeInDay} {timeInHour}","LessThanDay":"{timeInHour} {timeInMinute}","day":{"one":"{amount}일","other":"{amount}일"},"hour":{"one":"{amount}시간","other":"{amount}시간"},"minute":{"one":"{amount}분","other":"{amount}분"}},"useFormattedValue":{"none":"없음","boolean":{"true":"예","false":"아니요"},"quarters":{"short":{"q1":"1분기","q2":"2분기","q3":"3분기","q4":"4분기"},"long":{"q1":"{year}년 1분기","q2":"{year}년 2분기","q3":"{year}년 3분기","q4":"{year}년 4분기"}},"DAY_OF_WEEK":{"short":{"0":"월","1":"화","2":"수","3":"목","4":"금","5":"토","6":"일"},"long":{"0":"월요일","1":"화요일","2":"수요일","3":"목요일","4":"금요일","5":"토요일","6":"일요일"}}},"useFormatHistogram":{"days":{"one":"{count}일","other":"{count}일"}},"TooltipContent":{"fieldSuffixes":{"product_title":{"one":"제품 {count}개","other":"제품 {count}개"},"product_variant_title":{"one":"제품 이형 {count}개","other":"제품 이형 {count}개"},"product_variant_id":{"one":"제품 이형 {count}개","other":"제품 이형 {count}개"},"product_variant_sku":{"one":"제품 이형 {count}개","other":"제품 이형 {count}개"}}},"popover":{"learnMore":"자세히 알아보기"},"useFormatLineChartRelational":{"percentileLegend":"25~75번째 백분위수","median":"벤치마크 중앙값","missingData":{"title":"벤치마크 없음","content":"유사 스토어의 데이터가 부족함"},"yourTotals":"합계"},"useFormatLineChart":{"allTime":"전체 기간"},"RFMGroups":{"previously_loyal":{"description":"최근 구매는 없지만 주문 및 지출 기록이 매우 많은 고객입니다.","goal":"목표: 고객을 단골로 전환"},"at_risk":{"description":"최근 구매는 없지만 주문 및 지출 기록이 많은 고객입니다.","goal":"목표: 고객을 단골 또는 주의 필요로 전환"},"dormant":{"description":"최근 주문이 없고, 주문 빈도가 낮고, 지출이 적은 고객입니다.","goal":"목표: 고객을 대부분 상실로 전환"},"loyal":{"description":"최근 구매는 없지만 주문 및 지출 기록이 매우 많은 고객입니다.","goal":"목표: 고객을 챔피언으로 전환"},"needs_attention":{"description":"최근 구매가 줄었고 가끔 주문하며 스토어에서 적당한 금액을 지출하는 고객입니다.","goal":"목표: 고객을 단골 또는 활성화로 전환"},"almost_lost":{"description":"최근 구매가 없고 주문이 적으며 지출이 적은 고객입니다.","goal":"목표: 고객을 활성화 또는 유망으로 전환"},"promising":{"description":"최근 구매했고 주문이 적으며 지출이 적은 고객입니다.","goal":"목표: 고객을 활성화로 전환"},"active":{"description":"최근 구매했고 주문이 약간 있으며 지출이 보통인 고객입니다.","goal":"목표: 고객을 챔피언 또는 단골로 전환"},"new":{"description":"가장 최근 구매했고 주문이 적으며 지출이 적은 고객입니다.","goal":"목표: 고객을 활성화로 전환"},"champions":{"description":"가장 최근 구매했고 주문이 많으며 지출이 가장 많은 고객입니다."},"metricInformation":{"value":"{formattedMetricValue}","percentage":"(고객층의 {formattedPercentValue})"},"previewSegment":"세그먼트 미리 보기","viewReport":"보고서 보기"},"CustomerCohortAnalysis":{"Tooltip":{"returned":"{percent}({customers})가 {month} 이후 반품({currentMonth})","returnedAcquisitionMonth":"{percent}({customers})가 코호트의 확보 개월({month})에 반품","firstOrder":"{month} 코호트: {customers}","noOrders":"{month} 이후에 반품한 고객이 없음({currentMonth})","noOrdersAcquisitionMonth":"코호트의 확보 개월({currentMonth})에 반품한 고객이 없음","month":{"one":"{count}개월","other":"{count}개월"},"customer":{"one":"고객 {count}명","other":"고객 {count}명"}},"summaryRowDate":"모든 코호트","timeDimensionColumnDisplayName":"코호트"},"MetricTable":{"subtitle":"% 변경","summary":"요약","EmptyState":{"text":"이 선택에 대한 데이터 없음"},"FooterRow":{"exportMessage":"이 보고서에는 결과가 {amount}개까지 표시됩니다. 모든 결과에 액세스하려면 {export}","exportActionText":"보고서를 내보내면 됩니다.","message":{"one":"결과 {count}개","other":"결과 {count}개"}}},"FunnelChart":{"truncatedSessions":"{metric} 잘림","truncatedSessionsDescription":"퍼널을 더 잘 표현하기 위해 {metric}이(가) 조정되어 그려졌습니다."},"BasketPopover":{"noVariants":"• 이형 상품 없음","productsBoughtTogether":"함께 구매한 제품({count}개)","variantsBoughtTogether":"함께 구매한 이형 상품({count}개)","variantsCount":{"one":"• 이형 상품 {count}개","other":"• 이형 상품 {count}개"}},"BasketCell":{"hiddenProductCount":"외 {count}개","none":"없음"},"BasketListWithActions":{"actions":"작업","back":"뒤로"},"RowActions":{"previewSegment":"세그먼트 미리 보기"},"usePivotedColumnDisplayName":{"week":{"firstOrder":"첫 주문","greaterThanOne":"{value}주"},"month":{"firstOrder":"첫 주문","greaterThanOne":"{value}개월"},"quarter":{"firstOrder":"첫 주문","greaterThanOne":"{value}분기"},"year":{"firstOrder":"첫 주문","greaterThanOne":"{value}년"}},"ShopifyQlDateControls":{"dateTextField":{"placeholderDateValue":"YYYY-MM-DD","sinceTextFieldLabel":"시작","untilTextFieldLabel":"종료"},"actionButtons":{"apply":"적용","cancel":"취소","back":"뒤로"},"quickPicksSidebar":{"newBadge":"신규"},"quickPicksDropdown":{"customDateRange":"사용자 지정","label":"날짜 범위"},"compareTo":"비교 대상 날짜: {dateRange}","noComparison":"비교 없음","sections":{"bfcm":"블랙 프라이데이 사이버 먼데이","quarters":"분기"}},"useGetPrimaryMetricBadge":{"webPerformance":{"success":"양호","attention":"보통","critical":"나쁨"},"fraudRisk":{"attention":"위험","critical":"높은 위험"}},"RFMGridLabels":{"xAxis":"최근 점수","yAxis":"빈도 + 금전적 가치 점수"},"useWebPerformanceAnnotations":{"good":"양호","poor":"나쁨","count":{"one":"이벤트 {count}개","other":"이벤트 {count}개"}},"Polaris":{"Avatar":{"label":"아바타","labelWithInitials":"아바타(이니셜: {initials})"},"Autocomplete":{"spinnerAccessibilityLabel":"로드 중","ellipsis":"{content}…"},"Badge":{"PROGRESS_LABELS":{"incomplete":"미완료","partiallyComplete":"일부 완료","complete":"완료"},"TONE_LABELS":{"info":"정보","success":"성공","warning":"경고","attention":"주의","new":"신규","critical":"중요","readOnly":"읽기 전용","enabled":"사용"},"progressAndTone":"{toneLabel} {progressLabel}"},"Banner":{"dismissButton":"알림 무시"},"Button":{"spinnerAccessibilityLabel":"로드 중"},"Common":{"checkbox":"확인란","undo":"실행 취소","cancel":"취소","clear":"지우기","close":"닫기","submit":"제출","more":"자세히"},"ContextualSaveBar":{"save":"저장","discard":"취소"},"DataTable":{"sortAccessibilityLabel":"{direction} 정렬 기준","navAccessibilityLabel":"표를 {direction} 방향으로 1열 스크롤","totalsRowHeading":"총계","totalRowHeading":"총계"},"DatePicker":{"previousMonth":"지난 달 표시, {showPreviousYear} {previousMonthName}","nextMonth":"다음 달 표시, {nextYear} {nextMonth}","today":"오늘 ","months":{"january":"1월","february":"2월","march":"3월","april":"4월","may":"5월","june":"6월","july":"7월","august":"8월","september":"9월","october":"10월","november":"11월","december":"12월"},"daysAbbreviated":{"monday":"월","tuesday":"화","wednesday":"수","thursday":"목","friday":"금","saturday":"토","sunday":"일"},"days":{"monday":"월요일","tuesday":"화요일","wednesday":"수요일","thursday":"목요일","friday":"금요일","saturday":"토요일","sunday":"일요일"},"start":"시작 범위","end":"끝 범위"},"ActionMenu":{"RollupActions":{"rollupButton":"작업 보기"},"Actions":{"moreActions":"기타 작업"}},"Modal":{"iFrameTitle":"본문 표시","modalWarning":"모달에서 누락된 필수 속성: {missingProps}","unsavedChanges":"저장되지 않은 변경 사항"},"Pagination":{"previous":"이전","next":"다음","pagination":"페이지 매김"},"ProgressBar":{"negativeWarningMessage":"progress 속성으로 전달되는 값은 음수일 수 없습니다. {progress}을(를) 0으로 재설정합니다.","exceedWarningMessage":"progress 속성으로 전달되는 값은 100을 초과할 수 없습니다. {progress}을(를) 100으로 설정합니다."},"ResourceList":{"sortingLabel":"정렬 기준","defaultItemSingular":"품목","defaultItemPlural":"품목","showing":"{itemsCount}개 {resource} 표시 중","loading":"{resource} 로드 중","selected":"{selectedItemsCount}개 선택됨","allItemsSelected":"스토어에서 길이가 {itemsLength}보다 긴 {resourceNamePlural}을(를) 모두 선택했습니다","selectAllItems":"스토어에서 길이가 {itemsLength}보다 긴 모든 {resourceNamePlural} 선택","emptySearchResultTitle":"{resourceNamePlural}을(를) 찾을 수 없음","emptySearchResultDescription":"필터나 검색어를 변경해 보세요","selectButtonText":"선택","a11yCheckboxDeselectAllSingle":"{resourceNameSingular} 선택 취소","a11yCheckboxSelectAllSingle":"{resourceNameSingular} 선택","a11yCheckboxDeselectAllMultiple":"길이가 {itemsLength}인 모든 {resourceNamePlural} 선택 취소","a11yCheckboxSelectAllMultiple":"길이가 {itemsLength}인 모든 {resourceNamePlural} 선택","Item":{"actionsDropdownLabel":"{accessibilityLabel}에 대한 작업","actionsDropdown":"작업 드롭다운","viewItem":"{itemName}의 세부 정보 보기"},"BulkActions":{"actionsActivatorLabel":"작업","moreActionsActivatorLabel":"기타 작업"},"showingTotalCount":"{totalItemsCount}개 {resource} 중 {itemsCount}개 표시 중","allFilteredItemsSelected":"이 필터에서 길이가 {itemsLength}보다 긴 {resourceNamePlural}을(를) 모두 선택했습니다","selectAllFilteredItems":"이 필터에서 길이가 {itemsLength}보다 긴 모든 {resourceNamePlural} 선택"},"SkeletonPage":{"loadingLabel":"페이지 로딩"},"Tabs":{"toggleTabsLabel":"더 많은 보기","newViewAccessibilityLabel":"새 보기 생성","newViewTooltip":"보기 생성","Tab":{"rename":"보기 이름 바꾸기","duplicate":"보기 복제","edit":"보기 편집","editColumns":"열 편집","delete":"보기 삭제","copy":"{name}의 사본","deleteModal":{"title":"보기를 삭제하시겠습니까?","description":"이 작업은 취소할 수 없습니다. 관리자 패널에서 더 이상 {viewName} 보기를 사용할 수 없습니다.","cancel":"취소","delete":"보기 삭제"}},"RenameModal":{"title":"보기 이름 바꾸기","label":"이름","cancel":"취소","create":"저장","errors":{"sameName":"이 이름을 가진 보기가 이미 있습니다. 다른 이름을 선택하십시오."}},"DuplicateModal":{"title":"보기 복제","label":"이름","cancel":"취소","create":"보기 생성","errors":{"sameName":"이 이름을 가진 보기가 이미 있습니다. 다른 이름을 선택하십시오."}},"CreateViewModal":{"title":"새 보기 생성","label":"이름","cancel":"취소","create":"보기 생성","errors":{"sameName":"이 이름을 가진 보기가 이미 있습니다. 다른 이름을 선택하십시오."}}},"Tag":{"ariaLabel":"{children} 제거"},"TextField":{"characterCount":"{count}자","characterCountWithMaxLength":"{limit}자 중 {count}자 입력함"},"TopBar":{"toggleMenuLabel":"토글 메뉴","SearchField":{"clearButtonLabel":"지우기","search":"검색"}},"MediaCard":{"popoverButton":"작업","dismissButton":"무시"},"VideoThumbnail":{"playButtonA11yLabel":{"default":"동영상 재생","defaultWithDuration":"동영상 재생(길이: {duration})","duration":{"hours":{"other":{"only":"{hourCount}시간","andMinutes":"{hourCount}시간 {minuteCount}분","andMinute":"{hourCount}시간 {minuteCount}분","minutesAndSeconds":"{hourCount}시간 {minuteCount}분 {secondCount}초","minutesAndSecond":"{hourCount}시간 {minuteCount}분 {secondCount}초","minuteAndSeconds":"{hourCount}시간 {minuteCount}분 {secondCount}초","minuteAndSecond":"{hourCount}시간 {minuteCount}분 {secondCount}초","andSeconds":"{hourCount}시간 {secondCount}초","andSecond":"{hourCount}시간 {secondCount}초"},"one":{"only":"{hourCount}시간","andMinutes":"{hourCount}시간 {minuteCount}분","andMinute":"{hourCount}시간 {minuteCount}분","minutesAndSeconds":"{hourCount}시간 {minuteCount}분 {secondCount}초","minutesAndSecond":"{hourCount}시간 {minuteCount}분 {secondCount}초","minuteAndSeconds":"{hourCount}시간 {minuteCount}분 {secondCount}초","minuteAndSecond":"{hourCount}시간 {minuteCount}분 {secondCount}초","andSeconds":"{hourCount}시간 {secondCount}초","andSecond":"{hourCount}시간 {secondCount}초"}},"minutes":{"other":{"only":"{minuteCount}분","andSeconds":"{minuteCount}분 {secondCount}초","andSecond":"{minuteCount}분 {secondCount}초"},"one":{"only":"{minuteCount}분","andSeconds":"{minuteCount}분 {secondCount}초","andSecond":"{minuteCount}분 {secondCount}초"}},"seconds":{"other":"{secondCount}초","one":"{secondCount}초"}}}},"Loading":{"label":"페이지 로딩 표시줄"},"TooltipOverlay":{"accessibilityLabel":"툴팁: {label}"},"Page":{"Header":{"rollupActionsLabel":"{title} 작업 보기","pageReadyAccessibilityLabel":"{title}. 이 페이지가 준비되었습니다"}},"ActionList":{"SearchField":{"clearButtonLabel":"지우기","search":"검색","placeholder":"작업 검색"}},"AlphaTable":{"TableRowActions":{"heading":"작업","activatorAccessibilityLabel":"행 작업 열기","activatorLabel":"작업"},"TableRowGroups":{"heading":"행 그룹 전환","toggle":"이 행 그룹의 표시 유형 전환"},"Sorting":{"sortAscending":"이 표를 {heading}을(를) 기준으로 오름차순으로 정렬","sortDescending":"이 표를 {heading}을(를) 기준으로 내림차순으로 정렬"},"Selection":{"select":"{id} 선택","selectPage":"페이지에서 {count}개 모두 선택","selectAll":"스토어에서 {count}개 이상 모두 선택","selectAllWithTotal":"스토어에서 {total}개 모두 선택","selectionHeader":"선택","unselectAll":"모두 선택 취소","selectedPage":"{count}개 선택됨","selectedAll":"스토어에서 {count}개 이상 모두 선택됨","selectedAllWithTotal":"스토어에서 {total}개 모두 선택됨","selectedSome":"{total}개 중 {count}개 선택됨"},"TableCell":{"spansColumns":"{count}개 열에 걸쳐 있음"},"BulkActions":{"activatorLabel":"작업"}},"SortPopover":{"ariaLabel":"결과 정렬","tooltip":"정렬","title":"정렬 기준","sorting":{"asc":"오름차순","desc":"내림차순","az":"A-Z","za":"Z-A"}}},"DistributionChart":{"noData":"사용 가능한 데이터 없음","title":"분포 차트","description":"분포 데이터({data}.{percentiles})를 보여주는 막대 차트","highlightedPercentiles":" 주목할 만한 백분위수: {percentiles}"},"PerformanceEventType":{"APP_INSTALL":{"title":"앱 설치됨","content":"{appName} 설치됨"},"APP_UNINSTALL":{"title":"앱 제거됨","content":"{appName} 제거됨"},"THEME_LIVE_EDIT":{"title":"라이브 테마 편집됨","content":{"one":"{themeName} 테마 {count}회 편집됨","other":"{themeName} 테마 {count}회 편집됨"}},"THEME_PUBLICATION":{"title":"테마 게시됨","content":"{themeName} 테마 게시됨"}}}')
-  , $K = {
-    AnalyticsUIComponents: UK
-}
-  , HK = JSON.parse('{"BenchmarksSummary":{"shopValue":"Butikken din","benchmarksMedian":"Medianmåleverdi","benchmarks25thPercentile":"Den 25. prosentilen","benchmarks75thPercentile":"Den 75. prosentilen","benchmarksTooltip":"Mål butikkens resultater mot lignende butikker basert på produkter som er solgt i løpet av de siste 30 dagene, land i primærmarkedet og bestillingsvolum.","missingData":{"title":"Ingen referanseverdier","content":"Ikke nok data fra lignende butikker"}},"CloseButton":{"delete":"Slett måleverdi"},"MetricCardEmpty":{"noResults":"Det var ingen data i dette datointervallet","noResultsCompact":"Ingen data","incorrectCardSize":"Endre størrelse på dette kortet for å se data"},"MetricCardError":{"error":"Kunne ikke laste inn data"},"MetricLayout":{"ReportLinkAccessibilityLabel":"Vis {reportTitle}-rapporten"},"HorizontalNavigation":{"Forward":"Frem","Backward":"Tilbake"},"TimeframePicker":{"today":"I dag","todayHelp":"Sammenlignet med gårsdagen frem til den gjeldende timen","last7days":"7 dager","last7daysHelp":"Sammenlignet med de forrige 7 dagene","last30days":"30 dager","last30daysHelp":"sammenlignet med de forrige 30 dagene","last90days":"90 dager","last90daysHelp":"Sammenlignet med de forrige 90 dagene","last365days":"365 dager","last365daysHelp":"Sammenlignet med de forrige 365 dagene"},"date":{"range":"{startDate}–{endDate}","sameMonthRange":"{startDay}–{endDay} {month} {year}","months":{"1":"Jan.","2":"Feb.","3":"Mars","4":"April","5":"Mai","6":"Juni","7":"Juli","8":"Aug.","9":"Sep.","10":"Okt.","11":"Nov.","12":"Des."},"title":{"today":"I dag","yesterday":"I går","last7days":"Siste 7 dager","last30days":"Siste 30 dager","last90days":"Siste 90 dager","last365days":"Siste 365 dager","last12months":"Siste 12 måneder","this_week":"Denne uken","this_month":"Denne måneden","this_quarter":"Dette kvartalet","this_year":"Dette året","last_week":"Forrige uke","last_month":"Forrige måned","last_quarter":"Forrige kvartal","last_year":"I fjor","weekToDate":"Uke til dags dato","monthToDate":"Måned til dags dato","quarterToDate":"Kvartal til dags dato","yearToDate":"År til dags dato","bfcm":"Black Friday Cyber Monday {year}","quarter":"K{quarterNumber} {year}","previous_period":"Seneste periode","previous_second":"Seneste sekund","previous_minute":"Seneste minutt","previous_hour":"Seneste time","previous_day":"Seneste dag","previous_week":"Seneste uke","previous_month":"Seneste måned","previous_quarter":"Seneste kvartal","previous_year":"Seneste år","previous_year_match_day_of_week":"Forrige år (samme ukedag)"}},"MetricAnnotations":{"learnMoreLinkText":"Finn ut mer","sessionsBackfill2022":{"label":"Data starter","description":"Data for økter starter nå fra oktober 2022. Det er en del av arbeidet med å gjøre data enda bedre."},"checkoutConversionRate2022":{"label":"Nytt om måling","description":"Data for økter starter nå fra oktober 2022. Det er en del av arbeidet med å gjøre data enda bedre. Fra den datoen har vi i tillegg justert de følgende målingene: {affectedMetrics}.","banner":{"description":"Hvordan vi teller mens kassen har starter, fungerer nå bedre, og vi teller flere oppstarter av kasser. Dermed er følgende målinger sannsynligvis endret: {affectedMetrics}. Vi justerte de aktuelle målingene fra og med oktober 2022 for å sammenligne historiske oppførelser."}}},"TrendIndicator":{"IncreaseOf":"Økning på {change}","DecreaseOf":"Nedgang på {change}","NoChange":"Ingen endring"},"TimeFormatter":{"DayOrLonger":"{timeInDay} {timeInHour}","LessThanDay":"{timeInHour} {timeInMinute}","day":{"one":"{amount} dag","other":"{amount} dager"},"hour":{"one":"{amount} t","other":"{amount} t"},"minute":{"one":"{amount} min","other":"{amount} min"}},"useFormattedValue":{"none":"Ingen","boolean":{"true":"Ja","false":"Nei"},"quarters":{"short":{"q1":"1. kvartal","q2":"2. kvartal","q3":"3. kvartal","q4":"4. kvartal"},"long":{"q1":"1. kvartal {year}","q2":"2. kvartal {year}","q3":"3. kvartal {year}","q4":"4. kvartal {year}"}},"DAY_OF_WEEK":{"short":{"0":"Man","1":"Tir","2":"Ons","3":"Tor","4":"Fre","5":"Lør","6":"Søn"},"long":{"0":"Mandag","1":"Tirsdag","2":"Onsdag","3":"Torsdag","4":"Fredag","5":"Lørdag","6":"Søndag"}}},"useFormatHistogram":{"days":{"one":"{count} dag","other":"{count} dager"}},"TooltipContent":{"fieldSuffixes":{"product_title":{"one":"{count} produkt","other":"{count} produkter"},"product_variant_title":{"one":"{count} produktvariant","other":"{count} produktvarianter"},"product_variant_id":{"one":"{count} produktvariant","other":"{count} produktvarianter"},"product_variant_sku":{"one":"{count} produktvariant","other":"{count} produktvarianter"}}},"popover":{"learnMore":"Finn ut mer"},"useFormatLineChartRelational":{"percentileLegend":"25.–75. prosentverdi","median":"Medianmåleverdi","missingData":{"title":"Ingen referanseverdi","content":"Ikke nok data fra lignende butikker"},"yourTotals":"Dine totalsummer"},"RFMGroups":{"previously_loyal":{"description":"Kunder uten nylige kjøp, men har en sterk historikk for bestillinger og forbruk.","goal":"Mål: flytte kunder til Faste kunder"},"at_risk":{"description":"Kunder uten nylige kjøp, men har en sterk historikk for bestillinger og forbruk.","goal":"Mål: flytte kunder til Faste kunder eller Må ha tilsyn"},"dormant":{"description":"Kunder uten nylige bestillinger, men gjør sporadiske bestillinger og har lavt forbruk.","goal":"Mål: flytte kunder til Nesten tapt"},"loyal":{"description":"Kunder uten nylige kjøp, men har en sterk historikk for bestillinger og forbruk.","goal":"Mål: flytte kunder til Veldig gode kunder"},"needs_attention":{"description":"Kunder som kjøper sjeldnere, bestiller noen ganger og har moderat forbruk i butikken.","goal":"Mål: flytte kunder til Faste kunder eller Aktive kunder"},"almost_lost":{"description":"Kunder uten nylige kjøp, færre bestillinger og lavere forbruk.","goal":"Mål: flytte kunder til Aktive kunder eller Lovende kunder"},"promising":{"description":"Kunder med nylige kjøp, få bestillinger og lavt forbruk.","goal":"Mål: flytte kunder til Aktive kunder"},"active":{"description":"Kunder med nylige kjøp, noen bestillinger og moderat forbruk.","goal":"Mål: flytte kunder til Veldig gode kunder eller Faste kunder"},"new":{"description":"Kunder med svært nylige kjøp, få bestillinger og lavt forbruk.","goal":"Mål: flytte kunder til Aktive kunder"},"champions":{"description":"Kunder med svært nylige kjøp, mange bestillinger og høyest forbruk."},"metricInformation":{"value":"{formattedMetricValue}","percentage":"({formattedPercentValue} av kundebasen)"},"previewSegment":"Forhåndsvis segmentet","viewReport":"Vis rapporten"},"CustomerCohortAnalysis":{"Tooltip":{"returned":"{percent} ({customers}) kom tilbake etter {month} ({currentMonth})","returnedAcquisitionMonth":"{percent} ({customers}) kom tilbake av nye kunder i ({month})","firstOrder":"gruppe for {month}: {customers}","noOrders":"Ingen kunder kom tilbake etter {month} ({currentMonth})","noOrdersAcquisitionMonth":"Ingen nye kunder fra ({currentMonth}) kom tilbake","month":{"one":"{count} måned","other":"{count} måneder"},"customer":{"one":"{count} kunde","other":"{count} kunder"}},"summaryRowDate":"Alle kohorter","timeDimensionColumnDisplayName":"Kohort"},"MetricTable":{"subtitle":"% endring","summary":"Sammendrag","EmptyState":{"text":"Ingen data for dette valget"},"FooterRow":{"exportMessage":"Denne rapporten viser opptil {amount} resultater. Du kan {export} for å få tilgang til alle resultatene","exportActionText":"eksportere rapporten.","message":{"one":"{count} resultat","other":"{count} resultater"}}},"FunnelChart":{"truncatedSessions":"Avkortet {metric}","truncatedSessionsDescription":"{metric} ble tegnet etter skala for å gi en bedre representasjon av trakten"},"BasketPopover":{"noVariants":"• Ingen varianter","productsBoughtTogether":"Produkter som kjøpes sammen ({count})","variantsBoughtTogether":"Varianter som kjøpes sammen ({count})","variantsCount":{"one":"• {count} variant","other":"• {count} varianter"}},"BasketCell":{"hiddenProductCount":"+ {count} til","none":"Ingen"},"BasketListWithActions":{"actions":"Handlinger","back":"Tilbake"},"RowActions":{"previewSegment":"Forhåndsvis segmentet"},"usePivotedColumnDisplayName":{"week":{"firstOrder":"Første bestilling","greaterThanOne":"Uke {value}"},"month":{"firstOrder":"Første bestilling","greaterThanOne":"Måned {value}"},"quarter":{"firstOrder":"Første bestilling","greaterThanOne":"Kvartal {value}"},"year":{"firstOrder":"Første bestilling","greaterThanOne":"År {value}"}},"ShopifyQlDateControls":{"dateTextField":{"placeholderDateValue":"DD.MM.ÅÅÅÅ","sinceTextFieldLabel":"Starter","untilTextFieldLabel":"Slutter"},"actionButtons":{"apply":"Bruk","cancel":"Avbryt","back":"Tilbake"},"quickPicksSidebar":{"newBadge":"Ny"},"quickPicksDropdown":{"customDateRange":"Tilpasset","label":"Datointervall"},"compareTo":"Sammenlign med: {dateRange}","noComparison":"Ingen sammenligning","sections":{"bfcm":"Black Friday Cyber Monday","quarters":"Kvartaler"}},"useFormatLineChart":{"allTime":"Hele tiden"},"useGetPrimaryMetricBadge":{"webPerformance":{"success":"Bra","attention":"Moderat","critical":"Dårlig"},"fraudRisk":{"attention":"I fare","critical":"Økt risiko"}},"RFMGridLabels":{"xAxis":"Nylighetspoeng","yAxis":"Poeng for hyppighet + pengeverdi"},"useWebPerformanceAnnotations":{"good":"Bra","poor":"Dårlig","count":{"one":"{count} hendelse","other":"{count} hendelser"}},"Polaris":{"Avatar":{"label":"Avatar","labelWithInitials":"Avatar med initialene {initials}"},"Autocomplete":{"spinnerAccessibilityLabel":"Laster inn","ellipsis":"{content} …"},"Badge":{"PROGRESS_LABELS":{"incomplete":"Ufullstendig","partiallyComplete":"Delvis fullført","complete":"Ferdig"},"TONE_LABELS":{"info":"Info","success":"Vellykket","warning":"Advarsel","attention":"Obs!","new":"Ny","critical":"Kritisk","readOnly":"Skrivebeskyttet","enabled":"Aktivert"},"progressAndTone":"{toneLabel} {progressLabel}"},"Banner":{"dismissButton":"Lukk varsel"},"Button":{"spinnerAccessibilityLabel":"Laster inn"},"Common":{"checkbox":"avmerkingsboks","undo":"Angre","cancel":"Avbryt","clear":"Tøm","close":"Lukk","submit":"Send inn","more":"Mer"},"ContextualSaveBar":{"save":"Lagre","discard":"Forkast"},"DataTable":{"sortAccessibilityLabel":"sorter {direction} etter","navAccessibilityLabel":"Rull tabell {direction} en kolonne","totalsRowHeading":"Totalt","totalRowHeading":"Total"},"DatePicker":{"previousMonth":"Vis forrige måned, {previousMonthName} {showPreviousYear}","nextMonth":"Vis neste måned, {nextMonth} {nextYear}","today":"I dag ","months":{"january":"Januar","february":"Februar","march":"Mars","april":"April","may":"Mai","june":"Juni","july":"Juli","august":"August","september":"September","october":"Oktober","november":"November","december":"Desember"},"daysAbbreviated":{"monday":"man","tuesday":"tir","wednesday":"ons","thursday":"tor","friday":"fre","saturday":"lør","sunday":"søn"},"days":{"monday":"Mandag","tuesday":"Tirsdag","wednesday":"Onsdag","thursday":"Torsdag","friday":"Fredag","saturday":"Lørdag","sunday":"Søndag"},"start":"Start på intervall","end":"Slutt på intervall"},"ActionMenu":{"RollupActions":{"rollupButton":"Vis handlinger"},"Actions":{"moreActions":"Flere handlinger"}},"Modal":{"iFrameTitle":"oppkoding i brødtekst","modalWarning":"Disse nødvendige egenskapene mangler fra Modal: {missingProps}","unsavedChanges":"Ulagrede endringer"},"Pagination":{"previous":"Forrige","next":"Neste","pagination":"Sideinndeling"},"ProgressBar":{"negativeWarningMessage":"Verdier som er overført til fremgangsrekvisitten, bør ikke være negative. Tilbakestiller {progress} til 0.","exceedWarningMessage":"Verdier som er overført til fremgangsrekvisitten, bør ikke overstige 100. Setter {progress} til 100."},"ResourceList":{"sortingLabel":"Sorter etter","defaultItemSingular":"vare","defaultItemPlural":"varer","showing":"Viser {itemsCount} {resource}","loading":"Laster inn {resource}","selected":"{selectedItemsCount} er valgt","allItemsSelected":"Alle {itemsLength} + {resourceNamePlural} i butikken din er valgt","selectAllItems":"Velg alle {itemsLength}+ {resourceNamePlural} i butikken din","emptySearchResultTitle":"Fant ingen {resourceNamePlural}","emptySearchResultDescription":"Prøv å endre filtrene eller søkeord","selectButtonText":"Velg","a11yCheckboxDeselectAllSingle":"Opphev valg av {resourceNameSingular}","a11yCheckboxSelectAllSingle":"Velg {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"Opphev alle valg av {itemsLength} {resourceNamePlural}","a11yCheckboxSelectAllMultiple":"Velg alle {itemsLength} {resourceNamePlural}","Item":{"actionsDropdownLabel":"Handlinger for {accessibilityLabel}","actionsDropdown":"Rullegardinmeny for handlinger","viewItem":"Vis detaljer for {itemName}"},"BulkActions":{"actionsActivatorLabel":"Handlinger","moreActionsActivatorLabel":"Flere handlinger"},"showingTotalCount":"Viser {itemsCount} av {totalItemsCount} {resource}","allFilteredItemsSelected":"Alle {itemsLength} + {resourceNamePlural} i dette filteret er valgt","selectAllFilteredItems":"Velg alle {itemsLength}+ {resourceNamePlural} i dette filteret"},"SkeletonPage":{"loadingLabel":"Siden laster"},"Tabs":{"toggleTabsLabel":"Flere visninger","newViewAccessibilityLabel":"Opprett en ny visning","newViewTooltip":"Opprett visning","Tab":{"rename":"Gi visning nytt navn","duplicate":"Dupliser visning","edit":"Rediger visning","editColumns":"Endre kolonner","delete":"Slett visning","copy":"Kopi av {name}","deleteModal":{"title":"Slett visning?","description":"Dette kan ikke angres. {viewName}-visningen vil ikke lenger være tilgjengelig i administrator.","cancel":"Avbryt","delete":"Slett visning"}},"RenameModal":{"title":"Gi visning nytt navn","label":"Navn","cancel":"Avbryt","create":"Lagre","errors":{"sameName":"Det finnes allerede en visning med dette navnet. Velg et annet navn."}},"DuplicateModal":{"title":"Dupliser visning","label":"Navn","cancel":"Avbryt","create":"Opprett visning","errors":{"sameName":"Det finnes allerede en visning med dette navnet. Velg et annet navn."}},"CreateViewModal":{"title":"Opprett en ny visning","label":"Navn","cancel":"Avbryt","create":"Opprett visning","errors":{"sameName":"Det finnes allerede en visning med dette navnet. Velg et annet navn."}}},"Tag":{"ariaLabel":"Fjern {children}"},"TextField":{"characterCount":"{count} tegn","characterCountWithMaxLength":"{count} av {limit} tegn brukt"},"TopBar":{"toggleMenuLabel":"Aktiver/deaktiver meny","SearchField":{"clearButtonLabel":"Tøm","search":"Søk"}},"MediaCard":{"popoverButton":"Handlinger","dismissButton":"Avvis"},"VideoThumbnail":{"playButtonA11yLabel":{"default":"Spill av video","defaultWithDuration":"Spill av video med lengde {duration}","duration":{"hours":{"other":{"only":"{hourCount} timer","andMinutes":"{hourCount} timer og {minuteCount} minutter","andMinute":"{hourCount} timer og {minuteCount} minutt","minutesAndSeconds":"{hourCount} timer, {minuteCount} minutter og {secondCount} sekunder","minutesAndSecond":"{hourCount} timer, {minuteCount} minutter og {secondCount} sekund","minuteAndSeconds":"{hourCount} timer, {minuteCount} minutt og {secondCount} sekunder","minuteAndSecond":"{hourCount} timer, {minuteCount} minutt og {secondCount} sekund","andSeconds":"{hourCount} timer og {secondCount} sekunder","andSecond":"{hourCount} timer og {secondCount} sekund"},"one":{"only":"{hourCount} time","andMinutes":"{hourCount} time og {minuteCount} minutter","andMinute":"{hourCount} time og {minuteCount} minutt","minutesAndSeconds":"{hourCount} time, {minuteCount} minutter og {secondCount} sekunder","minutesAndSecond":"{hourCount} time, {minuteCount} minutter og {secondCount} sekund","minuteAndSeconds":"{hourCount} time, {minuteCount} minutt og {secondCount} sekunder","minuteAndSecond":"{hourCount} time, {minuteCount} minutt og {secondCount} sekund","andSeconds":"{hourCount} time og {secondCount} sekunder","andSecond":"{hourCount} time og {secondCount} sekund"}},"minutes":{"other":{"only":"{minuteCount} minutter","andSeconds":"{minuteCount} minutter og {secondCount} sekunder","andSecond":"{minuteCount} minutter og {secondCount} sekund"},"one":{"only":"{minuteCount} minutt","andSeconds":"{minuteCount} minutt og {secondCount} sekunder","andSecond":"{minuteCount} minutt og {secondCount} sekund"}},"seconds":{"other":"{secondCount} sekunder","one":"{secondCount} sekund"}}}},"Loading":{"label":"Sidelastingslinje"},"TooltipOverlay":{"accessibilityLabel":"Verktøytips: {label}"},"Page":{"Header":{"rollupActionsLabel":"Vis handlinger for {title}","pageReadyAccessibilityLabel":"{title}. Denne siden er klar"}},"ActionList":{"SearchField":{"clearButtonLabel":"Tøm","search":"Søk","placeholder":"Søk i handlinger"}},"AlphaTable":{"TableRowActions":{"heading":"Handlinger","activatorAccessibilityLabel":"Åpne handlinger for rad","activatorLabel":"Handlinger"},"TableRowGroups":{"heading":"Velg mellom radgrupper","toggle":"Slå synligheten til denne radgruppen av og på"},"Sorting":{"sortAscending":"Sorter denne tabellen etter {heading} i stigende rekkefølge","sortDescending":"Sorter denne tabellen etter {heading} i synkende rekkefølge"},"Selection":{"select":"Velg {id}","selectPage":"Velg alle {count} på siden","selectAll":"Velg alle {count}+ i butikken","selectAllWithTotal":"Velg alle {total} i butikken","selectionHeader":"Utvalg","unselectAll":"Opphev valget av alle","selectedPage":"{count} er valgt","selectedAll":"Alle {count}+ er valgt i butikken","selectedAllWithTotal":"Alle {total} er valgt i butikken","selectedSome":"{count}/{total} er valgt"},"TableCell":{"spansColumns":"dekker {count} kolonner"},"BulkActions":{"activatorLabel":"Handlinger"}},"SortPopover":{"ariaLabel":"Sorter resultatene","tooltip":"Sorter","title":"Sorter etter","sorting":{"asc":"Stigende","desc":"Synkende","az":"A–Å","za":"Å–A"}}},"DistributionChart":{"noData":"Ingen tilgjengelige data","title":"Distribusjonsdiagram","description":"Et linjediagram som viser distribusjonsdata: {data}.{percentiles}","highlightedPercentiles":" Viktige persentiler er blant annet: {percentiles}."},"PerformanceEventType":{"APP_INSTALL":{"title":"Appen er installert","content":"Installerte {appName}"},"APP_UNINSTALL":{"title":"Appen er avinstallert","content":"Avinstallerte {appName}"},"THEME_LIVE_EDIT":{"title":"Live-tema er redigert","content":{"one":"Redigerte temaet {themeName} {count} ganger","other":"Redigerte temaet {themeName} {count} ganger"}},"THEME_PUBLICATION":{"title":"Temaet er publisert","content":"Publiserte temaet {themeName}"}}}')
-  , WK = {
-    AnalyticsUIComponents: HK
-}
-  , qK = JSON.parse('{"BenchmarksSummary":{"shopValue":"Je winkel","benchmarksMedian":"Benchmarkmediaan","benchmarks25thPercentile":"25e percentiel","benchmarks75thPercentile":"75e percentiel","benchmarksTooltip":"Vergelijk de prestaties van jouw winkel met die van soortgelijke winkels op basis van de producten die in de afgelopen 30 dagen zijn verkocht, het land van de primaire markt en het bestelvolume.","missingData":{"title":"Geen benchmark","content":"Niet genoeg gegevens van vergelijkbare winkels"}},"CloseButton":{"delete":"Statistiek verwijderen"},"MetricCardEmpty":{"noResults":"Er zijn geen gegevens gevonden voor deze periode","noResultsCompact":"Geen gegevens","incorrectCardSize":"Als je gegevens wil zien, wijzig je het formaat van deze kaart"},"MetricCardError":{"error":"Kan geen gegevens laden"},"MetricLayout":{"ReportLinkAccessibilityLabel":"Het {reportTitle}-rapport bekijken"},"HorizontalNavigation":{"Forward":"Vooruit","Backward":"Achteruit"},"TimeframePicker":{"today":"Vandaag","todayHelp":"Vergeleken met gisteren tot het huidige tijdstip","last7days":"7 dagen","last7daysHelp":"Vergeleken met de vorige 7 dagen","last30days":"30 dagen","last30daysHelp":"Vergeleken met de vorige 30 dagen","last90days":"90 dagen","last90daysHelp":"Vergeleken met de vorige 90 dagen","last365days":"365 dagen","last365daysHelp":"Vergeleken met de vorige 365 dagen"},"date":{"range":"{startDate}–{endDate}","sameMonthRange":"{startDay}–{endDay} {month} {year}","months":{"1":"jan","2":"feb","3":"mrt","4":"apr","5":"mei","6":"jun","7":"jul","8":"aug","9":"sep","10":"okt","11":"nov","12":"dec"},"title":{"today":"Vandaag","yesterday":"Gisteren","last7days":"Afgelopen 7 dagen","last30days":"Afgelopen 30 dagen","last90days":"Afgelopen 90 dagen","last365days":"Afgelopen 365 dagen","last12months":"Afgelopen 12 maanden","this_week":"Deze week","this_month":"Deze maand","this_quarter":"Dit kwartaal","this_year":"Dit jaar","last_week":"Afgelopen week","last_month":"Afgelopen maand","last_quarter":"Afgelopen kwartaal","last_year":"Afgelopen jaar","weekToDate":"Week tot nu","monthToDate":"Maand tot nu","quarterToDate":"Kwartaal tot nu","yearToDate":"Jaar tot nu","bfcm":"BFCM ({year})","quarter":"Kwartaal {quarterNumber} {year}","previous_period":"Vorige periode","previous_second":"Vorige seconde","previous_minute":"Vorige minuut","previous_hour":"Vorig uur","previous_day":"Vorige dag","previous_week":"Vorige week","previous_month":"Vorige maand","previous_quarter":"Vorig kwartaal","previous_year":"Vorig jaar","previous_year_match_day_of_week":"Vorig jaar (zelfde dag van de week)"}},"MetricAnnotations":{"learnMoreLinkText":"Meer informatie","sessionsBackfill2022":{"label":"Beginpunt van gegevensmetingen","description":"Omwille van gegevensverbeteringen beginnen de gegevens voor sessies nu vanaf oktober 2022."},"checkoutConversionRate2022":{"label":"Meting bijwerken","description":"Omwille van gegevensverbeteringen beginnen de gegevens voor sessies nu vanaf oktober 2022. We hebben ook de volgende statistieken aangepast vanaf die datum: {affectedMetrics}.","banner":{"description":"We hebben verbeterd hoe we tellen wanneer een checkout is gestart, dus we zullen meer gestarte checkouts tellen. Daardoor zijn sommige statistieken waarschijnlijk gewijzigd: {affectedMetrics}. We hebben deze statistieken vanaf oktober 2022 aangepast om historische vergelijkingen mogelijk te maken."}}},"TrendIndicator":{"IncreaseOf":"Toename van {change}","DecreaseOf":"Afname van {change}","NoChange":"Geen wijziging"},"TimeFormatter":{"DayOrLonger":"{timeInDay} {timeInHour}","LessThanDay":"{timeInHour} {timeInMinute}","day":{"one":"{amount} dag","other":"{amount} dagen"},"hour":{"one":"{amount} uur","other":"{amount} uur"},"minute":{"one":"{amount} min.","other":"{amount} min."}},"useFormattedValue":{"none":"Geen","boolean":{"true":"Ja","false":"Nee"},"quarters":{"short":{"q1":"Q1","q2":"Q2","q3":"Q3","q4":"Q4"},"long":{"q1":"Q1 {year}","q2":"Q2 {year}","q3":"Q3 {year}","q4":"Q4 {year}"}},"DAY_OF_WEEK":{"short":{"0":"ma","1":"di","2":"wo","3":"do","4":"vr","5":"za","6":"zo"},"long":{"0":"maandag","1":"dinsdag","2":"woensdag","3":"donderdag","4":"vrijdag","5":"zaterdag","6":"zondag"}}},"useFormatHistogram":{"days":{"one":"{count} dag","other":"{count} dagen"}},"TooltipContent":{"fieldSuffixes":{"product_title":{"one":"{count} product","other":"{count} producten"},"product_variant_title":{"one":"{count} productvariant","other":"{count} productvarianten"},"product_variant_id":{"one":"{count} productvariant","other":"{count} productvarianten"},"product_variant_sku":{"one":"{count} productvariant","other":"{count} productvarianten"}}},"popover":{"learnMore":"Meer informatie"},"useFormatLineChartRelational":{"percentileLegend":"25e - 75e percentiel","median":"Benchmarkmediaan","missingData":{"title":"Geen benchmark","content":"Niet genoeg gegevens van vergelijkbare winkels"},"yourTotals":"Je totalen"},"RFMGroups":{"previously_loyal":{"description":"Klanten zonder recente aankopen, maar die in het verleden zeer veel hebben besteld en uitgegeven.","goal":"Doel: klanten verplaatsen naar Loyaal"},"at_risk":{"description":"Klanten zonder recente aankopen, maar die in het verleden veel hebben besteld en uitgegeven.","goal":"Doel: klanten verplaatsen naar Loyaal of Heeft aandacht nodig"},"dormant":{"description":"Klanten zonder recente aankopen, met onregelmatige bestellingen en lage uitgaven.","goal":"Doel: klanten verplaatsen naar Bijna verloren"},"loyal":{"description":"Klanten zonder recente aankopen, maar die in het verleden zeer veel hebben besteld en uitgegeven.","goal":"Doel: klanten verplaatsen naar Champions"},"needs_attention":{"description":"Klanten die tegenwoordig minder kopen, soms bestellen met bescheiden uitgaven in jouw winkel.","goal":"Doel: klanten verplaatsen naar Loyaal of Actief"},"almost_lost":{"description":"Klanten zonder recente aankopen, minder bestellingen en lagere uitgaven.","goal":"Doel: klanten verplaatsen naar Actief of Veelbelovend"},"promising":{"description":"Klanten met recente aankopen, weinig bestellingen en lage uitgaven.","goal":"Doel: klanten verplaatsen naar Actief"},"active":{"description":"Klanten met recente aankopen, enkele bestellingen en bescheiden uitgaven.","goal":"Doel: klanten verplaatsen naar Champions of Loyaal"},"new":{"description":"Klanten met zeer recente aankopen, weinig bestellingen en lage uitgaven.","goal":"Doel: klanten verplaatsen naar Actief"},"champions":{"description":"Klanten met zeer recente aankopen die veel hebben besteld en zeer veel hebben uitgegeven."},"metricInformation":{"value":"{formattedMetricValue}","percentage":"({formattedPercentValue} van het klantenbestand)"},"previewSegment":"Voorbeeld van segment","viewReport":"Rapport bekijken"},"CustomerCohortAnalysis":{"Tooltip":{"returned":"{percent} ({customers}) teruggekeerd na {month} ({currentMonth})","returnedAcquisitionMonth":"{percent} ({customers}) teruggekeerd in de maand van verwerving van het cohort ({month})","firstOrder":"{month}-cohort: {customers}","noOrders":"Geen klanten teruggekeerd na {month} ({currentMonth})","noOrdersAcquisitionMonth":"Geen klanten teruggekeerd in de maand van verwerving van het cohort ({currentMonth})","month":{"one":"{count} maand","other":"{count} maanden"},"customer":{"one":"{count} klant","other":"{count} klanten"}},"summaryRowDate":"Alle cohorten","timeDimensionColumnDisplayName":"Cohort"},"MetricTable":{"subtitle":"% gewijzigd","summary":"Overzicht","EmptyState":{"text":"Geen gegevens voor deze selectie"},"FooterRow":{"exportMessage":"Dit rapport bevat tot {amount} resultaten. Om alle resultaten te zien, kun je {export}","exportActionText":"het rapport exporteren.","message":{"one":"{count} resultaat","other":"{count} resultaten"}}},"FunnelChart":{"truncatedSessions":"Ingekorte {metric}","truncatedSessionsDescription":"{metric} zijn op schaal getekend, zodat ze de funnel beter weergeven"},"BasketPopover":{"noVariants":"• Geen varianten","productsBoughtTogether":"Samen gekochte producten ({count})","variantsBoughtTogether":"Samen gekochte varianten ({count})","variantsCount":{"one":"• {count} variant","other":"• {count} varianten"}},"BasketCell":{"hiddenProductCount":"+ nog {count}","none":"Geen"},"BasketListWithActions":{"actions":"Acties","back":"Terug"},"RowActions":{"previewSegment":"Voorbeeld van segment"},"usePivotedColumnDisplayName":{"week":{"firstOrder":"Eerste bestelling","greaterThanOne":"Week {value}"},"month":{"firstOrder":"Eerste bestelling","greaterThanOne":"Maand {value}"},"quarter":{"firstOrder":"Eerste bestelling","greaterThanOne":"Kwartaal {value}"},"year":{"firstOrder":"Eerste bestelling","greaterThanOne":"Jaar {value}"}},"ShopifyQlDateControls":{"dateTextField":{"placeholderDateValue":"DD-MM-JJJJ","sinceTextFieldLabel":"Vanaf","untilTextFieldLabel":"Tot"},"actionButtons":{"apply":"Toepassen","cancel":"Annuleren","back":"Terug"},"quickPicksSidebar":{"newBadge":"Nieuw"},"quickPicksDropdown":{"customDateRange":"Aangepast","label":"Datumbereik"},"compareTo":"Vergelijken met: {dateRange}","noComparison":"Geen vergelijking","sections":{"bfcm":"Black Friday Cyber Monday","quarters":"Kwartalen"}},"useFormatLineChart":{"allTime":"Gehele periode"},"useGetPrimaryMetricBadge":{"webPerformance":{"success":"Goed","attention":"Matig","critical":"Slecht"},"fraudRisk":{"attention":"Loopt risico","critical":"Verhoogd risico"}},"RFMGridLabels":{"xAxis":"Recentheidscore","yAxis":"Score van frequentie + monetaire waarde"},"useWebPerformanceAnnotations":{"good":"Goed","poor":"Slecht","count":{"one":"{count} evenement","other":"{count} evenementen"}},"Polaris":{"Avatar":{"label":"Avatar","labelWithInitials":"Avatar met initialen {initials}"},"Autocomplete":{"spinnerAccessibilityLabel":"Laden","ellipsis":"{content}..."},"Badge":{"PROGRESS_LABELS":{"incomplete":"Onvolledig","partiallyComplete":"Gedeeltelijk voltooid","complete":"Voltooid"},"TONE_LABELS":{"info":"Info","success":"Geslaagd","warning":"Waarschuwing","attention":"Let op","new":"Nieuw","critical":"Kritiek","readOnly":"Alleen-lezen","enabled":"Ingeschakeld"},"progressAndTone":"{toneLabel} {progressLabel}"},"Banner":{"dismissButton":"Melding negeren"},"Button":{"spinnerAccessibilityLabel":"Laden"},"Common":{"checkbox":"selectievakje","undo":"Ongedaan maken","cancel":"Annuleren","clear":"Wissen","close":"Sluiten","submit":"Indienen","more":"Meer"},"ContextualSaveBar":{"save":"Opslaan","discard":"Verwerpen"},"DataTable":{"sortAccessibilityLabel":"{direction} sorteren op","navAccessibilityLabel":"Scrol tabel één kolom {direction}","totalsRowHeading":"Totalen","totalRowHeading":"Totaal"},"DatePicker":{"previousMonth":"Vorige maand weergeven, {previousMonthName} {showPreviousYear}","nextMonth":"Volgende maand weergeven, {nextMonth} {nextYear}","today":"Vandaag ","months":{"january":"januari","february":"februari","march":"maart","april":"april","may":"mei","june":"juni","july":"juli","august":"augustus","september":"september","october":"oktober","november":"november","december":"december"},"daysAbbreviated":{"monday":"ma","tuesday":"di","wednesday":"wo","thursday":"do","friday":"vr","saturday":"za","sunday":"zo"},"days":{"monday":"maandag","tuesday":"dinsdag","wednesday":"woensdag","thursday":"donderdag","friday":"vrijdag","saturday":"zaterdag","sunday":"zondag"},"start":"Begin van reeks","end":"Einde van reeks"},"ActionMenu":{"RollupActions":{"rollupButton":"Acties bekijken"},"Actions":{"moreActions":"Meer acties"}},"Modal":{"iFrameTitle":"opmaak hoofdtekst","modalWarning":"Deze verplichte onderdelen ontbreken in het venster: {missingProps}","unsavedChanges":"Niet-opgeslagen wijzigingen"},"Pagination":{"previous":"Vorige","next":"Volgende","pagination":"Paginering"},"ProgressBar":{"negativeWarningMessage":"Waarden die worden doorgegeven aan de voortgangsinstelling mogen niet negatief zijn. {progress} wordt opnieuw ingesteld op 0.","exceedWarningMessage":"Waarden die worden doorgegeven aan de voortgangsinstelling mogen de 100 niet overschrijden. {progress} wordt ingesteld op 100."},"ResourceList":{"sortingLabel":"Sorteren op","defaultItemSingular":"artikel","defaultItemPlural":"artikelen","showing":"{itemsCount} {resource} wordt weergegeven","loading":"{resource} laden","selected":"{selectedItemsCount} geselecteerd","allItemsSelected":"Alle {itemsLength}+ {resourceNamePlural} in je winkel zijn geselecteerd","selectAllItems":"Selecteer alle {itemsLength}+ {resourceNamePlural} in je winkel","emptySearchResultTitle":"Geen {resourceNamePlural} gevonden","emptySearchResultDescription":"Wijzig de filters of zoekterm","selectButtonText":"Selecteren","a11yCheckboxDeselectAllSingle":"Selecteren van {resourceNameSingular} opheffen","a11yCheckboxSelectAllSingle":"{resourceNameSingular} selecteren","a11yCheckboxDeselectAllMultiple":"Selecteren van alle {itemsLength} {resourceNamePlural} opheffen","a11yCheckboxSelectAllMultiple":"Alle {itemsLength} {resourceNamePlural} selecteren","Item":{"actionsDropdownLabel":"Acties voor {accessibilityLabel}","actionsDropdown":"Keuzelijst acties","viewItem":"Productgegevens weergeven voor {itemName}"},"BulkActions":{"actionsActivatorLabel":"Acties","moreActionsActivatorLabel":"Meer acties"},"showingTotalCount":"{itemsCount} van {totalItemsCount} {resource} worden weergegeven","allFilteredItemsSelected":"Alle {itemsLength}+ {resourceNamePlural} in dit filter zijn geselecteerd","selectAllFilteredItems":"Selecteer alle {itemsLength}+ {resourceNamePlural} in dit filter."},"SkeletonPage":{"loadingLabel":"Pagina is aan het laden"},"Tabs":{"toggleTabsLabel":"Meer weergaven","newViewAccessibilityLabel":"Nieuwe weergave aanmaken","newViewTooltip":"Weergave aanmaken","Tab":{"rename":"Naam van weergave wijzigen","duplicate":"Weergave dupliceren","edit":"Weergave bewerken","editColumns":"Kolommen bewerken","delete":"Weergave verwijderen","copy":"Kopie van {name}","deleteModal":{"title":"Weergave verwijderen?","description":"Je kunt dit niet ongedaan maken. Het {viewName}-overzicht is niet langer beschikbaar in je beheerpaneel.","cancel":"Annuleren","delete":"Weergave verwijderen"}},"RenameModal":{"title":"Naam van weergave wijzigen","label":"Naam","cancel":"Annuleren","create":"Opslaan","errors":{"sameName":"Er bestaat al een weergave met deze naam. Kies een andere naam."}},"DuplicateModal":{"title":"Weergave dupliceren","label":"Naam","cancel":"Annuleren","create":"Weergave aanmaken","errors":{"sameName":"Er bestaat al een weergave met deze naam. Kies een andere naam."}},"CreateViewModal":{"title":"Nieuwe weergave aanmaken","label":"Naam","cancel":"Annuleren","create":"Weergave aanmaken","errors":{"sameName":"Er bestaat al een weergave met deze naam. Kies een andere naam."}}},"Tag":{"ariaLabel":"{children} verwijderen"},"TextField":{"characterCount":"{count} tekens","characterCountWithMaxLength":"{count} van {limit} tekens gebruikt"},"TopBar":{"toggleMenuLabel":"Menu weergeven/verbergen","SearchField":{"clearButtonLabel":"Wissen","search":"Zoeken"}},"MediaCard":{"popoverButton":"Acties","dismissButton":"Sluiten"},"VideoThumbnail":{"playButtonA11yLabel":{"default":"Video afspelen","defaultWithDuration":"Video van {duration} afspelen","duration":{"hours":{"other":{"only":"{hourCount} uur","andMinutes":"{hourCount} uur en {minuteCount} minuten","andMinute":"{hourCount} uur en {minuteCount} minuut","minutesAndSeconds":"{hourCount} uur, {minuteCount} minuten en {secondCount} seconden","minutesAndSecond":"{hourCount} uur, {minuteCount} minuten en {secondCount} seconde","minuteAndSeconds":"{hourCount} uur, {minuteCount} minuut en {secondCount} seconden","minuteAndSecond":"{hourCount} uur, {minuteCount} minuut en {secondCount} seconde","andSeconds":"{hourCount} uur en {secondCount} seconden","andSecond":"{hourCount} uur en {secondCount} seconde"},"one":{"only":"{hourCount} uur","andMinutes":"{hourCount} uur en {minuteCount} minuten","andMinute":"{hourCount} uur en {minuteCount} minuut","minutesAndSeconds":"{hourCount} uur, {minuteCount} minuten en {secondCount} seconden","minutesAndSecond":"{hourCount} uur, {minuteCount} minuten en {secondCount} seconde","minuteAndSeconds":"{hourCount} uur, {minuteCount} minuut en {secondCount} seconden","minuteAndSecond":"{hourCount} uur, {minuteCount} minuut en {secondCount} seconde","andSeconds":"{hourCount} uur en {secondCount} seconden","andSecond":"{hourCount} uur en {secondCount} seconde"}},"minutes":{"other":{"only":"{minuteCount} minuten","andSeconds":"{minuteCount} minuten en {secondCount} seconden","andSecond":"{minuteCount} minuten en {secondCount} seconde"},"one":{"only":"{minuteCount} minuut","andSeconds":"{minuteCount} minuut en {secondCount} seconden","andSecond":"{minuteCount} minuut en {secondCount} seconde"}},"seconds":{"other":"{secondCount} seconden","one":"{secondCount} seconde"}}}},"Loading":{"label":"Laadbalk pagina"},"TooltipOverlay":{"accessibilityLabel":"Tooltip: {label}"},"Page":{"Header":{"rollupActionsLabel":"Acties voor {title} bekijken","pageReadyAccessibilityLabel":"{title}. Deze pagina is gereed"}},"ActionList":{"SearchField":{"clearButtonLabel":"Wissen","search":"Zoeken","placeholder":"Zoekacties"}},"AlphaTable":{"TableRowActions":{"heading":"Acties","activatorAccessibilityLabel":"Rijacties openen","activatorLabel":"Acties"},"TableRowGroups":{"heading":"Schakelen tussen rijgroepen","toggle":"Zichtbaarheid van deze rijgroep in-/uitschakelen"},"Sorting":{"sortAscending":"Sorteer deze tabel op {heading}, in oplopende volgorde","sortDescending":"Sorteer deze tabel op {heading}, in aflopende volgorde"},"Selection":{"select":"{id} selecteren","selectPage":"Alle {count} op deze pagina selecteren","selectAll":"Alle {count}+ in deze winkel selecteren","selectAllWithTotal":"Alle {total} in deze winkel selecteren","selectionHeader":"Selectie","unselectAll":"Alles deselecteren","selectedPage":"{count} geselecteerd","selectedAll":"Alle {count}+ in deze winkel geselecteerd","selectedAllWithTotal":"Alle {total} in deze winkel geselecteerd","selectedSome":"{count} van {total} geselecteerd"},"TableCell":{"spansColumns":"omvat {count} kolommen"},"BulkActions":{"activatorLabel":"Acties"}},"SortPopover":{"ariaLabel":"Resultaten sorteren","tooltip":"Sorteren","title":"Sorteren op","sorting":{"asc":"Oplopend","desc":"Aflopend","az":"A-Z","za":"Z-A"}}},"DistributionChart":{"noData":"Geen beschikbare gegevens","title":"Distributiediagram","description":"Een staafdiagram met distributiegegevens: {data}.{percentiles}","highlightedPercentiles":" Opmerkelijke percentielen zijn: {percentiles}."},"PerformanceEventType":{"APP_INSTALL":{"title":"App geïnstalleerd","content":"{appName} geïnstalleerd"},"APP_UNINSTALL":{"title":"App verwijderd","content":"{appName} verwijderd"},"THEME_LIVE_EDIT":{"title":"Huidig thema bewerkt","content":{"one":"Thema {themeName} {count} keer bewerkt","other":"Thema {themeName} {count} keer bewerkt"}},"THEME_PUBLICATION":{"title":"Thema gepubliceerd","content":"Thema {themeName} gepubliceerd"}}}')
-  , GK = {
-    AnalyticsUIComponents: qK
-}
-  , KK = JSON.parse('{"BenchmarksSummary":{"shopValue":"Twój sklep","benchmarksMedian":"Mediana wskaźnika referencyjnego","benchmarks25thPercentile":"25. percentyl","benchmarks75thPercentile":"75. percentyl","benchmarksTooltip":"Porównaj wyniki swojego sklepu z podobnymi sklepami na podstawie produktów sprzedanych w ciągu ostatnich 30 dni, kraju rynku głównego i wielkości zamówień.","missingData":{"title":"Brak wskaźnika referencyjnego","content":"Za mało danych z podobnych sklepów"}},"CloseButton":{"delete":"Usuń metrykę"},"MetricCardEmpty":{"noResults":"Nie znaleziono żadnych danych dla tego zakresu dat","noResultsCompact":"Brak danych","incorrectCardSize":"Aby wyświetlić dane, zmień rozmiar tej karty"},"MetricCardError":{"error":"Nie można załadować danych"},"MetricLayout":{"ReportLinkAccessibilityLabel":"Wyświetl raport {reportTitle}"},"HorizontalNavigation":{"Forward":"Dalej","Backward":"Powrót"},"TimeframePicker":{"today":"Dzisiaj","todayHelp":"W porównaniu do wczoraj do bieżącej godziny","last7days":"7 dni","last7daysHelp":"W porównaniu do poprzednich 7 dni","last30days":"30 dni","last30daysHelp":"W porównaniu do poprzednich 30 dni","last90days":"90 dni","last90daysHelp":"W porównaniu do poprzednich 90 dni","last365days":"365 dni","last365daysHelp":"W porównaniu do poprzednich 365 dni"},"date":{"range":"{startDate}–{endDate}","sameMonthRange":"{startDay}–{endDay} {month} {year}","months":{"1":"Sty","2":"Lut","3":"Mar","4":"Kwi","5":"Maj","6":"Cze","7":"Lip","8":"Sie","9":"Wrz","10":"Paź","11":"Lis","12":"Gru"},"title":{"today":"Dzisiaj","yesterday":"Wczoraj","last7days":"Ostatnie 7 dni","last30days":"Ostatnie 30 dni","last90days":"Ostatnie 90 dni","last365days":"Ostatnie 365 dni","last12months":"Ostatnie 12 miesięcy","this_week":"Ten tydzień","this_month":"Ten miesiąc","this_quarter":"W tym kwartale","this_year":"Ten rok","last_week":"Ostatni tydzień","last_month":"Ostatni miesiąc","last_quarter":"Ostatni kwartał","last_year":"Ostatni rok","weekToDate":"Od początku tygodnia","monthToDate":"Od początku miesiąca","quarterToDate":"Od początku kwartału","yearToDate":"Od początku roku","bfcm":"BF i CM {year}","quarter":"{quarterNumber}. kw. {year}","previous_period":"Poprzedni okres","previous_second":"Poprzednia sekunda","previous_minute":"Poprzednia minuta","previous_hour":"Poprzednia godzina","previous_day":"Poprzedni dzień","previous_week":"Poprzedni tydzień","previous_month":"Poprzedni miesiąc","previous_quarter":"Poprzedni kwartał","previous_year":"Poprzedni rok","previous_year_match_day_of_week":"Poprzedni rok (ten sam dzień tygodnia)"}},"MetricAnnotations":{"learnMoreLinkText":"Dowiedz się więcej","sessionsBackfill2022":{"label":"Początek dostępności danych","description":"W ramach poprawek dane dla sesji zaczynają się teraz od października 2022 r."},"checkoutConversionRate2022":{"label":"Uaktualnienie wymiarów","description":"W ramach poprawek dane dla sesji zaczynają się teraz od października 2022 r. Również od tej daty dostosowaliśmy następujące współczynniki: {affectedMetrics}.","banner":{"description":"Ulepszyliśmy sposób liczenia rozpoczęcia realizacji zakupu, zatem będziemy naliczać więcej rozpoczętych realizacji zakupu. W efekcie prawdopodobnie zmienią się następujące wymiary: {affectedMetrics}. By umożliwić historyczne porównanie, dostosowaliśmy te wymiary od października 2022 r."}}},"TrendIndicator":{"IncreaseOf":"Zwiększenie o {change}","DecreaseOf":"Zmniejszenie o {change}","NoChange":"Bez zmian"},"TimeFormatter":{"DayOrLonger":"{timeInDay} {timeInHour}","LessThanDay":"{timeInHour} {timeInMinute}","day":{"one":"{amount} dzień","other":"{amount} dni","few":"{amount} dni","many":"{amount} dni"},"hour":{"one":"{amount} h","other":"{amount} h","few":"{amount} h","many":"{amount} h"},"minute":{"one":"{amount} min","other":"{amount} min","few":"{amount} min","many":"{amount} min"}},"useFormattedValue":{"none":"Brak","boolean":{"true":"Tak","false":"Nie"},"quarters":{"short":{"q1":"I kw.","q2":"II kw.","q3":"III kw.","q4":"IV kw."},"long":{"q1":"I kw. {year}","q2":"II kw. {year}","q3":"III kw. {year}","q4":"IV kw. {year}"}},"DAY_OF_WEEK":{"short":{"0":"Pon.","1":"Wt.","2":"Śr.","3":"Czw.","4":"Pt.","5":"Sob.","6":"Niedz."},"long":{"0":"Poniedziałek","1":"Wtorek","2":"Środa","3":"Czwartek","4":"Piątek","5":"Sobota","6":"Niedziela"}}},"useFormatHistogram":{"days":{"one":"{count} dzień","other":"{count} dni","few":"{count} dni","many":"{count} dni"}},"TooltipContent":{"fieldSuffixes":{"product_title":{"one":"{count} produkt","other":"{count} produkty(-ów)","few":"{count} produkty(-ów)","many":"{count} produkty(-ów)"},"product_variant_title":{"one":"{count} wariant produktu","other":"{count} warianty(-ów) produktu","few":"{count} warianty(-ów) produktu","many":"{count} warianty(-ów) produktu"},"product_variant_id":{"one":"{count} wariant produktu","other":"{count} warianty(-ów) produktu","few":"{count} warianty(-ów) produktu","many":"{count} warianty(-ów) produktu"},"product_variant_sku":{"one":"{count} wariant produktu","other":"{count} warianty(-ów) produktu","few":"{count} warianty(-ów) produktu","many":"{count} warianty(-ów) produktu"}}},"popover":{"learnMore":"Dowiedz się więcej"},"useFormatLineChartRelational":{"percentileLegend":"25.–75. percentyl","median":"Mediana wskaźnika referencyjnego","missingData":{"title":"Brak wskaźnika referencyjnego","content":"Za mało danych z podobnych sklepów"},"yourTotals":"Twoje sumy"},"RFMGroups":{"previously_loyal":{"description":"Klienci, którzy nie dokonali ostatnio zakupów, ale mają bardzo bogatą historię wcześniejszych zamówień i wydatków.","goal":"Cel: przenieść klientów do grupy Lojalni"},"at_risk":{"description":"Klienci, którzy nie dokonali ostatnio zakupów, ale mają bogatą historię wcześniejszych zamówień i wydatków.","goal":"Cel: przenieść klientów do grupy Lojalni lub Wymagają uwagi"},"dormant":{"description":"Klienci, którzy ostatnio nie dokonali zakupów, nie składali regularnie zamówień i wydali małe kwoty.","goal":"Goal: przenieść klientów do grupy Niemal straceni"},"loyal":{"description":"Klienci, którzy nie dokonali ostatnio zakupów, ale mają bardzo bogatą historię wcześniejszych zamówień i wydatków.","goal":"Cel: przenieść klientów do grupy Czempioni"},"needs_attention":{"description":"Klienci, którzy ostatnio kupują mniej, składają zamówienia od czasu do czasu i wydają w Twoim sklepie umiarkowane kwoty.","goal":"Cel: przenieść klientów do grupy Lojalni lub Aktywni"},"almost_lost":{"description":"Klienci, którzy nie dokonali ostatnio zakupów, mają mniejszą liczbę zamówień i niższe wydatki.","goal":"Cel: przenieść klientów do grupy Aktywni lub Obiecujący"},"promising":{"description":"Klienci, którzy ostatnio dokonali zakupów, złożyli mało zamówień i wydali małe kwoty.","goal":"Cel: przenieść klientów do grupy Aktywni"},"active":{"description":"Klienci, którzy dokonali ostatnio zakupów, złożyli średnią liczbę zamówień i wydali umiarkowane kwoty.","goal":"Cel: przenieść klientów do grupy Czempioni lub Lojalni"},"new":{"description":"Klienci, którzy bardzo niedawno dokonali zakupów, złożyli mało zamówień i wydali małe kwoty.","goal":"Cel: przenieść klientów do grupy Aktywni"},"champions":{"description":"Klienci, którzy bardzo niedawno dokonali zakupów, złożyli dużo zamówień i wydali najwięcej."},"metricInformation":{"value":"{formattedMetricValue}","percentage":"({formattedPercentValue} bazy klientów)"},"previewSegment":"Podgląd segmentu","viewReport":"Wyświetl raport"},"CustomerCohortAnalysis":{"Tooltip":{"returned":"{percent} ({customers}) wróciło po {month} ({currentMonth})","returnedAcquisitionMonth":"{percent} ({customers}) wróciło w miesiącu pozyskania kohorty ({month})","firstOrder":"{month} kohorta: {customers}","noOrders":"Żadni klienci nie wrócili po {month} ({currentMonth})","noOrdersAcquisitionMonth":"Żadni klienci nie wrócili w miesiącu pozyskania kohorty ({currentMonth})","month":{"one":"{count} miesiąc","other":"{count} miesiące/miesięcy","few":"{count} miesiące/miesięcy","many":"{count} miesiące/miesięcy"},"customer":{"one":"{count} klient","other":"{count} klientów","few":"{count} klientów","many":"{count} klientów"}},"summaryRowDate":"Wszystkie kohorty","timeDimensionColumnDisplayName":"Kohorta"},"MetricTable":{"subtitle":"Zmiana w %","summary":"Podsumowanie","EmptyState":{"text":"Brak danych dla tego wyboru"},"FooterRow":{"exportMessage":"Ten raport pokazuje do {amount} wyników. Aby uzyskać dostęp do wszystkich wyników, możesz {export}","exportActionText":"wyeksportować raport.","message":{"one":"{count} wynik","other":"Liczba wyników: {count}","few":"Liczba wyników: {count}","many":"Liczba wyników: {count}"}}},"FunnelChart":{"truncatedSessions":"{metric} ograniczone","truncatedSessionsDescription":"{metric} zostały dopasowane do skali, aby lepiej reprezentować lejek"},"BasketPopover":{"noVariants":"• Brak wariantów","productsBoughtTogether":"Produkty kupione razem ({count})","variantsBoughtTogether":"Warianty kupione razem ({count})","variantsCount":{"one":"• {count} wariant","other":"• {count} warianty(-ów)","few":"• {count} warianty(-ów)","many":"• {count} warianty(-ów)"}},"BasketCell":{"hiddenProductCount":"+{count} więcej","none":"Brak"},"BasketListWithActions":{"actions":"Czynności","back":"Powrót"},"RowActions":{"previewSegment":"Podgląd segmentu"},"usePivotedColumnDisplayName":{"week":{"firstOrder":"Pierwsze zamówienie","greaterThanOne":"Tydzień {value}"},"month":{"firstOrder":"Pierwsze zamówienie","greaterThanOne":"Miesiąc {value}"},"quarter":{"firstOrder":"Pierwsze zamówienie","greaterThanOne":"Kwartał {value}"},"year":{"firstOrder":"Pierwsze zamówienie","greaterThanOne":"Rok {value}"}},"ShopifyQlDateControls":{"dateTextField":{"placeholderDateValue":"RRRR-MM-DD","sinceTextFieldLabel":"Rozpoczęcie","untilTextFieldLabel":"Zakończenie"},"actionButtons":{"apply":"Zastosuj","cancel":"Anuluj","back":"Powrót"},"quickPicksSidebar":{"newBadge":"Nowość"},"quickPicksDropdown":{"customDateRange":"Niestandardowy","label":"Przedział dat"},"compareTo":"Porównaj z: {dateRange}","noComparison":"Bez porównywania","sections":{"bfcm":"Black Friday i Cyber Monday","quarters":"Kwartały"}},"useFormatLineChart":{"allTime":"Od początku"},"useGetPrimaryMetricBadge":{"webPerformance":{"success":"Dobry","attention":"Średni","critical":"Słaby"},"fraudRisk":{"attention":"Zagrożone","critical":"Podwyższone ryzyko"}},"RFMGridLabels":{"xAxis":"Ocena okresu od ostatniego zamówienia","yAxis":"Ocena częstotliwości i wartości pieniężnej"},"useWebPerformanceAnnotations":{"good":"Dobrze","poor":"Słabo","count":{"one":"{count} zdarzenie","other":"Zdarzenia: {count}","few":"Zdarzenia: {count}","many":"Zdarzenia: {count}"}},"Polaris":{"Avatar":{"label":"Awatar","labelWithInitials":"Awatar z inicjałami {initials}"},"Autocomplete":{"spinnerAccessibilityLabel":"Ładowanie","ellipsis":"{content}…"},"Badge":{"PROGRESS_LABELS":{"incomplete":"Niekompletne","partiallyComplete":"Częściowo kompletne","complete":"Kompletne"},"TONE_LABELS":{"info":"Informacja","success":"Udało się","warning":"Ostrzeżenie","attention":"Uwaga","new":"Nowe","critical":"Krytyczne","readOnly":"Tylko do odczytu","enabled":"Włączono"},"progressAndTone":"{toneLabel} {progressLabel}"},"Banner":{"dismissButton":"Odrzuć powiadomienie"},"Button":{"spinnerAccessibilityLabel":"Ładowanie"},"Common":{"checkbox":"pole wyboru","undo":"Cofnij","cancel":"Anuluj","clear":"Wyczyść","close":"Zamknij","submit":"Prześlij","more":"Więcej"},"ContextualSaveBar":{"save":"Zapisz","discard":"Odrzuć"},"DataTable":{"sortAccessibilityLabel":"sortuj {direction} według","navAccessibilityLabel":"Przewiń tabelę {direction} – jedna kolumna","totalsRowHeading":"Sumy","totalRowHeading":"Suma"},"DatePicker":{"previousMonth":"Pokaż poprzedni miesiąc, {previousMonthName} {showPreviousYear}","nextMonth":"Pokaż następny miesiąc, {nextMonth} {nextYear}","today":"Dzisiaj ","months":{"january":"styczeń","february":"luty","march":"marzec","april":"kwiecień","may":"maj","june":"czerwiec","july":"lipiec","august":"sierpień","september":"wrzesień","october":"październik","november":"listopad","december":"grudzień"},"daysAbbreviated":{"monday":"pn","tuesday":"wt","wednesday":"śr","thursday":"cz","friday":"pt","saturday":"sb","sunday":"nd"},"days":{"monday":"poniedziałek","tuesday":"wtorek","wednesday":"środa","thursday":"czwartek","friday":"piątek","saturday":"sobota","sunday":"niedziela"},"start":"Początek zakresu","end":"Koniec zakresu"},"ActionMenu":{"RollupActions":{"rollupButton":"Wyświetl czynności"},"Actions":{"moreActions":"Więcej czynności"}},"Modal":{"iFrameTitle":"znacznik treści","modalWarning":"W oknie modalnym brakuje tych wymaganych właściwości: {missingProps}","unsavedChanges":"Niezapisane zmiany"},"Pagination":{"previous":"Powrót","next":"Dalej","pagination":"Paginacja"},"ProgressBar":{"negativeWarningMessage":"Wartości przekazywane do właściwości postępu nie powinny być ujemne. Resetowanie {progress} do 0.","exceedWarningMessage":"Wartości przekazywane do właściwości postępu nie powinny przekroczyć 100. Ustawianie {progress} na 100."},"ResourceList":{"sortingLabel":"Sortuj wg","defaultItemSingular":"pozycja","defaultItemPlural":"pozycje","showing":"Wyświetlanie {itemsCount} {resource}","loading":"Ładowanie {resource}","selected":"Wybrano {selectedItemsCount}","allItemsSelected":"Wybrano wszystkie (ponad {itemsLength}) {resourceNamePlural} w Twoim sklepie","selectAllItems":"Wybierz wszystkie (ponad {itemsLength}) {resourceNamePlural} w Twoim sklepie","emptySearchResultTitle":"Nie znaleziono {resourceNamePlural}","emptySearchResultDescription":"Spróbuj zmienić filtry lub szukany termin","selectButtonText":"Wybierz","a11yCheckboxDeselectAllSingle":"Usuń wybór {resourceNameSingular}","a11yCheckboxSelectAllSingle":"Wybierz {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"Odznacz wszystkie {itemsLength} {resourceNamePlural}","a11yCheckboxSelectAllMultiple":"Wybierz wszystkie {itemsLength} {resourceNamePlural}","Item":{"actionsDropdownLabel":"Czynności dla {accessibilityLabel}","actionsDropdown":"Lista rozwijana czynności","viewItem":"Wyświetl szczegóły dla produktu {itemName}"},"BulkActions":{"actionsActivatorLabel":"Czynności","moreActionsActivatorLabel":"Więcej czynności"},"showingTotalCount":"Wyświetlanie {itemsCount} z {totalItemsCount} {resource}","allFilteredItemsSelected":"Wybrano wszystkie (ponad {itemsLength}) {resourceNamePlural} w tym filtrze","selectAllFilteredItems":"Wybierz wszystkie (ponad {itemsLength}) {resourceNamePlural} w tym filtrze"},"SkeletonPage":{"loadingLabel":"Ładowanie strony"},"Tabs":{"toggleTabsLabel":"Więcej widoków","newViewAccessibilityLabel":"Utwórz nowy widok","newViewTooltip":"Utwórz widok","Tab":{"rename":"Zmień nazwę widoku","duplicate":"Duplikuj widok","edit":"Edytuj widok","editColumns":"Edytuj kolumny","delete":"Usuń widok","copy":"Kopia {name}","deleteModal":{"title":"Czy usunąć widok?","description":"Tej czynności nie można cofnąć. Widok {viewName} nie będzie już dostępny w Twoim panelu administracyjnym.","cancel":"Anuluj","delete":"Usuń widok"}},"RenameModal":{"title":"Zmień nazwę widoku","label":"Nazwa","cancel":"Anuluj","create":"Zapisz","errors":{"sameName":"Widok o tej nazwie już istnieje. Wybierz inną nazwę."}},"DuplicateModal":{"title":"Duplikuj widok","label":"Nazwa","cancel":"Anuluj","create":"Utwórz widok","errors":{"sameName":"Widok o tej nazwie już istnieje. Wybierz inną nazwę."}},"CreateViewModal":{"title":"Utwórz nowy widok","label":"Nazwa","cancel":"Anuluj","create":"Utwórz widok","errors":{"sameName":"Widok o tej nazwie już istnieje. Wybierz inną nazwę."}}},"Tag":{"ariaLabel":"Usuń {children}"},"TextField":{"characterCount":"Znaki: {count}","characterCountWithMaxLength":"Wykorzystano {count} z {limit} znaków"},"TopBar":{"toggleMenuLabel":"Przełącz menu","SearchField":{"clearButtonLabel":"Wyczyść","search":"Szukaj"}},"MediaCard":{"popoverButton":"Czynności","dismissButton":"Odrzuć"},"VideoThumbnail":{"playButtonA11yLabel":{"default":"Odtwórz film","defaultWithDuration":"Odtwórz film o długości {duration}","duration":{"hours":{"other":{"only":"Liczba godzin: {hourCount}","andMinutes":"{hourCount} godz. i {minuteCount} min","andMinute":"{hourCount} godz. i {minuteCount} min","minutesAndSeconds":"{hourCount} godz., {minuteCount} min i {secondCount} s","minutesAndSecond":"{hourCount} godz., {minuteCount} min i {secondCount} s","minuteAndSeconds":"{hourCount} godz., {minuteCount} min i {secondCount} s","minuteAndSecond":"{hourCount} godz., {minuteCount} min i {secondCount} s","andSeconds":"{hourCount} godz. i {secondCount} s","andSecond":"{hourCount} godz. i {secondCount} s"},"one":{"only":"{hourCount} godzina","andMinutes":"{hourCount} godz. i {minuteCount} min","andMinute":"{hourCount} godz. i {minuteCount} min","minutesAndSeconds":"{hourCount} godz., {minuteCount} min i {secondCount} s","minutesAndSecond":"{hourCount} godz., {minuteCount} min i {secondCount} s","minuteAndSeconds":"{hourCount} godz., {minuteCount} min i {secondCount} s","minuteAndSecond":"{hourCount} godz., {minuteCount} min i {secondCount} s","andSeconds":"{hourCount} godz. i {secondCount} s","andSecond":"{hourCount} godz. i {secondCount} s"}},"minutes":{"other":{"only":"{minuteCount} min","andSeconds":"{minuteCount} min i {secondCount} s","andSecond":"{minuteCount} min i {secondCount} s"},"one":{"only":"{minuteCount} min","andSeconds":"{minuteCount} min i {secondCount} s","andSecond":"{minuteCount} min i {secondCount} s"}},"seconds":{"other":"{secondCount} s","one":"{secondCount} sekunda","few":"{secondCount} s","many":"{secondCount} s"}}}},"Loading":{"label":"Pasek ładowania strony"},"TooltipOverlay":{"accessibilityLabel":"Podpowiedź: {label}"},"Page":{"Header":{"rollupActionsLabel":"Wyświetl czynności dla {title}","pageReadyAccessibilityLabel":"{title}. Ta strona jest gotowa"}},"ActionList":{"SearchField":{"clearButtonLabel":"Wyczyść","search":"Wyszukiwanie","placeholder":"Szukaj czynności"}},"AlphaTable":{"TableRowActions":{"heading":"Czynności","activatorAccessibilityLabel":"Otwórz czynności dot. wierszy","activatorLabel":"Czynności"},"TableRowGroups":{"heading":"Przełącz grupy wierszy","toggle":"Przełącz widoczność tej grupy wierszy"},"Sorting":{"sortAscending":"Sortuj tę tabelę według {heading} w kolejności rosnącej","sortDescending":"Sortuj tę tabelę według {heading} w kolejności malejącej"},"Selection":{"select":"Wybierz {id}","selectPage":"Wybierz wszystkie {count} na stronie","selectAll":"Wybierz wszystkie (ponad {count}) w sklepie","selectAllWithTotal":"Wybierz wszystkie {total} w sklepie","selectionHeader":"Wybór","unselectAll":"Odznacz wszystko","selectedPage":"Wybrano {count}","selectedAll":"Wybrano wszystkie (ponad {count}) w sklepie","selectedAllWithTotal":"Wybrano wszystkie {total} w sklepie","selectedSome":"Wybrano {count}/{total}"},"BulkActions":{"activatorLabel":"Czynności"},"TableCell":{"spansColumns":"obejmuje {count} kolumn(-y)"}},"SortPopover":{"ariaLabel":"Sortuj wyniki","tooltip":"Sortuj","title":"Sortuj wg","sorting":{"asc":"Rosnąco","desc":"Malejąco","az":"A–Z","za":"Z–A"}}},"DistributionChart":{"noData":"Brak dostępnych danych","title":"Wykres rozkładu","description":"Wykres słupkowy przedstawiający dane rozkładu: {data}.{percentiles}","highlightedPercentiles":" Percentyle warte uwagi: {percentiles}."},"PerformanceEventType":{"APP_INSTALL":{"title":"Zainstalowano aplikację","content":"Zainstalowano {appName}"},"APP_UNINSTALL":{"title":"Odinstalowano aplikację","content":"Odinstalowano {appName}"},"THEME_LIVE_EDIT":{"title":"Edytowano dynamiczny szablon","content":{"one":"Edytowano szablon {themeName} {count} raz","other":"Edytowano szablon {themeName} {count} razy","few":"Edytowano szablon {themeName} {count} razy","many":"Edytowano szablon {themeName} {count} razy"}},"THEME_PUBLICATION":{"title":"Opublikowano szablon","content":"Opublikowano szablon {themeName}"}}}')
-  , QK = {
-    AnalyticsUIComponents: KK
-}
-  , ZK = JSON.parse('{"BenchmarksSummary":{"shopValue":"Sua loja","benchmarksMedian":"Média de referência","benchmarks25thPercentile":"25º percentil","benchmarks75thPercentile":"75º percentil","benchmarksTooltip":"Compare o desempenho de sua loja com outras lojas com base nos produtos vendidos nos últimos 30 dias, país de mercado principal e volume de pedidos.","missingData":{"title":"Sem parâmetro de comparação","content":"Não há dados suficientes de lojas semelhantes"}},"CloseButton":{"delete":"Excluir métrica"},"MetricCardEmpty":{"noResults":"Não foi possível encontrar dados para este período","noResultsCompact":"Não há dados","incorrectCardSize":"Para ver os dados, redimensione este cartão"},"MetricCardError":{"error":"Não foi possível carregar dados"},"MetricLayout":{"ReportLinkAccessibilityLabel":"Ver o relatório {reportTitle}"},"HorizontalNavigation":{"Forward":"Avançar","Backward":"Voltar"},"TimeframePicker":{"today":"Hoje","todayHelp":"Em comparação com ontem até a hora atual","last7days":"7 dias","last7daysHelp":"Em comparação com os 7 dias anteriores","last30days":"30 dias","last30daysHelp":"Em comparação com os 30 dias anteriores","last90days":"90 dias","last90daysHelp":"Em comparação com os 90 dias anteriores","last365days":"365 dias","last365daysHelp":"Em comparação com os 365 dias anteriores"},"date":{"range":"{startDate}–{endDate}","sameMonthRange":"{startDay}–{endDay} {month}, {year}","months":{"1":"Jan","2":"Fev","3":"Mar","4":"Abr","5":"Maio","6":"Jun","7":"Jul","8":"Ago","9":"Set","10":"Out","11":"Nov","12":"Dez"},"title":{"today":"Hoje","yesterday":"Ontem","last7days":"Últimos 7 dias","last30days":"Últimos 30 dias","last90days":"Últimos 90 dias","last365days":"Últimos 365 dias","last12months":"Últimos 12 meses","this_week":"Esta semana","this_month":"Este mês","this_quarter":"Este trimestre","this_year":"Este ano","last_week":"Semana passada","last_month":"Mês passado","last_quarter":"Trimestre passado","last_year":"Ano passado","weekToDate":"Acumulado semanal","monthToDate":"Acumulado mensal","quarterToDate":"Acumulado trimestral","yearToDate":"Acumulado anual","bfcm":"BFCM {year}","quarter":"T{quarterNumber} {year}","previous_period":"Período anterior","previous_second":"Segundo anterior","previous_minute":"Minutor anterior","previous_hour":"Hora anterior","previous_day":"Dia anterior","previous_week":"Semana anterior","previous_month":"Mês anterior","previous_quarter":"Trimestre anterior","previous_year":"Ano anterior","previous_year_match_day_of_week":"Ano anterior (coincidir com o dia da semana)"}},"MetricAnnotations":{"learnMoreLinkText":"Saiba mais","sessionsBackfill2022":{"label":"Início dos dados","description":"Para melhorar sua experiência, os dados para sessões agora começam a partir de outubro de 2022."},"checkoutConversionRate2022":{"label":"Atualização nas métricas","description":"Para melhorar sua experiência, os dados para sessões agora começam a partir de outubro de 2022. A partir dessa data, também ajustamos as métricas abaixo: {affectedMetrics}.","banner":{"description":"Melhoramos a forma como contamos quando um checkout é iniciado, por isso contaremos mais checkouts iniciados. Como resultado, as seguintes métricas provavelmente mudaram: {affectedMetrics}. Para possibilitar comparações históricas, ajustamos essas métricas a partir de outubro de 2022."}}},"TrendIndicator":{"IncreaseOf":"Aumento de {change}","DecreaseOf":"Redução de {change}","NoChange":"Nenhuma alteração"},"TimeFormatter":{"DayOrLonger":"{timeInDay} {timeInHour}","LessThanDay":"{timeInHour} {timeInMinute}","day":{"one":"{amount} dia","other":"{amount} dias","many":"{amount} dias"},"hour":{"one":"{amount}h","other":"{amount}h","many":"{amount}h"},"minute":{"one":"{amount}min","other":"{amount}min","many":"{amount}min"}},"useFormattedValue":{"none":"Ausente","boolean":{"true":"Sim","false":"Não"},"quarters":{"short":{"q1":"1º trim.","q2":"2º trim.","q3":"3º trim.","q4":"4º trim."},"long":{"q1":"1º trim. {year}","q2":"2º trim. {year}","q3":"3º trim. {year}","q4":"4º trim. {year}"}},"DAY_OF_WEEK":{"short":{"0":"Seg","1":"Ter","2":"Qua","3":"Qui","4":"Sex","5":"Sáb","6":"Dom"},"long":{"0":"segunda","1":"terça","2":"quarta","3":"quinta","4":"sexta","5":"sábado","6":"domingo"}}},"useFormatHistogram":{"days":{"one":"{count} dia","other":"{count} dias","many":"{count} dias"}},"TooltipContent":{"fieldSuffixes":{"product_title":{"one":"{count} produto","other":"{count} produtos","many":"{count} produtos"},"product_variant_title":{"one":"{count} variante do produto","other":"{count} variantes do produto","many":"{count} variantes do produto"},"product_variant_id":{"one":"{count} variante do produto","other":"{count} variantes do produto","many":"{count} variantes do produto"},"product_variant_sku":{"one":"{count} variante do produto","other":"{count} variantes do produto","many":"{count} variantes do produto"}}},"popover":{"learnMore":"Saiba mais"},"useFormatLineChartRelational":{"percentileLegend":"25º - 75º percentil","median":"Média de referência","missingData":{"title":"Sem parâmetro de comparação","content":"Não há dados suficientes de lojas semelhantes"},"yourTotals":"Seus totais"},"RFMGroups":{"previously_loyal":{"description":"Clientes sem compras recentes, mas com histórico de pedidos e gastos muito altos.","goal":"Objetivo: mover clientes para Fidelizados"},"at_risk":{"description":"Clientes sem compras recentes, mas com histórico de pedidos e gastos altos.","goal":"Objetivo: mover clientes para Fidelizados ou Precisa de atenção"},"dormant":{"description":"Clientes sem pedidos recentes, com pedidos pouco frequentes e gastos baixos.","goal":"Objetivo: mover clientes para Quase perdidos"},"loyal":{"description":"Clientes sem compras recentes, mas com histórico de pedidos e gastos muito altos.","goal":"Objetivo: mover clientes para Campeões"},"needs_attention":{"description":"Clientes que recentemente compraram menos, mas realizam pedidos às vezes e têm gastos moderados na loja.","goal":"Objetivo: mover clientes para Fidelizados ou Ativos"},"almost_lost":{"description":"Clientes sem compras recentes, menos pedidos e gastos menores.","goal":"Objetivo: mover clientes para Ativos ou Promissores"},"promising":{"description":"Clientes com compras recentes, poucos pedidos e gastos baixos.","goal":"Objetivo: mover clientes para Ativos"},"active":{"description":"Clientes com compras recentes, alguns pedidos e gastos moderados.","goal":"Objetivo: mover clientes para Campeões ou Fidelizados"},"new":{"description":"Clientes com compras muito recentes, poucos pedidos e gastos baixos.","goal":"Objetivo: mover clientes para Ativos"},"champions":{"description":"Clientes com compras muito recentes, muitos pedidos e gastos elevados."},"metricInformation":{"value":"{formattedMetricValue}","percentage":"({formattedPercentValue} da base de clientes)"},"previewSegment":"Pré-visualizar segmento","viewReport":"Ver relatório"},"CustomerCohortAnalysis":{"Tooltip":{"returned":"Retorno de {percent} ({customers}) após {month} ({currentMonth})","returnedAcquisitionMonth":"Retorno de {percent} ({customers}) no mês de aquisição da coorte ({month})","firstOrder":"Coorte de {month}: {customers}","noOrders":"Não houve retorno de clientes após {month} ({currentMonth})","noOrdersAcquisitionMonth":"Não houve retorno de clientes no mês de aquisição da coorte ({currentMonth})","month":{"one":"{count} mês","other":"{count} meses","many":"{count} meses"},"customer":{"one":"{count} cliente","other":"{count} clientes","many":"{count} clientes"}},"summaryRowDate":"Todas as coortes","timeDimensionColumnDisplayName":"Coorte"},"MetricTable":{"subtitle":"% de alteração","summary":"Resumo","EmptyState":{"text":"Não há dados para a seleção"},"FooterRow":{"exportMessage":"Este relatório mostra até {amount} resultados. Para ver todos os resultados, {export}.","exportActionText":"exporte o relatório.","message":{"one":"{count} resultado","other":"{count} resultados","many":"{count} resultados"}}},"FunnelChart":{"truncatedSessions":"Truncamento: {metric}","truncatedSessionsDescription":"Dimensionamos a métrica {metric} para representar com precisão o funil"},"BasketPopover":{"noVariants":"• Nenhuma variante","productsBoughtTogether":"Produtos comprados em conjunto ({count})","variantsBoughtTogether":"Variantes compradas em conjunto ({count})","variantsCount":{"one":"• {count} variante","other":"• {count} variantes","many":"• {count} variantes"}},"BasketCell":{"hiddenProductCount":"Mais {count}","none":"Nenhuma"},"BasketListWithActions":{"actions":"Ações","back":"Voltar"},"RowActions":{"previewSegment":"Pré-visualizar segmento"},"usePivotedColumnDisplayName":{"week":{"firstOrder":"Primeiro pedido","greaterThanOne":"Semana {value}"},"month":{"firstOrder":"Primeiro pedido","greaterThanOne":"Mês {value}"},"quarter":{"firstOrder":"Primeiro pedido","greaterThanOne":"Trimestre {value}"},"year":{"firstOrder":"Primeiro pedido","greaterThanOne":"Ano {value}"}},"ShopifyQlDateControls":{"dateTextField":{"placeholderDateValue":"DD-MM-AAAA","sinceTextFieldLabel":"Início","untilTextFieldLabel":"Fim"},"actionButtons":{"apply":"Aplicar","cancel":"Cancelar","back":"Voltar"},"quickPicksSidebar":{"newBadge":"Novo"},"quickPicksDropdown":{"customDateRange":"Personalizado","label":"Período"},"compareTo":"Comparar com: {dateRange}","noComparison":"Sem comparação","sections":{"bfcm":"Black Friday Cyber Monday","quarters":"Trimestres"}},"useFormatLineChart":{"allTime":"Em qualquer período"},"useGetPrimaryMetricBadge":{"webPerformance":{"success":"Bom","attention":"Moderado","critical":"Ruim"},"fraudRisk":{"attention":"Em risco","critical":"Risco elevado"}},"RFMGridLabels":{"xAxis":"Pontuação de atualidade","yAxis":"Pontuação de frequência + valor monetário"},"useWebPerformanceAnnotations":{"good":"Bom","poor":"Ruim","count":{"one":"{count} evento","other":"{count} eventos","many":"{count} eventos"}},"Polaris":{"Avatar":{"label":"Avatar","labelWithInitials":"Avatar com as iniciais {initials}"},"Autocomplete":{"spinnerAccessibilityLabel":"Carregando","ellipsis":"{content}…"},"Badge":{"PROGRESS_LABELS":{"incomplete":"Incompleto","partiallyComplete":"Parcialmente completo","complete":"Concluída"},"TONE_LABELS":{"info":"Informações","success":"Sucesso","warning":"Aviso","attention":"Destinatário","new":"Novo","critical":"Crítico","readOnly":"Somente leitura","enabled":"Habilitado"},"progressAndTone":"{toneLabel} {progressLabel}"},"Banner":{"dismissButton":"Dispensar notificação"},"Button":{"spinnerAccessibilityLabel":"Carregando"},"Common":{"checkbox":"caixa de seleção","undo":"Desfazer","cancel":"Cancelar","clear":"Limpar","close":"Fechar","submit":"Enviar","more":"Mais"},"ContextualSaveBar":{"save":"Salvar","discard":"Descartar"},"DataTable":{"sortAccessibilityLabel":"ordenar {direction} por","navAccessibilityLabel":"Rolar a tabela uma coluna {direction}","totalsRowHeading":"Totais","totalRowHeading":"Total"},"DatePicker":{"previousMonth":"Exibir o mês anterior, {previousMonthName} de {showPreviousYear}","nextMonth":"Exibir o próximo mês, {nextMonth} de {nextYear}","today":"Hoje ","months":{"january":"Janeiro","february":"Fevereiro","march":"Março","april":"Abril","may":"Maio","june":"Junho","july":"Julho","august":"Agosto","september":"Setembro","october":"Outubro","november":"Novembro","december":"Dezembro"},"daysAbbreviated":{"monday":"Seg","tuesday":"Ter","wednesday":"Qua","thursday":"Qui","friday":"Sex","saturday":"Sáb","sunday":"Dom"},"days":{"monday":"segunda","tuesday":"terça","wednesday":"quarta","thursday":"quinta","friday":"sexta","saturday":"sábado","sunday":"domingo"},"start":"Início do intervalo","end":"Final do intervalo"},"ActionMenu":{"RollupActions":{"rollupButton":"Ver ações"},"Actions":{"moreActions":"Mais ações"}},"Modal":{"iFrameTitle":"marcação de corpo","modalWarning":"Essas propriedades obrigatórias estão faltando na janela modal: {missingProps}","unsavedChanges":"Alterações não salvas"},"Pagination":{"previous":"Voltar","next":"Avançar","pagination":"Paginação"},"ProgressBar":{"negativeWarningMessage":"Os valores passados para o prop do progresso não devem ser negativos. Redefinindo {progress} para 0.","exceedWarningMessage":"Os valores passados para o prop do progresso não devem exceder 100. Configurando {progress} para 100."},"ResourceList":{"sortingLabel":"Ordenar por","defaultItemSingular":"item","defaultItemPlural":"itens","showing":"Mostrando {itemsCount} {resource}","loading":"Carregando {resource}","selected":"{selectedItemsCount} selecionados","allItemsSelected":"Todos os {resourceNamePlural} da loja maiores que {itemsLength} estão selecionados","selectAllItems":"Selecionar todos os {resourceNamePlural} da loja maiores do que {itemsLength}","emptySearchResultTitle":"Não encontramos: {resourceNamePlural}","emptySearchResultDescription":"Tente alterar os filtros ou o termo de pesquisa","selectButtonText":"Selecionar","a11yCheckboxDeselectAllSingle":"Desmarcar {resourceNameSingular}","a11yCheckboxSelectAllSingle":"Selecione {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"Desmarcar todos os {resourceNamePlural} com {itemsLength}","a11yCheckboxSelectAllMultiple":"Selecionar todos os {resourceNamePlural} com {itemsLength}","Item":{"actionsDropdownLabel":"Ações para {accessibilityLabel}","actionsDropdown":"Menu suspenso de ações","viewItem":"Ver informações de {itemName}"},"BulkActions":{"actionsActivatorLabel":"Ações","moreActionsActivatorLabel":"Mais ações"},"showingTotalCount":"Mostrando {itemsCount} de {totalItemsCount} {resource}","allFilteredItemsSelected":"Todos os {resourceNamePlural} maiores que {itemsLength} neste filtro estão selecionados","selectAllFilteredItems":"Selecionar todos {itemsLength} + {resourceNamePlural} neste filtro"},"SkeletonPage":{"loadingLabel":"Página carregando"},"Tabs":{"toggleTabsLabel":"Mais visualizações","newViewAccessibilityLabel":"Criar nova visualização","newViewTooltip":"Criar visualização","Tab":{"rename":"Renomear visualização","duplicate":"Duplicar visualização","edit":"Editar visualização","editColumns":"Editar colunas","delete":"Excluir visualização","copy":"Cópia de {name}","deleteModal":{"title":"Excluir visualização?","description":"Essa ação não pode ser desfeita. A visualização da aba {viewName} não estará mais disponível no admin.","cancel":"Cancelar","delete":"Excluir visualização"}},"RenameModal":{"title":"Renomear visualização","label":"Nome","cancel":"Cancelar","create":"Salvar","errors":{"sameName":"Uma visualização com esse nome já existe. Escolha outro nome."}},"DuplicateModal":{"title":"Duplicar visualização","label":"Nome","cancel":"Cancelar","create":"Criar visualização","errors":{"sameName":"Uma visualização com esse nome já existe. Escolha outro nome."}},"CreateViewModal":{"title":"Criar nova visualização","label":"Nome","cancel":"Cancelar","create":"Criar visualização","errors":{"sameName":"Uma visualização com esse nome já existe. Escolha outro nome."}}},"Tag":{"ariaLabel":"Remover {children}"},"TextField":{"characterCount":"{count} caracteres","characterCountWithMaxLength":"{count} de {limit} caracteres usados"},"TopBar":{"toggleMenuLabel":"Alternar menu","SearchField":{"clearButtonLabel":"Limpar","search":"Pesquisa"}},"MediaCard":{"popoverButton":"Ações","dismissButton":"Dispensar"},"VideoThumbnail":{"playButtonA11yLabel":{"default":"Reproduzir vídeo","defaultWithDuration":"Reproduzir vídeo com duração de {duration}","duration":{"hours":{"other":{"only":"{hourCount} horas","andMinutes":"{hourCount} horas e {minuteCount} minutos","andMinute":"{hourCount} horas e {minuteCount} minuto","minutesAndSeconds":"{hourCount} horas, {minuteCount} minutos e {secondCount} segundos","minutesAndSecond":"{hourCount} horas, {minuteCount} minutos e {secondCount} segundo","minuteAndSeconds":"{hourCount} horas, {minuteCount} minuto e {secondCount} segundos","minuteAndSecond":"{hourCount} horas, {minuteCount} minuto e {secondCount} segundo","andSeconds":"{hourCount} horas e {secondCount} segundos","andSecond":"{hourCount} horas e {secondCount} segundo"},"one":{"only":"{hourCount} hora","andMinutes":"{hourCount} hora e {minuteCount} minutos","andMinute":"{hourCount} hora e {minuteCount} minuto","minutesAndSeconds":"{hourCount} hora, {minuteCount} minutos e {secondCount} segundos","minutesAndSecond":"{hourCount} hora, {minuteCount} minutos e {secondCount} segundo","minuteAndSeconds":"{hourCount} hora, {minuteCount} minuto e {secondCount} segundos","minuteAndSecond":"{hourCount} hora, {minuteCount} minuto e {secondCount} segundo","andSeconds":"{hourCount} hora e {secondCount} segundos","andSecond":"{hourCount} hora e {secondCount} segundo"}},"minutes":{"other":{"only":"{minuteCount} minutos","andSeconds":"{minuteCount} minutos e {secondCount} segundos","andSecond":"{minuteCount} minutos e {secondCount} segundo"},"one":{"only":"{minuteCount} minuto","andSeconds":"{minuteCount} minuto e {secondCount} segundos","andSecond":"{minuteCount} minuto e {secondCount} segundo"}},"seconds":{"other":"{secondCount} segundos","one":"{secondCount} segundo","many":"{secondCount} segundos"}}}},"Loading":{"label":"Barra de carregamento da página"},"TooltipOverlay":{"accessibilityLabel":"Dica de ferramenta: {label}"},"Page":{"Header":{"rollupActionsLabel":"Ver ações para {title}","pageReadyAccessibilityLabel":"{title}. A página está pronta"}},"ActionList":{"SearchField":{"clearButtonLabel":"Limpar","search":"Pesquisa","placeholder":"Pesquisar ações"}},"AlphaTable":{"TableRowActions":{"heading":"Ações","activatorAccessibilityLabel":"Abrir ações de linha","activatorLabel":"Ações"},"Selection":{"select":"Selecione {id}","selectPage":"Selecionar todos os {count} na página","selectAll":"Selecionar todos os mais de {count} na loja","selectAllWithTotal":"Selecionar todos os {total} na loja","unselectAll":"Desmarcar todos","selectedPage":"{count} selecionados","selectedAll":"Todos os mais de {count} selecionados na loja","selectedAllWithTotal":"Todos os {total} selecionados na loja","selectionHeader":"Seleção","selectedSome":"{count}/{total} selecionados"},"TableRowGroups":{"heading":"Alternar grupos de linhas","toggle":"Alternar a visibilidade deste grupo de linhas"},"Sorting":{"sortAscending":"Organizar a tabela por {heading} em ordem crescente","sortDescending":"Organizar a tabela por {heading} em ordem decrescente"},"TableCell":{"spansColumns":"se estende por {count} colunas"},"BulkActions":{"activatorLabel":"Ações"}},"SortPopover":{"ariaLabel":"Ordenar os resultados","tooltip":"Classificar","title":"Ordenar por","sorting":{"asc":"Crescente","desc":"Decrescente","az":"A a Z","za":"Z a A"}}},"DistributionChart":{"noData":"Nenhum dado disponível","title":"Gráfico de distribuição","description":"Um gráfico de barras mostrando dados de distribuição: {data}.{percentiles}","highlightedPercentiles":" Percentis dignos de nota incluem: {percentiles}."},"PerformanceEventType":{"APP_INSTALL":{"title":"App instalado","content":"{appName} instalado"},"APP_UNINSTALL":{"title":"App desinstalado","content":"O {appName} foi desinstalado"},"THEME_LIVE_EDIT":{"title":"Tema ativo editado","content":{"one":"O tema {themeName} foi editado {count} vez","other":"O tema {themeName} foi editado {count} vezes","many":"O tema {themeName} foi editado {count} vezes"}},"THEME_PUBLICATION":{"title":"Tema publicado","content":"O tema {themeName} foi publicado"}}}')
-  , YK = {
-    AnalyticsUIComponents: ZK
-}
-  , JK = JSON.parse('{"BenchmarksSummary":{"shopValue":"A sua loja","benchmarksMedian":"Mediana de referência","benchmarks25thPercentile":"Percentil 25","benchmarks75thPercentile":"Percentil 75","benchmarksTooltip":"Compare o desempenho da sua loja com o de lojas semelhantes com base nos produtos vendidos nos últimos 30 dias, no país do mercado principal e no volume da encomenda.","missingData":{"title":"Sem referência","content":"Sem dados suficientes de lojas semelhantes"}},"CloseButton":{"delete":"Eliminar métrica"},"MetricCardEmpty":{"noResults":"Não foram encontrados dados para este intervalo de datas","noResultsCompact":"Nenhuns dados","incorrectCardSize":"Para ver os dados, redimensione este cartão"},"MetricCardError":{"error":"Não foi possível carregar dados"},"MetricLayout":{"ReportLinkAccessibilityLabel":"Ver o relatório de {reportTitle}"},"HorizontalNavigation":{"Forward":"Avançar","Backward":"Retroceder"},"TimeframePicker":{"today":"Hoje","todayHelp":"Comparado com o dia de ontem até à hora atual","last7days":"7 dias","last7daysHelp":"Comparado com os 7 dias anteriores","last30days":"30 dias","last30daysHelp":"Comparado com os 30 dias anteriores","last90days":"90 dias","last90daysHelp":"Comparado com os 90 dias anteriores","last365days":"365 dias","last365daysHelp":"Comparado com os 365 dias anteriores"},"date":{"range":"{startDate}–{endDate}","sameMonthRange":"{startDay}–{endDay}{month}, {year}","months":{"1":"Jan","2":"Fev","3":"Mar","4":"Abr","5":"Mai","6":"Jun","7":"Jul","8":"Ago","9":"Set","10":"Out","11":"Nov","12":"Dez"},"title":{"today":"Hoje","yesterday":"Ontem","last7days":"Últimos 7 dias","last30days":"Últimos 30 dias","last90days":"Últimos 90 dias","last365days":"Últimos 365 dias","last12months":"Últimos 12 meses","this_week":"Esta semana","this_month":"Este mês","this_quarter":"Este trimestre","this_year":"Este ano","last_week":"Última semana","last_month":"Último mês","last_quarter":"Último trimestre","last_year":"Último ano","weekToDate":"Acumulado semanal até à data","monthToDate":"Acumulado mensal até à data","quarterToDate":"Acumulado trimestral até à data","yearToDate":"Acumulado anual até à data","bfcm":"BFCM {year}","quarter":"T{quarterNumber} {year}","previous_period":"Período anterior","previous_second":"Segundo anterior","previous_minute":"Minuto anterior","previous_hour":"Hora anterior","previous_day":"Dia anterior","previous_week":"Semana anterior","previous_month":"Mês anterior","previous_quarter":"Trimestre anterior","previous_year":"Ano anterior","previous_year_match_day_of_week":"Ano anterior (dia da semana correspondente)"}},"MetricAnnotations":{"learnMoreLinkText":"Saber mais","sessionsBackfill2022":{"label":"Início dos dados","description":"Como parte das melhorias de dados, os dados para as sessões têm agora início a partir de outubro de 2022."},"checkoutConversionRate2022":{"label":"Atualização de medição","description":"Como parte das melhorias de dados, os dados para as sessões têm agora início a partir de outubro de 2022. A partir dessa data, ajustámos as métricas seguintes: {affectedMetrics}.","banner":{"description":"Melhorámos a forma como determinamos o início de uma finalização da compra, por isso, contaremos mais finalizações da compra iniciadas. Em resultado, as métricas seguintes podem ter mudado: {affectedMetrics}. Para possibilitar comparações históricas, ajustámos essas métricas a partir de outubro de 2022."}}},"TrendIndicator":{"IncreaseOf":"Aumento de {change}","DecreaseOf":"Diminuição de {change}","NoChange":"Sem alterações"},"TimeFormatter":{"DayOrLonger":"{timeInDay} {timeInHour}","LessThanDay":"{timeInHour} {timeInMinute}","day":{"one":"{amount} dia","other":"{amount} dias","many":"{amount} dias"},"hour":{"one":"{amount} h","other":"{amount} h","many":"{amount} h"},"minute":{"one":"{amount} min","other":"{amount} min","many":"{amount} min"}},"useFormattedValue":{"none":"Nenhum(a)","boolean":{"true":"Sim","false":"Não"},"quarters":{"short":{"q1":"1.º trim.","q2":"2.º trim.","q3":"3.º trim.","q4":"4.º trim."},"long":{"q1":"1.º trim. {year}","q2":"2.º trim. {year}","q3":"3.º trim. {year}","q4":"4.º trim. {year}"}},"DAY_OF_WEEK":{"short":{"0":"Seg","1":"Ter","2":"Qua","3":"Qui","4":"Sex","5":"Sáb","6":"Dom"},"long":{"0":"Segunda-feira","1":"Terça-feira","2":"Quarta-feira","3":"Quinta-feira","4":"Sexta-feira","5":"Sábado","6":"Domingo"}}},"useFormatHistogram":{"days":{"one":"{count} dia","other":"{count} dias","many":"{count} dias"}},"TooltipContent":{"fieldSuffixes":{"product_title":{"one":"{count} produto","other":"{count} produtos","many":"{count} produtos"},"product_variant_title":{"one":"{count} variante de produto","other":"{count} variantes de produto","many":"{count} variantes de produto"},"product_variant_id":{"one":"{count} variante de produto","other":"{count} variantes de produto","many":"{count} variantes de produto"},"product_variant_sku":{"one":"{count} variante de produto","other":"{count} variantes de produto","many":"{count} variantes de produto"}}},"popover":{"learnMore":"Saber mais"},"useFormatLineChartRelational":{"percentileLegend":"25.º - 75.º percentil","median":"Mediana de referência","missingData":{"title":"Sem parâmetro de comparação","content":"Sem dados suficientes de lojas semelhantes"},"yourTotals":"Os seus totais"},"RFMGroups":{"previously_loyal":{"description":"Clientes sem compras recentes, mas com um histórico de encomendas e gastos muito forte.","goal":"Objetivo: mover os clientes para Fidelizados"},"at_risk":{"description":"Clientes sem compras recentes, mas com um histórico de encomendas e gastos forte.","goal":"Objetivo: mover os clientes para Fidelizados ou Requer atenção"},"dormant":{"description":"Clientes sem encomendas recentes, com encomendas pouco frequentes e com gastos baixos.","goal":"Objetivo: mover os clientes para Quase perdidos"},"loyal":{"description":"Clientes sem compras recentes, mas com um histórico de encomendas e gastos muito forte.","goal":"Objetivo: mover os clientes para Champions"},"needs_attention":{"description":"Clientes que compraram menos recentemente, que encomendam de vez em quando e com gastos moderados na sua loja.","goal":"Objetivo: mover os clientes para Fidelizados ou Ativos"},"almost_lost":{"description":"Clientes sem compras recentes, menos encomendas e com gastos menores.","goal":"Objetivo: mover clientes para Ativos ou Promissores"},"promising":{"description":"Clientes com compras recentes, poucas encomendas e gastos baixos.","goal":"Objetivo: mover os clientes para Ativos"},"active":{"description":"Clientes com compras recentes, algumas encomendas e gastos moderados.","goal":"Objetivo: mover os clientes para Champions ou Fidelizados"},"new":{"description":"Clientes com compras muito recentes, poucas encomendas e gastos baixos.","goal":"Objetivo: mover os clientes para Ativos"},"champions":{"description":"Clientes com compras muito recentes, muitas encomendas e os que mais gastam."},"metricInformation":{"value":"{formattedMetricValue}","percentage":"({formattedPercentValue} de base de clientes)"},"previewSegment":"Pré-visualizar segmento","viewReport":"Ver relatório"},"CustomerCohortAnalysis":{"Tooltip":{"returned":"{percent} ({customers}) regressaram após {month} ({currentMonth})","returnedAcquisitionMonth":"{percent} ({customers}) regressaram no mês de aquisição da coorte ({month})","firstOrder":"Coorte de {month}: {customers}","noOrders":"Nenhum cliente regressou após {month} ({currentMonth})","noOrdersAcquisitionMonth":"Nenhum cliente regressou no mês de aquisição da coorte ({currentMonth})","month":{"one":"{count} mês","other":"{count} meses","many":"{count} meses"},"customer":{"one":"{count} cliente","other":"{count} clientes","many":"{count} clientes"}},"summaryRowDate":"Todas as coortes","timeDimensionColumnDisplayName":"Coorte"},"MetricTable":{"subtitle":"Alteração de %","summary":"Resumo","EmptyState":{"text":"Sem dados para esta seleção"},"FooterRow":{"exportMessage":"Este relatório mostra até {amount} resultados. Para aceder a todos os resultados, pode {export}","exportActionText":"exportar o relatório.","message":{"one":"{count} resultado","other":"{count} resultados","many":"{count} resultados"}}},"FunnelChart":{"truncatedSessions":"{metric} truncadas","truncatedSessionsDescription":"{metric} foram desenhados à escala para melhor representar o funil"},"BasketPopover":{"noVariants":"• Nenhuma variante","productsBoughtTogether":"Produtos comprados em conjunto ({count})","variantsBoughtTogether":"Variantes compradas em conjunto ({count})","variantsCount":{"one":"• {count} variante","other":"• {count} variantes","many":"• {count} variantes"}},"BasketCell":{"hiddenProductCount":"Mais {count}","none":"Nenhum(a)"},"BasketListWithActions":{"actions":"Ações","back":"Voltar"},"RowActions":{"previewSegment":"Pré-visualizar segmento"},"usePivotedColumnDisplayName":{"week":{"firstOrder":"Primeira encomenda","greaterThanOne":"Semana {value}"},"month":{"firstOrder":"Primeira encomenda","greaterThanOne":"Mês {value}"},"quarter":{"firstOrder":"Primeira encomenda","greaterThanOne":"Trimestre {value}"},"year":{"firstOrder":"Primeira encomenda","greaterThanOne":"Ano {value}"}},"ShopifyQlDateControls":{"dateTextField":{"placeholderDateValue":"AAAA-MM-DD","sinceTextFieldLabel":"Início","untilTextFieldLabel":"Fim"},"actionButtons":{"apply":"Aplicar","cancel":"Cancelar","back":"Voltar"},"quickPicksSidebar":{"newBadge":"Novo"},"quickPicksDropdown":{"customDateRange":"Personalizado","label":"Intervalo de datas"},"compareTo":"Comparar com: {dateRange}","noComparison":"Sem comparação","sections":{"bfcm":"Black Friday Cyber Monday","quarters":"Trimestres"}},"useFormatLineChart":{"allTime":"Desde sempre"},"useGetPrimaryMetricBadge":{"webPerformance":{"success":"Bom","attention":"Moderado","critical":"Mau"},"fraudRisk":{"attention":"Em risco","critical":"Risco elevado"}},"RFMGridLabels":{"xAxis":"Pontuação de recência","yAxis":"Pontuação de Frequência + Valor monetário"},"useWebPerformanceAnnotations":{"good":"Boa","poor":"Fraca","count":{"one":"{count} evento","other":"{count} eventos","many":"{count} eventos"}},"Polaris":{"Avatar":{"label":"Avatar","labelWithInitials":"Avatar com as iniciais {initials}"},"Autocomplete":{"spinnerAccessibilityLabel":"A carregar","ellipsis":"{content}…"},"Badge":{"PROGRESS_LABELS":{"incomplete":"Incompleto","partiallyComplete":"Parcialmente concluído","complete":"Concluído"},"TONE_LABELS":{"info":"Informações","success":"Êxito","warning":"Aviso","attention":"Atenção","new":"Novo","critical":"Crítico","readOnly":"Só de leitura","enabled":"Ativado"},"progressAndTone":"{toneLabel} {progressLabel}"},"Banner":{"dismissButton":"Ignorar notificação"},"Button":{"spinnerAccessibilityLabel":"A carregar"},"Common":{"checkbox":"caixa de verificação","undo":"Anular","cancel":"Cancelar","clear":"Limpar","close":"Fechar","submit":"Submeter","more":"Mais"},"ContextualSaveBar":{"save":"Guardar","discard":"Descartar"},"DataTable":{"sortAccessibilityLabel":"ordenar {direction} por","navAccessibilityLabel":"Percorrer tabela uma coluna para {direction}","totalsRowHeading":"Totais","totalRowHeading":"Total"},"DatePicker":{"previousMonth":"Mostrar mês anterior, {previousMonthName} de {showPreviousYear}","nextMonth":"Mostrar mês seguinte, {nextMonth} de {nextYear}","today":"Hoje ","months":{"january":"janeiro","february":"fevereiro","march":"março","april":"abril","may":"maio","june":"junho","july":"julho","august":"agosto","september":"setembro","october":"outubro","november":"novembro","december":"dezembro"},"daysAbbreviated":{"monday":"seg","tuesday":"ter","wednesday":"qua","thursday":"qui","friday":"sex","saturday":"sáb","sunday":"dom"},"days":{"monday":"segunda-feira","tuesday":"terça-feira","wednesday":"quarta-feira","thursday":"quinta-feira","friday":"sexta-feira","saturday":"sábado","sunday":"domingo"},"start":"Início do intervalo","end":"Fim do intervalo"},"ActionMenu":{"RollupActions":{"rollupButton":"Ver ações"},"Actions":{"moreActions":"Mais ações"}},"Modal":{"iFrameTitle":"marcação de corpo","modalWarning":"Estas propriedades necessárias estão em falta no modal: {missingProps}","unsavedChanges":"Alterações não guardadas"},"Pagination":{"previous":"Anterior","next":"Seguinte","pagination":"Paginação"},"ProgressBar":{"negativeWarningMessage":"Os valores passados para propriedades do progresso não devem ser negativos. A repor {progress} para 0.","exceedWarningMessage":"Os valores passados para propriedades do progresso não devem exceder 100. A configurar {progress} para 100."},"ResourceList":{"sortingLabel":"Ordenar por","defaultItemSingular":"item","defaultItemPlural":"itens","showing":"A mostrar {itemsCount} {resource}","loading":"A carregar {resource}","selected":"{selectedItemsCount} selecionado(s)","allItemsSelected":"Todos os {itemsLength}+ {resourceNamePlural} da sua loja estão selecionados","selectAllItems":"Selecione todos os {itemsLength}+ {resourceNamePlural} na sua loja","emptySearchResultTitle":"Sem {resourceNamePlural} encontrados","emptySearchResultDescription":"Tente alterar os filtros ou o termo de pesquisa","selectButtonText":"Selecionar","a11yCheckboxDeselectAllSingle":"Anular seleção de {resourceNameSingular}","a11yCheckboxSelectAllSingle":"Selecionar {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"Anular seleção de todos os {itemsLength} {resourceNamePlural}","a11yCheckboxSelectAllMultiple":"Selecionar todos os {itemsLength} {resourceNamePlural}","Item":{"actionsDropdownLabel":"Ações para {accessibilityLabel}","actionsDropdown":"Menu pendente de ações","viewItem":"Ver detalhes de {itemName}"},"BulkActions":{"actionsActivatorLabel":"Ações","moreActionsActivatorLabel":"Mais ações"},"showingTotalCount":"A mostrar {itemsCount} de {totalItemsCount} {resource}","allFilteredItemsSelected":"Todos os {itemsLength}+ {resourceNamePlural} neste filtro estão selecionados","selectAllFilteredItems":"Selecionar todos os {itemsLength}+ {resourceNamePlural} neste filtro"},"SkeletonPage":{"loadingLabel":"Carregamento da página"},"Tabs":{"toggleTabsLabel":"Mais vistas","newViewAccessibilityLabel":"Criar nova vista","newViewTooltip":"Criar vista","Tab":{"rename":"Mudar o nome da vista","duplicate":"Duplicar vista","edit":"Editar vista","editColumns":"Editar colunas","delete":"Eliminar vista","copy":"Cópia de {name}","deleteModal":{"title":"Eliminar vista?","description":"Esta ação não pode ser anulada. A vista de {viewName} deixará de estar disponível no painel de admin.","cancel":"Cancelar","delete":"Eliminar vista"}},"RenameModal":{"title":"Mudar o nome da vista","label":"Nome","cancel":"Cancelar","create":"Guardar","errors":{"sameName":"Já existe uma vista com este nome. Escolha um nome diferente."}},"DuplicateModal":{"title":"Duplicar vista","label":"Nome","cancel":"Cancelar","create":"Criar vista","errors":{"sameName":"Já existe uma vista com este nome. Escolha um nome diferente."}},"CreateViewModal":{"title":"Criar nova vista","label":"Nome","cancel":"Cancelar","create":"Criar vista","errors":{"sameName":"Já existe uma vista com este nome. Escolha um nome diferente."}}},"Tag":{"ariaLabel":"Remover {children}"},"TextField":{"characterCount":"{count} caracteres","characterCountWithMaxLength":"{count} de {limit} caracteres utilizado(s)"},"TopBar":{"toggleMenuLabel":"Alternar menu","SearchField":{"clearButtonLabel":"Limpar","search":"Pesquisar"}},"MediaCard":{"popoverButton":"Ações","dismissButton":"Ignorar"},"VideoThumbnail":{"playButtonA11yLabel":{"default":"Reproduzir vídeo","defaultWithDuration":"Reproduzir vídeo de {duration}","duration":{"hours":{"other":{"only":"{hourCount} horas","andMinutes":"{hourCount} horas e {minuteCount} minutos","andMinute":"{hourCount} horas e {minuteCount} minuto","minutesAndSeconds":"{hourCount} horas, {minuteCount} minutos e {secondCount} segundos","minutesAndSecond":"{hourCount} horas, {minuteCount} minutos e {secondCount} segundo","minuteAndSeconds":"{hourCount} horas, {minuteCount} minuto e {secondCount} segundos","minuteAndSecond":"{hourCount} horas, {minuteCount} minuto e {secondCount} segundo","andSeconds":"{hourCount} horas e {secondCount} segundos","andSecond":"{hourCount} horas e {secondCount} segundo"},"one":{"only":"{hourCount} hora","andMinutes":"{hourCount} hora e {minuteCount} minutos","andMinute":"{hourCount} hora e {minuteCount} minuto","minutesAndSeconds":"{hourCount} hora, {minuteCount} minutos e {secondCount} segundos","minutesAndSecond":"{hourCount} hora, {minuteCount} minutos e {secondCount} segundo","minuteAndSeconds":"{hourCount} hora, {minuteCount} minuto e {secondCount} segundos","minuteAndSecond":"{hourCount} hora, {minuteCount} minuto e {secondCount} segundo","andSeconds":"{hourCount} hora e {secondCount} segundos","andSecond":"{hourCount} hora e {secondCount} segundo"}},"minutes":{"other":{"only":"{minuteCount} minutos","andSeconds":"{minuteCount} minutos e {secondCount} segundos","andSecond":"{minuteCount} minutos e {secondCount} segundo"},"one":{"only":"{minuteCount} minuto","andSeconds":"{minuteCount} minuto e {secondCount} segundos","andSecond":"{minuteCount} minuto e {secondCount} segundo"}},"seconds":{"other":"{secondCount} segundos","one":"{secondCount} segundo","many":"{secondCount} segundos"}}}},"Loading":{"label":"Barra de carregamento da página"},"TooltipOverlay":{"accessibilityLabel":"Descrição: {label}"},"Page":{"Header":{"rollupActionsLabel":"Ver ações para {title}","pageReadyAccessibilityLabel":"{title}. Esta página está pronta"}},"ActionList":{"SearchField":{"clearButtonLabel":"Limpar","search":"Pesquisar","placeholder":"Pesquisar ações"}},"AlphaTable":{"TableRowActions":{"heading":"Ações","activatorAccessibilityLabel":"Abrir ações de linha","activatorLabel":"Ações"},"TableRowGroups":{"heading":"Alternar grupos de linha","toggle":"Alternar a visibilidade deste grupo de linhas"},"Sorting":{"sortAscending":"Organizar esta tabela por {heading} e ordem crescente","sortDescending":"Organizar esta tabela por {heading} e ordem decrescente"},"Selection":{"select":"Selecionar {id}","selectPage":"Selecionar todos os {count} na página","selectAll":"Selecionar todos os {count}+ na loja","selectAllWithTotal":"Selecionar todos os {total} na loja","selectionHeader":"Seleção","unselectAll":"Anular a seleção de tudo","selectedPage":"{count} selecionado(s)","selectedAll":"Todos os {count}+ selecionados na loja","selectedAllWithTotal":"Todos os {total} selecionados na loja","selectedSome":"{count}/{total} selecionado(s)"},"BulkActions":{"activatorLabel":"Ações"},"TableCell":{"spansColumns":"abrange {count} colunas"}},"SortPopover":{"ariaLabel":"Ordenar os resultados","tooltip":"Ordenar","title":"Ordenar por","sorting":{"asc":"Ascendente","desc":"Descendente","az":"A–Z","za":"Z–A"}}},"DistributionChart":{"noData":"Nenhuns dados disponíveis","title":"Gráfico de distribuição","description":"Um gráfico de barras que apresenta dados de distribuição: {data}.{percentiles}","highlightedPercentiles":" Os percentis dignos de nota incluem: {percentiles}."},"PerformanceEventType":{"APP_INSTALL":{"title":"Aplicação instalada","content":"Aplicação {appName} instalada"},"APP_UNINSTALL":{"title":"Aplicação desinstalada","content":"Aplicação {appName} desinstalada"},"THEME_LIVE_EDIT":{"title":"Tema ativo editado","content":{"one":"O tema {themeName} foi editado {count} vez","other":"O tema {themeName} foi editado {count} vezes","many":"O tema {themeName} foi editado {count} vezes"}},"THEME_PUBLICATION":{"title":"Tema publicado","content":"O tema {themeName} foi publicado"}}}')
-  , XK = {
-    AnalyticsUIComponents: JK
-}
-  , eQ = JSON.parse('{"BenchmarksSummary":{"shopValue":"Din butik","benchmarksMedian":"Riktmärkesmedian","benchmarks25thPercentile":"25:e percentilen","benchmarks75thPercentile":"75:e percentilen","benchmarksTooltip":"Jämför din butiks resultat med liknande butikers, utifrån antalet sålda produkter de senaste 30 dagarna, det land som är primärmarknad och ordervolym.","missingData":{"title":"Inga riktmärken","content":"Inte tillräckligt med data från liknande butiker"}},"CloseButton":{"delete":"Radera mätvärde"},"MetricCardEmpty":{"noResults":"Inga data hittades för det här datumintervallet","noResultsCompact":"Inga data","incorrectCardSize":"Ändra storlek på detta kort för att se data"},"MetricCardError":{"error":"Det gick inte att läsa in data"},"MetricLayout":{"ReportLinkAccessibilityLabel":"Visa rapporten {reportTitle}"},"HorizontalNavigation":{"Forward":"Framåt","Backward":"Bakåt"},"TimeframePicker":{"today":"I dag","todayHelp":"Jämfört med i går fram till aktuell tid","last7days":"7 dagar","last7daysHelp":"Jämfört med föregående 7 dagar","last30days":"30 dagar","last30daysHelp":"Jämfört med föregående 30 dagar","last90days":"90 dagar","last90daysHelp":"Jämfört med de föregående 90 dagarna","last365days":"365 dagar","last365daysHelp":"Jämfört med de föregående 365 dagarna"},"date":{"range":"{startDate}–{endDate}","sameMonthRange":"{startDay}–{endDay} {month} {year}","months":{"1":"Jan","2":"Feb","3":"Mar","4":"Apr","5":"Maj","6":"Jun","7":"Jul","8":"Aug","9":"Sep","10":"Okt","11":"Nov","12":"Dec"},"title":{"today":"I dag","yesterday":"I går","last7days":"De senaste 7 dagarna","last30days":"De senaste 30 dagarna","last90days":"De senaste 90 dagarna","last365days":"De senaste 365 dagarna","last12months":"De senaste 12 månaderna","this_week":"Den här veckan","this_month":"Den här månaden","this_quarter":"Det här kvartalet","this_year":"I år","last_week":"Förra veckan","last_month":"Förra månaden","last_quarter":"Förra kvartalet","last_year":"Förra året","weekToDate":"Veckan hittills","monthToDate":"Månaden hittills","quarterToDate":"Kvartalet hittills","yearToDate":"Året hittills","bfcm":"BFCM {year}","quarter":"Kvartal {quarterNumber} {year}","previous_period":"Föregående period","previous_second":"Föregående sekund","previous_minute":"Föregående minut","previous_hour":"Föregående timme","previous_day":"Föregående dag","previous_week":"Föregående vecka","previous_month":"Föregående månad","previous_quarter":"Föregående kvartal","previous_year":"Föregående år","previous_year_match_day_of_week":"Föregående år (matcha veckodag)"}},"MetricAnnotations":{"learnMoreLinkText":"Mer information","sessionsBackfill2022":{"label":"Data från och med","description":"Som en del av dataförbättringarna visas nu data för sessioner från och med oktober 2022."},"checkoutConversionRate2022":{"label":"Uppdatering av mätvärden","description":"Som en del av dataförbättringarna visas nu data för sessioner från och med oktober 2022. Från och med detta datum justerade vi också följande mätvärden: {affectedMetrics}.","banner":{"description":"Vi har förbättrat hur vi räknar besök i kassan, så vi räknar fler påbörjade besök i kassan. Som ett resultat av detta har följande mätvärden antagligen förändrats: {affectedMetrics}. För att möjliggöra historiska jämförelser har vi justerat dessa mått från och med oktober 2022."}}},"TrendIndicator":{"IncreaseOf":"Ökning med {change}","DecreaseOf":"Minskning med {change}","NoChange":"Ingen förändring"},"TimeFormatter":{"DayOrLonger":"{timeInDay} {timeInHour}","LessThanDay":"{timeInHour} {timeInMinute}","day":{"one":"{amount} dag","other":"{amount} dagar"},"hour":{"one":"{amount} tim","other":"{amount} tim"},"minute":{"one":"{amount} min","other":"{amount} min"}},"useFormattedValue":{"none":"Inga","boolean":{"true":"Ja","false":"Nej"},"quarters":{"short":{"q1":"Q1","q2":"Q2","q3":"Q3","q4":"Q4"},"long":{"q1":"Q1 {year}","q2":"Q2 {year}","q3":"Q3 {year}","q4":"Q4 {year}"}},"DAY_OF_WEEK":{"short":{"0":"Mån","1":"Tis","2":"Ons","3":"Tor","4":"Fre","5":"Lör","6":"Sön"},"long":{"0":"Måndag","1":"Tisdag","2":"Onsdag","3":"Torsdag","4":"Fredag","5":"Lördag","6":"Söndag"}}},"useFormatHistogram":{"days":{"one":"{count} dag","other":"{count} dagar"}},"TooltipContent":{"fieldSuffixes":{"product_title":{"one":"{count} produkt","other":"{count} produkter"},"product_variant_title":{"one":"{count} produktvariant","other":"{count} produktvarianter"},"product_variant_id":{"one":"{count} produktvariant","other":"{count} produktvarianter"},"product_variant_sku":{"one":"{count} produktvariant","other":"{count} produktvarianter"}}},"popover":{"learnMore":"Mer information"},"useFormatLineChartRelational":{"percentileLegend":"25:e percentilen–75:e percentilen","median":"Riktmärkesmedian","missingData":{"title":"Inga riktmärken","content":"Inte tillräckligt med data från liknande butiker"},"yourTotals":"Dina summor"},"RFMGroups":{"previously_loyal":{"description":"Kunder utan nya köp men med en mycket stark köphistorik.","goal":"Mål: flytta kunder till Lojal"},"at_risk":{"description":"Kunder utan nya köp men med en stark köphistorik.","goal":"Mål: flytta kunder till Lojal eller Behöver åtgärdas"},"dormant":{"description":"Kunder utan nya ordrar, med oregelbundna ordrar, lågspenderande.","goal":"Mål: flytta kunder till Nästan förlorad"},"loyal":{"description":"Kunder utan nya köp men med en mycket stark köphistorik.","goal":"Mål: flytta kunder till Champions"},"needs_attention":{"description":"Kunder som köpt mindre senaste tiden, beställer ibland, måttligt spenderande i din butik.","goal":"Mål: flytta kunder till Lojal eller Aktiv"},"almost_lost":{"description":"Kunder utan nya köp, färre beställningar, spenderat minst.","goal":"Mål: flytta kunder till Aktiv eller Lovande"},"promising":{"description":"Kunder med nya köp, få ordrar, lågspenderande.","goal":"Mål: flytta kunder till Aktiv"},"active":{"description":"Kunder med nya köp, en del ordrar, måttligt spenderande.","goal":"Mål: flytta kunder till Champions eller Lojal"},"new":{"description":"Kunder med nya köp, få ordrar, lågspenderande.","goal":"Mål: flytta kunder till Aktiv"},"champions":{"description":"Kunder med väldigt nya köp, många beställningar, spenderat mest."},"metricInformation":{"value":"{formattedMetricValue}","percentage":"({formattedPercentValue} av kundbasen)"},"previewSegment":"Förhandsgranska segment","viewReport":"Visa rapport"},"CustomerCohortAnalysis":{"Tooltip":{"returned":"{percent} ({customers}) kom tillbaka efter {month} ({currentMonth})","returnedAcquisitionMonth":"{percent} ({customers}) kom tillbaka under kohortinsamlingsmånaden ({month})","firstOrder":"{month} kohort: {customers}","noOrders":"Inga kunder kom tillbaka efter {month} ({currentMonth})","noOrdersAcquisitionMonth":"Inga kunder kom tillbaka under kohortinsamlingsmånaden ({currentMonth})","month":{"one":"{count} månad","other":"{count} månader"},"customer":{"one":"{count} kund","other":"{count} kunder"}},"summaryRowDate":"Alla kohorter","timeDimensionColumnDisplayName":"Kohort"},"MetricTable":{"subtitle":"% förändring","summary":"Sammanfattning","EmptyState":{"text":"Inga data för det här valet"},"FooterRow":{"exportMessage":"Denna rapport visar upp till {amount} resultat. Du kan {export} för att se alla resultat","exportActionText":"exportera rapporten","message":{"one":"{count} resultat","other":"{count} resultat"}}},"FunnelChart":{"truncatedSessions":"Trunkerade {metric}","truncatedSessionsDescription":"{metric} ritades skalenligt för att bättre representera tratten"},"BasketPopover":{"noVariants":"• Inga varianter","productsBoughtTogether":"Produkter inköpta tillsammans ({count})","variantsBoughtTogether":"Varianter inköpta tillsammans ({count})","variantsCount":{"one":"• {count} variant","other":"• {count} varianter"}},"BasketCell":{"hiddenProductCount":"+{count} till","none":"Inga"},"BasketListWithActions":{"actions":"Åtgärder","back":"Tillbaka"},"RowActions":{"previewSegment":"Förhandsgranska segment"},"usePivotedColumnDisplayName":{"week":{"firstOrder":"Första ordern","greaterThanOne":"Vecka {value}"},"month":{"firstOrder":"Första ordern","greaterThanOne":"Månad {value}"},"quarter":{"firstOrder":"Första ordern","greaterThanOne":"Kvartal {value}"},"year":{"firstOrder":"Första ordern","greaterThanOne":"År {value}"}},"ShopifyQlDateControls":{"dateTextField":{"placeholderDateValue":"ÅÅÅÅ-MM-DD","sinceTextFieldLabel":"Börjar","untilTextFieldLabel":"Slutar"},"actionButtons":{"apply":"Tillämpa","cancel":"Avbryt","back":"Tillbaka"},"quickPicksSidebar":{"newBadge":"Nytt"},"quickPicksDropdown":{"customDateRange":"Anpassad","label":"Datumintervall"},"compareTo":"Jämför med: {dateRange}","noComparison":"Ingen jämförelse","sections":{"bfcm":"Black Friday Cyber Monday","quarters":"Kvartal"}},"useFormatLineChart":{"allTime":"Sedan start"},"useGetPrimaryMetricBadge":{"webPerformance":{"success":"Bra","attention":"Måttlig","critical":"Dålig"},"fraudRisk":{"attention":"I riskzonen","critical":"Hög risk"}},"RFMGridLabels":{"xAxis":"Aktualitetspoäng","yAxis":"Frekvenspoäng + poäng för monetärt värde"},"useWebPerformanceAnnotations":{"good":"Bra","poor":"Dåligt","count":{"one":"{count} händelse","other":"{count} händelser"}},"Polaris":{"Avatar":{"label":"Avatar","labelWithInitials":"Avatar med initialer {initials}"},"Autocomplete":{"spinnerAccessibilityLabel":"Läser in","ellipsis":"{content} ..."},"Badge":{"PROGRESS_LABELS":{"incomplete":"Ofullständig","partiallyComplete":"Delvis slutförd","complete":"Slutförd"},"TONE_LABELS":{"info":"Info","success":"Klart","warning":"Varning","attention":"Mottagare","new":"Ny","critical":"Kritisk","readOnly":"Skrivskyddad","enabled":"Aktiverad"},"progressAndTone":"{toneLabel} {progressLabel}"},"Banner":{"dismissButton":"Avvisa avisering"},"Button":{"spinnerAccessibilityLabel":"Läser in"},"Common":{"checkbox":"kryssruta","undo":"Ångra","cancel":"Avbryt","clear":"Rensa","close":"Stäng","submit":"Skicka","more":"Mer"},"ContextualSaveBar":{"save":"Spara","discard":"Ignorera"},"DataTable":{"sortAccessibilityLabel":"sortera {direction} efter","navAccessibilityLabel":"Skrolla tabellen {direction} en kolumn","totalsRowHeading":"Totalt","totalRowHeading":"Totalt"},"DatePicker":{"previousMonth":"Visa föregående månad, {previousMonthName} {showPreviousYear}","nextMonth":"Visa nästa månad, {nextMonth} {nextYear}","today":"I dag ","months":{"january":"Januari","february":"Februari","march":"Mars","april":"April","may":"Maj","june":"Juni","july":"Juli","august":"Augusti","september":"September","october":"Oktober","november":"November","december":"December"},"daysAbbreviated":{"monday":"Mån","tuesday":"Tis","wednesday":"Ons","thursday":"Tor","friday":"Fre","saturday":"Lör","sunday":"Sön"},"days":{"monday":"Måndag","tuesday":"Tisdag","wednesday":"Onsdag","thursday":"Torsdag","friday":"Fredag","saturday":"Lördag","sunday":"Söndag"},"start":"Intervallets början","end":"Intervallets slut"},"ActionMenu":{"RollupActions":{"rollupButton":"Visa åtgärder"},"Actions":{"moreActions":"Fler åtgärder"}},"Modal":{"iFrameTitle":"uppmärkning av brödtext","modalWarning":"Dessa nödvändiga egenskaper saknas i spärrande fönster: {missingProps}","unsavedChanges":"Ej sparade ändringar"},"Pagination":{"previous":"Föregående","next":"Nästa","pagination":"Paginering"},"ProgressBar":{"negativeWarningMessage":"Värden som skickas till framstegspropagering ska inte vara negativa. Återställer {progress} till 0.","exceedWarningMessage":"Värden som skickas till framstegspropagering ska inte överstiga 100. Ställer in {progress} till 100."},"ResourceList":{"sortingLabel":"Sortera efter","defaultItemSingular":"artikel","defaultItemPlural":"artiklar","showing":"Visar {itemsCount} {resource}","loading":"Läser in {resource}","selected":"{selectedItemsCount} valda","allItemsSelected":"Alla {itemsLength}+ {resourceNamePlural} i din butik har valts","selectAllItems":"Välj alla {itemsLength}+ {resourceNamePlural} i din butik","emptySearchResultTitle":"Inga {resourceNamePlural} hittades","emptySearchResultDescription":"Prova att byta filter eller sökord","selectButtonText":"Välj","a11yCheckboxDeselectAllSingle":"Avmarkera {resourceNameSingular}","a11yCheckboxSelectAllSingle":"Välj {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"Avmarkera alla {itemsLength} {resourceNamePlural}","a11yCheckboxSelectAllMultiple":"Välj alla {itemsLength} {resourceNamePlural}","Item":{"actionsDropdownLabel":"Åtgärder för {accessibilityLabel}","actionsDropdown":"Åtgärdsmeny","viewItem":"Visa uppgifter om {itemName}"},"BulkActions":{"actionsActivatorLabel":"Åtgärder","moreActionsActivatorLabel":"Fler åtgärder"},"showingTotalCount":"Visar {itemsCount} av {totalItemsCount} {resource}","allFilteredItemsSelected":"Alla {itemsLength} + {resourceNamePlural} i detta filter har valts","selectAllFilteredItems":"Välj alla {itemsLength}+{resourceNamePlural} i det här filtret"},"SkeletonPage":{"loadingLabel":"Sidan läses in"},"Tabs":{"toggleTabsLabel":"Fler vyer","newViewAccessibilityLabel":"Skapa ny vy","newViewTooltip":"Skapa vy","Tab":{"rename":"Byt namn på vy","duplicate":"Duplicera vy","edit":"Redigera bild","editColumns":"Redigera kolumner","delete":"Radera vy","copy":"Kopia av {name}","deleteModal":{"title":"Vill du radera vyn?","description":"Du kan inte ångra detta. {viewName}-vyn kommer inte längre vara tillgänglig i adminpanelen.","cancel":"Avbryt","delete":"Radera vy"}},"RenameModal":{"title":"Byt namn på vy","label":"Namn","cancel":"Avbryt","create":"Spara","errors":{"sameName":"En vy med detta namn finns redan. Välj ett annat namn."}},"DuplicateModal":{"title":"Duplicera vy","label":"Namn","cancel":"Avbryt","create":"Skapa vy","errors":{"sameName":"En vy med detta namn finns redan. Välj ett annat namn."}},"CreateViewModal":{"title":"Skapa ny vy","label":"Namn","cancel":"Avbryt","create":"Skapa vy","errors":{"sameName":"En vy med detta namn finns redan. Välj ett annat namn."}}},"Tag":{"ariaLabel":"Ta bort {children}"},"TextField":{"characterCount":"{count} tecken","characterCountWithMaxLength":"{count} av {limit} tecken har använts"},"TopBar":{"toggleMenuLabel":"Växla menyn","SearchField":{"clearButtonLabel":"Rensa","search":"Sökning"}},"MediaCard":{"popoverButton":"Åtgärder","dismissButton":"Avvisa"},"VideoThumbnail":{"playButtonA11yLabel":{"default":"Spela video","defaultWithDuration":"Spela video som är {duration} lång","duration":{"hours":{"other":{"only":"{hourCount} timmar","andMinutes":"{hourCount} timmar och {minuteCount} minuter","andMinute":"{hourCount} timmar och {minuteCount} minut","minutesAndSeconds":"{hourCount} timme, {minuteCount} minuter och {secondCount} sekunder","minutesAndSecond":"{hourCount} timmar, {minuteCount} minuter och {secondCount} sekund","minuteAndSeconds":"{hourCount} timmar, {minuteCount} minut och {secondCount} sekunder","minuteAndSecond":"{hourCount} timmar, {minuteCount} minut och {secondCount} sekund","andSeconds":"{hourCount} timme och {secondCount} sekunder","andSecond":"{hourCount} timmar och {secondCount} sekund"},"one":{"only":"{hourCount} timme","andMinutes":"{hourCount} timme och {minuteCount} minuter","andMinute":"{hourCount} timme och {minuteCount} minut","minutesAndSeconds":"{hourCount} timme, {minuteCount} minuter och {secondCount} sekunder","minutesAndSecond":"{hourCount} timme, {minuteCount} minuter och {secondCount} sekund","minuteAndSeconds":"{hourCount} timme, {minuteCount} minut och {secondCount} sekunder","minuteAndSecond":"{hourCount} timme, {minuteCount} minut och {secondCount} sekund","andSeconds":"{hourCount} timme och {secondCount} sekunder","andSecond":"{hourCount} timme och {secondCount} sekund"}},"minutes":{"other":{"only":"{minuteCount} minuter","andSeconds":"{minuteCount} minuter och {secondCount} sekunder","andSecond":"{minuteCount} minuter och {secondCount} sekund"},"one":{"only":"{minuteCount} minut","andSeconds":"{minuteCount} minut och {secondCount} sekunder","andSecond":"{minuteCount} minut och {secondCount} sekund"}},"seconds":{"other":"{secondCount} sekunder","one":"{secondCount} sekund"}}}},"Loading":{"label":"Förloppsindikator för sidinläsning"},"TooltipOverlay":{"accessibilityLabel":"Verktygstips: {label}"},"Page":{"Header":{"rollupActionsLabel":"Visa åtgärder för {title}","pageReadyAccessibilityLabel":"{title}. Den här sidan är redo"}},"ActionList":{"SearchField":{"clearButtonLabel":"Rensa","search":"Sökning","placeholder":"Sök åtgärder"}},"AlphaTable":{"TableRowActions":{"heading":"Åtgärder","activatorAccessibilityLabel":"Öppna radåtgärder","activatorLabel":"Åtgärder"},"TableRowGroups":{"heading":"Växla radgrupper","toggle":"Växla synlighet för denna radgrupp"},"Sorting":{"sortAscending":"Sortera denna tabell efter {heading} i stigande ordning","sortDescending":"Sortera denna tabell efter {heading} i fallande ordning"},"Selection":{"select":"Välj {id}","selectPage":"Välj alla {count} på sidan","selectAll":"Välj alla {count}+ i butiken","selectAllWithTotal":"Välj alla {total} i butiken","selectionHeader":"Val","unselectAll":"Avmarkera alla","selectedPage":"{count} valda","selectedAll":"Alla {count}+ har valts i butiken","selectedAllWithTotal":"Alla {total} har valts i butiken","selectedSome":"{count}/{total} har valts"},"TableCell":{"spansColumns":"omfattar {count} kolumner"},"BulkActions":{"activatorLabel":"Åtgärder"}},"SortPopover":{"ariaLabel":"Sortera resultaten","tooltip":"Sortera","title":"Sortera efter","sorting":{"asc":"Stigande","desc":"Fallande","az":"A–Ö","za":"Ö–A"}}},"DistributionChart":{"noData":"Inga tillgängliga data","title":"Distributionsdiagram","description":"Ett stapeldiagram som visar distributionsdata: {data}.{percentiles}","highlightedPercentiles":" Anmärkningsvärda percentiler: {percentiles}."},"PerformanceEventType":{"APP_INSTALL":{"title":"App installerad","content":"Installerade {appName}"},"APP_UNINSTALL":{"title":"App avinstallerad","content":"Avinstallerade {appName}"},"THEME_LIVE_EDIT":{"title":"Livetema redigerat","content":{"one":"Redigerade temat {themeName} {count} gång","other":"Redigerade temat {themeName} {count} gånger"}},"THEME_PUBLICATION":{"title":"Tema publicerat","content":"Publicerade temat {themeName}"}}}')
-  , tQ = {
-    AnalyticsUIComponents: eQ
-}
-  , nQ = JSON.parse('{"BenchmarksSummary":{"shopValue":"ร้านค้าของคุณ","benchmarksMedian":"เกณฑ์ค่ากลาง","benchmarks25thPercentile":"เปอร์เซ็นไทล์ที่ 25","benchmarks75thPercentile":"เปอร์เซ็นไทล์ที่ 75","benchmarksTooltip":"เปรียบเทียบประสิทธิภาพร้านค้าของคุณกับร้านค้าที่คล้ายกันโดยอิงจากสินค้าที่ขายได้ในช่วง 30 วันที่ผ่านมา ประเทศที่เป็นตลาดหลัก และปริมาณคำสั่งซื้อ","missingData":{"title":"ไม่มีเกณฑ์มาตรฐาน","content":"ข้อมูลจากร้านค้าที่คล้ายกันไม่เพียงพอ"}},"CloseButton":{"delete":"ลบตัวชี้วัด"},"MetricCardEmpty":{"noResults":"ไม่พบข้อมูลในช่วงวันที่นี้","noResultsCompact":"ไม่มีข้อมูล","incorrectCardSize":"หากต้องการดูข้อมูล ให้ปรับขนาดบัตรใบนี้"},"MetricCardError":{"error":"ไม่สามารถโหลดข้อมูลได้"},"MetricLayout":{"ReportLinkAccessibilityLabel":"ดูรายงาน {reportTitle}"},"HorizontalNavigation":{"Forward":"ต่อไป","Backward":"ย้อนกลับ"},"TimeframePicker":{"today":"วันนี้","todayHelp":"เทียบกับเมื่อวานจนถึงเวลาปัจจุบัน","last7days":"7 วัน","last7daysHelp":"เทียบกับ 7 วันที่ผ่านมา","last30days":"30 วัน","last30daysHelp":"เทียบกับ 30 วันที่ผ่านมา","last90days":"90 วัน","last90daysHelp":"เทียบกับ 90 วันที่ผ่านมา","last365days":"365 วัน","last365daysHelp":"เทียบกับ 365 วันที่ผ่านมา"},"date":{"range":"{startDate}–{endDate}","sameMonthRange":"{month} {startDay}–{endDay}, {year}","months":{"1":"ม.ค.","2":"ก.พ.","3":"มี.ค.","4":"เม.ย.","5":"พ.ค.","6":"มิ.ย.","7":"ก.ค.","8":"ส.ค.","9":"ก.ย.","10":"ต.ค.","11":"พ.ย.","12":"ธ.ค."},"title":{"today":"วันนี้","yesterday":"เมื่อวานนี้","last7days":"7 วันที่ผ่านมา","last30days":"30 วันที่ผ่านมา","last90days":"90 วันที่ผ่านมา","last365days":"365 วันที่ผ่านมา","last12months":"12 เดือนที่ผ่านมา","this_week":"สัปดาห์นี้","this_month":"เดือนนี้","this_quarter":"ไตรมาสนี้","this_year":"ปีนี้","last_week":"สัปดาห์ที่ผ่านมา","last_month":"เดือนที่ผ่านมา","last_quarter":"ไตรมาสที่ผ่านมา","last_year":"ปีที่ผ่านมา","weekToDate":"ต้นสัปดาห์ถึงปัจจุบัน","monthToDate":"ต้นเดือนถึงปัจจุบัน","quarterToDate":"ต้นไตรมาสถึงปัจจุบัน","yearToDate":"ต้นปีถึงปัจจุบัน","bfcm":"BFCM {year}","quarter":"ไตรมาสที่ {quarterNumber} {year}","previous_period":"ช่วงก่อนหน้า","previous_second":"วินาทีก่อนหน้า","previous_minute":"นาทีก่อนหน้า","previous_hour":"ชั่วโมงก่อนหน้า","previous_day":"วันก่อนหน้า","previous_week":"สัปดาห์ก่อนหน้า","previous_month":"เดือนก่อนหน้า","previous_quarter":"ไตรมาสก่อนหน้า","previous_year":"ปีก่อนหน้า","previous_year_match_day_of_week":"ปีก่อนหน้า (วันในสัปดาห์ที่ตรงกัน)"}},"MetricAnnotations":{"learnMoreLinkText":"ดูข้อมูลเพิ่มเติม","sessionsBackfill2022":{"label":"จุดเริ่มต้นของข้อมูล","description":"ข้อมูลสำหรับเซสชันจะเริ่มตั้งแต่เดือนตุลาคม 2022 โดยเป็นส่วนหนึ่งของการปรับปรุงข้อมูล"},"checkoutConversionRate2022":{"label":"การอัปเดตการวัดผล","description":"ข้อมูลสำหรับเซสชันจะเริ่มตั้งแต่เดือนตุลาคม 2022 โดยเป็นส่วนหนึ่งของการปรับปรุงข้อมูล ตั้งแต่วันที่ดังกล่าว เราได้ปรับตัวชี้วัดต่อไปนี้เช่นกัน: {affectedMetrics}","banner":{"description":"เราได้ปรับปรุงวิธีการนับเมื่อเริ่มการชำระเงิน เราจึงนับการชำระเงินที่เริ่มไปได้มากขึ้น ดังนั้น ตัวชี้วัดต่อไปนี้จึงอาจเปลี่ยนแปลง: {affectedMetrics} เพื่อให้การเปรียบเทียบย้อนหลังเป็นไปได้ เราจึงปรับตัวชี้วัดเหล่านั้นตั้งแต่เดือนตุลาคม 2022"}}},"TrendIndicator":{"IncreaseOf":"เพิ่มขึ้น {change}","DecreaseOf":"ลดลง {change}","NoChange":"ไม่มีการเปลี่ยนแปลง"},"TimeFormatter":{"DayOrLonger":"{timeInDay} {timeInHour}","LessThanDay":"{timeInHour} {timeInMinute}","day":{"one":"{amount} วัน","other":"{amount} วัน"},"hour":{"one":"{amount} ชม.","other":"{amount} ชม."},"minute":{"one":"{amount} นาที","other":"{amount} นาที"}},"useFormattedValue":{"none":"ไม่มี","boolean":{"true":"ใช่","false":"ไม่"},"quarters":{"short":{"q1":"ไตรมาส 1","q2":"ไตรมาส 2","q3":"ไตรมาส 3","q4":"ไตรมาส 4"},"long":{"q1":"ไตรมาส 1 {year}","q2":"ไตรมาส 2 {year}","q3":"ไตรมาส 3 {year}","q4":"ไตรมาส 4 {year}"}},"DAY_OF_WEEK":{"short":{"0":"จ.","1":"อ.","2":"พ.","3":"พฤ.","4":"ศ.","5":"ส.","6":"อา."},"long":{"0":"วันจันทร์","1":"วันอังคาร","2":"วันพุธ","3":"วันพฤหัสบดี","4":"วันศุกร์","5":"วันเสาร์","6":"วันอาทิตย์"}}},"useFormatHistogram":{"days":{"one":"{count} วัน","other":"{count} วัน"}},"TooltipContent":{"fieldSuffixes":{"product_title":{"one":"สินค้า {count} รายการ","other":"สินค้า {count} รายการ"},"product_variant_title":{"one":"ตัวเลือกสินค้า {count} รายการ","other":"ตัวเลือกสินค้า {count} รายการ"},"product_variant_id":{"one":"ตัวเลือกสินค้า {count} รายการ","other":"ตัวเลือกสินค้า {count} รายการ"},"product_variant_sku":{"one":"ตัวเลือกสินค้า {count} รายการ","other":"ตัวเลือกสินค้า {count} รายการ"}}},"popover":{"learnMore":"ดูข้อมูลเพิ่มเติม"},"useFormatLineChartRelational":{"percentileLegend":"เปอร์เซ็นไทล์ที่ 25 - 75","median":"เกณฑ์ค่ากลาง","missingData":{"title":"ไม่มีเกณฑ์มาตรฐาน","content":"ข้อมูลจากร้านค้าที่คล้ายกันไม่เพียงพอ"},"yourTotals":"ยอดรวมของคุณ"},"RFMGroups":{"previously_loyal":{"description":"ลูกค้าที่ไม่มีการซื้อล่าสุด แต่มีประวัติคำสั่งซื้อและการใช้จ่ายที่ดีมาก","goal":"เป้าหมาย: ย้ายลูกค้าไปยัง \\"ลูกค้าประจำ\\""},"at_risk":{"description":"ลูกค้าที่ไม่มีการซื้อล่าสุด แต่มีประวัติคำสั่งซื้อและการใช้จ่ายที่ดี","goal":"เป้าหมาย: ย้ายลูกค้าไปยัง \\"ลูกค้าประจำ\\" หรือ \\"จำเป็นต้องให้ความสนใจ\\""},"dormant":{"description":"ลูกค้าที่ไม่มีคำสั่งซื้อล่าสุด มีคำสั่งซื้อที่ไม่บ่อย และการใช้จ่ายน้อย","goal":"เป้าหมาย: ย้ายลูกค้าไปยัง \\"มีแนวโน้มไม่กลับมาสูง\\""},"loyal":{"description":"ลูกค้าที่ไม่มีการซื้อล่าสุด แต่มีประวัติคำสั่งซื้อและการใช้จ่ายที่ดีมาก","goal":"เป้าหมาย: ย้ายลูกค้าไปยัง \\"Champion\\""},"needs_attention":{"description":"ลูกค้าที่ซื้อน้อยในช่วงนี้ มีคำสั่งซื้อบ้างและใช้จ่ายกับร้านของคุณพอประมาณ","goal":"เป้าหมาย: ย้ายลูกค้าไปยัง \\"ลูกค้าประจำ\\" หรือ \\"ใช้งานอยู่\\""},"almost_lost":{"description":"ลูกค้าที่ไม่มีการซื้อล่าสุด มีคำสั่งซื้อที่น้อยกว่า และการใช้จ่ายน้อยกว่า","goal":"เป้าหมาย: ย้ายลูกค้าไปยัง \\"ใช้งานอยู่ \\" หรือ \\"มีแนวโน้มที่ดี\\""},"promising":{"description":"ลูกค้าที่มีการซื้อล่าสุด มีคำสั่งซื้อที่น้อย และการใช้จ่ายน้อย","goal":"เป้าหมาย: ย้ายลูกค้าไปยัง \\"ใช้งานอยู่\\""},"active":{"description":"ลูกค้าที่มีการซื้อล่าสุด มีคำสั่งซื้อบางรายการ และการใช้จ่ายพอประมาณ","goal":"เป้าหมาย: ย้ายลูกค้าไปยัง \\"Champion\\" หรือ \\"ลูกค้าประจำ\\""},"new":{"description":"ลูกค้าที่มีการซื้อล่าสุดเมื่อไม่นานมานี้ มีคำสั่งซื้อที่น้อย และการใช้จ่ายน้อย","goal":"เป้าหมาย: ย้ายลูกค้าไปยัง \\"ใช้งานอยู่\\""},"champions":{"description":"ลูกค้าที่มีการซื้อล่าสุดเมื่อไม่นานมานี้ มีคำสั่งซื้อจำนวนมาก และมีการใช้จ่ายมากที่สุด"},"metricInformation":{"value":"{formattedMetricValue}","percentage":"({formattedPercentValue} ของฐานลูกค้า)"},"previewSegment":"ดูตัวอย่างเซกเมนต์","viewReport":"ดูรายงาน"},"CustomerCohortAnalysis":{"Tooltip":{"returned":"{percent} ({customers}) คืนสินค้าหลัง {month} ({currentMonth})","returnedAcquisitionMonth":"{percent} ({customers}) คืนสินค้าในเดือน ({month}) ที่มีการหากลุ่มลูกค้า","firstOrder":"กลุ่มลูกค้า {month}: {customers}","noOrders":"ไม่มีลูกค้ากลับมาซื้ออีกครั้งหลังจาก {month} ({currentMonth})","noOrdersAcquisitionMonth":"ไม่มีลูกค้าที่มีการคืนสินค้าในเดือนที่มีการหากลุ่มลูกค้า ({currentMonth})","month":{"one":"{count} เดือน","other":"{count} เดือน"},"customer":{"one":"ลูกค้า {count} ราย","other":"ลูกค้า {count} ราย"}},"summaryRowDate":"กลุ่มลูกค้าทั้งหมด","timeDimensionColumnDisplayName":"กลุ่มลูกค้า"},"MetricTable":{"subtitle":"เปลี่ยน %","summary":"ข้อมูลสรุป","EmptyState":{"text":"ไม่มีข้อมูลสำหรับการเลือกนี้"},"FooterRow":{"exportMessage":"รายงานนี้จะแสดงผลลัพธ์สูงสุด {amount} รายการ หากต้องการดูผลลัพธ์ทั้งหมด คุณสามารถ{export}","exportActionText":"ส่งออกรายงาน","message":{"one":"ผลลัพธ์ {count} รายการ","other":"ผลลัพธ์ {count} รายการ"}}},"FunnelChart":{"truncatedSessions":"{metric} ที่ลดลง","truncatedSessionsDescription":"{metric} ถูกวาดเพื่อขยายสเกลให้แสดงช่องทางได้ดีขึ้น"},"BasketPopover":{"noVariants":"• ไม่มีตัวเลือกสินค้า","productsBoughtTogether":"สินค้าที่ซื้อร่วมกัน ({count} รายการ)","variantsBoughtTogether":"ตัวเลือกสินค้าที่ซื้อร่วมกัน ({count} รายการ)","variantsCount":{"one":"• ตัวเลือกสินค้า {count} รายการ","other":"• ตัวเลือกสินค้า {count} รายการ"}},"BasketCell":{"hiddenProductCount":"และอีก {count} รายการ","none":"ไม่มี"},"BasketListWithActions":{"actions":"การดำเนินการ","back":"ย้อนกลับ"},"RowActions":{"previewSegment":"ดูตัวอย่างกลุ่ม"},"usePivotedColumnDisplayName":{"week":{"firstOrder":"คำสั่งซื้อแรก","greaterThanOne":"สัปดาห์ที่ {value}"},"month":{"firstOrder":"คำสั่งซื้อแรก","greaterThanOne":"เดือนที่ {value}"},"quarter":{"firstOrder":"คำสั่งซื้อแรก","greaterThanOne":"ไตรมาสที่ {value}"},"year":{"firstOrder":"คำสั่งซื้อแรก","greaterThanOne":"ปีที่ {value}"}},"ShopifyQlDateControls":{"dateTextField":{"placeholderDateValue":"ปปปป-ดด-วว","sinceTextFieldLabel":"เริ่มต้น","untilTextFieldLabel":"สิ้นสุด"},"actionButtons":{"apply":"ปรับใช้","cancel":"ยกเลิก","back":"ย้อนกลับ"},"quickPicksSidebar":{"newBadge":"ใหม่"},"quickPicksDropdown":{"customDateRange":"กำหนดเอง","label":"ช่วงวันที่"},"compareTo":"เปรียบเทียบกับ: {dateRange}","noComparison":"ไม่มีการเปรียบเทียบ","sections":{"bfcm":"Black Friday Cyber Monday","quarters":"ไตรมาส"}},"useFormatLineChart":{"allTime":"ทุกช่วงเวลา"},"useGetPrimaryMetricBadge":{"webPerformance":{"success":"ดี","attention":"ปานกลาง","critical":"แย่"},"fraudRisk":{"attention":"มีความเสี่ยง","critical":"ความเสี่ยงที่เพิ่มขึ้น"}},"RFMGridLabels":{"xAxis":"คะแนนความใหม่","yAxis":"ความถี่ + คะแนนมูลค่าแทนเงิน"},"useWebPerformanceAnnotations":{"good":"ดี","poor":"แย่","count":{"one":"{count} เหตุการณ์","other":"{count} เหตุการณ์"}},"Polaris":{"Avatar":{"label":"ตัวแทน","labelWithInitials":"ตัวแทนพร้อมอักษรย่อ {initials}"},"Autocomplete":{"spinnerAccessibilityLabel":"กำลังโหลด","ellipsis":"{content}…"},"Badge":{"PROGRESS_LABELS":{"incomplete":"ยังไม่เสร็จสมบูรณ์","partiallyComplete":"เสร็จสมบูรณ์แล้วบางส่วน","complete":"เสร็จสมบูรณ์"},"TONE_LABELS":{"info":"ข้อมูล","success":"สำเร็จ","warning":"คำเตือน","attention":"ระวัง","new":"ใหม่","critical":"ร้ายแรง","readOnly":"อ่านอย่างเดียว","enabled":"เปิดใช้แล้ว"},"progressAndTone":"{toneLabel} {progressLabel}"},"Banner":{"dismissButton":"ปิดการแจ้งเตือน"},"Button":{"spinnerAccessibilityLabel":"กำลังโหลด"},"Common":{"checkbox":"ช่องทำเครื่องหมาย","undo":"เลิกทำ","cancel":"ยกเลิก","clear":"ล้าง","close":"ปิด","submit":"ส่ง","more":"เพิ่มเติม"},"ContextualSaveBar":{"save":"บันทึก","discard":"ละทิ้ง"},"DataTable":{"sortAccessibilityLabel":"จัดเรียง {direction} ตาม","navAccessibilityLabel":"เลื่อนตาราง {direction} หนึ่งคอลัมน์","totalsRowHeading":"ยอดทั้งหมด","totalRowHeading":"ยอดรวม"},"DatePicker":{"previousMonth":"แสดงเดือนก่อนหน้า ซึ่งคือ {previousMonthName} {showPreviousYear}","nextMonth":"แสดงเดือนถัดไป ซึ่งคือ {nextMonth} {nextYear}","today":"วันนี้ ","months":{"january":"มกราคม","february":"กุมภาพันธ์","march":"มีนาคม","april":"เมษายน","may":"พฤษภาคม","june":"มิถุนายน","july":"กรกฎาคม","august":"สิงหาคม","september":"กันยายน","october":"ตุลาคม","november":"พฤศจิกายน","december":"ธันวาคม"},"daysAbbreviated":{"monday":"จ.","tuesday":"อ.","wednesday":"พ.","thursday":"พฤ.","friday":"ศ.","saturday":"ส.","sunday":"อา."},"days":{"monday":"วันจันทร์","tuesday":"วันอังคาร","wednesday":"วันพุธ","thursday":"วันพฤหัสบดี","friday":"วันศุกร์","saturday":"วันเสาร์","sunday":"วันอาทิตย์"},"start":"จุดเริ่มของช่วง","end":"จุดสิ้นสุดของช่วง"},"ActionMenu":{"RollupActions":{"rollupButton":"ดูการดำเนินการ"},"Actions":{"moreActions":"การดำเนินการเพิ่มเติม"}},"Modal":{"iFrameTitle":"มาร์กอัปเนื้อหา","modalWarning":"คุณสมบัติที่จำเป็นเหล่านี้ไม่มีอยู่ในโมดอล {missingProps}","unsavedChanges":"การเปลี่ยนแปลงที่ไม่ได้บันทึก"},"Pagination":{"previous":"ก่อนหน้า","next":"ถัดไป","pagination":"การแบ่งหน้า"},"ProgressBar":{"negativeWarningMessage":"ค่าที่ส่งไปยังคุณสมบัติความคืบหน้าไม่ควรเป็นลบ กำลังรีเซ็ต {progress} ให้เป็น 0","exceedWarningMessage":"ค่าที่ส่งไปยังคุณสมบัติความคืบหน้าไม่ควรเกิน 100 กำลังตั้ง {progress} ให้เป็น 100"},"ResourceList":{"sortingLabel":"จัดเรียงตาม","defaultItemSingular":"รายการ","defaultItemPlural":"รายการ","showing":"แสดง {itemsCount} {resource}","loading":"กำลังโหลด {resource}","selected":"เลือกแล้ว {selectedItemsCount} รายการ","allItemsSelected":"เลือก {resourceNamePlural} ทั้ง {itemsLength}+ รายการในร้านค้าของคุณแล้ว","selectAllItems":"เลือก {itemsLength}+ {resourceNamePlural} ทั้งหมดในร้านค้าของคุณ","emptySearchResultTitle":"ไม่พบ {resourceNamePlural}","emptySearchResultDescription":"ลองเปลี่ยนตัวกรองหรือคำค้นหา","selectButtonText":"เลือก","a11yCheckboxDeselectAllSingle":"ยกเลิกการเลือก {resourceNameSingular}","a11yCheckboxSelectAllSingle":"เลือก {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"ยกเลิกการเลือก {itemsLength} {resourceNamePlural} ทั้งหมด","a11yCheckboxSelectAllMultiple":"เลือก {itemsLength} {resourceNamePlural} ทั้งหมด","Item":{"actionsDropdownLabel":"การดำเนินการสำหรับ {accessibilityLabel}","actionsDropdown":"เมนูดรอปดาวน์ของการดำเนินการ","viewItem":"ดูรายละเอียดของ {itemName}"},"BulkActions":{"actionsActivatorLabel":"การดำเนินการ","moreActionsActivatorLabel":"การดำเนินการเพิ่มเติม"},"showingTotalCount":"แสดง {itemsCount} ของ {totalItemsCount} {resource}","allFilteredItemsSelected":"เลือก {resourceNamePlural} ทั้ง {itemsLength}+ รายการในตัวกรองนี้แล้ว","selectAllFilteredItems":"เลือก {itemsLength}+ {resourceNamePlural} ทั้งหมดในตัวกรองนี้"},"SkeletonPage":{"loadingLabel":"กำลังโหลดหน้า"},"Tabs":{"toggleTabsLabel":"มุมมองเพิ่มเติม","newViewAccessibilityLabel":"สร้างมุมมองใหม่","newViewTooltip":"สร้างมุมมอง","Tab":{"rename":"เปลี่ยนชื่อมุมมอง","duplicate":"ทำซ้ำมุมมอง","edit":"แก้ไขมุมมอง","editColumns":"แก้ไขคอลัมน์","delete":"ลบการดู","copy":"สำเนาของ {name}","deleteModal":{"title":"ลบมุมมองหรือไม่","description":"การดำเนินการนี้ไม่สามารถเลิกทำได้ ไม่สามารถใช้มุมมอง {viewName} ในส่วนผู้ดูแลระบบของคุณได้อีกต่อไป","cancel":"ยกเลิก","delete":"ลบการดู"}},"RenameModal":{"title":"เปลี่ยนชื่อมุมมอง","label":"ชื่อ","cancel":"ยกเลิก","create":"บันทึก","errors":{"sameName":"มีมุมมองที่ใช้ชื่อนี้แล้ว โปรดเลือกชื่ออื่น"}},"DuplicateModal":{"title":"ทำซ้ำมุมมอง","label":"ชื่อ","cancel":"ยกเลิก","create":"สร้างมุมมอง","errors":{"sameName":"มีมุมมองที่ใช้ชื่อนี้แล้ว โปรดเลือกชื่ออื่น"}},"CreateViewModal":{"title":"สร้างมุมมองใหม่","label":"ชื่อ","cancel":"ยกเลิก","create":"สร้างมุมมอง","errors":{"sameName":"มีมุมมองที่ใช้ชื่อนี้แล้ว โปรดเลือกชื่ออื่น"}}},"Tag":{"ariaLabel":"ลบ {children} ออก"},"TextField":{"characterCount":"{count} ตัวอักษร","characterCountWithMaxLength":"ใช้ตัวอักษรไปแล้ว {count} จาก {limit}"},"TopBar":{"toggleMenuLabel":"เมนูเปิด/ปิด","SearchField":{"clearButtonLabel":"ล้าง","search":"การค้นหา"}},"MediaCard":{"popoverButton":"การดำเนินการ","dismissButton":"ปิด"},"VideoThumbnail":{"playButtonA11yLabel":{"default":"เล่นวิดีโอ","defaultWithDuration":"เล่นวิดีโอความยาว {duration}","duration":{"hours":{"other":{"only":"{hourCount} ชั่วโมง","andMinutes":"{hourCount} ชั่วโมง {minuteCount} นาที","andMinute":"{hourCount} ชั่วโมง {minuteCount} นาที","minutesAndSeconds":"{hourCount} ชั่วโมง {minuteCount} นาที {secondCount} วินาที","minutesAndSecond":"{hourCount} ชั่วโมง {minuteCount} นาที {secondCount} วินาที","minuteAndSeconds":"{hourCount} ชั่วโมง {minuteCount} นาที {secondCount} วินาที","minuteAndSecond":"{hourCount} ชั่วโมง {minuteCount} นาที {secondCount} วินาที","andSeconds":"{hourCount} ชั่วโมง {secondCount} วินาที","andSecond":"{hourCount} ชั่วโมง {secondCount} วินาที"},"one":{"only":"{hourCount} ชั่วโมง","andMinutes":"{hourCount} ชั่วโมง {minuteCount} นาที","andMinute":"{hourCount} ชั่วโมง {minuteCount} นาที","minutesAndSeconds":"{hourCount} ชั่วโมง {minuteCount} นาที {secondCount} วินาที","minutesAndSecond":"{hourCount} ชั่วโมง {minuteCount} นาที {secondCount} วินาที","minuteAndSeconds":"{hourCount} ชั่วโมง {minuteCount} นาที {secondCount} วินาที","minuteAndSecond":"{hourCount} ชั่วโมง {minuteCount} นาที {secondCount} วินาที","andSeconds":"{hourCount} ชั่วโมง {secondCount} วินาที","andSecond":"{hourCount} ชั่วโมง {secondCount} วินาที"}},"minutes":{"other":{"only":"{minuteCount} นาที","andSeconds":"{minuteCount} นาที {secondCount} วินาที","andSecond":"{minuteCount} นาที {secondCount} วินาที"},"one":{"only":"{minuteCount} นาที","andSeconds":"{minuteCount} นาที {secondCount} วินาที","andSecond":"{minuteCount} นาที {secondCount} วินาที"}},"seconds":{"other":"{secondCount} วินาที","one":"{secondCount} วินาที"}}}},"Loading":{"label":"แถบแสดงการโหลดหน้า"},"TooltipOverlay":{"accessibilityLabel":"เคล็ดลับเกี่ยวกับเครื่องมือ {label}"},"Page":{"Header":{"rollupActionsLabel":"ดูการดำเนินการสำหรับ {title}","pageReadyAccessibilityLabel":"{title} หน้านี้พร้อมแล้ว"}},"ActionList":{"SearchField":{"clearButtonLabel":"ล้าง","search":"การค้นหา","placeholder":"ค้นหาการดำเนินการ"}},"AlphaTable":{"TableRowActions":{"heading":"การดำเนินการ","activatorAccessibilityLabel":"เปิดการดำเนินการแถว","activatorLabel":"การดำเนินการ"},"TableRowGroups":{"heading":"แสดง/ซ่อนกลุ่มของแถว","toggle":"แสดง/ซ่อนการแสดงผลกลุ่มของแถวนี้"},"Sorting":{"sortAscending":"จัดเรียงตารางนี้ตาม {heading} จากน้อยไปหามาก","sortDescending":"จัดเรียงตารางนี้ตาม {heading} จากมากไปหาน้อย"},"Selection":{"select":"เลือก {id}","selectPage":"เลือกทั้งหมด {count} รายการบนหน้า","selectAll":"เลือกทั้งหมด {count}+ รายการในร้านค้า","selectAllWithTotal":"เลือกทั้งหมด {total} รายการในร้านค้า","selectionHeader":"การเลือก","unselectAll":"ยกเลิกการเลือกทั้งหมด","selectedPage":"เลือกแล้ว {count} รายการ","selectedAll":"ทั้งหมด {count}+ รายการที่เลือกไว้ในร้านค้า","selectedAllWithTotal":"ทั้งหมด {total} รายการที่เลือกไว้ในร้านค้า","selectedSome":"เลือกแล้ว {count}/{total}"},"TableCell":{"spansColumns":"ครอบคลุม {count} คอลัมน์"},"BulkActions":{"activatorLabel":"การดำเนินการ"}},"SortPopover":{"ariaLabel":"จัดเรียงผลลัพธ์","tooltip":"จัดเรียง","title":"จัดเรียงตาม","sorting":{"asc":"น้อยไปมาก","desc":"มากไปน้อย","az":"A-Z","za":"Z-A"}}},"DistributionChart":{"noData":"ไม่มีข้อมูลที่พร้อมใช้งาน","title":"แผนภูมิการกระจาย","description":"แผนภูมิแท่งแสดงข้อมูลการกระจาย: {data} {percentiles}","highlightedPercentiles":" เปอร์เซ็นไทล์ที่น่าสนใจ: {percentiles}"},"PerformanceEventType":{"APP_INSTALL":{"title":"ติดตั้งแอปแล้ว","content":"ติดตั้ง {appName} แล้ว"},"APP_UNINSTALL":{"title":"ถอนการติดตั้งแอปแล้ว","content":"ถอนการติดตั้ง {appName} แล้ว"},"THEME_LIVE_EDIT":{"title":"แก้ไขธีมที่ใช้อยู่แล้ว","content":{"one":"แก้ไขธีม {themeName} แล้ว {count} ครั้ง","other":"แก้ไขธีม {themeName} แล้ว {count} ครั้ง"}},"THEME_PUBLICATION":{"title":"เผยแพร่ธีมแล้ว","content":"เผยแพร่ธีม {themeName} แล้ว"}}}')
-  , iQ = {
-    AnalyticsUIComponents: nQ
-}
-  , aQ = JSON.parse(`{"BenchmarksSummary":{"shopValue":"Mağazanız","benchmarksMedian":"Karşılaştırma ölçütlerinin medyan değeri","benchmarks25thPercentile":"25. yüzdelik dilim","benchmarks75thPercentile":"75. yüzdelik dilim","benchmarksTooltip":"Mağazanızın performansını benzer mağazalardan elde edilen ve son 30 günde satılan ürünlere, birincil pazar ülkesine ve sipariş hacmine göre belirlenen karşılaştırma ölçütleriyle karşılaştırın.","missingData":{"title":"Karşılaştırma ölçütü yok","content":"Benzer mağazalardan yeterli veri alınamadı"}},"CloseButton":{"delete":"Metriği sil"},"MetricCardEmpty":{"noResults":"Bu tarih aralığı için veri bulunamadı","noResultsCompact":"Veri yok","incorrectCardSize":"Verileri görmek için bu kartın boyutunu değiştirin"},"MetricCardError":{"error":"Veriler yüklenemedi"},"MetricLayout":{"ReportLinkAccessibilityLabel":"{reportTitle} raporunu görüntüleyin"},"HorizontalNavigation":{"Forward":"İleri","Backward":"Geri"},"TimeframePicker":{"today":"Bugün","todayHelp":"Dünden şu ana kadarkilere kıyasla","last7days":"7 gün","last7daysHelp":"Önceki 7 güne kıyasla","last30days":"30 gün","last30daysHelp":"Önceki 30 güne kıyasla","last90days":"90 gün","last90daysHelp":"Önceki 90 güne kıyasla","last365days":"365 gün","last365daysHelp":"Önceki 365 güne kıyasla"},"date":{"range":"{startDate}–{endDate}","sameMonthRange":"{startDay}–{endDay} {month} {year}","months":{"1":"Oca","2":"Şub","3":"Mar","4":"Nis","5":"May","6":"Haz","7":"Tem","8":"Ağu","9":"Eyl","10":"Eki","11":"Kas","12":"Ara"},"title":{"today":"Bugün","yesterday":"Dün","this_week":"Bu hafta","this_month":"Bu ay","this_quarter":"Bu çeyrek","this_year":"Bu yıl","last_week":"Geçen hafta","last_month":"Geçen ay","last_quarter":"Son çeyrek","last_year":"Geçen yıl","bfcm":"Black Friday Cyber Monday {year}","quarter":"{year} {quarterNumber}. çeyreği","previous_period":"Önceki dönem","previous_second":"Önceki saniye","previous_minute":"Önceki dakika","previous_hour":"Önceki saat","previous_day":"Önceki gün","previous_week":"Önceki hafta","previous_month":"Önceki ay","previous_quarter":"Önceki çeyrek","previous_year":"Önceki yıl","last7days":"Son 7 gün","last30days":"Son 30 gün","last90days":"Son 90 gün","last365days":"Son 365 gün","last12months":"Son 12 ay","weekToDate":"Hafta başından bugüne","monthToDate":"Ay başından bugüne","quarterToDate":"Üç aylık dönem başlangıcından bugüne","yearToDate":"Yıl başından bugüne","previous_year_match_day_of_week":"Önceki yıl (haftanın aynı günü)"}},"MetricAnnotations":{"learnMoreLinkText":"Daha fazla bilgi edinin","sessionsBackfill2022":{"label":"Verilerin başlama tarihi","description":"Veri iyileştirmelerinin bir parçası olarak oturum verileri artık Ekim 2022'den başlayacaktır."},"checkoutConversionRate2022":{"label":"Ölçüm güncellemesi","description":"Veri iyileştirmelerinin bir parçası olarak oturum verileri artık Ekim 2022'den başlayacaktır. Bu tarihten sonrası için de şu metriklerde değişiklikler yaptık: {affectedMetrics}.","banner":{"description":"Ödeme işleminin ne zaman başladığını hesaplama şeklimizi iyileştirdik. Dolayısıyla başlatılmış olan daha fazla ödemeyi hesaplayabileceğiz. Sonuç olarak şu metrikler değişmiş olabilir: {affectedMetrics}. Geçmiş karşılaştırmalarını mümkün kılmak için Ekim 2022'den itibaren söz konusu metriklerde değişiklik yaptık."}}},"TrendIndicator":{"IncreaseOf":"Artış: {change}","DecreaseOf":"Düşüş: {change}","NoChange":"Değişiklik yok"},"TimeFormatter":{"DayOrLonger":"{timeInDay} {timeInHour}","LessThanDay":"{timeInHour} {timeInMinute}","day":{"one":"{amount} gün","other":"{amount} gün"},"hour":{"one":"{amount} sa.","other":"{amount} sa."},"minute":{"one":"{amount} dk.","other":"{amount} dk."}},"useFormattedValue":{"none":"Yok","boolean":{"true":"Evet","false":"Hayır"},"quarters":{"short":{"q1":"1. Çeyrek","q2":"2. Çeyrek","q3":"3. Çeyrek","q4":"4. Çeyrek"},"long":{"q1":"{year} 1. Çeyreği","q2":"{year} 2. Çeyreği","q3":"{year} 3. Çeyreği","q4":"{year} 4. Çeyreği"}},"DAY_OF_WEEK":{"short":{"0":"Pzt","1":"Sal","2":"Çar","3":"Per","4":"Cum","5":"Cmt","6":"Paz"},"long":{"0":"Pazartesi","1":"Salı","2":"Çarşamba","3":"Perşembe","4":"Cuma","5":"Cumartesi","6":"Pazar"}}},"useFormatHistogram":{"days":{"one":"{count} gün","other":"{count} gün"}},"TooltipContent":{"fieldSuffixes":{"product_title":{"one":"{count} ürün","other":"{count} ürün"},"product_variant_title":{"one":"{count} ürün varyasyonu","other":"{count} ürün varyasyonu"},"product_variant_id":{"one":"{count} ürün varyasyonu","other":"{count} ürün varyasyonu"},"product_variant_sku":{"one":"{count} ürün varyasyonu","other":"{count} ürün varyasyonu"}}},"popover":{"learnMore":"Daha fazla bilgi edinin"},"useFormatLineChartRelational":{"percentileLegend":"25. - 75. yüzdelik dilim","median":"Karşılaştırma ölçütlerinin medyan değeri","missingData":{"title":"Karşılaştırma yok","content":"Benzer mağazalardan yeterli veri alınamadı"},"yourTotals":"Toplamlarınız"},"RFMGroups":{"previously_loyal":{"description":"Yakın zamanda ürün satın almamış, ancak sipariş ve harcama geçmişi çok güçlü olan müşteriler.","goal":"Hedef: Müşterileri Sadık kategorisine taşıma"},"at_risk":{"description":"Yakın zamanda ürün satın almamış, ancak sipariş ve harcama geçmişi güçlü olan müşteriler.","goal":"Hedef: Müşterileri Sadık veya İlgilenilmesi Gerekiyor kategorisine taşıma"},"dormant":{"description":"Yakın zamanda sipariş vermemiş, seyrek sipariş vermiş ve az harcama yapmış olan müşteriler.","goal":"Hedef: Müşterileri Kaybedilmek üzere kategorisine taşıma"},"loyal":{"description":"Yakın zamanda ürün satın almamış, ancak sipariş ve harcama geçmişi çok güçlü olan müşteriler.","goal":"Hedef: Müşterileri Şampiyonlar kategorisine taşıma"},"needs_attention":{"description":"Yakın zamanda daha az satın alım yapan, bazen sipariş veren ve mağazanızda ölçülü harcama yapan müşteriler.","goal":"Hedef: Müşterileri Sadık veya Etkin kategorisine taşıma"},"almost_lost":{"description":"Yakın zamanda ürün satın almamış, daha az sipariş vermiş ve daha az harcama yapmış olan müşteriler.","goal":"Hedef: Müşterileri Etkin veya Umut veriyor kategorisine taşıma"},"promising":{"description":"Yakın zamanda ürün satın almış, az sayıda sipariş vermiş ve az harcama yapmış olan müşteriler.","goal":"Hedef: Müşterileri Etkin kategorisine taşıma"},"active":{"description":"Yakın zamanda ürün satın almış, bazı siparişler vermiş ve ölçülü harcama yapmış olan müşteriler.","goal":"Hedef: Müşterileri Şampiyonlar veya Sadık kategorisine taşıma"},"new":{"description":"Çok yakın zamanda ürün satın almış, az sayıda sipariş vermiş ve az harcama yapmış olan müşteriler.","goal":"Hedef: Müşterileri Etkin kategorisine taşıma"},"champions":{"description":"Çok yakın zamanda ürün satın almış, çok sayıda sipariş vermiş ve en fazla harcamayı yapmış olan müşteriler."},"metricInformation":{"value":"{formattedMetricValue}","percentage":"(Müşteri tabanının {formattedPercentValue} kadarı)"},"previewSegment":"Segmentin önizlemesini görüntüle","viewReport":"Raporu görüntüle"},"CustomerCohortAnalysis":{"Tooltip":{"returned":"{percent} ({customers}), {month} sonra ({currentMonth}) geri döndü","returnedAcquisitionMonth":"{percent} ({customers}), bu topluluğun edinildiği ay ({month}) içinde geri döndü.","firstOrder":"{month} topluluğu: {customers}","noOrders":"{month} sonra ({currentMonth}) geri dönen müşteri olmadı","noOrdersAcquisitionMonth":"Topluluğun edinildiği ay ({currentMonth}) içinde geri dönen müşteri olmadı","month":{"one":"{count} ay","other":"{count} ay"},"customer":{"one":"{count} müşteri","other":"{count} müşteri"}},"summaryRowDate":"Tüm topluluklar","timeDimensionColumnDisplayName":"Topluluk"},"MetricTable":{"subtitle":"Değişiklik Yüzdesi","summary":"Özet","EmptyState":{"text":"Bu seçim için veri yok"},"FooterRow":{"exportMessage":"Bu raporda en fazla {amount} sonuç gösterilir. Tüm sonuçlara erişmek için {export}","exportActionText":"raporu dışa aktarabilirsiniz.","message":{"one":"{count} sonuç","other":"{count} sonuç"}}},"FunnelChart":{"truncatedSessions":"Kısaltılmış {metric}","truncatedSessionsDescription":"{metric}, huniyi daha iyi temsil etmek üzere ölçeklendirecek şekilde çizilmiştir"},"BasketPopover":{"noVariants":"• Varyasyon yok","productsBoughtTogether":"Birlikte satın alınan ürünler ({count})","variantsBoughtTogether":"Birlikte satın alınan varyasyonlar ({count})","variantsCount":{"one":"• {count} varyasyon","other":"• {count} varyasyon"}},"BasketCell":{"hiddenProductCount":"+{count} tane daha","none":"Yok"},"BasketListWithActions":{"actions":"İşlemler","back":"Geri"},"RowActions":{"previewSegment":"Segmentin önizlemesini görüntüle"},"usePivotedColumnDisplayName":{"week":{"firstOrder":"İlk sipariş","greaterThanOne":"{value}. Hafta"},"month":{"firstOrder":"İlk sipariş","greaterThanOne":"{value}. Ay"},"quarter":{"firstOrder":"İlk sipariş","greaterThanOne":"{value}. Çeyrek"},"year":{"firstOrder":"İlk sipariş","greaterThanOne":"{value}. Yıl"}},"ShopifyQlDateControls":{"dateTextField":{"placeholderDateValue":"GG.AA.YYYY","sinceTextFieldLabel":"Başlangıç","untilTextFieldLabel":"Bitiş"},"actionButtons":{"apply":"Uygula","cancel":"İptal","back":"Geri"},"quickPicksSidebar":{"newBadge":"Yeni"},"quickPicksDropdown":{"customDateRange":"Özel","label":"Tarih aralığı"},"compareTo":"Karşılaştırılacak dönem: {dateRange}","noComparison":"Karşılaştırma yok","sections":{"bfcm":"Black Friday Cyber Monday","quarters":"Çeyrekler"}},"useFormatLineChart":{"allTime":"Tüm zamanlar"},"useGetPrimaryMetricBadge":{"webPerformance":{"success":"İyi","attention":"Orta","critical":"Kötü"},"fraudRisk":{"attention":"Risk altında","critical":"Yüksek risk"}},"RFMGridLabels":{"xAxis":"Yakınlık puanı","yAxis":"Sıklık + Parasal değer puanı"},"useWebPerformanceAnnotations":{"good":"İyi","poor":"Kötü","count":{"one":"{count} etkinlik","other":"{count} etkinlik"}},"Polaris":{"Avatar":{"label":"Avatar","labelWithInitials":"Baş harfleri {initials} olan avatar"},"Autocomplete":{"spinnerAccessibilityLabel":"Yükleniyor","ellipsis":"{content}…"},"Badge":{"PROGRESS_LABELS":{"incomplete":"Tamamlanmadı","partiallyComplete":"Kısmen tamamlandı","complete":"Tamamlandı"},"TONE_LABELS":{"info":"Bilgi","success":"Başarılı","warning":"Uyarı","attention":"Dikkat","new":"Yeni","critical":"Kritik","readOnly":"Salt okunur","enabled":"Etkinleştirildi"},"progressAndTone":"{toneLabel} {progressLabel}"},"Banner":{"dismissButton":"Bildirimi kapat"},"Button":{"spinnerAccessibilityLabel":"Yükleniyor"},"Common":{"checkbox":"onay kutusu","undo":"Geri al","cancel":"İptal","clear":"Temizle","close":"Kapat","submit":"Gönder","more":"Diğer"},"ContextualSaveBar":{"save":"Kaydet","discard":"Vazgeç"},"DataTable":{"sortAccessibilityLabel":"{direction} tarafı şuna göre sırala:","navAccessibilityLabel":"Tabloyu bir sütun {direction} tarafa kaydır","totalsRowHeading":"Toplamlar","totalRowHeading":"Toplam"},"DatePicker":{"previousMonth":"Önceki ayı ({previousMonthName} {showPreviousYear}) göster","nextMonth":"Sonraki ayı ({nextMonth} {nextYear}) göster","today":"Bugün ","months":{"january":"Ocak","february":"Şubat","march":"Mart","april":"Nisan","may":"Mayıs","june":"Haziran","july":"Temmuz","august":"Ağustos","september":"Eylül","october":"Ekim","november":"Kasım","december":"Aralık"},"daysAbbreviated":{"monday":"Pt","tuesday":"Sa","wednesday":"Ça","thursday":"Pe","friday":"Cu","saturday":"Ct","sunday":"Pz"},"days":{"monday":"Pazartesi","tuesday":"Salı","wednesday":"Çarşamba","thursday":"Perşembe","friday":"Cuma","saturday":"Cumartesi","sunday":"Pazar"},"start":"Aralık başlangıcı","end":"Aralık bitişi"},"ActionMenu":{"RollupActions":{"rollupButton":"İşlemleri görüntüle"},"Actions":{"moreActions":"Diğer işlemler"}},"Modal":{"iFrameTitle":"gövde işaretlemesi","modalWarning":"Şu gerekli özellikler Modda yok: {missingProps}","unsavedChanges":"Kaydedilmemiş değişiklikler var"},"Pagination":{"previous":"Önceki","next":"Sonraki","pagination":"Sayfalara ayırma"},"ProgressBar":{"negativeWarningMessage":"İlerleme özelliğine geçirilen değerler negatif olmamalıdır. {progress} sıfırlanıyor.","exceedWarningMessage":"İlerleme özelliğine geçirilen değerler 100'ü aşmamalıdır. {progress} 100 olarak ayarlanıyor."},"ResourceList":{"sortingLabel":"Sıralama ölçütü","defaultItemSingular":"ürün","defaultItemPlural":"ürün","showing":"{itemsCount} {resource} gösteriliyor","loading":"{resource} yükleniyor","selected":"{selectedItemsCount} tane seçildi","allItemsSelected":"Mağazanızdaki tüm {itemsLength}+ {resourceNamePlural} seçildi","selectAllItems":"Mağazanızdaki tüm {itemsLength}+ {resourceNamePlural} öğesini seç","emptySearchResultTitle":"Herhangi bir {resourceNamePlural} bulunamadı","emptySearchResultDescription":"Filtreleri veya arama terimini değiştirmeyi deneyin","selectButtonText":"Seç","a11yCheckboxDeselectAllSingle":"{resourceNameSingular} seçimini kaldır","a11yCheckboxSelectAllSingle":"Seç: {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"{itemsLength} {resourceNamePlural} öğesinin tümünün seçimini kaldır","a11yCheckboxSelectAllMultiple":"{itemsLength} {resourceNamePlural} öğesinin tümünü seç","Item":{"actionsDropdownLabel":"{accessibilityLabel} ile ilgili işlemler","actionsDropdown":"İşlemler açılır listesi","viewItem":"{itemName} için ayrıntıları görüntüle"},"BulkActions":{"actionsActivatorLabel":"İşlemler","moreActionsActivatorLabel":"Diğer işlemler"},"showingTotalCount":"{totalItemsCount} {resource} içinden {itemsCount} tanesi gösteriliyor","allFilteredItemsSelected":"Bu filtredeki tüm {itemsLength}+ {resourceNamePlural} seçildi","selectAllFilteredItems":"Bu filtredeki tüm {itemsLength}+ {resourceNamePlural} öğesini seç"},"SkeletonPage":{"loadingLabel":"Sayfa yükleniyor"},"Tabs":{"toggleTabsLabel":"Daha fazla görünüm","newViewAccessibilityLabel":"Yeni görünüm oluştur","newViewTooltip":"Görünüm oluştur","Tab":{"rename":"Görünümü yeniden adlandır","duplicate":"Görünümü çoğalt","edit":"Görünümü düzenle","editColumns":"Sütunları düzenle","delete":"Görünümü sil","copy":"{name} kopyası","deleteModal":{"title":"Görünüm silinsin mi?","description":"Bu işlem geri alınamaz. {viewName} görünümü artık yönetici panelinizde kullanılamayacak.","cancel":"İptal","delete":"Görünümü sil"}},"RenameModal":{"title":"Görünümü yeniden adlandır","label":"Ad","cancel":"İptal","create":"Kaydet","errors":{"sameName":"Bu ada sahip bir görünüm zaten var. Lütfen farklı bir ad seçin."}},"DuplicateModal":{"title":"Görünümü çoğalt","label":"Ad","cancel":"İptal","create":"Görünüm oluştur","errors":{"sameName":"Bu ada sahip bir görünüm zaten var. Lütfen farklı bir ad seçin."}},"CreateViewModal":{"title":"Yeni görünüm oluştur","label":"Ad","cancel":"İptal","create":"Görünüm oluştur","errors":{"sameName":"Bu ada sahip bir görünüm zaten var. Lütfen farklı bir ad seçin."}}},"Tag":{"ariaLabel":"Kaldır: {children}"},"TextField":{"characterCount":"{count} karakter","characterCountWithMaxLength":"{count}/{limit} karakter kullanıldı"},"TopBar":{"toggleMenuLabel":"Menüyü aç/kapat","SearchField":{"clearButtonLabel":"Temizle","search":"Ara"}},"MediaCard":{"popoverButton":"İşlemler","dismissButton":"Kapat"},"VideoThumbnail":{"playButtonA11yLabel":{"default":"Videoyu oynat","defaultWithDuration":"{duration} uzunluğundaki videoyu oynat","duration":{"hours":{"other":{"only":"{hourCount} saat","andMinutes":"{hourCount} saat {minuteCount} dakika","andMinute":"{hourCount} saat {minuteCount} dakika","minutesAndSeconds":"{hourCount} saat {minuteCount} dakika {secondCount} saniye","minutesAndSecond":"{hourCount} saat {minuteCount} dakika {secondCount} saniye","minuteAndSeconds":"{hourCount} saat {minuteCount} dakika {secondCount} saniye","minuteAndSecond":"{hourCount} saat {minuteCount} dakika {secondCount} saniye","andSeconds":"{hourCount} saat {secondCount} saniye","andSecond":"{hourCount} saat {secondCount} saniye"},"one":{"only":"{hourCount} saat","andMinutes":"{hourCount} saat {minuteCount} dakika","andMinute":"{hourCount} saat {minuteCount} dakika","minutesAndSeconds":"{hourCount} saat {minuteCount} dakika {secondCount} saniye","minutesAndSecond":"{hourCount} saat {minuteCount} dakika {secondCount} saniye","minuteAndSeconds":"{hourCount} saat {minuteCount} dakika {secondCount} saniye","minuteAndSecond":"{hourCount} saat {minuteCount} dakika {secondCount} saniye","andSeconds":"{hourCount} saat {secondCount} saniye","andSecond":"{hourCount} saat {secondCount} saniye"}},"minutes":{"other":{"only":"{minuteCount} dakika","andSeconds":"{minuteCount} dakika {secondCount} saniye","andSecond":"{minuteCount} dakika {secondCount} saniye"},"one":{"only":"{minuteCount} dakika","andSeconds":"{minuteCount} dakika {secondCount} saniye","andSecond":"{minuteCount} dakika {secondCount} saniye"}},"seconds":{"other":"{secondCount} saniye","one":"{secondCount} saniye"}}}},"Loading":{"label":"Sayfa yüklenme çubuğu"},"TooltipOverlay":{"accessibilityLabel":"Araç ipucu: {label}"},"Page":{"Header":{"rollupActionsLabel":"{title} ile ilgili işlemleri görüntüleyin","pageReadyAccessibilityLabel":"{title}. Bu sayfa hazır"}},"ActionList":{"SearchField":{"clearButtonLabel":"Temizle","search":"Ara","placeholder":"İşlem arayın"}},"AlphaTable":{"TableRowActions":{"heading":"İşlemler","activatorAccessibilityLabel":"Satır işlemlerini aç","activatorLabel":"İşlemler"},"TableRowGroups":{"heading":"Satır gruplarını aç/kapat","toggle":"Bu satır grubunun görünürlüğünü aç/kapat"},"Sorting":{"sortAscending":"Bu tabloyu {heading} ölçütüne göre artan düzende sırala","sortDescending":"Bu tabloyu {heading} ölçütüne göre azalan düzende sırala"},"Selection":{"select":"Seç: {id}","selectPage":"Sayfadaki {count} tanenin tümünü seç","selectAll":"Mağazadaki {count}+ tanenin tümünü seç","selectAllWithTotal":"Mağazadaki {total} tanenin tümünü seç","selectionHeader":"Seçim","unselectAll":"Tümünün seçimini kaldır","selectedPage":"{count} tane seçildi","selectedAll":"Mağazadaki {count}+ tanenin tümü seçildi","selectedAllWithTotal":"Mağazadaki {total} tanenin tümü seçildi","selectedSome":"{count}/{total} tane seçildi"},"TableCell":{"spansColumns":"{count} sütuna yayılır"},"BulkActions":{"activatorLabel":"İşlemler"}},"SortPopover":{"ariaLabel":"Sonuçları sırala","tooltip":"Sıralama","title":"Sıralama ölçütü","sorting":{"asc":"Artan","desc":"Azalan","az":"A-Z","za":"Z-A"}}},"DistributionChart":{"noData":"Kullanılabilir veri yok","title":"Dağıtım grafiği","description":"Dağıtım verilerini gösteren çubuk grafik: {data}.{percentiles}","highlightedPercentiles":" Kayda değer yüzdelik dilimler şunları içerir: {percentiles}."},"PerformanceEventType":{"APP_INSTALL":{"title":"Uygulama yüklendi","content":"{appName} yüklendi"},"APP_UNINSTALL":{"title":"Uygulama kaldırıldı","content":"{appName} kaldırıldı"},"THEME_LIVE_EDIT":{"title":"Canlı tema düzenlendi","content":{"one":"{themeName} teması {count} defa düzenlendi","other":"{themeName} teması {count} defa düzenlendi"}},"THEME_PUBLICATION":{"title":"Tema yayınlandı","content":"{themeName} teması yayınlandı"}}}`)
-  , rQ = {
-    AnalyticsUIComponents: aQ
-}
-  , oQ = JSON.parse('{"BenchmarksSummary":{"shopValue":"您的商店","benchmarksMedian":"基准中位数","benchmarks25thPercentile":"第 25 个百分位","benchmarks75thPercentile":"第 75 个百分位","benchmarksTooltip":"对照类似商店评估您商店的绩效；类似商店基于过去 30 天售出的产品、主要市场的对应国家/地区以及订单量。","missingData":{"title":"没有基准","content":"类似商店的数据不足"}},"CloseButton":{"delete":"删除指标"},"MetricCardEmpty":{"noResults":"找不到此日期范围的数据","noResultsCompact":"没有数据","incorrectCardSize":"若要查看数据，请调整此卡片的大小"},"MetricCardError":{"error":"无法加载数据"},"MetricLayout":{"ReportLinkAccessibilityLabel":"查看 {reportTitle} 报告"},"HorizontalNavigation":{"Forward":"前进","Backward":"后退"},"TimeframePicker":{"today":"今天","todayHelp":"与昨天（最近到当前小时）对比","last7days":"7 天","last7daysHelp":"与前 7 天相比","last30days":"30 天","last30daysHelp":"与前 30 天相比","last90days":"90 天","last90daysHelp":"与前 90 天相比","last365days":"365 天","last365daysHelp":"与过去 365 天相比"},"date":{"range":"{startDate}–{endDate}","sameMonthRange":"{year} {month} {startDay}–{endDay}","months":{"1":"一月","2":"二月","3":"三月","4":"四月","5":"五月","6":"六月","7":"七月","8":"八月","9":"九月","10":"十月","11":"十一月","12":"十二月"},"title":{"today":"今天","yesterday":"昨天","this_week":"本周","this_month":"本月","this_quarter":"本季度","this_year":"今年","last_week":"上周","last_month":"上月","last_quarter":"上季度","last_year":"去年","bfcm":"BFCM {year}","quarter":"{year} 年第 {quarterNumber} 季","previous_period":"前一时间段","previous_second":"前一秒","previous_minute":"前一分钟","previous_hour":"前一小时","previous_day":"前一天\uFEFF","previous_week":"前一周","previous_month":"前一个月","previous_quarter":"前一季度\uFEFF","previous_year":"前一年","last7days":"过去 7 天","last30days":"过去 30 天","last90days":"过去 90 天","last365days":"过去 365 天","last12months":"过去 12 个月","weekToDate":"至今周数","monthToDate":"至今月数","quarterToDate":"至今季度","yearToDate":"至今年数","previous_year_match_day_of_week":"前一年（匹配星期几）"}},"MetricAnnotations":{"learnMoreLinkText":"详细了解","sessionsBackfill2022":{"label":"数据开始","description":"作为数据改进的一部分，访问数据的时间范围现在从 2022 年 10 月开始计算。"},"checkoutConversionRate2022":{"label":"度量更新","description":"作为数据改进的一部分，访问数据的时间范围现在从 2022 年 10 月开始计算。从该日起，我们调整了以下指标：{affectedMetrics}。","banner":{"description":"我们改进了结账开始时间的计数方法，因此我们将对更多已经开始的结账进行计数。所以，以下指标可能发生了变化：{affectedMetrics}。为了可以进行历史比较，我们调整了从 2022 年 10 月起的这些指标。"}}},"TrendIndicator":{"IncreaseOf":"增加了 {change}","DecreaseOf":"降低了 {change}","NoChange":"无变化"},"TimeFormatter":{"DayOrLonger":"{timeInDay} {timeInHour}","LessThanDay":"{timeInHour} {timeInMinute}","day":{"one":"{amount} 天","other":"{amount} 天"},"hour":{"one":"{amount} 小时","other":"{amount} 小时"},"minute":{"one":"{amount} 分钟","other":"{amount} 分钟"}},"useFormattedValue":{"none":"无","boolean":{"true":"是","false":"否"},"quarters":{"short":{"q1":"问题 1","q2":"问题 2","q3":"问题 3","q4":"问题 4"},"long":{"q1":"{year} 年第 1 季度","q2":"{year} 年第 2 季度","q3":"{year} 年第 3 季度","q4":"{year} 年第 4 季度"}},"DAY_OF_WEEK":{"short":{"0":"星期一","1":"星期二","2":"星期三","3":"星期四","4":"星期五","5":"星期六","6":"星期日"},"long":{"0":"星期一","1":"星期二","2":"星期三","3":"星期四","4":"星期五","5":"星期六","6":"星期天"}}},"useFormatHistogram":{"days":{"one":"{count} 天","other":"{count} 天"}},"TooltipContent":{"fieldSuffixes":{"product_title":{"one":"{count} 件产品","other":"{count} 件产品"},"product_variant_title":{"one":"{count} 个产品多属性","other":"{count} 个产品多属性"},"product_variant_id":{"one":"{count} 个产品多属性","other":"{count} 个产品多属性"},"product_variant_sku":{"one":"{count} 个产品多属性","other":"{count} 个产品多属性"}}},"popover":{"learnMore":"详细了解"},"useFormatLineChartRelational":{"percentileLegend":"第 25 - 第 75 个百分位","median":"基准中位数","missingData":{"title":"没有基准","content":"类似商店的数据不足"},"yourTotals":"您的总额"},"RFMGroups":{"previously_loyal":{"description":"近期未购买，但订单量和消费额历史记录很高的客户。","goal":"目标：将客户移至“忠实”"},"at_risk":{"description":"近期未购买，但订单量和消费额历史记录高的客户。","goal":"目标：将客户移至“忠实”或“需要注意”"},"dormant":{"description":"近期未购买、订单很少、消费低的客户。","goal":"目标：将客户移至“几乎流失”"},"loyal":{"description":"近期未购买，但订单量和消费额历史记录很高的客户。","goal":"目标：将客户移至“冠军”"},"needs_attention":{"description":"近期在您商店购买较少、有时下单、消费中等的客户。","goal":"目标：将客户移至“忠实”或“活跃”"},"almost_lost":{"description":"近期未购买、订单较少、消费较低的客户。","goal":"目标：将客户移至“活跃”或“有潜力”"},"promising":{"description":"近期购买、订单少、消费低的客户。","goal":"目标：将客户移至“活跃”"},"active":{"description":"近期购买、有一些订单、消费中等的客户。","goal":"目标：将客户移至“冠军”或“忠实”"},"new":{"description":"最近购买、订单少、消费低的客户。","goal":"目标：将客户移至“活跃”"},"champions":{"description":"最近购买、订单多、消费最高的客户。"},"metricInformation":{"value":"{formattedMetricValue}","percentage":"（客户群的 {formattedPercentValue}）"},"previewSegment":"预览细分","viewReport":"查看报告"},"CustomerCohortAnalysis":{"Tooltip":{"returned":"{percent} ({customers}) 在 {month} ({currentMonth}) 后返回","returnedAcquisitionMonth":"{percent} ({customers}) 在相应群体的获取月份后 ({month}) 返回","firstOrder":"{month} 群体：{customers}","noOrders":"没有客户在 {month} ({currentMonth}) 后返回","noOrdersAcquisitionMonth":"没有客户在相应群体的获取月份 ({currentMonth}) 后返回","month":{"one":"{count} 个月","other":"{count} 个月"},"customer":{"one":"{count} 位客户","other":"{count} 位客户"}},"summaryRowDate":"所有群体","timeDimensionColumnDisplayName":"群组"},"MetricTable":{"subtitle":"% 更改","summary":"摘要","EmptyState":{"text":"没有用于此选项的数据"},"FooterRow":{"exportMessage":"此报告最多显示 {amount} 个结果。若要访问所有结果，您可以{export}","exportActionText":"导出报告。","message":{"one":"{count} 个结果","other":"{count} 个结果"}}},"FunnelChart":{"truncatedSessions":"已截断 {metric}","truncatedSessionsDescription":"{metric} 按比例绘制，以更好地表现漏斗"},"BasketPopover":{"noVariants":"• 无多属性","productsBoughtTogether":"同时购买的产品 ({count})","variantsBoughtTogether":"同时购买的多属性 ({count})","variantsCount":{"one":"• {count} 个多属性","other":"• {count} 个多属性"}},"BasketCell":{"hiddenProductCount":"+{count} 个","none":"无"},"BasketListWithActions":{"actions":"操作","back":"返回"},"RowActions":{"previewSegment":"预览片段"},"usePivotedColumnDisplayName":{"week":{"firstOrder":"首单","greaterThanOne":"第 {value} 周"},"month":{"firstOrder":"首单","greaterThanOne":"第 {value} 个月"},"quarter":{"firstOrder":"首单","greaterThanOne":"第 {value} 个季度"},"year":{"firstOrder":"首单","greaterThanOne":"第 {value} 年"}},"ShopifyQlDateControls":{"dateTextField":{"placeholderDateValue":"YYY-MM-DD","sinceTextFieldLabel":"开始日期","untilTextFieldLabel":"结束日期"},"actionButtons":{"apply":"应用","cancel":"取消","back":"返回"},"quickPicksSidebar":{"newBadge":"新品"},"quickPicksDropdown":{"customDateRange":"自定义","label":"日期范围"},"compareTo":"对比：{dateRange}","noComparison":"无对比","sections":{"bfcm":"黑色星期五/网络星期一","quarters":"季度"}},"useFormatLineChart":{"allTime":"所有时间"},"useGetPrimaryMetricBadge":{"webPerformance":{"success":"良好","attention":"中","critical":"差"},"fraudRisk":{"attention":"存在风险","critical":"风险上升"}},"RFMGridLabels":{"xAxis":"新近性评分","yAxis":"频率 + 货币价值评分"},"useWebPerformanceAnnotations":{"good":"良好","poor":"差","count":{"one":"{count} 个活动","other":"{count} 个活动"}},"Polaris":{"Avatar":{"label":"头像","labelWithInitials":"头像和姓名缩写 {initials}"},"Autocomplete":{"spinnerAccessibilityLabel":"正在加载","ellipsis":"{content}…"},"Badge":{"PROGRESS_LABELS":{"incomplete":"未完成","partiallyComplete":"部分完成","complete":"完成"},"TONE_LABELS":{"info":"信息","success":"成功","warning":"警告","attention":"注意","new":"新","critical":"重要","readOnly":"只读","enabled":"已启用"},"progressAndTone":"{toneLabel} {progressLabel}"},"Banner":{"dismissButton":"忽略通知"},"Button":{"spinnerAccessibilityLabel":"正在加载"},"Common":{"checkbox":"复选框","undo":"撤消","cancel":"取消","clear":"清除","close":"关闭","submit":"提交","more":"更多"},"ContextualSaveBar":{"save":"保存","discard":"放弃"},"DataTable":{"sortAccessibilityLabel":"向 {direction} 排序","navAccessibilityLabel":"将表向 {direction} 滚动一列","totalsRowHeading":"总计","totalRowHeading":"总计"},"DatePicker":{"previousMonth":"显示上个月，{showPreviousYear} 年 {previousMonthName}","nextMonth":"显示下个月，{nextYear} 年 {nextMonth}","today":"今天 ","months":{"january":"一月","february":"二月","march":"三月","april":"四月","may":"五月","june":"六月","july":"七月","august":"八月","september":"九月","october":"十月","november":"十一月","december":"十二月"},"daysAbbreviated":{"monday":"周一","tuesday":"周二","wednesday":"周三","thursday":"周四","friday":"周五","saturday":"周六","sunday":"周日"},"days":{"monday":"星期一","tuesday":"星期二","wednesday":"星期三","thursday":"星期四","friday":"星期五","saturday":"星期六","sunday":"星期日"},"start":"起始日期","end":"结束日期"},"ActionMenu":{"RollupActions":{"rollupButton":"查看操作"},"Actions":{"moreActions":"其他操作"}},"Modal":{"iFrameTitle":"正文标记","modalWarning":"模态窗口缺少这些必需的属性：{missingProps}","unsavedChanges":"未保存的更改"},"Pagination":{"previous":"上一页","next":"下一页","pagination":"分页"},"ProgressBar":{"negativeWarningMessage":"传递给进度条的值不可为负数。将 {progress} 重置为 0。","exceedWarningMessage":"传递给进度条的值不可超过 100。将 {progress} 设置为 100。"},"ResourceList":{"sortingLabel":"排序方式","defaultItemSingular":"商品","defaultItemPlural":"商品","showing":"显示 {itemsCount} 个 {resource}","loading":"正在加载 {resource}","selected":"已选择 {selectedItemsCount} 个","allItemsSelected":"已选择您商店中所有 {itemsLength}+ 个{resourceNamePlural}","selectAllItems":"选择商店中所有 {itemsLength}+ 个 {resourceNamePlural}","emptySearchResultTitle":"未找到 {resourceNamePlural}","emptySearchResultDescription":"尝试更改筛选条件或搜索词","selectButtonText":"选择","a11yCheckboxDeselectAllSingle":"取消选择 {resourceNameSingular}","a11yCheckboxSelectAllSingle":"选择 {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"取消选择所有 {itemsLength} 个 {resourceNamePlural}","a11yCheckboxSelectAllMultiple":"选择所有 {itemsLength} 个 {resourceNamePlural}","Item":{"actionsDropdownLabel":"{accessibilityLabel} 的操作","actionsDropdown":"操作下拉菜单","viewItem":"查看 {itemName} 详细信息"},"BulkActions":{"actionsActivatorLabel":"操作","moreActionsActivatorLabel":"其他操作"},"showingTotalCount":"显示 {itemsCount} 项 {resource}（共 {totalItemsCount} 项）","allFilteredItemsSelected":"已选择此筛选器中所有 {itemsLength}+ 个{resourceNamePlural}","selectAllFilteredItems":"选择此筛选器中的所有 {itemsLength}+ 个 {resourceNamePlural}"},"SkeletonPage":{"loadingLabel":"页面加载"},"Tabs":{"toggleTabsLabel":"更多视图","newViewAccessibilityLabel":"创建新视图","newViewTooltip":"创建视图","Tab":{"rename":"重命名视图","duplicate":"复制视图","edit":"编辑视图","editColumns":"编辑列","delete":"删除视图","copy":"{name} 的副本","deleteModal":{"title":"删除视图？","description":"此操作无法撤消。您的后台中将不再提供 {viewName} 视图。","cancel":"取消","delete":"删除视图"}},"RenameModal":{"title":"重命名视图","label":"名称","cancel":"取消","create":"保存","errors":{"sameName":"已存在具有此名称的视图。请选择其他名称。"}},"DuplicateModal":{"title":"复制视图","label":"名称","cancel":"取消","create":"创建视图","errors":{"sameName":"已存在具有此名称的视图。请选择其他名称。"}},"CreateViewModal":{"title":"创建新视图","label":"名称","cancel":"取消","create":"创建视图","errors":{"sameName":"已存在具有此名称的视图。请选择其他名称。"}}},"Tag":{"ariaLabel":"删除 {children}"},"TextField":{"characterCount":"{count} 个字符","characterCountWithMaxLength":"已使用 {count}/{limit} 个字符"},"TopBar":{"toggleMenuLabel":"切换菜单","SearchField":{"clearButtonLabel":"清除","search":"搜索"}},"MediaCard":{"popoverButton":"操作","dismissButton":"忽略"},"VideoThumbnail":{"playButtonA11yLabel":{"default":"播放视频","defaultWithDuration":"播放时长为 {duration} 的视频","duration":{"hours":{"other":{"only":"{hourCount} 小时","andMinutes":"{hourCount} 小时 {minuteCount} 分","andMinute":"{hourCount} 小时 {minuteCount} 分","minutesAndSeconds":"{hourCount} 小时 {minuteCount} 分 {secondCount} 秒","minutesAndSecond":"{hourCount} 小时 {minuteCount} 分 {secondCount} 秒","minuteAndSeconds":"{hourCount} 小时 {minuteCount} 分 {secondCount} 秒","minuteAndSecond":"{hourCount} 小时 {minuteCount} 分 {secondCount} 秒","andSeconds":"{hourCount} 小时 {secondCount} 秒","andSecond":"{hourCount} 小时 {secondCount} 秒"},"one":{"only":"{hourCount} 小时","andMinutes":"{hourCount} 小时 {minuteCount} 分","andMinute":"{hourCount} 小时 {minuteCount} 分","minutesAndSeconds":"{hourCount} 小时 {minuteCount} 分 {secondCount} 秒","minutesAndSecond":"{hourCount} 小时 {minuteCount} 分 {secondCount} 秒","minuteAndSeconds":"{hourCount} 小时 {minuteCount} 分 {secondCount} 秒","minuteAndSecond":"{hourCount} 小时 {minuteCount} 分 {secondCount} 秒","andSeconds":"{hourCount} 小时 {secondCount} 秒","andSecond":"{hourCount} 小时 {secondCount} 秒"}},"minutes":{"other":{"only":"{minuteCount} 分","andSeconds":"{minuteCount} 分 {secondCount} 秒","andSecond":"{minuteCount} 分 {secondCount} 秒"},"one":{"only":"{minuteCount} 分","andSeconds":"{minuteCount} 分 {secondCount} 秒","andSecond":"{minuteCount} 分 {secondCount} 秒"}},"seconds":{"other":"{secondCount} 秒","one":"{secondCount} 秒"}}}},"Loading":{"label":"页面加载条"},"TooltipOverlay":{"accessibilityLabel":"工具提示：{label}"},"Page":{"Header":{"rollupActionsLabel":"查看用于 {title} 的操作","pageReadyAccessibilityLabel":"{title}。此页面已就绪"}},"ActionList":{"SearchField":{"clearButtonLabel":"清除","search":"搜索","placeholder":"搜索操作"}},"AlphaTable":{"TableRowActions":{"heading":"操作","activatorAccessibilityLabel":"打开行操作","activatorLabel":"操作"},"Selection":{"select":"选择 {id}","selectPage":"选择页面上的全部 {count} 个","selectAll":"选择商店中的全部 {count}+ 个","selectAllWithTotal":"选择商店中的全部 {total} 个","unselectAll":"取消全选","selectedPage":"已选择 {count} 个","selectedAll":"已选择商店中的全部 {count}+ 个","selectedAllWithTotal":"已选择商店中的全部 {total} 个","selectionHeader":"选择","selectedSome":"已选择 {count}/{total} 个"},"TableRowGroups":{"heading":"切换行组","toggle":"切换此行组的可见性"},"Sorting":{"sortAscending":"按 {heading} 以升序为此表排序","sortDescending":"按 {heading} 以降序为此表排序"},"TableCell":{"spansColumns":"跨 {count} 列"},"BulkActions":{"activatorLabel":"操作"}},"SortPopover":{"ariaLabel":"对结果排序","tooltip":"排序","title":"排序方式","sorting":{"asc":"升序","desc":"降序","az":"A-Z","za":"Z-A"}}},"DistributionChart":{"noData":"无可用数据","title":"分布图","description":"显示分布数据的条形图：{data}.{percentiles}","highlightedPercentiles":" 值得关注的百分位数包括：{percentiles}。"},"PerformanceEventType":{"APP_INSTALL":{"title":"已安装应用","content":"已安装 {appName}"},"APP_UNINSTALL":{"title":"已卸载应用","content":"已卸载 {appName}"},"THEME_LIVE_EDIT":{"title":"已编辑实时模板","content":{"one":"已编辑 {themeName} 模板 {count} 次","other":"已编辑 {themeName} 模板 {count} 次"}},"THEME_PUBLICATION":{"title":"已发布模板","content":"已发布 {themeName} 模板"}}}')
-  , sQ = {
-    AnalyticsUIComponents: oQ
-}
-  , lQ = JSON.parse('{"BenchmarksSummary":{"shopValue":"您的商店","benchmarksMedian":"基準中位數","benchmarks25thPercentile":"前 25%","benchmarks75thPercentile":"前 75%","benchmarksTooltip":"與同類商店比較過去 30 天的商品銷售情形、主要市場國家/地區及訂單量，藉此衡量您商店的成效表現。","missingData":{"title":"沒有基準","content":"來自類似商店的資料不足"}},"CloseButton":{"delete":"刪除指標"},"MetricCardEmpty":{"noResults":"找不到此日期範圍內的資料","noResultsCompact":"沒有資料","incorrectCardSize":"若要查看資料，請調整此卡片的大小"},"MetricCardError":{"error":"無法載入資料"},"MetricLayout":{"ReportLinkAccessibilityLabel":"檢視 {reportTitle} 報告"},"HorizontalNavigation":{"Forward":"往前","Backward":"往後"},"TimeframePicker":{"today":"今日","todayHelp":"與昨天此刻相比","last7days":"7 天","last7daysHelp":"與過去 7 天相比","last30days":"30 天","last30daysHelp":"與過去 30 天相比","last90days":"90 天","last90daysHelp":"與過去 90 天相比","last365days":"365 天","last365daysHelp":"與過去 365 天相比"},"date":{"range":"{startDate}–{endDate}","sameMonthRange":"{year} {month} {startDay}–{endDay}","months":{"1":"1 月","2":"2 月","3":"3 月","4":"4 月","5":"5 月","6":"6 月","7":"7 月","8":"8 月","9":"9 月","10":"10 月","11":"11 月","12":"12 月"},"title":{"today":"今天","yesterday":"昨天","last7days":"過去 7 天","last30days":"過去 30 天","last90days":"過去 90 天","last365days":"過去 365 天","last12months":"過去 12 個月","this_week":"本週","this_month":"本月","this_quarter":"本季","this_year":"今年","last_week":"上週","last_month":"上個月","last_quarter":"上一季","last_year":"去年","weekToDate":"本週至今","monthToDate":"本月至今","quarterToDate":"本季至今","yearToDate":"本年度至今","bfcm":"{year} 黑色星期五和網購星期一","quarter":"{year} 第 {quarterNumber} 季","previous_period":"上一期間","previous_second":"前一秒","previous_minute":"前一分鐘","previous_hour":"前一小時","previous_day":"前一天","previous_week":"前一週","previous_month":"上個月","previous_quarter":"上一季","previous_year":"去年","previous_year_match_day_of_week":"去年 (比對週間日)"}},"MetricAnnotations":{"learnMoreLinkText":"瞭解詳情","sessionsBackfill2022":{"label":"資料起始","description":"基於資料改善作業，工作階段資料現在以 2022 年 10 月為分析起點。"},"checkoutConversionRate2022":{"label":"量測值更新","description":"基於資料改善作業，工作階段資料現在以 2022 年 10 月為分析起點。我們也對該日期起的資料調整了以下指標：{affectedMetrics}。","banner":{"description":"我們改善了開始結帳動作的計數方式，導致統計的開始結帳次數將有所增加。因此，以下指標可能出現變動：{affectedMetrics}。為了比較歷史資料，我們針對 2022 年 10 月起的資料調整這些指標。"}}},"TrendIndicator":{"IncreaseOf":"增加 {change}","DecreaseOf":"減少 {change}","NoChange":"未變更"},"TimeFormatter":{"DayOrLonger":"{timeInDay} {timeInHour}","LessThanDay":"{timeInHour} {timeInMinute}","day":{"one":"{amount} 天","other":"{amount} 天"},"hour":{"one":"{amount} 小時","other":"{amount} 小時"},"minute":{"one":"{amount} 分鐘","other":"{amount} 分鐘"}},"useFormattedValue":{"none":"無","boolean":{"true":"是","false":"否"},"quarters":{"short":{"q1":"第一季","q2":"第二季","q3":"第三季","q4":"第四季"},"long":{"q1":"{year} 第一季","q2":"{year} 第二季","q3":"{year} 第三季","q4":"{year} 第四季"}},"DAY_OF_WEEK":{"short":{"0":"週一","1":"週二","2":"週三","3":"週四","4":"週五","5":"週六","6":"週日"},"long":{"0":"星期一","1":"星期二","2":"星期三","3":"星期四","4":"星期五","5":"星期六","6":"星期日"}}},"useFormatHistogram":{"days":{"one":"{count} 天","other":"{count} 天"}},"TooltipContent":{"fieldSuffixes":{"product_title":{"one":"{count} 項商品","other":"{count} 項商品"},"product_variant_title":{"one":"{count} 個商品子類選項","other":"{count} 個商品子類選項"},"product_variant_id":{"one":"{count} 個商品子類選項","other":"{count} 個商品子類選項"},"product_variant_sku":{"one":"{count} 個商品子類選項","other":"{count} 個商品子類選項"}}},"popover":{"learnMore":"瞭解詳情"},"useFormatLineChartRelational":{"percentileLegend":"前 25% - 75%","median":"基準中位數","missingData":{"title":"沒有基準","content":"來自類似商店的資料不足"},"yourTotals":"您的總額"},"RFMGroups":{"previously_loyal":{"description":"近期未購買、但過往有大量訂單和消費記錄的顧客。","goal":"目標：將顧客移入忠實行列"},"at_risk":{"description":"近期未購買、但過往有不少訂單和消費記錄的顧客。","goal":"目標：將顧客移入忠實或需注意行列"},"dormant":{"description":"近期未下單、訂單頻率不高且消費金額低的顧客。","goal":"目標：將顧客移入幾乎失去行列"},"loyal":{"description":"近期未購買、但過往有大量訂單和消費記錄的顧客。","goal":"目標：將顧客移入冠軍行列"},"needs_attention":{"description":"近期在您的商店較少購買、有時下訂單且消費金額中等的顧客。","goal":"目標：將顧客移入忠實或活躍行列"},"almost_lost":{"description":"近期未購買、訂單量少且消費金額較低的顧客。","goal":"目標：將顧客移入活躍或潛在顧客行列"},"promising":{"description":"近期購買過、訂單量少且消費金額低的顧客。","goal":"目標：將顧客移入活躍行列"},"active":{"description":"近期購買過、訂單量不多且消費金額中等的顧客。","goal":"目標：將顧客移入冠軍或忠實行列"},"new":{"description":"近期剛購買過、訂單量少且消費金額低的顧客。","goal":"目標：將顧客移入活躍行列"},"champions":{"description":"最近剛購買過、訂單量大且消費金額高的顧客。"},"metricInformation":{"value":"{formattedMetricValue}","percentage":"(佔客群的 {formattedPercentValue})"},"previewSegment":"預覽顧客群","viewReport":"檢視報告"},"CustomerCohortAnalysis":{"Tooltip":{"returned":"{month} 個月後 ({currentMonth}) 的回購率為 {percent} ({customers})","returnedAcquisitionMonth":"此組別顧客開發月份回購率為 ({month}){percent} ({customers})","firstOrder":"{month} 組別：{customers}","noOrders":"{month} 個月後 ({currentMonth})，沒有顧客回流","noOrdersAcquisitionMonth":"此組別顧客開發月份 ({currentMonth}) 沒有顧客回流","month":{"one":"{count} 個月","other":"{count} 個月"},"customer":{"one":"{count} 位顧客","other":"{count} 位顧客"}},"summaryRowDate":"所有組別","timeDimensionColumnDisplayName":"組別"},"MetricTable":{"subtitle":"變更百分比","summary":"摘要","EmptyState":{"text":"沒有此選項的資料"},"FooterRow":{"exportMessage":"此報告最多可顯示 {amount} 項結果。若要存取所有結果，您可以{export}","exportActionText":"匯出報告。","message":{"one":"{count} 項結果","other":"{count} 項結果"}}},"FunnelChart":{"truncatedSessions":"截斷的 {metric}","truncatedSessionsDescription":"{metric} 按比例繪製，以便以更清楚的方式表示漏斗"},"BasketPopover":{"noVariants":"• 沒有子類","productsBoughtTogether":"一起購買的商品 ({count})","variantsBoughtTogether":"一起購買的子類 ({count})","variantsCount":{"one":"• {count} 個子類","other":"• {count} 個子類"}},"BasketCell":{"hiddenProductCount":"還有 {count} 個","none":"無"},"BasketListWithActions":{"actions":"動作","back":"返回"},"RowActions":{"previewSegment":"預覽顧客群"},"usePivotedColumnDisplayName":{"week":{"firstOrder":"第一筆訂單","greaterThanOne":"第 {value} 週"},"month":{"firstOrder":"第一筆訂單","greaterThanOne":"第 {value} 個月"},"quarter":{"firstOrder":"第一筆訂單","greaterThanOne":"第 {value} 季"},"year":{"firstOrder":"第一筆訂單","greaterThanOne":"第 {value} 年"}},"ShopifyQlDateControls":{"dateTextField":{"placeholderDateValue":"YYYY-MM-DD","sinceTextFieldLabel":"開始","untilTextFieldLabel":"結束"},"actionButtons":{"apply":"套用","cancel":"取消","back":"返回"},"quickPicksSidebar":{"newBadge":"新增"},"quickPicksDropdown":{"customDateRange":"自訂","label":"日期範圍"},"compareTo":"與 {dateRange}相比","noComparison":"沒有比較結果","sections":{"bfcm":"黑色星期五和網購星期一","quarters":"季"}},"useFormatLineChart":{"allTime":"所有時間"},"useGetPrimaryMetricBadge":{"webPerformance":{"success":"好","attention":"尚可","critical":"不佳"},"fraudRisk":{"attention":"有風險","critical":"風險升高"}},"RFMGridLabels":{"xAxis":"時近性分數","yAxis":"頻率 + 消費金額分數"},"useWebPerformanceAnnotations":{"good":"很好","poor":"不佳","count":{"one":"{count} 項活動","other":"{count} 項活動"}},"Polaris":{"Avatar":{"label":"大頭貼","labelWithInitials":"姓名首字母為 {initials} 的大頭貼"},"Autocomplete":{"spinnerAccessibilityLabel":"載入中","ellipsis":"{content}…"},"Badge":{"PROGRESS_LABELS":{"incomplete":"未完成","partiallyComplete":"部分完成","complete":"完成"},"TONE_LABELS":{"info":"資訊","success":"成功","warning":"警告","attention":"注意","new":"新內容","critical":"重要","readOnly":"唯讀","enabled":"已啟用"},"progressAndTone":"{toneLabel} {progressLabel}"},"Banner":{"dismissButton":"關閉通知"},"Button":{"spinnerAccessibilityLabel":"載入中"},"Common":{"checkbox":"核取方塊","undo":"復原","cancel":"取消","clear":"清除","close":"關閉","submit":"提交","more":"更多"},"ContextualSaveBar":{"save":"儲存","discard":"捨棄"},"DataTable":{"sortAccessibilityLabel":"向{direction}排序，依據","navAccessibilityLabel":"向{direction}捲動表格一欄","totalsRowHeading":"總計","totalRowHeading":"總計"},"DatePicker":{"previousMonth":"顯示上個月 ({showPreviousYear} {previousMonthName})","nextMonth":"顯示下個月 ({nextYear} {nextMonth})","today":"今天 ","months":{"january":"一月","february":"二月","march":"三月","april":"四月","may":"五月","june":"六月","july":"七月","august":"八月","september":"九月","october":"十月","november":"十一月","december":"十二月"},"daysAbbreviated":{"monday":"週一","tuesday":"週二","wednesday":"週三","thursday":"週四","friday":"週五","saturday":"週六","sunday":"週日"},"days":{"monday":"星期一","tuesday":"星期二","wednesday":"星期三","thursday":"星期四","friday":"星期五","saturday":"星期六","sunday":"星期日"},"start":"範圍起點","end":"範圍終點"},"ActionMenu":{"RollupActions":{"rollupButton":"檢視動作"},"Actions":{"moreActions":"更多動作"}},"Modal":{"iFrameTitle":"內文標記","modalWarning":"互動視窗缺少以下必要屬性：{missingProps}","unsavedChanges":"未儲存的變更"},"Pagination":{"previous":"上一頁","next":"下一頁","pagination":"分頁"},"ProgressBar":{"negativeWarningMessage":"傳送至進度條屬性的數值不應為負值。正在將 {progress} 重設為 0。","exceedWarningMessage":"傳送至進度條屬性的數值不應超過 100。正在將 {progress} 設為 100。"},"ResourceList":{"sortingLabel":"排序依據","defaultItemSingular":"品項","defaultItemPlural":"品項","showing":"顯示 {itemsCount} {resource}","loading":"正在載入 {resource}","selected":"已選取 {selectedItemsCount} 個","allItemsSelected":"已選取您商店中所有 {itemsLength} 以上的 {resourceNamePlural}","selectAllItems":"選擇您商店中所有 {itemsLength} 以上的 {resourceNamePlural}","emptySearchResultTitle":"找不到任何 {resourceNamePlural}","emptySearchResultDescription":"嘗試變更篩選條件或搜尋詞彙","selectButtonText":"選取","a11yCheckboxDeselectAllSingle":"取消選取 {resourceNameSingular}","a11yCheckboxSelectAllSingle":"選取 {resourceNameSingular}","a11yCheckboxDeselectAllMultiple":"取消選取所有 {itemsLength} {resourceNamePlural}","a11yCheckboxSelectAllMultiple":"選取所有 {itemsLength} {resourceNamePlural}","Item":{"actionsDropdownLabel":"{accessibilityLabel} 的動作","actionsDropdown":"「動作」下拉式選單","viewItem":"檢視 {itemName} 的詳細資訊"},"BulkActions":{"actionsActivatorLabel":"動作","moreActionsActivatorLabel":"更多動作"},"showingTotalCount":"顯示第 {itemsCount} 個 {resource}，共 {totalItemsCount} 個","allFilteredItemsSelected":"已選取此篩選條件中所有 {itemsLength} 以上的 {resourceNamePlural}","selectAllFilteredItems":"選取此篩選條件中所有 {itemsLength} 以上的 {resourceNamePlural}"},"SkeletonPage":{"loadingLabel":"頁面載入中"},"Tabs":{"toggleTabsLabel":"更多檢視畫面","newViewAccessibilityLabel":"建立新檢視畫面","newViewTooltip":"建立檢視畫面","Tab":{"rename":"重新命名檢視畫面","duplicate":"複製檢視畫面","edit":"編輯檢視畫面","editColumns":"編輯欄","delete":"刪除檢視畫面","copy":"{name} 的副本","deleteModal":{"title":"是否要刪除檢視畫面？","description":"此動作無法復原。{viewName} 檢視畫面已無法在您的管理介面中使用。","cancel":"取消","delete":"刪除檢視畫面"}},"RenameModal":{"title":"重新命名檢視畫面","label":"名稱","cancel":"取消","create":"儲存","errors":{"sameName":"已有其他檢視畫面使用此名稱。請改用其他名稱。"}},"DuplicateModal":{"title":"複製檢視畫面","label":"名稱","cancel":"取消","create":"建立檢視畫面","errors":{"sameName":"已有其他檢視畫面使用此名稱。請改用其他名稱。"}},"CreateViewModal":{"title":"建立新檢視畫面","label":"名稱","cancel":"取消","create":"建立檢視畫面","errors":{"sameName":"已有其他檢視畫面使用此名稱。請改用其他名稱。"}}},"Tag":{"ariaLabel":"移除 {children}"},"TextField":{"characterCount":"{count} 個字元","characterCountWithMaxLength":"已使用 {count} 個字元，上限為 {limit} 個字元"},"TopBar":{"toggleMenuLabel":"切換選單","SearchField":{"clearButtonLabel":"清除","search":"搜尋"}},"MediaCard":{"popoverButton":"動作","dismissButton":"關閉"},"VideoThumbnail":{"playButtonA11yLabel":{"default":"播放影片","defaultWithDuration":"播放長度為 {duration} 的影片","duration":{"hours":{"other":{"only":"{hourCount} 小時","andMinutes":"{hourCount} 小時 {minuteCount} 分鐘","andMinute":"{hourCount} 小時 {minuteCount} 分鐘","minutesAndSeconds":"{hourCount} 小時 {minuteCount} 分鐘 {secondCount} 秒","minutesAndSecond":"{hourCount} 小時 {minuteCount} 分鐘 {secondCount} 秒","minuteAndSeconds":"{hourCount} 小時 {minuteCount} 分鐘 {secondCount} 秒","minuteAndSecond":"{hourCount} 小時 {minuteCount} 分鐘 {secondCount} 秒","andSeconds":"{hourCount} 小時 {secondCount} 秒","andSecond":"{hourCount} 小時 {secondCount} 秒"},"one":{"only":"{hourCount} 小時","andMinutes":"{hourCount} 小時 {minuteCount} 分鐘","andMinute":"{hourCount} 小時 {minuteCount} 分鐘","minutesAndSeconds":"{hourCount} 小時 {minuteCount} 分鐘 {secondCount} 秒","minutesAndSecond":"{hourCount} 小時 {minuteCount} 分鐘 {secondCount} 秒","minuteAndSeconds":"{hourCount} 小時 {minuteCount} 分鐘 {secondCount} 秒","minuteAndSecond":"{hourCount} 小時 {minuteCount} 分鐘 {secondCount} 秒","andSeconds":"{hourCount} 小時 {secondCount} 秒","andSecond":"{hourCount} 小時 {secondCount} 秒"}},"minutes":{"other":{"only":"{minuteCount} 分鐘","andSeconds":"{minuteCount} 分鐘 {secondCount} 秒","andSecond":"{minuteCount} 分鐘 {secondCount} 秒"},"one":{"only":"{minuteCount} 分鐘","andSeconds":"{minuteCount} 分鐘 {secondCount} 秒","andSecond":"{minuteCount} 分鐘 {secondCount} 秒"}},"seconds":{"other":"{secondCount} 秒","one":"{secondCount} 秒"}}}},"Loading":{"label":"頁面載入進度條"},"TooltipOverlay":{"accessibilityLabel":"工具提示：{label}"},"Page":{"Header":{"rollupActionsLabel":"檢視 {title} 的動作","pageReadyAccessibilityLabel":"{title}。此頁面已準備就緒"}},"ActionList":{"SearchField":{"clearButtonLabel":"清除","search":"搜尋","placeholder":"搜尋動作"}},"AlphaTable":{"TableRowActions":{"heading":"動作","activatorAccessibilityLabel":"開啟列動作","activatorLabel":"動作"},"TableRowGroups":{"heading":"切換列群組","toggle":"切換此列群組的可見性"},"Sorting":{"sortAscending":"以 {heading} 遞增排序此表格","sortDescending":"以 {heading} 遞減排序此表格"},"Selection":{"select":"選取 {id}","selectPage":"選取頁面上所有 {count} 個項目","selectAll":"選取店內 {count} 件以上的所有項目","selectAllWithTotal":"選取店內所有 {total} 個項目","selectionHeader":"選項","unselectAll":"取消全選","selectedPage":"已選取 {count} 個","selectedAll":"已選取店內所有 {count} 件以上的項目","selectedAllWithTotal":"已選取店內所有 {total} 件的項目","selectedSome":"已選取 {count} 個，總共 {total} 個"},"BulkActions":{"activatorLabel":"動作"},"TableCell":{"spansColumns":"跨 {count} 欄"}},"SortPopover":{"ariaLabel":"排序結果","tooltip":"排序","title":"排序依據","sorting":{"asc":"遞增","desc":"遞減","az":"由 A 到 Z","za":"由 Z 到 A"}}},"DistributionChart":{"noData":"無可用資料","title":"配送圖表","description":"顯示配送資料的長條圖：{data}。{percentiles}","highlightedPercentiles":" 值得注意的百分位數包括：{percentiles}。"},"PerformanceEventType":{"APP_INSTALL":{"title":"已安裝應用程式","content":"已安裝 {appName}"},"APP_UNINSTALL":{"title":"已解除安裝應用程式","content":"已解除安裝 {appName}"},"THEME_LIVE_EDIT":{"title":"已編輯當前佈景主題","content":{"one":"已編輯 {themeName} 佈景主題 {count} 次","other":"已編輯 {themeName} 佈景主題 {count} 次"}},"THEME_PUBLICATION":{"title":"已發布佈景主題","content":"已發佈 {themeName} 佈景主題"}}}')
-  , cQ = {
-    AnalyticsUIComponents: lQ
-}
-  , uQ = {
-    [Symbol.for("i18n-id")]: "AnalyticsUIComponents",
-    en: LK,
-    cs: _K,
-    da: NK,
-    de: PK,
-    es: EK,
-    fi: RK,
-    fr: DK,
-    it: BK,
-    ja: VK,
-    ko: $K,
-    nb: WK,
-    nl: GK,
-    pl: QK,
-    "pt-BR": YK,
-    "pt-PT": XK,
-    sv: tQ,
-    th: iQ,
-    tr: rQ,
-    "zh-CN": sQ,
-    "zh-TW": cQ
-}
-
-
-;
-var yg = {}, OP;
 
 
 
-var pQ = function() {
-    var e = function(t, n) {
-        return e = Object.setPrototypeOf || {
-            __proto__: []
-        }instanceof Array && function(i, a) {
-            i.__proto__ = a
-        }
-        || function(i, a) {
-            for (var r in a)
-                a.hasOwnProperty(r) && (i[r] = a[r])
-        }
-        ,
-        e(t, n)
-    };
-    return function(t, n) {
-        e(t, n);
-        function i() {
-            this.constructor = t
-        }
-        t.prototype = n === null ? Object.create(n) : (i.prototype = n.prototype,
-        new i)
-    }
-}()
-;
-function fQ(e) {
-    var t = React.useContext(zx);
-    if (!t)
-        throw new Error("Missing <CookiesProvider>");
-    var n = t.getAll()
-      , i = React.useState(n)
-      , a = i[0]
-      , r = i[1]
-      , s = React.useRef(a);
-    React.useEffect(function() {
-        function d() {
-            var p = t.getAll();
-            hQ(e || null, p, s.current) && r(p),
-            s.current = p
-        }
-        return t.addChangeListener(d),
-        function() {
-            t.removeChangeListener(d)
-        }
-    }, [t]);
-    var l = React.useMemo(function() {
-        return t.set.bind(t)
-    }, [t])
-      , c = React.useMemo(function() {
-        return t.remove.bind(t)
-    }, [t]);
-    return [a, l, c]
-}
-function hQ(e, t, n) {
-    if (!e)
-        return !0;
-    for (var i = 0, a = e; i < a.length; i++) {
-        var r = a[i];
-        if (t[r] !== n[r])
-            return !0
-    }
-    return !1
-}
-const gQ = 500;
-class vQ {
-[k: string]: any;
-    constructor() {
-        this.keysPressed = [],
-        this.shortcuts = [],
-        this.shortcutsMatched = [],
-        this.isShortcutsDisabled = !1,
-        this.handleKeyDown = t => {
-            if (this.isShortcutsDisabled)
-                return;
-            const {key: n} = t;
-            switch (this.keysPressed.push(n),
-            this.updateMatchingShortcuts(t),
-            this.shortcutsMatched.length) {
-            case 0:
-                this.resetKeys();
-                break;
-            case 1:
-                this.callMatchedShortcut(t);
-                break;
-            default:
-                this.timer = window.setTimeout( () => {
-                    this.callMatchedShortcut(t)
-                }
-                , gQ)
-            }
-        }
-    }
-    setup() {
-        document.addEventListener("keydown", this.handleKeyDown)
-    }
-    subscribe(t) {
-        const {shortcuts: n} = this;
-        return n.push(t),
-        {
-            unsubscribe() {
-                const i = n.findIndex(a => a === t);
-                n.splice(i, 1)
-            }
-        }
-    }
-    disableShortcuts() {
-        this.isShortcutsDisabled = !0
-    }
-    enableShortcuts() {
-        this.isShortcutsDisabled = !1
-    }
-    triggerShortcut({ordered: t, held: n, ignoreInput: i, ignoredTags: a, allowDefault: r}) {
-        const s = this.shortcuts.find(l => vd(t, l.ordered) && vd(n || [], l.held || []) && (a == null || vd(a, l.ignoredTags || [])) && (i == null || i === l.ignoreInput) && (r == null || r === l.allowDefault));
-        s && s.onMatch({
-            ordered: s.ordered,
-            held: s.held
-        })
-    }
-    resetKeys() {
-        this.keysPressed = [],
-        this.shortcutsMatched = []
-    }
-    allModifiersAreHeld(t, n) {
-        function i(r) {
-            return r.every(s => Array.isArray(s))
-        }
-        function a(r) {
-            return r.every(s => n.getModifierState && n.getModifierState(s))
-        }
-        return i(t) ? t.some(a) : a(t)
-    }
-    updateMatchingShortcuts(t) {
-        const n = this.shortcutsMatched.length > 0 ? this.shortcutsMatched : this.shortcuts;
-        this.shortcutsMatched = n.filter( ({ordered: i, held: a, node: r, ignoreInput: s, ignoredTags: l}) => {
-            if (yQ(l) && !s || a && !this.allModifiersAreHeld(a, t))
-                return !1;
-            const c = vd(this.keysPressed, i.slice(0, this.keysPressed.length));
-            if (r) {
-                const d = document.activeElement === r;
-                return c && d
-            }
-            return c
-        }
-        )
-    }
-    callMatchedShortcut(t) {
-        const n = this.shortcutsMatched.find( ({ordered: i}) => vd(i, this.keysPressed));
-        n && (n.allowDefault || t.preventDefault(),
-        n.onMatch({
-            ordered: n.ordered,
-            held: n.held
-        }),
-        clearTimeout(this.timer),
-        this.resetKeys())
-    }
-}
-function yQ(e) {
-    const t = document.activeElement;
-    return t == null || t.tagName == null ? !1 : e.includes(t.tagName) || t.hasAttribute("contenteditable")
-}
-function vd(e, t) {
-    return Array.isArray(e) && Array.isArray(t) ? e.length !== t.length ? !1 : e.every( (n, i) => vd(n, t[i])) : e === t
-}
-const Bj = React.Component(null);
-function zj({children: e}) {
-    const t = React.useRef(new vQ);
-    return React.useEffect( () => {
-        t.current.setup()
-    }
-    , []),
-    React.createElement(Bj.Provider, {
-        value: t.current
-    }, e)
-}
-const BP = ["INPUT", "SELECT", "TEXTAREA"];
-function Vj(e, t, n={}) {
-    const i = React.useContext(Bj)
-      , a = React.useRef(null)
-      , {node: r, held: s, ignoreInput: l, acceptedDefaultIgnoredTags: c, allowDefault: d} = n;
-    React.useEffect( () => {
-        if (i != null)
-            return a.current = i.subscribe({
-                onMatch: t,
-                ordered: e,
-                node: r,
-                held: s,
-                ignoreInput: l || !1,
-                ignoredTags: bQ(c),
-                allowDefault: d || !1
-            }),
-            () => {
-                a.current != null && a.current.unsubscribe()
-            }
-    }
-    , [r, e, s, l, c, d, i, t])
-}
-function bQ(e) {
-    return e != null && e.length ? BP.filter(t => !e.includes(t)) : BP
-}
-function hGe(e) {
-    const {ordered: t, onMatch: n, ...i} = e;
-    return Vj(t, n, {
-        ...i
-    }),
-    null
-}
-
-
-let Xv;
-(function(e) {
-    e.Complete = "complete",
-    e.Usable = "usable"
-}
-)(Xv || (Xv = {}));
-
-function Uj({stage: e, id: t}) {
-    return kQ(e, t),
-    null
-}
-
-function CQ({onNavigation: e}) {
-    return Of(e),
-    null
-}
-const Vx = React.createContext(void 0);
-function gGe() {
-    const e = React.useContext(Vx);
-    if (e == null)
-        throw new Error("No CSRF token found in context.");
-    return e
-}
-function AQ(e="shop1") {
-    return `${rU === "unified" ? "admin" : e}.myshopify.io`
-}
-
-const xQ = {
-    notify() {},
-    leaveBreadcrumb() {}
-}
-  , pm = React.createContext(xQ)
-  , Wj = {
-    video: null,
-    startAt: 0,
-    isMinimized: !1,
-    links: [],
-    overlay: null,
-    position: {
-        top: "auto",
-        left: "auto",
-        bottom: 10,
-        right: 10
-    },
-    playerRef: null,
-    playerRefVideoId: null,
-    updateProgress: !0
-}
-  , qj = React.createContext({
-    videoState: {
-        ...Wj
-    },
-    updateVideoState: () => {
-        throw new Error("Did you try to render a component without wrapping it in a ContextualVideoContext provider?")
-    }
-});
-function Gj({children: e}) {
-    var t = E(1);
-    try {
-        var n = E(1);
-        try {
-            const [i,a] = React.useState(Wj)
-              , r = React.useMemo( () => ({
-                videoState: i,
-                updateVideoState: s => {
-                    a(l => ({
-                        ...l,
-                        ...s
-                    }))
-                }
-            }), [i]);
-            return React.createElement(qj.Provider, {
-                value: r,
-                children: e
-            })
-        } finally {
-            n.f()
-        }
-    } finally {
-        t.f()
-    }
-}
-function _Q({url: e}) {
-    return o$(e),
-    null
-}
-/**
- * React Router DOM v6.27.0
- *
- * Copyright (c) Remix Software Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE.md file in the root directory of this source tree.
- *
- * @license MIT
- */
-function zs() {
-    return zs = Object.assign ? Object.assign.bind() : function(e) {
-        for (var t = 1; t < arguments.length; t++) {
-            var n = arguments[t];
-            for (var i in n)
-                Object.prototype.hasOwnProperty.call(n, i) && (e[i] = n[i])
-        }
-        return e
-    }
-    ,
-    zs.apply(this, arguments)
-}
-function Kj(e, t) {
-    if (e == null)
-        return {};
-    var n = {}, i = Object.keys(e), a, r;
-    for (r = 0; r < i.length; r++)
-        a = i[r],
-        !(t.indexOf(a) >= 0) && (n[a] = e[a]);
-    return n
-}
-const kv = "get"
-  , US = "application/x-www-form-urlencoded";
-function qy(e) {
-    return e != null && typeof e.tagName == "string"
-}
-function wQ(e) {
-    return qy(e) && e.tagName.toLowerCase() === "button"
-}
-function NQ(e) {
-    return qy(e) && e.tagName.toLowerCase() === "form"
-}
-function TQ(e) {
-    return qy(e) && e.tagName.toLowerCase() === "input"
-}
-function PQ(e) {
-    return !!(e.metaKey || e.altKey || e.ctrlKey || e.shiftKey)
-}
-function IQ(e, t) {
-    return e.button === 0 && (!t || t === "_self") && !PQ(e)
-}
-function r0(e) {
-    return e === void 0 && (e = ""),
-    new URLSearchParams(typeof e == "string" || Array.isArray(e) || e instanceof URLSearchParams ? e : Object.keys(e).reduce( (t, n) => {
-        let i = e[n];
-        return t.concat(Array.isArray(i) ? i.map(a => [n, a]) : [[n, i]])
-    }
-    , []))
-}
-function LQ(e, t) {
-    let n = r0(e);
-    return t && t.forEach( (i, a) => {
-        n.has(a) || t.getAll(a).forEach(r => {
-            n.append(a, r)
-        }
-        )
-    }
-    ),
-    n
-}
-let bg = null;
-function FQ() {
-    if (bg === null)
-        try {
-            new FormData(document.createElement("form"),0),
-            bg = !1
-        } catch {
-            bg = !0
-        }
-    return bg
-}
-const EQ = new Set(["application/x-www-form-urlencoded", "multipart/form-data", "text/plain"]);
-function $S(e) {
-    return e != null && !EQ.has(e) ? null : e
-}
-function MQ(e, t) {
-    let n, i, a, r, s;
-    if (NQ(e)) {
-        let l = e.getAttribute("action");
-        i = l ? $A(l, t) : null,
-        n = e.getAttribute("method") || kv,
-        a = $S(e.getAttribute("enctype")) || US,
-        r = new FormData(e)
-    } else if (wQ(e) || TQ(e) && (e.type === "submit" || e.type === "image")) {
-        let l = e.form;
-        if (l == null)
-            throw new Error('Cannot submit a <button> or <input type="submit"> without a <form>');
-        let c = e.getAttribute("formaction") || l.getAttribute("action");
-        if (i = c ? $A(c, t) : null,
-        n = e.getAttribute("formmethod") || l.getAttribute("method") || kv,
-        a = $S(e.getAttribute("formenctype")) || $S(l.getAttribute("enctype")) || US,
-        r = new FormData(l,e),
-        !FQ()) {
-            let {name: d, type: p, value: f} = e;
-            if (p === "image") {
-                let v = d ? d + "." : "";
-                r.append(v + "x", "0"),
-                r.append(v + "y", "0")
-            } else
-                d && r.append(d, f)
-        }
-    } else {
-        if (qy(e))
-            throw new Error('Cannot submit element that is not <form>, <button>, or <input type="submit|image">');
-        n = kv,
-        i = null,
-        a = US,
-        s = e
-    }
-    return r && a === "text/plain" && (s = r,
-    r = void 0),
-    {
-        action: i,
-        method: n.toLowerCase(),
-        encType: a,
-        formData: r,
-        body: s
-    }
-}
-const RQ = ["onClick", "relative", "reloadDocument", "replace", "state", "target", "to", "preventScrollReset", "viewTransition"]
-  , jQ = ["fetcherKey", "navigate", "reloadDocument", "replace", "state", "method", "action", "onSubmit", "relative", "preventScrollReset", "viewTransition"]
-  , DQ = "6";
-try {
-    window.__reactRouterVersion = DQ
-} catch {}
-const Gy = React.createContext({
-    isTransitioning: !1
-})
-  , Qj = React.createContext(new Map)
-  , OQ = "startTransition"
-  , BQ = "flushSync"
-  , zQ = "useId";
-function VQ(e) {
-    zP ? zP(e) : e()
-}
-function cp(e) {
-    VP ? VP(e) : e()
-}
-class UQ {
-[k: string]: any;
-    constructor() {
-        this.status = "pending",
-        this.promise = new Promise( (t, n) => {
-            this.resolve = i => {
-                this.status === "pending" && (this.status = "resolved",
-                t(i))
-            }
-            ,
-            this.reject = i => {
-                this.status === "pending" && (this.status = "rejected",
-                n(i))
-            }
-        }
-        )
-    }
-}
-function Zj(e) {
-    let {fallbackElement: t, router: n, future: i} = e
-      , [a,r] = React.useState(n.state)
-      , [s,l] = React.useState()
-      , [c,d] = React.useState({
-        isTransitioning: !1
-    })
-      , [p,f] = React.useState()
-      , [v,g] = React.useState()
-      , [y,b] = React.useState()
-      , k = React.useRef(new Map)
-      , {v7_startTransition: C} = i || {}
-      , x = React.useCallback(I => {
-        C ? VQ(I) : I()
-    }
-    , [C])
-      , A = React.useCallback( (I, L) => {
-        let {deletedFetchers: R, flushSync: D, viewTransitionOpts: M} = L;
-        R.forEach(z => k.current.delete(z)),
-        I.fetchers.forEach( (z, B) => {
-            z.data !== void 0 && k.current.set(B, z.data)
-        }
-        );
-        let O = n.window == null || n.window.document == null || typeof n.window.document.startViewTransition != "function";
-        if (!M || O) {
-            D ? cp( () => r(I)) : x( () => r(I));
-            return
-        }
-        if (D) {
-            cp( () => {
-                v && (p && p.resolve(),
-                v.skipTransition()),
-                d({
-                    isTransitioning: !0,
-                    flushSync: !0,
-                    currentLocation: M.currentLocation,
-                    nextLocation: M.nextLocation
-                })
-            }
-            );
-            let z = n.window.document.startViewTransition( () => {
-                cp( () => r(I))
-            }
-            );
-            z.finished.finally( () => {
-                cp( () => {
-                    f(void 0),
-                    g(void 0),
-                    l(void 0),
-                    d({
-                        isTransitioning: !1
-                    })
-                }
-                )
-            }
-            ),
-            cp( () => g(z));
-            return
-        }
-        v ? (p && p.resolve(),
-        v.skipTransition(),
-        b({
-            state: I,
-            currentLocation: M.currentLocation,
-            nextLocation: M.nextLocation
-        })) : (l(I),
-        d({
-            isTransitioning: !0,
-            flushSync: !1,
-            currentLocation: M.currentLocation,
-            nextLocation: M.nextLocation
-        }))
-    }
-    , [n.window, v, p, k, x]);
-    React.useLayoutEffect( () => n.subscribe(A), [n, A]),
-    React.useEffect( () => {
-        c.isTransitioning && !c.flushSync && f(new UQ)
-    }
-    , [c]),
-    React.useEffect( () => {
-        if (p && s && n.window) {
-            let I = s
-              , L = p.promise
-              , R = n.window.document.startViewTransition(async () => {
-                x( () => r(I)),
-                await L
-            }
-            );
-            R.finished.finally( () => {
-                f(void 0),
-                g(void 0),
-                l(void 0),
-                d({
-                    isTransitioning: !1
-                })
-            }
-            ),
-            g(R)
-        }
-    }
-    , [x, s, p, n.window]),
-    React.useEffect( () => {
-        p && s && a.location.key === s.location.key && p.resolve()
-    }
-    , [p, v, a.location, s]),
-    React.useEffect( () => {
-        !c.isTransitioning && y && (l(y.state),
-        d({
-            isTransitioning: !0,
-            flushSync: !1,
-            currentLocation: y.currentLocation,
-            nextLocation: y.nextLocation
-        }),
-        b(void 0))
-    }
-    , [c.isTransitioning, y]),
-    React.useEffect( () => {}
-    , []);
-    let _ = React.useMemo( () => ({
-        createHref: n.createHref,
-        encodeLocation: n.encodeLocation,
-        go: I => n.navigate(I),
-        push: (I, L, R) => n.navigate(I, {
-            state: L,
-            preventScrollReset: R == null ? void 0 : R.preventScrollReset
-        }),
-        replace: (I, L, R) => n.navigate(I, {
-            replace: !0,
-            state: L,
-            preventScrollReset: R == null ? void 0 : R.preventScrollReset
-        })
-    }), [n])
-      , w = n.basename || "/"
-      , T = React.useMemo( () => ({
-        router: n,
-        navigator: _,
-        static: !1,
-        basename: w
-    }), [n, _, w])
-      , P = React.useMemo( () => ({
-        v7_relativeSplatPath: n.future.v7_relativeSplatPath
-    }), [n.future.v7_relativeSplatPath]);
-    return React.createElement(React.Fragment, null, React.createElement(QR.Provider, {
-        value: T
-    }, React.createElement(ZR.Provider, {
-        value: a
-    }, React.createElement(Qj.Provider, {
-        value: k.current
-    }, React.createElement(Gy.Provider, {
-        value: c
-    }, React.createElement(l$, {
-        basename: w,
-        location: a.location,
-        navigationType: a.historyAction,
-        navigator: _,
-        future: P
-    }, a.initialized || n.future.v7_partialHydration ? React.createElement($Q, {
-        routes: n.routes,
-        future: n.future,
-        state: a
-    }) : t))))), null)
-}
-const $Q = React.memo(HQ);
-function HQ(e) {
-    let {routes: t, future: n, state: i} = e;
-    return u$(t, void 0, i, n)
-}
-const WQ = typeof window < "u" && typeof window.document < "u" && typeof window.document.createElement < "u"
-  , qQ = /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i
-  , $P = React.forwardRef(function(t, n) {
-    let {onClick: i, relative: a, reloadDocument: r, replace: s, state: l, target: c, to: d, preventScrollReset: p, viewTransition: f} = t, v = Kj(t, RQ), {basename: g} = React.useContext(Nx), y, b = !1;
-    if (typeof d == "string" && qQ.test(d) && (y = d,
-    WQ))
-        try {
-            let A = new URL(window.location.href)
-              , _ = d.startsWith("//") ? new URL(A.protocol + d) : new URL(d)
-              , w = $A(_.pathname, g);
-            _.origin === A.origin && w != null ? d = w + _.search + _.hash : b = !0
-        } catch {}
-    let k = c$(d, {
-        relative: a
-    })
-      , C = KQ(d, {
-        replace: s,
-        state: l,
-        target: c,
-        preventScrollReset: p,
-        relative: a,
-        viewTransition: f
-    });
-    function x(A) {
-        i && i(A),
-        A.defaultPrevented || C(A)
-    }
-    return React.createElement("a", zs({}, v, {
-        href: y || k,
-        onClick: b || r ? i : x,
-        ref: n,
-        target: c
-    }))
-})
-  , GQ = React.forwardRef( (e, t) => {
-    let {fetcherKey: n, navigate: i, reloadDocument: a, replace: r, state: s, method: l=kv, action: c, onSubmit: d, relative: p, preventScrollReset: f, viewTransition: v} = e
-      , g = Kj(e, jQ)
-      , y = tD()
-      , b = YQ(c, {
-        relative: p
-    })
-      , k = l.toLowerCase() === "get" ? "get" : "post"
-      , C = x => {
-        if (d && d(x),
-        x.defaultPrevented)
-            return;
-        x.preventDefault();
-        let A = x.nativeEvent.submitter
-          , _ = (A == null ? void 0 : A.getAttribute("formmethod")) || l;
-        y(A || x.currentTarget, {
-            fetcherKey: n,
-            method: _,
-            navigate: i,
-            replace: r,
-            state: s,
-            relative: p,
-            preventScrollReset: f,
-            viewTransition: v
-        })
-    }
-    ;
-    return React.createElement("form", zs({
-        ref: t,
-        method: k,
-        action: b,
-        onSubmit: a ? d : C
-    }, g))
-}
-);
-var ey;
-(function(e) {
-    e.UseScrollRestoration = "useScrollRestoration",
-    e.UseSubmit = "useSubmit",
-    e.UseSubmitFetcher = "useSubmitFetcher",
-    e.UseFetcher = "useFetcher",
-    e.useViewTransitionState = "useViewTransitionState"
-}
-)(ey || (ey = {}));
-var ty;
-(function(e) {
-    e.UseFetcher = "useFetcher",
-    e.UseFetchers = "useFetchers",
-    e.UseScrollRestoration = "useScrollRestoration"
-}
-)(ty || (ty = {}));
-function Yj(e) {
-    let t = React.useContext(QR);
-    return t || qc(!1),
-    t
-}
-function Jj(e) {
-    let t = React.useContext(ZR);
-    return t || qc(!1),
-    t
-}
-function KQ(e, t) {
-    let {target: n, replace: i, state: a, preventScrollReset: r, relative: s, viewTransition: l} = t === void 0 ? {} : t
-      , c = Oi()
-      , d = At()
-      , p = YR(e, {
-        relative: s
-    });
-    return React.useCallback(f => {
-        if (IQ(f, n)) {
-            f.preventDefault();
-            let v = i !== void 0 ? i : UA(d) === UA(p);
-            c(e, {
-                replace: v,
-                state: a,
-                preventScrollReset: r,
-                relative: s,
-                viewTransition: l
-            })
-        }
-    }
-    , [d, c, p, i, a, n, e, r, s, l])
-}
-function Xj(e) {
-    let t = React.useRef(r0(e))
-      , n = React.useRef(!1)
-      , i = At()
-      , a = React.useMemo( () => LQ(i.search, n.current ? null : t.current), [i.search])
-      , r = Oi()
-      , s = React.useCallback( (l, c) => {
-        const d = r0(typeof l == "function" ? l(a) : l);
-        n.current = !0,
-        r("?" + d, c)
-    }
-    , [r, a]);
-    return [a, s]
-}
-function QQ() {
-    if (typeof document > "u")
-        throw new Error("You are calling submit during the server render. Try calling submit within a `useEffect` or callback instead.")
-}
-let ZQ = 0
-  , eD = () => "__" + String(++ZQ) + "__";
-function tD() {
-    let {router: e} = Yj(ey.UseSubmit)
-      , {basename: t} = React.useContext(Nx)
-      , n = s$();
-    return React.useCallback(function(i, a) {
-        a === void 0 && (a = {}),
-        QQ();
-        let {action: r, method: s, encType: l, formData: c, body: d} = MQ(i, t);
-        if (a.navigate === !1) {
-            let p = a.fetcherKey || eD();
-            e.fetch(p, n, a.action || r, {
-                preventScrollReset: a.preventScrollReset,
-                formData: c,
-                body: d,
-                formMethod: a.method || s,
-                formEncType: a.encType || l,
-                flushSync: a.flushSync
-            })
-        } else
-            e.navigate(a.action || r, {
-                preventScrollReset: a.preventScrollReset,
-                formData: c,
-                body: d,
-                formMethod: a.method || s,
-                formEncType: a.encType || l,
-                replace: a.replace,
-                state: a.state,
-                fromRouteId: n,
-                flushSync: a.flushSync,
-                viewTransition: a.viewTransition
-            })
-    }, [e, t, n])
-}
-function YQ(e, t) {
-    let {relative: n} = t === void 0 ? {} : t
-      , {basename: i} = React.useContext(Nx)
-      , a = React.useContext(wx);
-    a || qc(!1);
-    let[r] = a.matches.slice(-1)
-      , s = zs({}, YR(e || ".", {
-        relative: n
-    }))
-      , l = At();
-    if (e == null) {
-        s.search = l.search;
-        let c = new URLSearchParams(s.search)
-          , d = c.getAll("index");
-        if (d.some(f => f === "")) {
-            c.delete("index"),
-            d.filter(v => v).forEach(v => c.append("index", v));
-            let f = c.toString();
-            s.search = f ? "?" + f : ""
-        }
-    }
-    return (!e || e === ".") && r.route.index && (s.search = s.search ? s.search.replace(/^\?/, "?index&") : "?index"),
-    i !== "/" && (s.pathname = s.pathname === "/" ? i : sU([i, s.pathname])),
-    UA(s)
-}
-function vGe(e) {
-    var t;
-    let {key: n} = e === void 0 ? {} : e
-      , {router: i} = Yj(ey.UseFetcher)
-      , a = Jj(ty.UseFetcher)
-      , r = React.useContext(Qj)
-      , s = React.useContext(wx)
-      , l = (t = s.matches[s.matches.length - 1]) == null ? void 0 : t.route.id;
-    r || qc(!1),
-    s || qc(!1),
-    l == null && qc(!1);
-    let c = UP ? UP() : ""
-      , [d,p] = React.useState(n || c);
-    n && n !== d ? p(n) : d || p(eD()),
-    React.useEffect( () => (i.getFetcher(d),
-    () => {
-        i.deleteFetcher(d)
-    }
-    ), [i, d]);
-    let f = React.useCallback( (x, A) => {
-        l || qc(!1),
-        i.fetch(d, l, x, A)
-    }
-    , [d, l, i])
-      , v = tD()
-      , g = React.useCallback( (x, A) => {
-        v(x, zs({}, A, {
-            navigate: !1,
-            fetcherKey: d
-        }))
-    }
-    , [d, v])
-      , y = React.useMemo( () => React.forwardRef( (A, _) => React.createElement(GQ, zs({}, A, {
-        navigate: !1,
-        fetcherKey: d,
-        ref: _
-    }))), [d])
-      , b = a.fetchers.get(d) || oU
-      , k = r.get(d);
-    return React.useMemo( () => zs({
-        Form: y,
-        submit: g,
-        load: f
-    }, b, {
-        data: k
-    }), [y, g, f, b, k])
-}
-function yGe() {
-    let e = Jj(ty.UseFetchers);
-    return Array.from(e.fetchers.entries()).map(t => {
-        let[n,i] = t;
-        return zs({}, i, {
-            key: n
-        })
-    }
-    )
-}
 
 
 
-const nD = React.memo(e => {
-    var t = E(1);
-    try {
-        var n = E(1);
-        try {
-            const a = ot().webInternalBrowserDetails()
-              , {children: r, userAgent: s, supported: l} = e
-              , c = new vR({
-                userAgent: s || "unknown",
-                supported: l ?? !0
-            });
-            return React.createElement(JR.Provider, {
-                value: c,
-                children: [r, React.createElement(_Q, {
-                    url: a
-                })]
-            })
-        } finally {
-            n.f()
-        }
-    } finally {
-        t.f()
-    }
-}
-);
-let tn = function(e) {
+
+
+
+
+
+
+
+
+
+
+
+
+let tn = function(e: any) {
     return e[e.Backspace = 8] = "Backspace",
     e[e.Tab = 9] = "Tab",
     e[e.Enter = 13] = "Enter",
@@ -6169,6 +167,8 @@ let tn = function(e) {
     e[e.SingleQuote = 222] = "SingleQuote",
     e
 }({});
+
+
 const Ky = {
     props: {
         "data-polaris-scrollable": !0
@@ -6253,9 +253,11 @@ function eZ(e) {
 function yd(e) {
     return `var(${eZ(e)})`
 }
-function tZ(e) {
-    return Object.values(e).flatMap(t => Object.keys(t))
+function tZ(e: any) {
+    return Object.values(e).flatMap((t: any) => Object.keys(t))
 }
+
+
 function nZ(e) {
     const t = Object.entries(e)
       , n = t.length - 1;
@@ -7460,7 +1462,7 @@ function _Ge(e) {
     }
 }
 const gm = React.createContext(!1);
-function wGe(e={}) {
+function wGe(e={} as any) {
     const {defaultValue: t="", timeout: n=1500} = e
       , [i,a] = React.useState("inactive")
       , r = React.useCallback(s => {
@@ -7850,9 +1852,12 @@ for (let e of xZ) {
     vD[t] = "https://cdn.shopify.com/shopifycloud/admin-ui-foundations/internal-only/" + n + ".svg"
 }
 const _Z = [...Object.keys(vD), ...Object.keys(gD)];
-function So(e) {
-    return typeof e == "string" && _Z.includes(e)
-}
+
+
+
+
+
+
 const yD = Yx.createAndListen(wZ(Bf.breakpoints))
   , Wn = yD.useMediaQueryState
   , TGe = yD.useMediaQueryStateSelector;
@@ -10127,15 +4132,11 @@ const ZY = {
 }
 )();
 
-var eJ = {
-    Icon: "Polaris-Icon"
-};
-const Fe = ({...e}) => React.createElement("span", {
-    className: eJ.Icon,
-    children: React.createElement(XY, {
-        ...e
-    })
-});
+
+
+
+
+
 var yI = {
     Spinner: "Polaris-Spinner",
     sizeSmall: "Polaris-Spinner--sizeSmall",
@@ -11217,7 +5218,7 @@ const kJ = e => {
     const t = e.closest(Ky.selector);
     return t instanceof HTMLElement ? t : document
 }
-  , La = u2;
+  , La = u2 as any;
 La.ScrollTo = yJ;
 La.forNode = kJ;
 let Ni = class extends React.PureComponent {
@@ -11236,13 +5237,13 @@ let Ni = class extends React.PureComponent {
         return null
     }
     attachListener() {
-        const {event: t, handler: n, capture: i, passive: a} = this.props;
+        const {event: t, handler: n, capture: i, passive: a} = this.props as any;
         window.addEventListener(t, n, {
             capture: i,
             passive: a
         })
     }
-    detachListener(t) {
+    detachListener(t?) {
         const {event: n, handler: i, capture: a} = t || this.props;
         window.removeEventListener(n, i, a)
     }
@@ -11258,7 +5259,7 @@ let m2 = class extends React.PureComponent {
     [k: string]: any;
     constructor(n) {
         super(n);
-        te(this, "state", {
+        te(this as any, "state", {
             measuring: !0,
             activatorRect: Yo(this.props.activator),
             right: void 0,
@@ -11294,7 +5295,7 @@ let m2 = class extends React.PureComponent {
             this.overlay = n
         }
         );
-        te(this, "setScrollableContainers", () => {
+        te(this as any, "setScrollableContainers", () => {
             const n = [];
             let i = La.forNode(this.props.activator);
             if (i)
@@ -11407,8 +5408,8 @@ let m2 = class extends React.PureComponent {
         r && a != null && i !== 0 && n && a()
     }
     render() {
-        const {left: n, right: i, top: a, zIndex: r, width: s} = this.state
-          , {render: l, fixed: c, preventInteraction: d, classNames: p, zIndexOverride: f} = this.props
+        const {left: n, right: i, top: a, zIndex: r, width: s} = this.state as any
+          , {render: l, fixed: c, preventInteraction: d, classNames: p, zIndexOverride: f} = this.props as any
           , v = {
             top: a == null || isNaN(a) ? void 0 : a,
             left: n == null || isNaN(n) ? void 0 : n,
@@ -11532,7 +5533,7 @@ function Qn({children: e, content: t, dismissOnMouseOut: n, active: i, hoverDela
       , {value: A, setTrue: _, setFalse: w} = Di(!!i)
       , {value: T, toggle: P} = Di(!!i && !!y)
       , [I,L] = React.useState(null)
-      , {presenceList: R, addPresence: D, removePresence: M} = dJ()
+      , {presenceList: R, addPresence: D, removePresence: M} = dJ() as any
       , O = React.useId()
       , z = React.useRef(null)
       , B = React.useRef(!1)
@@ -12722,7 +6723,7 @@ function y_(e, t) {
     return (Array.isArray(t) ? t : [t]).some(l => typeof a != "string" && WJ(l, a))
 }
 function h2(e, t= () => !0) {
-    return u.Children.toArray(e).filter(n => React.isValidElement(n) && t(n))
+    return React.Children.toArray(e).filter(n => React.isValidElement(n) && t(n))
 }
 function qJ({condition: e, wrapper: t, children: n}) {
     return e ? t(n) : n
@@ -12963,7 +6964,7 @@ class v2 extends React.PureComponent {
 }
 te(v2, "contextType", n_);
 function GJ(e, t) {
-    const n = u.Children.toArray(e);
+    const n = React.Children.toArray(e);
     return y_(n[0], f0) ? n : ym(n, f0, t)
 }
 function PI(e, t) {
@@ -13082,7 +7083,7 @@ const QJ = React.forwardRef(function({activatorWrapper: t="div", children: n, on
     }) : null;
     return React.createElement(P, {
         ref: C,
-        children: [u.Children.only(r), B]
+        children: [React.Children.only(r), B]
     })
 });
 function LI(e) {
@@ -14550,7 +8551,7 @@ const A2 = React.createContext({
     , [])
       , B = React.useCallback( (K, J, X) => {
         if (J.children && X) {
-            const se = u.Children.toArray(J.children)
+            const se = React.Children.toArray(J.children)
               , ne = new Map;
             let Y = 0;
             X.forEach(ue => {
@@ -18741,7 +12742,7 @@ const wte = React.forwardRef(function({children: t, tableRowActions: n, onClick:
       , p = React.useContext(NO)
       , f = React.useMemo( () => {
         const {slots: g, sortableSlots: y, hiddenSlots: b, addToSingleUseSlot: k, addSortableSlot: C, hideSlot: x, sortSlot: A} = Ate()
-          , _ = u.Children.toArray(t);
+          , _ = React.Children.toArray(t);
         return _.forEach( (w, T) => {
             const P = React.isValidElement(w) && w.props.value ? l(w.props.value.cellIndex) : l(T);
             if (!P)
@@ -18881,9 +12882,9 @@ const wte = React.forwardRef(function({children: t, tableRowActions: n, onClick:
 });
 function Nte({children: e}) {
     const [t,n] = React.useState(!1)
-      , i = React.useMemo( () => u.Children.toArray(e).length, [e])
+      , i = React.useMemo( () => React.Children.toArray(e).length, [e])
       , a = React.useRef([])
-      , r = React.useRef(u.Children.toArray(e).length);
+      , r = React.useRef(React.Children.toArray(e).length);
     React.useEffect( () => {
         r.current = i
     }
@@ -19019,7 +13020,7 @@ function Tte({id: e, value: t, children: n, tableRowActions: i, selected: a, dis
                 })
             }) : null
         }) : null;
-        return u.Children.toArray([K, n, J, C])
+        return React.Children.toArray([K, n, J, C])
     }
     , [z, n, l, d, i, v, C, x, A])
       , {allColspansRegistered: H, cellIndexContext: q, registerColSpan: W} = Nte({
@@ -19275,7 +13276,7 @@ const Rte = ({value: e}) => {
   , Ote = yu(Mte, Rte);
 function Bte({children: e, nestedLevelContextValue: t, colspan: n, rowGroupId: i, childrenVisible: a, renderedVariant: r}) {
     const s = React.useMemo( () => {
-        const l = u.Children.toArray(e)
+        const l = React.Children.toArray(e)
           , c = l.map( (d, p) => {
             const f = p === l.length - 1;
             return React.createElement(yO.Provider, {
@@ -19904,7 +13905,7 @@ function L_(e, t) {
         return t && React.isValidElement(r) ? t(r) : r
     }
       , i = Object.create(null);
-    return e && u.Children.map(e, function(a) {
+    return e && React.Children.map(e, function(a) {
         return a
     }).forEach(function(a) {
         i[a.key] = n(a)
@@ -20598,7 +14599,7 @@ function fne({children: e, selectedValues: t, isFilteringToSelectedOnly: n, show
     const {getStoredRowData: r} = vu()
       , {setShowSelectedPageIndex: s} = eo()
       , {headings: l} = gu()
-      , c = React.useMemo( () => u.Children.toArray(e), [e])
+      , c = React.useMemo( () => React.Children.toArray(e), [e])
       , d = n && t.size > 0
       , p = React.useMemo( () => {
         const v = new Map;
@@ -21282,7 +15283,7 @@ function Yt({children: e, autoSelection: t=Zc.FirstSelected, enableKeyboardContr
     }
     , [f, g, d, H, B, Q, $]);
     React.useEffect( () => {
-        t !== Zc.None && !l && e && u.Children.count(e) > 0 && K()
+        t !== Zc.None && !l && e && React.Children.count(e) > 0 && K()
     }
     , [e, t, d, l, K]),
     React.useEffect( () => {
@@ -21596,7 +15597,7 @@ function M_({activator: e, allowMultiple: t, children: n, preferredPosition: i="
       , [k,C] = React.useState()
       , [x,A] = React.useState(!1)
       , _ = !p
-      , w = p && u.Children.count(n) > 0
+      , w = p && React.Children.count(n) > 0
       , T = React.useRef(null)
       , P = React.useCallback( () => {
         f(!1),
@@ -21669,7 +15670,7 @@ function M_({activator: e, allowMultiple: t, children: n, preferredPosition: i="
         preferredPosition: i,
         onClose: P,
         preferVisualViewportHeight: H,
-        children: u.Children.count(n) > 0 ? React.createElement(Fn.Pane, {
+        children: React.Children.count(n) > 0 ? React.createElement(Fn.Pane, {
             onScrolledToBottom: c,
             height: r,
             maxHeight: s,
@@ -22179,6 +16180,7 @@ var pr = {
     BreadcrumbItem: "Polaris-Breadcrumbs__BreadcrumbItem",
     BreadcrumbItemOverflow: "Polaris-Breadcrumbs__BreadcrumbItemOverflow"
 };
+
 function Une({firstBreadcrumb: e, breadcrumbsLength: t, icon: n}) {
     if (!t || !e)
         return null;
@@ -25808,7 +19810,7 @@ function rB({children: e, condensed: t, title: n, helpText: i}) {
         as: "p",
         children: n
     }));
-    const d = u.Children.map(e, p => ym(p, aB, {
+    const d = React.Children.map(e, p => ym(p, aB, {
         condensed: t
     }));
     return React.createElement(ft, {
@@ -25825,7 +19827,7 @@ function rB({children: e, condensed: t, title: n, helpText: i}) {
 const Qs = React.memo(function({children: t}) {
     return React.createElement(ft, {
         gap: "400",
-        children: u.Children.map(t, sae)
+        children: React.Children.map(t, sae)
     })
 });
 Qs.Group = rB;
@@ -32144,7 +26146,7 @@ function Xre({actionMenuMarkup: e, additionalMetadataMarkup: t, isNavigationColl
                 }),
                 slot4: a,
                 slot5: t
-            },
+            }, 
             condition: !n
         }
     };
@@ -33544,7 +27546,7 @@ function voe({items: e, filterControl: t, flushFilters: n, emptyState: i, emptyS
         ref: W,
         "aria-live": "polite",
         "aria-busy": v,
-        children: [vn, u.Children.toArray(e.map(de))]
+        children: [vn, React.Children.toArray(e.map(de))]
     }) : null
       , Jt = I ? React.createElement("div", {
         className: Pn.PaginationWrapper,
@@ -34441,9 +28443,9 @@ function RB(e) {
     return e ?? lu
 }
 function sse({theme: e, children: t, ...n}) {
-    var i = E(1);
+    // var i = E(1);
     try {
-        var a = E(1);
+       // var a = E(1);
         try {
             const r = RB(e);
             return React.createElement(ose, {
@@ -34456,20 +28458,672 @@ function sse({theme: e, children: t, ...n}) {
                 })
             })
         } finally {
-            a.f()
+          //  a.f()
         }
     } finally {
-        i.f()
+       // i.f()
     }
 }
 function lse(e) {
     try {
         return new URL(e).href
     } catch {
-        return e
+        return e 
     }
 }
 
 
 
-export {rs as Card, he as Box, ose as AppProvider, xB as Page}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function Vv(e) {
+    if (typeof e == "object") {
+        if (e == null)
+            return e;
+        if (Array.isArray(e))
+            return e.map(t => Vv(t));
+        if (om(e))
+            return Object.keys(e).reduce( (t, n) => ({
+                ...t,
+                [n]: Vv(e[n])
+            }), {})
+    }
+    return typeof e == "function" && F8(e) ? (...n) => ($l(n),
+    e(...Vv(n))) : e
+}
+const ove = "You attempted to call a function that was already revoked.";
+function J0(e) {
+    if (typeof e == "object") {
+        if (e == null)
+            return e;
+        if (Array.isArray(e))
+            return e.map(t => J0(t));
+        if (om(e))
+            return Object.keys(e).reduce( (t, n) => ({
+                ...t,
+                [n]: J0(e[n])
+            }), {})
+    }
+    return typeof e == "function" ? async (...n) => {
+        try {
+            return await e(...n)
+        } catch (i) {
+            if (i.toString().includes(ove))
+                return;
+            throw i
+        }
+    }
+    : e
+}
+function fGe(e, t) {
+    const n = Yf(e, i => t == null ? void 0 : t(i));
+    return By(n)
+}
+function lve(e) {
+    var a, r;
+    if (!e)
+        return !1;
+    const {adminMobileBridge: t} = ((r = (a = e.host) == null ? void 0 : a.pluginApi) == null ? void 0 : r.mobileBridge) || {};
+    if (!t || !t.isSupported || !t.supportsVersion(1.9) || !t.api.value)
+        return !1;
+    const n = t.api.value;
+    return !!(n == null ? void 0 : n.mobileBridgeExtensibility)
+}
+const cve = 56
+  , cd = new Map
+  , uve = {
+    scrollAnchorRefMap: cd,
+    addScrollAnchor: (e, t) => {
+        cd.has(e) || cd.set(e, t)
+    }
+    ,
+    removeScrollAnchor: e => {
+        cd.delete(e)
+    }
+    ,
+    scrollToAnchor: (e, t={}) => {
+        if (cd.has(e)) {
+            const n = cd.get(e);
+            n != null && n.current && mve(e, {
+                anchor: n.current,
+                ...t
+            })
+        }
+    }
+};
+function CE(e) {
+    return e instanceof HTMLElement
+}
+function N3(e) {
+    return "alphaScrollTo"in e && typeof e.alphaScrollTo == "function"
+}
+function dve(e) {
+    return (e && "element"in e ? e.element : e) || null
+}
+function mve(e, t) {
+    const {anchor: n, negateTopBar: i=!1, topBarHeight: a=cve, addToUrl: r=!1, containerRef: o=null, containerFinalTop: l, calculateOffsetAbsolutely: c=!1, focusAfterScroll: d=!1, onScrollEnd: p} = t;
+    function h() {
+        var A, _;
+        if (o != null && o.current)
+            return o.current;
+        if (Gr() && !(((_ = (A = window.navigator) == null ? void 0 : A.userAgent) == null ? void 0 : _.includes("Android")) ?? !1))
+            return window;
+        const x = document.getElementById("AppFrameScrollable");
+        return x || window
+    }
+    const g = h()
+      , y = (CE(g) || N3(g) ? g.scrollTop : window.scrollY || document.documentElement.scrollTop) + n.getBoundingClientRect().top
+      , k = c ? y : n.offsetTop;
+    let S = i ? k - a : k;
+    if (o != null && o.current && typeof l == "number") {
+        const _ = ("element"in (o == null ? void 0 : o.current) ? o.current.element : o.current).getBoundingClientRect().top - l;
+        S -= _
+    }
+    r && (window.location.hash = e);
+    const C = dve(g);
+    if (C != null && C.scrollTo ? C.scrollTo({
+        top: S,
+        left: 0,
+        behavior: "smooth"
+    }) : CE(g) ? g.scrollTop = S : window.scrollTo(0, S),
+    d || p) {
+        const x = setTimeout( () => A.disconnect(), 1e3)
+          , A = new IntersectionObserver( (_, w) => {
+            var T;
+            for (const {isIntersecting: P} of _)
+                P && (p == null || p(),
+                (d || p) && ((T = m5(n)) == null || T.focus({
+                    preventScroll: !0
+                })),
+                w.disconnect(),
+                x && clearTimeout(x))
+        }
+        ,{
+            threshold: 1
+        });
+        A.observe(n)
+    }
+}
+const hGe = React.createContext(uve);
+function AE(e) {
+    var a;
+    const {router: t} = Ye()
+      , n = e ? t.getRouteId(e) : null
+      , i = n ? t.getRoute(n) : null;
+    return !!((a = i == null ? void 0 : i.handle) != null && a.modal)
+}
+function pve({children: e, nodeRef: t}) {
+    var a;
+    var n = E(1);
+    try {
+        var i = E(1);
+        try {
+            const r = Xa()
+              , {pathname: o} = Ct()
+              , {router: l} = Ye()
+              , c = AE(o)
+              , d = AE((a = l == null ? void 0 : l.previousRoute) == null ? void 0 : a.pathname);
+            return React.useEffect( () => {
+                var h;
+                if (c || d || !l.previousRoute)
+                    return;
+                const p = t == null ? void 0 : t.current;
+                p && N3(p) ? p.alphaScrollTo(0, 0) : p ? p.scrollTo(0, 0) : (h = r.scrollableRef.current) == null || h.alphaScrollTo(0, 0)
+            }
+            , [o, t, r.scrollableRef, c, d, l]),
+            React.createElement(s.Fragment, {
+                children: e
+            })
+        } finally {
+            i.f()
+        }
+    } finally {
+        n.f()
+    }
+}
+const T3 = React.createContext(void 0);
+function fve({children: e, intent: t}) {
+    var n = E(1);
+    try {
+        var i = E(1);
+        try {
+            const {router: a} = Ye();
+            return React.useEffect( () => {
+                var o, l, c;
+                if ((c = (l = (o = t.instance.pluginApi) == null ? void 0 : o.title) == null ? void 0 : l.breadcrumbs) != null && c.length)
+                    return;
+                const r = t.instance.runtime;
+                a.getBreadcrumbs(r.router).then(d => {
+                    var p, h, g;
+                    (g = t.instance.pluginApi.title) == null || g.set({
+                        breadcrumbs: d,
+                        icon: (p = d[0]) == null ? void 0 : p.icon,
+                        title: (h = d == null ? void 0 : d[d.length - 1]) == null ? void 0 : h.title
+                    })
+                }
+                ).catch( () => {
+                    var d;
+                    (d = t.instance.pluginApi.title) == null || d.set({
+                        title: r.title
+                    })
+                }
+                )
+            }
+            ),
+            React.useEffect( () => {
+                t.telemetry.track("rendered", {
+                    eventData: "dialog"
+                })
+            }
+            , []),
+            React.createElement(T3.Provider, {
+                value: {
+                    intent: t
+                },
+                children: e
+            })
+        } finally {
+            i.f()
+        }
+    } finally {
+        n.f()
+    }
+}
+function P3() {
+    const e = React.useContext(T3);
+    if (e)
+        return e.intent
+}
+const hve = "Close overlay"
+  , gve = {
+    close: hve
+}
+  , vve = "Fermer la superposition"
+  , yve = {
+    close: vve
+}
+  , bve = {
+    [Symbol.for("i18n-id")]: "Page_18b3cq",
+    en: gve,
+    fr: yve
+};
+function kve() {
+    const e = React.useRef(null);
+    return React.useEffect( () => {
+        const t = e.current;
+        if (!t)
+            return;
+        const n = r => (r.preventDefault(),
+        r.stopPropagation(),
+        !1)
+          , i = ["click", "keydown", "focus"];
+        return i.forEach(r => t.addEventListener(r, n, {
+            capture: !0
+        })),
+        t.querySelectorAll("a").forEach(r => {
+            r.removeAttribute("href")
+        }
+        ),
+        () => {
+            i.forEach(r => t.removeEventListener(r, n, {
+                capture: !0
+            }))
+        }
+    }
+    , []),
+    e
+}
+const Sve = "_NonInteractive_1o46w_1"
+  , Cve = {
+    NonInteractive: Sve
+};
+function Ave({children: e}) {
+    var t = E(1);
+    try {
+        var n = E(1);
+        try {
+            const i = kve();
+            return React.createElement("div", {
+                ref: i,
+                className: Cve.NonInteractive,
+                "aria-hidden": "true",
+                children: e
+            })
+        } finally {
+            n.f()
+        }
+    } finally {
+        t.f()
+    }
+}
+const xve = "_IntentPageWrapper_pbm61_1"
+  , _ve = "_Scrollable_pbm61_6"
+  , wve = "_IntentPageContent_pbm61_11"
+  , rA = {
+    IntentPageWrapper: xve,
+    Scrollable: _ve,
+    IntentPageContent: wve
+};
+
+
+
+
+function Nve(e) {
+    var i, a, r, o;
+    var t = E(1);
+    try {
+        var n = E(1);
+        try {
+            const l = P3()
+              , [c] = ce(bve);
+            Vy( () => {
+                l && (l.page.value = e)
+            }
+            , [l, e]);
+            const d = React.useCallback( () => {
+                l && (l.telemetry.track("closed", {
+                    eventData: "button"
+                }),
+                l.resolve({
+                    force: !0,
+                    code: Oy.CLOSED
+                }))
+            }
+            , [l]);
+            if (!l)
+                return null;
+            const p = (a = (i = l.instance.pluginApi) == null ? void 0 : i.title) == null ? void 0 : a.breadcrumbs;
+            return React.createElement("div", {
+                className: rA.IntentPageWrapper,
+                children: [React.createElement(ve, {
+                    padding: "400",
+                    borderBlockEndWidth: "0165",
+                    borderColor: "border",
+                    children: React.createElement(Ee, {
+                        align: "space-between",
+                        blockAlign: "center",
+                        children: [p && p.length > 0 ? React.createElement(Ave, {
+                            children: React.createElement(VB, {
+                                breadcrumbs: p
+                            })
+                        }) : React.createElement(te, {
+                            as: "h1",
+                            variant: "headingMd",
+                            fontWeight: "bold",
+                            children: (o = (r = l.instance.pluginApi) == null ? void 0 : r.title) == null ? void 0 : o.title
+                        }), React.createElement(nt, {
+                            id: "activity-dialog-close-button",
+                            variant: "tertiary",
+                            onClick: d,
+                            accessibilityLabel: c.translate("close"),
+                            icon: "x"
+                        })]
+                    })
+                }), React.createElement(La, {
+                    horizontal: !1,
+                    shadow: !0,
+                    className: rA.Scrollable,
+                    children: React.createElement("div", {
+                        className: rA.IntentPageContent,
+                        children: e.children
+                    })
+                })]
+            })
+        } finally {
+            n.f()
+        }
+    } finally {
+        t.f()
+    }
+}
+function L3() {
+    const e = Bi()
+      , t = Ye().router
+      , n = st();
+    return {
+        navigateToUrl(i, a) {
+            if (i)
+                if (a)
+                    window.open(i, "_blank");
+                else if (n.isExternal(i))
+                    window.location.assign(i);
+                else {
+                    const r = t.toRoute(i) ?? i;
+                    e(gx(r))
+                }
+        }
+    }
+}
+function I3() {
+    const {navigateToUrl: e} = L3();
+    return React.useMemo( () => ({
+        mapTitleBarAction: t => {
+            const {content: n, disabled: i, onAction: a, url: r, external: o, icon: l, image: c, destructive: d, showLabel: p, loading: h} = t;
+            return {
+                label: n,
+                icon: l,
+                imageUrl: c,
+                disabled: i,
+                destructive: d,
+                showLabel: p,
+                loading: h,
+                onAction: () => {
+                    a == null || a(),
+                    e(r, o)
+                }
+            }
+        }
+    }), [e])
+}
+const Tve = "_MobileBridgePageChildrenWrapper_1dzu6_1"
+  , Pve = "_noPadding_1dzu6_5"
+  , xE = {
+    MobileBridgePageChildrenWrapper: Tve,
+    noPadding: Pve
+};
+
+function Lve() {
+    return React.useRef(Gr()).current ? React.useContext(I5) : null
+}
+function _l2(e) {
+    return React.isValidElement(e)
+}
+const Ive = Gr() ? Fve : e => e;
+function Fve(e) {
+    var P, L, I, R;
+    const t = no()
+      , n = Ct()
+      , i = React.useRef(n);
+    i.current = n;
+    const {mapTitleBarAction: a} = I3()
+      , r = Lve()
+      , {pathname: o} = Ct()
+      , l = !!(e.additionalMetadata || e.titleMetadata || _l2(e.primaryAction) || _l2(e.secondaryActions))
+      , [c,d] = React.useState(l);
+    if (React.useLayoutEffect( () => {
+        if (r)
+            return r.pageShown(o),
+            () => {
+                r.pageHidden(o)
+            }
+    }
+    , []),
+    !t)
+        return {
+            ...e
+        };
+    const p = (L = (P = e.breadcrumbs) == null ? void 0 : P[e.breadcrumbs.length - 1]) == null ? void 0 : L.title
+      , h = e.subtitle && typeof e.subtitle != "string" ? void 0 : e.subtitle
+      , g = h ? React.createElement(te, {
+        variant: "bodySm",
+        as: "span",
+        tone: "subdued",
+        children: h
+    }) : void 0
+      , v = e.additionalMetadata ? React.createElement(te, {
+        variant: "bodyXs",
+        as: "span",
+        tone: "subdued",
+        children: e.additionalMetadata
+    }) : void 0
+      , y = e.titleMetadata ? React.createElement(Ee, {
+        children: e.titleMetadata
+    }) : void 0
+      , k = _l2(e.primaryAction) ? e.primaryAction : void 0
+      , S = _l2(e.secondaryActions) ? e.secondaryActions : void 0
+      , C = v || y || _l2(e.primaryAction) || _l2(e.secondaryActions) ? React.createElement(ve, {
+        paddingBlockEnd: {
+            sm: "400"
+        },
+        children: React.createElement(Xs, {
+            children: React.createElement(iw, {
+                threshold: .5,
+                onIntersectionChange: j => {
+                    d(j.isIntersecting)
+                }
+                ,
+                children: React.createElement(Ee, {
+                    gap: "100",
+                    align: "space-between",
+                    blockAlign: "end",
+                    children: [React.createElement(pt, {
+                        gap: "100",
+                        children: [React.createElement(Ee, {
+                            gap: "200",
+                            blockAlign: "center",
+                            align: "start",
+                            children: [React.createElement(te, {
+                                as: "span",
+                                variant: "heading2xl",
+                                children: p
+                            }), y]
+                        }), g ?? h, v]
+                    }), React.createElement(pt, {
+                        gap: "100",
+                        children: [k, S]
+                    })]
+                })
+            })
+        })
+    }) : void 0
+      , x = React.createElement(s.Fragment, {
+        children: [C, e.children]
+    })
+      , A = ( () => {
+        const {primaryAction: j} = e;
+        if (!_l2(e.primaryAction) && j && typeof j == "object" && "content"in j)
+            return a(j)
+    }
+    )()
+      , _ = !e.secondaryActions || _l2(e.secondaryActions) || (I = e.secondaryActions) == null ? void 0 : I.map(a)
+      , w = (R = e.actionGroups) == null ? void 0 : R.map( ({title: j, actions: M}) => ({
+        title: j,
+        actions: M.map(a)
+    }));
+    n.pathname === window.location.pathname && (async () => await t.setTitleBar({
+        title: c ? "" : p ?? "",
+        subtitle: c ? void 0 : h,
+        primaryAction: A,
+        secondaryActions: _,
+        actionGroups: w
+    }, {
+        pathname: n.pathname
+    }))();
+    const T = e.children ? React.createElement("div", {
+        className: classnames(xE.MobileBridgePageChildrenWrapper, e.noMobileBridgePadding && xE.noPadding),
+        children: x
+    }) : x;
+    return {
+        ...e,
+        title: p,
+        children: T,
+        primaryAction: A || k ? void 0 : e.primaryAction,
+        secondaryActions: _ || S ? void 0 : e.secondaryActions,
+        actionGroups: w ? void 0 : e.actionGroups,
+        breadcrumbs: void 0
+    }
+}
+const Eve = 50;
+
+
+
+
+const Gy = React.createContext({
+    isTransitioning: !1
+})
+
+
+
+function F3() {
+    const {router: e = {}} = Ye()
+      , [t,n] = React.useState(e == null ? void 0 : e.currentBreadcrumbs)
+      , i = React.useContext(Gy)
+      , a = useNavigation(); 
+    return React.useEffect( () => {
+        let r;
+        return a.state === "idle" ? n(e.currentBreadcrumbs) : (i.isTransitioning || !("startViewTransition"in document)) && (r = setTimeout( () => {
+            n(e.currentBreadcrumbs)
+        }
+        , Eve)),
+        () => {
+            r && clearTimeout(r)
+        }
+    }
+    , [e.currentBreadcrumbs, i.isTransitioning, a.state]),
+    t
+}
+
+const nm = e => {
+    var t = E(1);
+    try {
+        var n = E(1);
+        try {
+            const i = P3();
+            return Gr() ? React.createElement(E3, {
+                ...e
+            }) : i ? React.createElement(Nve, {
+                ...e
+            }) : React.createElement(Mve, {
+                ...e
+            })
+        } finally {
+            n.f()
+        }
+    } finally {
+        t.f()
+    }
+}
+;
+
+function E3(e) {
+    var i;
+    var t = E(1);
+    try {
+        var n = E(1);
+        try {
+            const a = F3()
+              , r = Ive({
+                ...e,
+                breadcrumbs: (i = a == null ? void 0 : a[a.length - 1]) != null && i.title ? a : e.breadcrumbs
+            });
+            return React.createElement(_B, {
+                ...r
+            })
+        } finally {
+            n.f()
+        }
+    } finally {
+        t.f()
+    }
+}
+function Mve(e) {
+    var t = E(1);
+    try {
+        const n = F3();
+        return React.createElement(_B, {
+            breadcrumbs: n,
+            ...e
+        })
+    } finally {
+        t.f()
+    }
+}
+
+const gGe = Object.freeze(Object.defineProperty({
+    __proto__: null,
+    MobileBridgePage: E3,
+    Page: nm,
+    default: nm
+}, Symbol.toStringTag, {
+    value: "Module"
+}));
+
+
+
+
+
+
+
+
+
+
+
+
+export {rs as Card, he as Box, ose as AppProvider, xB as Page, ee as Text, sse as AppWrapper, gGe as PageGroup};
+
+
