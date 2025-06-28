@@ -45,7 +45,7 @@ import { useApplyShopifyErrors } from "./helpers/shopifyErrors";
 import { Footer } from "../../components";
 
 const App = ({ isDelete }) => {
-  const { form } = useArticle();
+  const { form } = useArticle(); 
 
   return (
     <FormProviderWrapper initialData={form}>
