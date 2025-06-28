@@ -176,9 +176,6 @@ const RenderWrapper = ({ children }) => {
 
   useEffect(() => {
     setLoading(navigation.state === "loading");
-
-    setLoading(true);
-     setLoading(true);
   }, [navigation.state, setLoading]);
 
   const [hydrated, setHydrated] = useState(false);
