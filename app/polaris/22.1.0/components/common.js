@@ -475,6 +475,7 @@ function hv() {
 }
 var pv = hv();
 const fv = ["mobile", "tablet"];
+
 class rN {
     get name() {
         return this.ua.getBrowser().name || ""
@@ -13151,6 +13152,7 @@ function uI(t) {
     8 & this.f && Wl(this),
     Ii()
 }
+
 function _a(t) {
     this.x = t,
     this.u = void 0,

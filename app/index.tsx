@@ -216,7 +216,7 @@ const RenderWrapper = ({ children }) => {
   return (
     <div className={styles["appFrame"]}>
       <div ref={wrapperRef} className={styles["ChildContainer"]}>
-        <GlobalI18nProvider initialLang="fr">
+        <GlobalI18nProvider initialLang={"fr"}>
           <globalAppI18n.I18nProvider id="app">
             <PolarisBridge>{children}</PolarisBridge>
           </globalAppI18n.I18nProvider>
