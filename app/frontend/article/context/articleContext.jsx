@@ -7,7 +7,7 @@ import { useLocation } from "@remix-run/react";
 import { useAppBridge } from "@shopify/app-bridge-react";
 import { createApp } from "@shopify/app-bridge";
 
-
+ 
 
 // Créez le contexte
 const ArticleContext = createContext({});
@@ -36,6 +36,8 @@ export function ArticleProvider({ data: p1, children }) {
     history.dispatch(History.Action.REPLACE, location.pathname);
   }, [location?.pathname]);
 
+
+
   const contextValue = useMemo(() => {
     return {
       ...data,
@@ -49,15 +51,7 @@ export function ArticleProvider({ data: p1, children }) {
       {children}
     </ArticleContext.Provider>
   );
-  return (
-    <ClientOnly fallback={""}>
-      {() => (
-        <ArticleContext.Provider value={contextValue}>
-          {children}
-        </ArticleContext.Provider>
-      )}
-    </ClientOnly>
-  );
+
 }
 
 // Hook pour utiliser le contexte

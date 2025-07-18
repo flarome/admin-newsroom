@@ -1,4 +1,4 @@
-'use client';
+
 
 import type { AIChatPluginConfig } from '@platejs/ai/react';
 import type { UseChatOptions } from 'ai/react';

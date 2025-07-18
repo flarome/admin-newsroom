@@ -13,7 +13,7 @@ declare global {
   }
 }
 
-/**
+/** 
  * Expose un store Zustand dans window.__STORES__[key] uniquement en dev
  * 
  * @param key Nom unique sous lequel le store sera exposé

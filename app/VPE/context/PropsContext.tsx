@@ -5,19 +5,27 @@ import {
   ReactNode
 } from "react";
 
-import { Config, UserGenerics,   UiState,  Data,  InitialHistory, } from "types";
+import { Config, UserGenerics,   UiState,  Data,  InitialHistory, } from "../types";
 
-export type VPEProps< 
+
+export type VPEBase< 
   UserConfig extends Config = Config,
     G extends UserGenerics<UserConfig> = UserGenerics<UserConfig>
 > = {
-  id: String,
-  children?: ReactNode;
-  config: UserConfig;
+  config?: UserConfig;
   data: Partial<G["UserData"] | Data>;
   ui?: Partial<UiState>;
   onChange?: (data: G["UserData"]) => void;
   initialHistory?: InitialHistory;
+};
+
+
+export type VPEProps<
+  UserConfig extends Config = Config,
+  G extends UserGenerics<UserConfig> = UserGenerics<UserConfig>
+> = VPEBase<UserConfig, G> & {
+  id: string; // Utilise string (primitif) et non String (wrapper)
+  children?: ReactNode;
 };
 
 

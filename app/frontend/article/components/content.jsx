@@ -28,6 +28,7 @@ const settingsCatalog = [];
 const modalId = `${prefix}:${getFieldRoot(FieldsMap, ["content"])}:modal`;
 
 const EmbeddedContentInnert = () => {
+  
   const [focus, setFocus] = useState(false);
   const inputRef = useRef(null);
 
@@ -165,7 +166,9 @@ const Content = () => {
         closeModal={closeModal}
         open={modalOpen}
         modalId={modalId}
-        sections={{
+        data={{data: {}}}
+        onChange={(data) => ""}
+       /* sections={{
           [FieldsMap.content.body]: bodyField.value,
           [FieldsMap.content.header]: headerField.value,
         }}
@@ -177,7 +180,7 @@ const Content = () => {
           headerField.onChange(content.header || []);
         }}
         onSettingsChange={(newSettings) => settingsField.onChange(newSettings)}
-        themes={themes.nodes}
+        themes={themes.nodes}*/
       />
     </div>
   );

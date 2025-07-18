@@ -1,4 +1,4 @@
-'use client';
+
 
 import * as React from 'react';
 
@@ -9,7 +9,7 @@ import { SettingsDialog } from '../../components/editor/settings-dialog';
 import { Editor, EditorContainer } from '../../components/ui/editor';
 import { usePropsContext } from '../../context/PropsContext';
 import { useAppStore } from '../../store';
-import { data as dataTEST } from 'editor/__test__/data';
+import { data as dataTEST } from '../../../editor/__test__/data';
 
 export function PlateEditor() {
 
@@ -40,3 +40,4 @@ const data = useAppStore((s) => s.data);
     </Plate>
   );
 }
+

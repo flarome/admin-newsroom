@@ -1,30 +1,14 @@
 import { useEffect, useCallback, useState } from "react";
-import { useNavigate, useHref } from "@remix-run/react";
+import { useNavigate } from "@remix-run/react";
 import { useAppBridge, TitleBar } from "@shopify/app-bridge-react";
 
-import { Page, Badge, Layout, BlockStack, Text } from "@shopify/polaris";
+import { Page as PolarisPage, Badge } from "@shopify/polaris";
 import { DeleteIcon, ViewIcon } from "@shopify/polaris-icons";
 import { useArticle } from "./context/articleContext";
 import { get as fetchAdjacentArticle } from "./services/adjacentArticle";
 import { make as creatArticle } from "./services/creatArticle";
 import { make as updateArticle } from "./services/updateArticle";
-import {
-  Tags,
-  Banner,
-  Template,
-  Author,
-  Extrait,
-  Seo,
-  Visible,
-  MainImage,
-  MainVideo,
-  Blog as BlogA,
-  Title,
-  SubTitle,
-  Category,
-  Content,
-  EmbeddedContent,
-} from "./components";
+;
 
 import {
   Card as CardV2,
@@ -34,35 +18,26 @@ import {
   Text as TextV2,
 } from "@polaris/22.1.0";
 
-import { Banner as BannerForm } from "../../modules/form/components";
-import { FormProviderWrapper } from "../../modules/form";
-import { Actions, SaveBar } from "./structures";
-import { useFormContext } from "react-hook-form";
-import { DeleteModalProvider, useDeleteModal } from "./context/deleteContext";
+
+import {  SaveBar } from "./structures";
+import {  useFormContext } from "react-hook-form";
+import {  useDeleteModal } from "./context/deleteContext";
 import { saveBarId } from "./structures/saveBar";
 import { get as fetchArticleDetails } from "./services/articleDetails";
 import { useApplyShopifyErrors } from "./helpers/shopifyErrors";
 import { Footer } from "../../components";
 
-const App = ({ isDelete }) => {
-  const { form } = useArticle(); 
 
-  return (
-    <FormProviderWrapper initialData={form}>
-      <DeleteModalProvider isDelete={isDelete}>
-        <RHFAppContent />
-      </DeleteModalProvider>
-    </FormProviderWrapper>
-  );
-};
 
-const RHFAppContent = ({}) => {
+
+
+export const Page = ({hasArticle, children}) => {
   const { show: showDeleteModal } = useDeleteModal();
 
   const navigate = useNavigate();
   const shopify = useAppBridge();
 
-  const { article, hasArticle, shop, setData } = useArticle();
+  const { article, shop, setData } = useArticle();
 
   const [pagination, setPagination] = useState(
     hasArticle
@@ -157,6 +132,8 @@ const RHFAppContent = ({}) => {
 
   return (
     <>
+
+    {/*
       <AppWrapperV2>
         <PageGroup.Page
 
@@ -177,7 +154,11 @@ const RHFAppContent = ({}) => {
           ]}
         ></PageGroup.Page>
       </AppWrapperV2>
-      <Page
+
+
+        */}
+
+      <PolarisPage
         backAction={{
           accessibilityLabel: "Accéder à la section des articles de blog",
           //  url: useHref("..", { relative: "route" }),
@@ -221,78 +202,13 @@ const RHFAppContent = ({}) => {
         <SaveBar handleSubmit={handleSubmit} />
         <TitleBar />
 
-        <BlockStack gap={{ xs: "400" }}>
-          <Banner />
 
-          <BannerForm />
-
-          <form
-            method="get"
-            action={useHref(".", { relative: "route" })}
-            onSubmit={(e) => {
-              e.preventDefault();
-            }}
-          >
-            <Layout>
-              <Layout.Section>
-                <BlockStack gap={{ xs: "400" }} align="space-between">
-                  <CardV2>
-                    <BlockStack gap={{ xs: "400" }}>
-                      {/* Titre */}
-                      <Title />
-                      {/* Sous-titre */}
-                      <SubTitle />
-
-                      <EmbeddedContent />
-                    </BlockStack>
-                  </CardV2>
-                  {/* */}
-
-                  <Content />
-                  {/* Extrait*/}
-
-                  <Extrait />
-                  {/* Seo*/}
-                  <Seo />
-                </BlockStack>
-              </Layout.Section>
-              {/* Sidebar */}
-              <Layout.Section variant="oneThird">
-                <BlockStack gap={{ xs: "400" }} align="space-between">
-                  <Visible />
-
-                  <MainImage />
-                  <MainVideo />
-
-                  <CardV2>
-                    <BlockStack gap={{ xs: "200" }}>
-                      <Text as="h2" variant="headingSm" fontWeight="semibold">
-                        Organisation
-                      </Text>
-
-                      <BlockStack gap={{ xs: "400" }}>
-                        <Category />
-                        <Author />
-                        <BlogA />
-
-                        <Tags />
-                      </BlockStack>
-                    </BlockStack>
-                  </CardV2>
-
-                  <Template />
-                </BlockStack>
-              </Layout.Section>
-            </Layout>
-
-            <Actions handleSubmit={handleSubmit} />
-          </form>
-        </BlockStack>
+{children}
+        
 
         <Footer />
-      </Page>
+      </PolarisPage>
     </>
   );
 };
 
-export default App;

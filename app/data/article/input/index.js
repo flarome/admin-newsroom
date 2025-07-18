@@ -15,7 +15,7 @@ import { fieldPath as handlePath } from "../../../frontend/article/components/se
 import { fieldPath as redirectPath } from "../../../frontend/article/components/seo/components/redirectNewHandle";
 import { fieldPath as contactPath } from "../../../frontend/article/components/author";
 import { fieldPath as blogPath } from "../../../frontend/article/components/blog";
-import { fieldPath as templatePath } from "../../../frontend/article/components/template";
+import { defaultLayoutName, fieldPath as templatePath } from "../../../frontend/article/ui/layout";
 import { fieldPath as tagsPath } from "../../../frontend/article/components/tags";
  
 // 📌 Champs imbriqués
@@ -84,7 +84,7 @@ export async function generateArticle(
       summary: excerpt,
       ...(isNewArticle ? {} : { redirectNewHandle }),
       isPublished,
-      templateSuffix: template,
+      templateSuffix: template && template === defaultLayoutName ? "" : template,
       publishDate: isValidDate(publishDateRaw)
         ? new Date(publishDateRaw).toISOString()
         : null,
@@ -105,7 +105,7 @@ export async function generateArticle(
     const mainImage_LP = _.get(fields, mainImage_Srcs_LandscapeFieldPath);
     const mainImage_SQUARE = _.get(fields, mainImage_Srcs_SquareFieldPath);
     const mainImage_PORTRAIT = _.get(fields, mainImage_Srcs_PortraitFieldPath);
-
+ 
     console.log("1");
 
     const data = await adminClient.graphql(query, {

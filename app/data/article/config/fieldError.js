@@ -4,7 +4,7 @@ export const shopifyToFormFieldMap = {
   "article.handle": {
     path: handlePath,
     messages: {
-      "Handle has already been taken": "Ce handle est déjà utilisé. Veuillez en choisir un autre.",
+     TAKEN: "Ce handle est déjà utilisé. Veuillez en choisir un autre.",
     },
   },
-};
+}; 

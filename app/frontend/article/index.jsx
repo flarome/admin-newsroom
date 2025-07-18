@@ -1,20 +1,32 @@
-// context
-import { ArticleProvider } from "./context/articleContext";
-
-// states
-import App from "./app";
+import { FormProviderWrapper } from "../../modules/form";
+import { ArticleProvider, useArticle } from "./context/articleContext";
+import { DeleteModalProvider } from "./context/deleteContext";
+import GlobalApp from "../../"; 
 
 import "./styles/main.css";
 import "./styles/render.css";
 
-const Editor = ({ data, isDelete }) => {
+export const Wrapper = ({ children, data, ...props }) => (
+  <GlobalApp>
+    <div data-cms="index"> 
+         <ArticleProvider data={data}>
+        <App {...props}>
+          {children}
+        </App>
+        </ArticleProvider>
+    </div> 
+    </GlobalApp>
+  );
+
+const App = ({ children, isDelete }) => {
+  const { form } = useArticle(); 
+
   return (
-    <div data-cms="index">
-      <ArticleProvider data={data}>
-        <App isDelete={isDelete} />
-      </ArticleProvider>
-    </div>
+    <FormProviderWrapper initialData={form}>
+      <DeleteModalProvider isDelete={isDelete}>
+        {children}
+      </DeleteModalProvider>
+    </FormProviderWrapper>
   );
 };
 
-export default Editor;

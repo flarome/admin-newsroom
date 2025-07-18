@@ -80,7 +80,7 @@ export const GlobalI18nContext = createContext(createGlobalI18nStore());
 export function GlobalI18nProvider({
   children,
   initialLang,
-}: {
+}: { 
   children: React.ReactNode;
   initialLang: Lang;
 }) {

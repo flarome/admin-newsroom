@@ -4,18 +4,15 @@ import { getAppProviderClass } from "styles/OnlineStore";
 import { memo, useId } from "react";
 
 import { DesignSystemProvider } from "./context/DesignSystemContext";
-import { PropsProvider, VPEProps } from "context/PropsContext";
+import { PropsProvider, VPEBase } from "context/PropsContext";
 
 import App from "./app";
-import { globalAppI18n } from "..";
 
-const Main = (props: VPEProps) => {
+
+const Main = (props: VPEBase) => {
   const uniqueId = useId();
-
-  const i18n = globalAppI18n.useI18nStore((s) => s.i18n);
-  return (
+  return ( 
 <>
-      <p>{i18n.translate("test")}</p>
       <div className={`${ThemeStyles["html"]} ${ThemeStyles["p-theme-light"]}`}>
         <div className={ThemeStyles["body"]}>
           <div id={`vpe-app-${uniqueId}`}>

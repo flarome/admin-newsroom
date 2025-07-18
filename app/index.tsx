@@ -9,13 +9,14 @@ import {
 import styles from "./app.module.css";
 import "./app.css";
 import { useNavigation } from "@remix-run/react";
-import { PolarisBridge, PolarisI18n } from "./polaris/npm";
+import { PolarisBridge } from "./polaris/npm";
 import { createI18nContext } from "./i18n/context";
 import { GlobalI18nProvider } from "./i18n/global";
 import { language } from "./config/app";
 export { languages } from "./locales";
 import { translations } from "./locales/locales";
 import classNames from "classnames";
+import { secondsToMs } from "./utils/time";
 
 export const globalAppI18n = createI18nContext({
   fallback: language,
@@ -36,11 +37,23 @@ export const globalAppI18n = createI18nContext({
   initialTranslations: translations.fr,
 });
 
+const spinnerTimeOut = secondsToMs(2); // ms
+
 const Spinner = () => {
   const [showSpinner, setShowSpinner] = useState(false);
   const [spinnerVisible, setSpinnerVisible] = useState(false);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const store = useAppStoreApi();
+
+  // Detect initial loading state on mount
+  useEffect(() => {
+    const initialLoading = store.getState().ui.loading;
+    if (initialLoading) {
+      setShowSpinner(true);
+      requestAnimationFrame(() => setSpinnerVisible(true));
+    } 
+  }, []);
 
   // Subscribe to loading state
   useEffect(() => {
@@ -48,16 +61,31 @@ const Spinner = () => {
       (s) => s.ui.loading,
       (isLoading) => {
         if (isLoading) {
-          setShowSpinner(true);
-          requestAnimationFrame(() => {
-            setSpinnerVisible(true);
-          });
+          // Si spinner déjà visible (ex: initial), ne rien faire (déjà affiché)
+          if (showSpinner) return;
+
+          // Retarder l'affichage de $ms : seulement si le loading dure assez
+          timerRef.current = setTimeout(() => {
+            setShowSpinner(true);
+            requestAnimationFrame(() => setSpinnerVisible(true));
+            timerRef.current = null; // proprement
+          }, spinnerTimeOut);
         } else {
+          if (!showSpinner) return;
+
+          // Si le chargement se termine, on coupe le timer
+          if (timerRef.current) {
+            clearTimeout(timerRef.current);
+            timerRef.current = null;
+          }
           setSpinnerVisible(false); // ➝ trigger .exit
         }
       },
     );
-    return () => unsubscribe();
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+      unsubscribe();
+    };
   }, []);
 
   // ⏱️ Catch animation end (only for exit)
@@ -70,7 +98,7 @@ const Spinner = () => {
         setShowSpinner(false);
       }
     };
-
+    
     el.addEventListener("animationend", handleAnimationEnd);
     return () => {
       el.removeEventListener("animationend", handleAnimationEnd);
@@ -166,7 +194,7 @@ const Spinner = () => {
   );
 };
 
-const RenderWrapper = ({ children }) => {
+const RenderWrapper = ({ lang = "fr", children }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const store = useAppStoreApi();
   const navigation = useNavigation();
@@ -213,7 +241,7 @@ const RenderWrapper = ({ children }) => {
   return (
     <div className={styles["appFrame"]}>
       <div ref={wrapperRef} className={styles["ChildContainer"]}>
-        <GlobalI18nProvider initialLang={"fr"}>
+        <GlobalI18nProvider initialLang={lang}>
           <globalAppI18n.I18nProvider id="app">
             <PolarisBridge>{children}</PolarisBridge>
           </globalAppI18n.I18nProvider>
@@ -225,12 +253,12 @@ const RenderWrapper = ({ children }) => {
   );
 };
 
-export const App = ({ children }) => {
+export const App = ({ children, lang }) => {
   const [appStore] = useState(() => createAppStore({}));
 
   return (
     <appStoreContext.Provider value={appStore}>
-      <RenderWrapper>{children}</RenderWrapper>
+      <RenderWrapper lang={lang}>{children}</RenderWrapper>
     </appStoreContext.Provider>
   );
 };

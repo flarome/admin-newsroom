@@ -13,25 +13,24 @@ import { Controller, useFormContext, useWatch } from "react-hook-form";
 import { ViewIcon } from "@shopify/polaris-icons";
 import { useArticle } from "../context/articleContext";
 import { prefix } from "../config/ids";
-import { form as FieldsMap } from "../../../data/article/config/fieldMap";
 import { useGetUrl } from "../selectors/article";
+import { defaultLayoutName, fieldPath } from "../ui/layout";
 
-export const fieldPath = FieldsMap.template;
 
 const Template = () => {
-  const { availableTemplateOptions, hasArticle, shop, article } = useArticle();
+  const { availableTemplateOptions, hasArticle, article } = useArticle();
   const { control } = useFormContext();
 
   const selectedValue = useWatch({ name: fieldPath }) || "";
 
   const options =
     availableTemplateOptions?.map((name) => {
-      const label =
-        name === "article"
+      const label = 
+        name === defaultLayoutName
           ? "Modèle par défaut : Article de blog"
-          : name.replace("article.", "");
+          : name
 
-      const value = name === "article" ? "" : label;
+      const value = name === defaultLayoutName ? name : label;
 
       return { value, label };
     }) ?? [];
@@ -88,7 +87,7 @@ const previewUrl =
               name={`${prefix}.${fieldPath}`}
               id={`${prefix}:${fieldPath}`}
               options={options}
-              value={value || options[0].value}
+              value={value || defaultLayoutName}
               onChange={onChange}
               error={error?.message}
             />

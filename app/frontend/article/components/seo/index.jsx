@@ -34,7 +34,7 @@ import { toShopifySlug } from "../../../../utils/str";
 // ID unique pour le composant Collapsible (accessibilité)
 const collapsibleId = `${prefix}:${getFieldRoot(FormFieldsMap, ["seo"])}:collapsible`;
 
-const Seo = () => {
+const Seo = () => { 
   const { shop } = useArticle();
   const [open, setOpen] = useState(false);
 

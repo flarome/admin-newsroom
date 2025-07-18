@@ -1,7 +1,7 @@
 import { shopifyToFormFieldMap } from "../../../data/article/config/fieldError";
 
 export function mapShopifyErrorsToFormErrors(userErrors = []) {
-  return userErrors.map(({ field, message }) => {
+  return userErrors.map(({ field, message, code }) => {
     const shopifyPath = field.join(".");
     const entry = shopifyToFormFieldMap[shopifyPath];
 
@@ -13,12 +13,13 @@ export function mapShopifyErrorsToFormErrors(userErrors = []) {
     if (typeof entry === "string") {
       return { path: entry, message };
     }
-
+ 
     const { path, messages = {} } = entry;
 
-    return {
+        return {
       path,
-      message: messages[message] || message,
+      message: messages[code] || message,
     };
+
   });
 }

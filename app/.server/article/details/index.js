@@ -8,6 +8,9 @@ import _ from "lodash";
 import { buildShopifyFileCdnUrl } from "../../../utils/shopify/cdn";
 
 import { safeJsonParse } from "../../../utils/json";
+import { defaultLayoutName } from "../../../frontend/article/ui/layout";
+import { InternalLayout } from "../../../data/article/state/internal";
+import { InternalBlog } from "../../../data/blog/state/internal";
 export function extractArticleTemplates(files) {
   return files.map(({ filename }) =>
     filename
@@ -54,7 +57,10 @@ function res(data) {
     [formFields.tags]: article.tags ?? [],
     [formFields.excerpt]: article.summary ?? "",
     [formFields.contactPresse]: contactPresse,
-    [formFields.template]: article.templateSuffix ?? "",
+    [formFields.template]: article.templateSuffix === "" 
+  ? defaultLayoutName 
+  : (article.templateSuffix ?? ""),
+
     [formFields.category]: category ?? [],
 
     // 📄 Contenu
@@ -100,10 +106,22 @@ function res(data) {
       handleWithOutDate: adminArticle.handleWithOutDate || (article.handle ?? ""),
     },
     form: formValues,
-    shop,
+    shop, 
     themes,
-    blogs,
-    availableTemplateOptions: availableTemplates,
+    blogs: {
+
+      ...blogs,
+      nodes: (blogs.nodes || []) .filter((blog) => {
+    return !InternalBlog.includes(blog.handle);
+  }),
+      
+    },
+    availableTemplateOptions: (availableTemplates || [])
+   .filter((name) => {
+    const nameWithoutPrefix = name.replace(/^article\./, ""); // ex: "article.maintenance" → "maintenance"
+    return !InternalLayout.includes(nameWithoutPrefix);
+  })
+  .map(name => name === "article" ? defaultLayoutName : name.replace(/^article\./, "")),
     allArticlesTags: allTags,
   };
 }

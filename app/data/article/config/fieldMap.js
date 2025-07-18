@@ -3,12 +3,13 @@
 import { flattenWithRoot } from "../../../utils/buildFieldsMap";
 
 export const form = {
+  type: "type",
   category: "category",
   publishDate: "date",
   published: "isPublished",
   title: "headline",
   subTitle: "subhead",
-  blogId: "blogId",
+  blogId: "blogId", 
   tags: "tags",
   excerpt: "excerpt",
   contactPresse: "contactPresse",

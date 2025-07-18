@@ -1,4 +1,4 @@
-'use client';
+
 
 /* DEMO ONLY, DO NOT USE IN PRODUCTION */
 
