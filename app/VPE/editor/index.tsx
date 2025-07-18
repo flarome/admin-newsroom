@@ -13,7 +13,7 @@ import { PropsProvider } from "./context/PropsContext";
 import { EditorProps } from "./context/PropsContext";
 import { EditorContextProvider } from "./context/EditorContext";
 
-type ModeType = "PAGE" | "EMBEDDED";
+type ModeType = "PAGE" | "EMBEDDED"; 
 
 interface UIConfig {
   mode: ModeType;

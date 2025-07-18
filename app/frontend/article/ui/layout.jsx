@@ -15,7 +15,7 @@ import { useArticle } from "../context/articleContext";
 
 export const fieldPath = FieldsMap.template;
 export const defaultLayoutName = "__default__";
-
+ 
 export const SelectTypeLayout = () => {
   const { control } = useFormContext();
   const { availableTemplateOptions } = useArticle();

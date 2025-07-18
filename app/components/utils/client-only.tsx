@@ -9,6 +9,7 @@ type Props = {
 	 */
 	children(): React.ReactNode;
 	fallback?: React.ReactNode;
+	visible?: boolean;
 };
 
 /**
@@ -26,6 +27,6 @@ type Props = {
  * );
  * ```
  */
-export function ClientOnly({ children, fallback = null }: Props) {
-	return useHydrated() ? <>{children()}</> : <>{fallback}</>;
+export function ClientOnly({ children, fallback = null, visible = true }: Props) {
+	return useHydrated() && visible ? <>{children()}</> : <>{fallback}</>;
 }

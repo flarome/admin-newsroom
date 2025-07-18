@@ -10,6 +10,7 @@ import { messageChanel } from "./_intercom";
 
 
 import { Config, UserGenerics,   UiState,  Data,  InitialHistory, } from "./types";
+import { useFetcher } from "@remix-run/react";
 
 const iframeSrc = "/vpe";
 
@@ -22,7 +23,7 @@ interface CMSProps<
   modalId: string;
   closeModal: () => void;
   data: ModalProps;
- onChange?: (data: Partial<G["UserData"]>) => void;
+ onChange?: (data: Partial<G["UserData"]>) => void; 
 }
 
 
@@ -32,6 +33,20 @@ const CMS = ({ open, modalId, closeModal, data, onChange }: CMSProps) => {
   const [channel, setChannel] = useState<ReturnType<typeof createMessageChannel> | null>(null);
   const [iframeReady, setIframeReady] = useState(false);
   const [token] = useState(() => uuidv4());
+
+    const fetcher = useFetcher();
+     const preload = () => fetcher.load(`${iframeSrc}?lang=${lang}&token=${token}`);
+
+
+useEffect(() => {
+  const timer = setTimeout(() => {
+    preload();
+  }, 10000); // 10 000 ms = 10 secondes
+
+  return () => clearTimeout(timer); // cleanup si le composant se démonte avant
+}, []);
+
+
 
 // Récupère le modal
 useEffect(() => {

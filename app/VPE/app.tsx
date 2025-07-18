@@ -46,10 +46,10 @@ const Loading = () => (
 );
 
 const LayoutInner = () => {
-  const { zoomConfig, setStatus } = useAppStore(
+  const { zoomConfig/*, setStatus*/ } = useAppStore(
     useShallow((s) => ({
       zoomConfig: s.zoomConfig,
-      setStatus: s.setStatus,
+     // setStatus: s.setStatus,
     })),
   );
 

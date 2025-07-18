@@ -34,7 +34,7 @@ import {
 import { Banner as BannerForm } from "../../../modules/form/components";
 import { Actions } from "../structures";
 
-export const Editor = ({handleSubmit}) => {
+export const Editor = ({handleSubmit, visible}) => {
 
 
   return (
