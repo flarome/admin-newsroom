@@ -9,7 +9,7 @@ import { ModalProps} from './route';
 import { messageChanel } from "./_intercom";
 
 
-import { Config, UserGenerics,   UiState,  Data,  InitialHistory, } from "./types";
+import { Config, UserGenerics } from "./types";
 import { useFetcher } from "@remix-run/react";
 
 const iframeSrc = "/vpe";

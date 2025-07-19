@@ -1,7 +1,7 @@
 // components/RouteInner.tsx
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { VPE } from ".";
-import GlobalApp from "../";
+import GlobalApp from "../"; 
 import { exposePostMessageTools } from "../_dev";
 import { createMessageChannel } from "../utils/postMessageSecure";
 import { messageChanel } from "./_intercom";
@@ -23,7 +23,7 @@ import { VPEBase } from "./context/PropsContext";
 type token = string | null;
 
 export type VpeConfig = {
-  lang: string | null;
+  lang?: string;
   token: token;
 };
 
@@ -39,6 +39,10 @@ export type ModalProps<
   data: Partial<G["UserData"] | Data>;
 };
 
+
+
+
+
 const Inner = ({token}: {token: token}) => {
   const [payload, setPayload] = useState<ModalProps | null>(null);
   const [channel, setChannel] = useState<ReturnType<
@@ -46,6 +50,14 @@ const Inner = ({token}: {token: token}) => {
   > | null>(null);
 
   useEffect(() => {
+  if (!token) {
+    console.log("[Modal] Pas de token → pas de communication attendue → mode autonome");
+    setPayload({
+      data: {}, // ou fake data
+    });
+    return;
+  }
+
     if (!token) {
       console.error("[Modal] Missing token, cannot init secure channel");
       return;
@@ -120,7 +132,7 @@ const Inner = ({token}: {token: token}) => {
         </div>
       )}
     </>
-  );
+  ); 
 };
 
 

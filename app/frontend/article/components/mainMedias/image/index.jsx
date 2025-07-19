@@ -13,9 +13,12 @@ import {
   Thumbnail,
   InlineGrid,
   Collapsible,
-  DropZone,
+  DropZone, 
   ActionList,
 } from "@shopify/polaris";
+
+
+
 import { Card as CardV2 } from "@polaris/22.1.0";
 import {
   DeleteIcon,
@@ -358,7 +361,7 @@ const ImageModalContent = memo(function ImageModalContent({
             <BannerForm />
             <InlineGrid columns={{ xs: 1, md: 2 }} gap="600">
               {/* Métadonnées */}
-              <Card padding="500" rounded="2xl">
+              <CardV2 padding="500" rounded="2xl">
                 <BlockStack gap="400">
                   <Text variant="headingSm" fontWeight="semibold">
                     Métadonnées
@@ -407,10 +410,10 @@ const ImageModalContent = memo(function ImageModalContent({
                     )}
                   />
                 </BlockStack>
-              </Card>
+              </CardV2>
 
               {/* Variantes d'image */}
-              <Card padding="500" rounded="2xl">
+              <CardV2 padding="500" rounded="2xl">
                 <BlockStack gap="300">
                   <Text variant="headingSm" fontWeight="semibold">
                     Variantes d’image
@@ -427,7 +430,7 @@ const ImageModalContent = memo(function ImageModalContent({
                     />
                   ))}
                 </BlockStack>
-              </Card>
+              </CardV2>
             </InlineGrid>
           </BlockStack>
         </PolarisModal.Section>

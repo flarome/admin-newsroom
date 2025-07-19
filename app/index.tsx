@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState } from "react";
+import { memo, useEffect, useRef, useState, ReactNode } from "react";
 import {
   createAppStore,
   useAppStoreApi,
@@ -22,12 +22,22 @@ export const globalAppI18n = createI18nContext({
   fallback: language,
   translations: {
     // Langues à charger dynamiquement
+  
+
+        // Autres langues chargées dynamiquement
     ...Object.fromEntries(
-      Object.entries(translations).map(([lang, val]) => [
-        lang,
-        { type: "parsed" as const, value: val },
-      ]),
+      Object.entries(translations)
+        .filter(([lang]) => lang !== "fr")
+        .map(([lang, value]) => [
+          lang,
+          {
+            type: "parsed" as const,
+            value,
+          },
+        ])
     ),
+
+
     // Langue déjà chargée
     fr: {
       type: "parsed",
@@ -194,7 +204,7 @@ const Spinner = () => {
   );
 };
 
-const RenderWrapper = ({ lang = "fr", children }) => {
+const RenderWrapper = ({ lang = language, children }: {lang?: string, children: ReactNode}) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const store = useAppStoreApi();
   const navigation = useNavigation();
@@ -253,7 +263,7 @@ const RenderWrapper = ({ lang = "fr", children }) => {
   );
 };
 
-export const App = ({ children, lang }) => {
+export const App = ({ lang, children }: {lang?: string, children: ReactNode}) => {
   const [appStore] = useState(() => createAppStore({}));
 
   return (

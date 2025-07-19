@@ -1,24 +1,7 @@
-import { styles as LoadingStyles } from "styles/Loading";
-import { styles as EditorStyles } from "styles/Editor";
-import {
-  styles as OnlineStoreStyles,
-  getPreviewClass,
-} from "styles/OnlineStore";
+export const editorData = 
 
-import { useAppStore } from "store";
-import { clsx } from "clsx";
 
-import EditorSW from "editor";
-
-export const SkeletonEditor = () => (
-  <div className={LoadingStyles["Preview"]}>
-    <div className={LoadingStyles["MobileCard"]}></div>
-  </div>
-);
-
-export const EditorURI = "/vpe/editor";
-
-const value = [ 
+[ 
   {
     children: [{ text: "Welcome to the Plate Playground!" }],
     type: "h1",
@@ -575,78 +558,498 @@ const value = [
   },
 ]; 
 
-export const Editor = ( 
-  {
-    /*canRenderEditor*/
-  },
-) => {
-  const zoomConfig = useAppStore((s) => s.zoomConfig);
 
-  return (
-    <div className={getPreviewClass()}>
-      <div
-        className={OnlineStoreStyles["Online-Store-UI-Preview__PreviewInner"]}
-      >
-        <div
-          className={
-            OnlineStoreStyles["Online-Store-UI-Preview__HeaderWrapper"]
-          }
-        ></div>
 
-        <div className={OnlineStoreStyles["Online-Store-UI-Preview__Main"]}>
-          <div
-            className={`${OnlineStoreStyles["Online-Store-UI-Preview__Interior"]} ${getPreviewClass({ modeDesktop: zoomConfig === "DESKTOP", modeFullscreen: zoomConfig === "FULLSCREEN", modeTabletLandscape: zoomConfig === "TABLET_LANDSCAPE", modeMobile: zoomConfig == "MOBILE", modeMobileLandscape: zoomConfig === "MOBILE_LANDSCAPE", scaled: false }, false)}`}
-            data-preview-container=""
-          >
-            <div className={EditorStyles["SafeArea"]}></div>
 
-            <div
-              className={
-                OnlineStoreStyles["Online-Store-UI-Preview__ShopFrame"]
-              }
-            >
-              <div
-                className={clsx(
-                  EditorStyles["StaticIframe"],
-                  EditorStyles["visible"],
-                )}
-              >
-              
-              <SW />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+
+// src/data/sectionCatalog.js
+export const settingsData = {
+  hero: {
+    img: {
+      title: "mon titre perso",
+    },
+  }, 
 };
 
-const SW = () => {
- const data = useAppStore((s) => s.data);
+export const SETTINGS_CATALOG = [
+  {
+    title: "Hero Section",
+    name: "hero",
+    props: [
+         { 
+            name: "title",
+            type: "plainText",
+            label: "Title",
+            value: "Hero title",
+          },
+      {
+        name: "img",
+        title: "Image",
+        props: [
+          {
+            name: "title",
+            type: "plainText",
+            label: "Title",
+            value: "Hero title",
+          },
+        ],
+      },
 
-  return (
-  <EditorSW
-                  ui={{ mode: "PAGE" }}
-                  editor={{ data: value, onChange: (value) => "" }}
-                />
-  )
-}
+      {
+        name: "img33",
+        title: "Image",
+        props: [
+          {
+            name: "title",
+            type: "plainText",
+            label: "Title",
+            value: "Hero title",
+          },
+        ],
+      },
+      {
+        name: "img4",
+        title: "Image",
+        props: [
+          {
+            name: "title",
+            type: "plainText",
+            label: "Title",
+            value: "Hero title",
+          },
+        ],
+      },
+      {
+        name: "i3mg",
+        title: "Image",
+        props: [
+          {
+            name: "title",
+            type: "plainText",
+            label: "Title",
+            value: "Hero title",
+          },
+        ],
+      },
 
-/*
-      <div
-                  className={clsx(
-                    EditorStyles["StaticIframe"],
-                    canRenderEditor && EditorStyles["visible"]
-                  )}
-    
+      {
+        name: "im1g",
+        title: "Image",
+        props: [
+          {
+            name: "title",
+            type: "plainText",
+            label: "Title",
+            value: "Hero title",
+          },
+        ],
+      },
+      {
+        name: "img2",
+        title: "Image",
+        props: [
+          {
+            name: "price",
+            type: "plainText",
+            label: "price",
+            value: "price",
+          },
+        ],
+      },
+    ],
+  },
+
+  {
+    title: "Hero Section",
+    name: "herrro",
+    props: [
+      {
+        name: "img",
+        title: "Image",
+        props: [
+          {
+            name: "title",
+            type: "plainText",
+            label: "Title",
+            value: "Hero title",
+          },
+        ],
+      },
+
+      {
+        name: "img33",
+        title: "Image",
+        props: [
+          {
+            name: "title",
+            type: "plainText",
+            label: "Title",
+            value: "Hero title",
+          },
+        ],
+      },
+      {
+        name: "img4",
+        title: "Image",
+        props: [
+          {
+            name: "title",
+            type: "plainText",
+            label: "Title",
+            value: "Hero title",
+          },
+        ],
+      },
+      {
+        name: "i3mg",
+        title: "Image",
+        props: [
+          {
+            name: "title",
+            type: "plainText",
+            label: "Title",
+            value: "Hero title",
+          },
+        ],
+      },
+
+      {
+        name: "im1g",
+        title: "Image",
+        props: [
+          {
+            name: "title",
+            type: "plainText",
+            label: "Title",
+            value: "Hero title",
+          },
+        ],
+      },
+      {
+        name: "img2",
+        title: "Image",
+        props: [
+          {
+            name: "price",
+            type: "plainText",
+            label: "price",
+            value: "price",
+          },
+        ],
+      },
+    ],
+  },
+
+  {
+    title: "Hero Section",
+    name: "hrero",
+    props: [
+      {
+        name: "img",
+        title: "Image",
+        props: [
+          {
+            name: "title",
+            type: "plainText",
+            label: "Title",
+            value: "Hero title",
+          },
+        ],
+      },
+
+      {
+        name: "img33",
+        title: "Image",
+        props: [
+          {
+            name: "title",
+            type: "plainText",
+            label: "Title",
+            value: "Hero title",
+          },
+        ],
+      },
+      {
+        name: "img4",
+        title: "Image",
+        props: [
+          {
+            name: "title",
+            type: "plainText",
+            label: "Title",
+            value: "Hero title",
+          },
+        ],
+      },
+      {
+        name: "i3mg",
+        title: "Image",
+        props: [
+          {
+            name: "title",
+            type: "plainText",
+            label: "Title",
+            value: "Hero title",
+          },
+        ],
+      },
+
+      {
+        name: "im1g",
+        title: "Image",
+        props: [
+          {
+            name: "title",
+            type: "plainText",
+            label: "Title",
+            value: "Hero title",
+          },
+        ],
+      },
+      {
+        name: "img2",
+        title: "Image",
+        props: [
+          {
+            name: "price",
+            type: "plainText",
+            label: "price",
+            value: "price",
+          },
+        ],
+      },
+    ],
+  },
+
+  {
+    title: "Hero Section",
+    name: "hejkjkjjkjkjkkjjkro",
+    props: [
+      {
+        name: "img",
+        title: "Image",
+        props: [
+          {
+            name: "title",
+            type: "plainText",
+            label: "Title",
+            value: "Hero title",
+          },
+        ],
+      },
+
+      {
+        name: "img33",
+        title: "Image",
+        props: [
+          {
+            name: "title",
+            type: "plainText",
+            label: "Title",
+            value: "Hero title",
+          },
+        ],
+      },
+      {
+        name: "img4",
+        title: "Image",
+        props: [
+          {
+            name: "title",
+            type: "plainText",
+            label: "Title",
+            value: "Hero title",
+          },
+        ],
+      },
+      {
+        name: "i3mg",
+        title: "Image",
+        props: [
+          {
+            name: "title",
+            type: "plainText",
+            label: "Title",
+            value: "Hero title",
+          },
+        ],
+      },
+
+      {
+        name: "im1g",
+        title: "Image",
+        props: [
+          {
+            name: "title",
+            type: "plainText",
+            label: "Title",
+            value: "Hero title",
+          },
+        ],
+      },
+      {
+        name: "img2",
+        title: "Image",
+        props: [
+          {
+            name: "price",
+            type: "plainText",
+            label: "price",
+            value: "price",
+          },
+        ],
+      },
+    ],
+  },
+]; 
 
 
-                >
-{canRenderEditor &&  <EditorSW />}
-                 
+const SECTION_CATALOG =  [ 
+  {
+    title: "Hero Section",
+    type: "hero",
+    maxInstances: 10, // Limite de 2 "hero" max (optionnel)
+    minInstances: 3,
+    defaultInstancesNumber: 1, // ← exemple de default
+    props: [
+      {
+     
+        name: "cta",
+        label: "Boutons",
+        props: [
+          { name: "showCta", type: "checkbox", label: "Show CTA", value: true },
+          {
+            name: "showCta2",
+            type: "checkbox",
+            label: "Show CTA 2",
+            value: false,
+          },
+        ],
+      },
+      { name: "title", type: "plainText", label: "Title", value: "Hero title" },
+      {
+        name: "alignment",
+        type: "select",
+        label: "Alignment",
+        value: "center",
+        options: ["left", "center", "right"],
+      },
+      { name: "showCta", type: "checkbox", label: "Show CTA", value: true },
+      { name: "showCta2", type: "checkbox", label: "Show CTA 2", value: false },
+      {
+        name: "fontSize",
+        type: "range",
+        label: "Font Size",
+        value: 32,
+        min: 12,
+        max: 48,
+      },
+    ],
+    blocks: [
+      {
+            minInstances: 11,
+        defaultInstancesNumber: 2, // ← exemple de default
+        maxInstances: 11, // Limite de 2 "hero" max (optionnel)
+        type: "text_block",
+        title: "Text Block",
+        props: [
+          {
+            name: "content",
+            type: "plainText",
+            label: "Content",
+            value: "Default text",
+          },
+        ],
+      },
+      {
+        maxInstances: 2, // Limite de 2 "hero" max (optionnel)
+        type: "image_block",
+        title: "Image Block",
+        props: [
+          {
+            name: "url",
+            type: "text",
+            label: "Image URL",
+            value: "https://example.com/image.jpg",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    title: "Feature Section",
+    type: "features",
+    props: [
+      { name: "title", type: "text", label: "Title", value: "Feature title" },
+    ],
+    blocks: [
+      {
+        type: "feature_item",
+        title: "Feature Item",
+        props: [
+          { name: "label", type: "text", label: "Label", value: "Feature" },
+          {
+            name: "description",
+            type: "text",
+            label: "Description",
+            value: "Description of the feature.",
+          },
+        ],
+      },
+    ],
+  },
+];
 
 
+export const sectionsData = {
+  header: [ 
+    {
+      title: "Hero Section",
+      type: "hero", 
+      visible: true,
+      blocks: [
+        {
+          type: "text_block",
+        },
+        {
+          type: "text_block",
+        },
+        {
+          type: "text_block",
+        },
+        {
+          type: "text_block",
+        },
+      ],
+      values: {
+        title: "data title",
+        cta: {
+          showCta: false,
+        },
+      },
+    },
+    {
+      title: "Hero Section",
+      type: "hero",
+      visible: true,
+      values: {},
+    },
+    {
+      title: "Hero Section",
+      type: "hero",
+      visible: true,
+      values: {},
+    },
+  ],
 
-                </div>
-*/
+  main: [],
+  footer: [],
+  modele: [],
+  // Ajoute ici tes groupes custom
+};
+
+export const SECTIONS_CATALOG = {
+  header: { label: "header", sections: SECTION_CATALOG },
+   body: { label: "body", sections: SECTION_CATALOG },
+  // Ajoute ici tes groupes custom
+};

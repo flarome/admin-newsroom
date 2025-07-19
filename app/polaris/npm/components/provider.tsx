@@ -12,6 +12,7 @@ const polarisI18n = createI18nContext({
     // Langues à charger dynamiquement
     ...Object.fromEntries(
       languages
+        .filter((lang) => lang !== 'fr')
         .map((lang) => [
           lang,
           { type: 'import' as const, value: () => import(`../locales/${lang}.json`) }

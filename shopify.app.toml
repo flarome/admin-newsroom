@@ -3,7 +3,7 @@
 client_id = "e492689cd409d873cb2b0c8df3e93dfa"
 name = "newsroom"
 handle = "newsroom-2"
-application_url = "https://visitors-matches-basketball-steady.trycloudflare.com"
+application_url = "https://riverside-departments-nightmare-marble.trycloudflare.com"
 embedded = true
 
 [build]
@@ -26,7 +26,7 @@ api_version = "2025-04"
 scopes = "unauthenticated_read_product_listings,read_content,read_draft_orders,read_files,read_metaobject_definitions,read_metaobjects,read_online_store_pages,read_orders,read_themes,unauthenticated_read_content,write_content,write_files,write_metaobjects,write_products,write_themes"
 
 [auth]
-redirect_urls = ["https://visitors-matches-basketball-steady.trycloudflare.com/auth/callback", "https://visitors-matches-basketball-steady.trycloudflare.com/auth/shopify/callback", "https://visitors-matches-basketball-steady.trycloudflare.com/api/auth/callback"]
+redirect_urls = ["https://riverside-departments-nightmare-marble.trycloudflare.com/auth/callback", "https://riverside-departments-nightmare-marble.trycloudflare.com/auth/shopify/callback", "https://riverside-departments-nightmare-marble.trycloudflare.com/api/auth/callback"]
 
 [pos]
 embedded = false

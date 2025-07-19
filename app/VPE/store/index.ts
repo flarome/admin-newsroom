@@ -6,6 +6,7 @@ import { defaultAppState } from "./default-app-state";
 import { Config, UserGenerics, UiState, Data} from "types";
 import { VPEAction, createReducer } from "reducer";
 import { createHistorySlice, HistorySlice } from "./slices/history";
+import { editorData } from "__test__/data";
 
 export { defaultAppState };
 
@@ -43,6 +44,7 @@ catalog: Catalog;
   setStatus: (status: Status) => void;
   setUi: (ui: Partial<UiState>, recordHistory?: boolean) => void;
   history: HistorySlice;
+  
 };
 
 export type AppStoreApi = StoreApi<AppStore>;
@@ -51,7 +53,7 @@ export type AppStoreApi = StoreApi<AppStore>;
 const defaultData = {
   settings: {},
   sections: {}
-}
+} 
 
 const defaultCatalog = {
   settings: {},
@@ -62,7 +64,7 @@ const defaultCatalog = {
 
 export const createAppStore = (initialAppStore?: Partial<AppStore>) =>
   create<AppStore>()(
-    subscribeWithSelector((set, get) => ({
+    subscribeWithSelector((set, get) => ({ 
       state: defaultAppState,
       config: { components: {} },
       zoomConfig: "DESKTOP",
@@ -70,9 +72,15 @@ export const createAppStore = (initialAppStore?: Partial<AppStore>) =>
       selectedAction: "SECTIONS",
       data: defaultData,
       catalog: defaultCatalog,
+      editorData: editorData,
+
+      
+
+
       ...initialAppStore,
 
       history: createHistorySlice(set, get),
+
       dispatch: (action: VPEAction) =>
         set((s) => {
           const { record } = get().history;

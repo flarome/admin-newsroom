@@ -439,7 +439,7 @@ const SECTION_CATALOG =  [
 
 
 export const sectionsData = {
-  header: [
+  header: [ 
     {
       title: "Hero Section",
       type: "hero", 

@@ -165,7 +165,7 @@ export function DesignSystemProvider({ themes = [], children }) {
         switchPanel,
         subscribe,
         notifyAll,
-        localeDataModified,
+        localeDataModified, 
         themes,
       }}
     >
