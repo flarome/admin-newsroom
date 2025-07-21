@@ -1,0 +1,24 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+client_id = "4009a268e238bc6e3e39a27aed379c36"
+name = "newsroom"
+handle = "newsroom-4"
+application_url = "https://trail-pod-its-webshots.trycloudflare.com"
+embedded = true
+
+[build]
+include_config_on_deploy = true
+automatically_update_urls_on_dev = true
+
+[webhooks]
+api_version = "2025-07"
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "read_content,read_draft_orders,read_files,read_metaobject_definitions,read_metaobjects,read_online_store_pages,read_orders,read_themes,unauthenticated_read_content,unauthenticated_read_product_listings,write_content,write_files,write_metaobjects,write_products,write_themes"
+
+[auth]
+redirect_urls = ["https://trail-pod-its-webshots.trycloudflare.com/auth/callback", "https://trail-pod-its-webshots.trycloudflare.com/auth/shopify/callback", "https://trail-pod-its-webshots.trycloudflare.com/api/auth/callback"]
+
+[pos]
+embedded = false

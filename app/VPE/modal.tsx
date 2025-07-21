@@ -5,53 +5,37 @@ import { createMessageChannel } from "../utils/postMessageSecure";
 import { v4 as uuidv4 } from "uuid";
 import { useGlobalLang } from "../i18n/global";
 import { exposePostMessageTools } from "../_dev";
-import { ModalProps} from './route';
+import { ModalProps } from "./route";
 import { messageChanel } from "./_intercom";
 
-
 import { Config, UserGenerics } from "./types";
-import { useFetcher } from "@remix-run/react";
-
-const iframeSrc = "/vpe";
-
+import { useRoutes } from "../routes";
 
 interface CMSProps<
   UserConfig extends Config = Config,
-  G extends UserGenerics<UserConfig> = UserGenerics<UserConfig>
+  G extends UserGenerics<UserConfig> = UserGenerics<UserConfig>,
 > {
   open: boolean;
   modalId: string;
   closeModal: () => void;
   data: ModalProps;
- onChange?: (data: Partial<G["UserData"]>) => void; 
+  onChange?: (data: Partial<G["UserData"]>) => void;
 }
 
-
 const CMS = ({ open, modalId, closeModal, data, onChange }: CMSProps) => {
-  const lang = useGlobalLang();
   const modalRef = useRef<HTMLIFrameElement | null>(null);
-  const [channel, setChannel] = useState<ReturnType<typeof createMessageChannel> | null>(null);
+  const [channel, setChannel] = useState<ReturnType<
+    typeof createMessageChannel
+  > | null>(null);
   const [iframeReady, setIframeReady] = useState(false);
   const [token] = useState(() => uuidv4());
 
-    const fetcher = useFetcher();
-     const preload = () => fetcher.load(`${iframeSrc}?lang=${lang}&token=${token}`);
+  const routes = useRoutes();
 
-
-useEffect(() => {
-  const timer = setTimeout(() => {
-    preload();
-  }, 10000); // 10 000 ms = 10 secondes
-
-  return () => clearTimeout(timer); // cleanup si le composant se démonte avant
-}, []);
-
-
-
-// Récupère le modal
-useEffect(() => {
-  modalRef.current = document.getElementById(modalId) as HTMLIFrameElement;
-}, [modalId, open]);
+  // Récupère le modal
+  useEffect(() => {
+    modalRef.current = document.getElementById(modalId) as HTMLIFrameElement;
+  }, [modalId, open]);
 
   // Crée le channel une seule fois
   useEffect(() => {
@@ -75,7 +59,6 @@ useEffect(() => {
       console.log("[CMS] Received ACK from iframe:", payload);
     });
 
-
     ch.on(messageChanel.set, (data: ModalProps) => {
       console.log("[CMS] Received DATA:", data);
       onChange?.(data?.data);
@@ -90,28 +73,23 @@ useEffect(() => {
     };
   }, [modalRef.current, token]);
 
-
-
-// Quand le channel est prêt et iframeReady, on set le contentWindow
+  // Quand le channel est prêt et iframeReady, on set le contentWindow
 
   useEffect(() => {
     if (!iframeReady || !channel) return;
 
+    const trySetWindow = () => {
+      if (modalRef.current!.contentWindow) {
+        console.log("[CMS] iframe.contentWindow disponible");
+        channel?.setTargetWindow(modalRef.current!.contentWindow);
+      } else {
+        console.log("[CMS] Attente de contentWindow...");
+        setTimeout(trySetWindow, 100); // Retry loop
+      }
+    };
 
-  const trySetWindow = () => {
-    if (modalRef.current!.contentWindow) {
-      console.log("[CMS] iframe.contentWindow disponible");
-      channel?.setTargetWindow(modalRef.current!.contentWindow);
-    } else {
-      console.log("[CMS] Attente de contentWindow...");
-      setTimeout(trySetWindow, 100); // Retry loop
-    }
-  };
-
-  trySetWindow();
-}, [modalRef.current, channel, iframeReady]);
-
-
+    trySetWindow();
+  }, [modalRef.current, channel, iframeReady]);
 
   // Envoie les données dès que tout est prêt
 
@@ -135,42 +113,33 @@ useEffect(() => {
         variant="max"
         open={open}
         id={modalId}
-        src={`${iframeSrc}?lang=${lang}&token=${token}`}
+        src={`${routes.vpe}?token=${token}`}
         onHide={closeModal}
       >
         <TitleBar title="Contenu de l'article" />
       </BridgeModal>
 
-      {process.env.NODE_ENV !== "production" && (
-        <Dev modalId={modalId}  />
-      )}
+      {process.env.NODE_ENV !== "production" && <Dev modalId={modalId} />}
     </>
   );
 };
 
-
-
-
-
-
-function Dev({modalId}) {
+function Dev({ modalId }) {
   useEffect(() => {
+    const modal = document.getElementById(modalId) as HTMLIFrameElement;
 
-        const modal = document.getElementById(modalId) as HTMLIFrameElement;
-  
     // window.__MESSAGES__.vpe.send('test')
 
-    exposePostMessageTools("vpe", {
-  iframe: modal
-}, location.origin);
-
-
-
-  
+    exposePostMessageTools(
+      "vpe",
+      {
+        iframe: modal,
+      },
+      location.origin,
+    );
   }, [modalId]);
 
   return null;
 }
 
 export const Modal = memo(CMS);
-

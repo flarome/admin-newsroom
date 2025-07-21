@@ -26,6 +26,7 @@ import { saveBarId } from "./structures/saveBar";
 import { get as fetchArticleDetails } from "./services/articleDetails";
 import { useApplyShopifyErrors } from "./helpers/shopifyErrors";
 import { Footer } from "../../components";
+import { useRoutes } from "../../routes";
 
 
 

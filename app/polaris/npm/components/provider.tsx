@@ -25,7 +25,7 @@ const polarisI18n = createI18nContext({
       value: fr,
     }
   },
-  initialTranslations: fr,
+  initialTranslations: { lang: 'fr', translations: fr }
 });
 
 export const PolarisI18n = ({ children }: { children: React.ReactNode }) => {

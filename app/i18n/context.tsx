@@ -3,23 +3,26 @@ import {
   createContext,
   useContext,
   useEffect,
-  useId,
   useRef,
   useState,
-  useSyncExternalStore,
 } from "react";
 import { createStore, StoreApi, useStore } from "zustand";
 import { createLangLoader, LangLoaderConfig, loadLang } from "./loader";
 import {
-  useGlobalLang,
+  useGlobalLang, 
   getGlobalI18nStore,
   registeredSources,
-  Lang,
+  type Lang,
   i18nCache,
 } from "./global";
 import { I18n } from "./i18";
 
 type Translations = Record<string, any>;
+
+type InitialTranslations = {
+  lang: Lang;
+  translations: Translations;
+};
 
 export type I18nStore = {
   translations: Translations;
@@ -27,12 +30,13 @@ export type I18nStore = {
 };
 
 type I18nConfigBase = {
-  initialTranslations?: Translations;
+  initialTranslations?: InitialTranslations;
 };
 
 type I18nConfig = I18nConfigBase & LangLoaderConfig<Lang>;
 
 export function createI18nContext(config: I18nConfig) {
+  
   const I18nStoreContext = createContext<StoreApi<I18nStore> | null>(null);
 
   const langLoader = createLangLoader({
@@ -41,10 +45,12 @@ export function createI18nContext(config: I18nConfig) {
   });
 
   function createI18nStore(): StoreApi<I18nStore> {
-    const initial = config.initialTranslations ?? {};
+    // On récupère initialTranslations ou fallback vide
+    const initialTrans = config.initialTranslations?.translations ?? {}; 
+
     return createStore<I18nStore>(() => ({
-      translations: initial,
-      i18n: new I18n(initial),
+      translations: initialTrans,
+      i18n: new I18n(initialTrans),
     }));
   }
 
@@ -68,26 +74,18 @@ export function createI18nContext(config: I18nConfig) {
 
     const lastLangRef = useRef<Lang>(lang);
 
-    useEffect(() => {
-      if (registeredSources.has(instanceId)) {
-        console.error("[i18n] Registered sources:", [...registeredSources]);
-        throw new Error(`[i18n] Duplicate context id "${instanceId}"`);
-      }
 
-      registeredSources.add(instanceId);
 
-      return () => {
-        registeredSources.delete(instanceId);
-        i18nCache.delete(instanceId); // facultatif
-      };
-    }, [instanceId]);
 
-    // Subscribe to global language changes and load translations accordingly
-    useEffect(() => {
-      const unsubscribe = global.subscribe(
-        (state) => state.lang,
-        async (newLang) => {
-          if (newLang === lastLangRef.current) return;
+
+
+
+  // Fonction commune pour charger et appliquer une langue
+  async function loadAndApplyLang(newLang: Lang) {
+
+
+
+
 
                   const contextCache = i18nCache.get(instanceId) ?? new Map<Lang, any>();
           const cached = contextCache.get(newLang);
@@ -114,6 +112,46 @@ export function createI18nContext(config: I18nConfig) {
             }
           }
 
+    lastLangRef.current = newLang;
+  }
+
+    // Correction au montage si la langue globale diffère de initialTranslations.lang
+  useEffect(() => {
+    const initialLang = config.initialTranslations?.lang;
+    if (initialLang !== lang) {
+      loadAndApplyLang(lang);
+    }
+  }, []); 
+  
+ // Registration et cleanup
+    useEffect(() => {
+      if (registeredSources.has(instanceId)) {
+        console.error("[i18n] Registered sources:", [...registeredSources]);
+        throw new Error(`[i18n] Duplicate context id "${instanceId}"`);
+      }
+
+      registeredSources.add(instanceId);
+
+      return () => {
+        registeredSources.delete(instanceId);
+        i18nCache.delete(instanceId); // facultatif
+      };
+    }, [instanceId]);
+
+
+
+
+
+    
+    // Subscribe to global language changes and load translations accordingly
+    useEffect(() => {
+      const unsubscribe = global.subscribe(
+        (state) => state.lang,
+        async (newLang) => {
+          if (newLang === lastLangRef.current) return;
+
+          await loadAndApplyLang(newLang);
+
            // Notify trackers
           const trackers = Array.from(global.getState()._trackers);
           for (const t of trackers) {
@@ -123,7 +161,7 @@ export function createI18nContext(config: I18nConfig) {
             }
           }
 
-          lastLangRef.current = newLang;
+    
         },
       );
 
@@ -131,6 +169,10 @@ export function createI18nContext(config: I18nConfig) {
         unsubscribe();
       };
     }, [instanceId]);
+
+
+
+
 
     return (
       <I18nStoreContext.Provider value={store}>

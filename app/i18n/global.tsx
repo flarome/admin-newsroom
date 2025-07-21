@@ -4,6 +4,7 @@ import { createStore, useStore, StoreApi } from "zustand";
 import { language } from "../config/app";
 import { exposeStoreDevTools } from "../_dev/exposeStoreDevTools";
 import { subscribeWithSelector } from "zustand/middleware";
+import { API_ROUTES } from "../routes";
 
 export type Lang = string;
 
@@ -17,9 +18,10 @@ type GlobalI18nStore = {
   lang: Lang;
   setLang: (lang: Lang) => Promise<void>;
   _trackers: Set<LangChangePromise>;
+  _abortController?: AbortController;
 };
 
-export function createGlobalI18nStore(initialLang?: Lang) {
+export function createGlobalI18nStore(initialLang?: Lang) { 
   return createStore<GlobalI18nStore>()(
     subscribeWithSelector((set, get) => ({
       lang: initialLang ?? language,
@@ -51,7 +53,10 @@ export function createGlobalI18nStore(initialLang?: Lang) {
             }
           }
 
+           // 1. Met à jour l’état local immédiatement
           set({ lang });
+
+             // 2. Change <html lang="">
           if (
             typeof document !== "undefined" &&
             document &&
@@ -65,6 +70,29 @@ export function createGlobalI18nStore(initialLang?: Lang) {
               { timeout: 1000 },
             );
           }
+
+    // 3. Abort requête précédente s’il y en a une
+           get()._abortController?.abort();
+
+    // 4. Crée une nouvelle
+    const controller = new AbortController();
+    set({ _abortController: controller });
+
+    // 5. Appelle l’API en parallèle (non bloquant)
+    fetch(API_ROUTES.lang, {
+      method: "POST",
+      body: JSON.stringify({ lang }),
+      headers: { "Content-Type": "application/json" },
+      signal: controller.signal,
+    }).catch((err) => {
+      if (err.name === "AbortError") {
+        console.log("🌪️ Requête langue annulée");
+      } else {
+        console.warn("❌ Erreur mise à jour langue serveur", err);
+      }
+    });
+
+
         });
       },
     })),
@@ -109,7 +137,7 @@ export function useSetGlobalLang(): (lang: Lang) => Promise<void> {
 
   return useStore(store, (s) => s.setLang);
 }
-
+ 
 export function getGlobalI18nStore() {
   return useContext(GlobalI18nContext);
 }

@@ -18,7 +18,7 @@ export const createAppStore = (initialAppStore?: Partial<AppStore>) =>
     subscribeWithSelector((set, get) => ({
       ui: {
         loading: false
-      },
+      }, 
       ...initialAppStore,
 
       setLoading: (value) =>

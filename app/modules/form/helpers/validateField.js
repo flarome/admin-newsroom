@@ -1,8 +1,9 @@
-import { API_ROUTES} from "../../../routesMap";
+import { API_ROUTES } from "../../../routes";
 
 const urlValidationCache = new Map();
 
 export async function validateFileOrUrl(value, validImageTypes) {
+
   // Cas File
   if (value instanceof File) {
     if (validImageTypes.includes(value.type)) return true;

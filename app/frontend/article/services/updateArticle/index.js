@@ -1,6 +1,7 @@
+
 import { customRequest }  from "../../../../lib/client/request";
 
-import { API_ROUTES } from "../../../../routesMap";
+import { API_ROUTES } from "../../../../routes";
 import { uploadAndReplaceFilesRecursively } from "../../../../utils/uploadAndReplaceFiles";
 
 /**
@@ -9,8 +10,7 @@ import { uploadAndReplaceFilesRecursively } from "../../../../utils/uploadAndRep
  * @returns {Promise<{ beforeId: string|null, afterId: string|null }>}
  */
 export async function make(id, data) {
-  try {
-
+try {
     const rawData = await uploadAndReplaceFilesRecursively(data);
     const response = await customRequest(API_ROUTES.articleUpdate(id), "POST", "application/json", rawData);
 

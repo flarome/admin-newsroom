@@ -7,15 +7,13 @@ import "./styles/main.css";
 import "./styles/render.css";
 
 export const Wrapper = ({ children, data, ...props }) => (
-  <GlobalApp>
     <div data-cms="index"> 
          <ArticleProvider data={data}>
         <App {...props}>
           {children}
         </App>
         </ArticleProvider>
-    </div> 
-    </GlobalApp>
+    </div>
   );
 
 const App = ({ children, isDelete }) => {

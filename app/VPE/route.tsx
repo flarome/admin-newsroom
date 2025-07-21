@@ -1,7 +1,6 @@
 // components/RouteInner.tsx
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { VPE } from ".";
-import GlobalApp from "../"; 
 import { exposePostMessageTools } from "../_dev";
 import { createMessageChannel } from "../utils/postMessageSecure";
 import { messageChanel } from "./_intercom";
@@ -18,19 +17,15 @@ export const links = [
 
 import { Config, UserGenerics, UiState, Data, InitialHistory } from "./types";
 import { VPEBase } from "./context/PropsContext";
+import { useLoaderData } from "@remix-run/react";
+import type { LoaderData } from "../routes/a.vpe";
 
 
 type token = string | null;
 
 export type VpeConfig = {
-  lang?: string;
   token: token;
 };
-
-interface RouteInnerProps {
-  config: VpeConfig;
-}
-
 
 export type ModalProps<
   UserConfig extends Config = Config,
@@ -136,14 +131,13 @@ const Inner = ({token}: {token: token}) => {
 };
 
 
-const RouteInner = ({ config }: RouteInnerProps) => {
+const RouteInner = () => {
+   const { config } = useLoaderData<LoaderData>();
   return (
-    <GlobalApp lang={config.lang}>
       <div data-cms="vpe">
         <Inner token={config.token} />
         {process.env.NODE_ENV !== "production" && <Dev />}
       </div>
-    </GlobalApp>
   );
 };
 

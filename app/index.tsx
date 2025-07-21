@@ -7,7 +7,7 @@ import {
 } from "./store";
 // @ts-ignore
 import styles from "./app.module.css";
-import "./app.css";
+import "./app.css"; 
 import { useNavigation } from "@remix-run/react";
 import { PolarisBridge } from "./polaris/npm";
 import { createI18nContext } from "./i18n/context";
@@ -17,11 +17,13 @@ export { languages } from "./locales";
 import { translations } from "./locales/locales";
 import classNames from "classnames";
 import { secondsToMs } from "./utils/time";
+import { Distribution } from "_distribution";
+import { RoutesProvider, createRoutesContext } from "./routes";
 
 export const globalAppI18n = createI18nContext({
   fallback: language,
   translations: {
-    // Langues à charger dynamiquement
+    // Langues à charger dynamiquement 
   
 
         // Autres langues chargées dynamiquement
@@ -44,7 +46,7 @@ export const globalAppI18n = createI18nContext({
       value: translations.fr,
     },
   },
-  initialTranslations: translations.fr,
+  initialTranslations: { lang: 'fr', translations: translations.fr }
 });
 
 const spinnerTimeOut = secondsToMs(2); // ms
@@ -55,6 +57,54 @@ const Spinner = () => {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const store = useAppStoreApi();
+
+
+
+   /* useEffect(() => {
+  const el = wrapperRef.current;
+  if (!el) return;
+
+  console.log('spinnerVisible:', spinnerVisible);
+
+  if (spinnerVisible) {
+    el.classList.remove(styles["exit"]);
+    el.classList.add(styles["enter"]);
+  } else {
+    el.classList.remove(styles["enter"]);
+    el.classList.add(styles["exit"]);
+  }
+}, [spinnerVisible]);*/
+
+
+
+
+  // ⏱️ Catch animation end (only for exit)
+  useEffect(() => {
+    const el = wrapperRef.current;
+    if (!el) return;
+
+    const handleAnimationEnd = (e: AnimationEvent) => {
+
+
+console.log('Animation ended:', e.animationName);
+
+
+
+
+      if (e.animationName.includes("exit")) {
+        setShowSpinner(false);
+      } 
+
+
+    };
+    
+    el.addEventListener("animationend", handleAnimationEnd);
+    return () => {
+      el.removeEventListener("animationend", handleAnimationEnd);
+    };
+  }, []);
+
+
 
   // Detect initial loading state on mount
   useEffect(() => {
@@ -70,6 +120,8 @@ const Spinner = () => {
     const unsubscribe = store.subscribe(
       (s) => s.ui.loading,
       (isLoading) => {
+
+        console.log('Spinner state changed:', isLoading);
         if (isLoading) {
           // Si spinner déjà visible (ex: initial), ne rien faire (déjà affiché)
           if (showSpinner) return;
@@ -81,14 +133,26 @@ const Spinner = () => {
             timerRef.current = null; // proprement
           }, spinnerTimeOut);
         } else {
-          if (!showSpinner) return;
+  
 
           // Si le chargement se termine, on coupe le timer
           if (timerRef.current) {
             clearTimeout(timerRef.current);
             timerRef.current = null;
           }
-          setSpinnerVisible(false); // ➝ trigger .exit
+          // Ensuite, si le spinner est visible → on le masque
+  setSpinnerVisible(false);
+
+
+
+
+  // Fallback : au cas où animationend ne se déclenche pas
+ /* setTimeout(() => {
+    setShowSpinner(false);
+  }, 400); */
+
+
+
         }
       },
     );
@@ -98,24 +162,12 @@ const Spinner = () => {
     };
   }, []);
 
-  // ⏱️ Catch animation end (only for exit)
-  useEffect(() => {
-    const el = wrapperRef.current;
-    if (!el) return;
 
-    const handleAnimationEnd = (e: AnimationEvent) => {
-      if (e.animationName.includes("exit")) {
-        setShowSpinner(false);
-      }
-    };
-    
-    el.addEventListener("animationend", handleAnimationEnd);
-    return () => {
-      el.removeEventListener("animationend", handleAnimationEnd);
-    };
-  }, [spinnerVisible]);
 
-  if (!showSpinner) return null;
+
+  // Toujours monter l'élément si l'animation "exit" est en cours
+if (!showSpinner) return null;
+
 
   return (
     <div
@@ -212,9 +264,10 @@ const RenderWrapper = ({ lang = language, children }: {lang?: string, children: 
   // 🔁 Synchroniser état Remix ⇄ Zustand
   const setLoading = useAppStore((s) => s.setLoading);
 
-  useEffect(() => {
-    setLoading(navigation.state === "loading");
-  }, [navigation.state, setLoading]);
+useEffect(() => {
+  console.log("Navigation state:", navigation.state);
+  setLoading(navigation.state === "loading");
+}, [navigation.state, setLoading]);
 
   const [hydrated, setHydrated] = useState(false);
 
@@ -263,13 +316,16 @@ const RenderWrapper = ({ lang = language, children }: {lang?: string, children: 
   );
 };
 
-export const App = ({ lang, children }: {lang?: string, children: ReactNode}) => {
+export const App = ({ lang, children, distribution }: {lang?: string, children: ReactNode, distribution: Distribution}) => {
+  const [routes] = useState(() => createRoutesContext(distribution));
   const [appStore] = useState(() => createAppStore({}));
 
   return (
+    <RoutesProvider value={routes}>
     <appStoreContext.Provider value={appStore}>
       <RenderWrapper lang={lang}>{children}</RenderWrapper>
     </appStoreContext.Provider>
+    </RoutesProvider>
   );
 };
 export default memo(App);

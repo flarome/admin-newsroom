@@ -6,17 +6,30 @@ import {
   ScrollRestoration,
   useRouteError,
   isRouteErrorResponse,
+  useLoaderData,
 } from "@remix-run/react";
+import { json, type LoaderFunctionArgs, type HeadersArgs, type LinksFunction } from "@remix-run/node";
 
-
-
-import P404 from "./frontend/404";
+import { boundary } from "@shopify/shopify-app-remix/server";
+import P404 from "./frontend/_status/404";
 import styles from "./frontend/404/styles/styles.css?url"
 import { language } from "./config/app";
+import { getLanguageFromSession } from "./models/language.server";
+import { authenticate } from "./lib/shopify/shopify.server";
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const { session } = await authenticate.admin(request);
+  const lang = await getLanguageFromSession(session);
+
+  return json({ apiKey: process.env.SHOPIFY_API_KEY || "", lang });
+};
+
 
 export default function App() {
-  return (
-    <html lang={language} dir="ltr">
+    const { lang } = useLoaderData<typeof loader>();
+  return ( 
+
+    <html lang={lang} dir="ltr">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -38,15 +51,15 @@ export default function App() {
 }
 
 
-/*
-export function ErrorBoundary() {
 
+export function ErrorBoundary() {
+  const { lang } = useLoaderData<typeof loader>();
   const error = useRouteError();
 
-  if (isRouteErrorResponse(error)) {
-    if (error.status === 404) {
+  if (isRouteErrorResponse(error) && error.status === 404) {
+
       return (
-        <html lang="fr-FR" dir="ltr">
+        <html lang={lang} dir="ltr">
           <head>
             <meta charSet="utf-8" />
             <meta
@@ -71,21 +84,8 @@ export function ErrorBoundary() {
           </body>
         </html>
       );
-    }
 
-    return (
-      <div>
-        <h1>Erreur {error.status}</h1>
-        <p>{error.statusText}</p>
-      </div>
-    );
   }
 
-  // Erreur JS inattendue
-  return (
-    <div>
-      <h1>Erreur inattendue</h1>
-      <p>{error.message || "Quelque chose s'est mal passé."}</p>
-    </div>
-  );
-}*/
+   return boundary.error(error);
+}

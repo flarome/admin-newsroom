@@ -1,4 +1,5 @@
-import { API_ROUTES } from "~/routesMap";
+import { API_ROUTES } from "../../routes";
+
 
 /**
  * Effectue une requête HTTP standard avec support JSON ou FormData.
@@ -68,6 +69,9 @@ export async function getRequest(endpoint, params = {}) {
  * @returns {Promise<any>} - Données GraphQL
  */
 export async function graphqlRequest(api, operationName, query, variables = {}) {
+
+
+
   const endpoint =
     api === "admin"
       ? API_ROUTES.graphql.admin
