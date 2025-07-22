@@ -8,20 +8,25 @@ import {
   isRouteErrorResponse,
   useLoaderData,
 } from "@remix-run/react";
-import { json, type LoaderFunctionArgs, type HeadersArgs, type LinksFunction } from "@remix-run/node";
+import { type LoaderFunctionArgs, type HeadersArgs } from "@remix-run/node";
 
 import { boundary } from "@shopify/shopify-app-remix/server";
 import P404 from "./frontend/_status/404";
-import styles from "./frontend/404/styles/styles.css?url"
-import { language } from "./config/app";
+import styles from "./frontend/_status/404/styles/styles.css?url"
 import { getLanguageFromSession } from "./models/language.server";
 import { authenticate } from "./lib/shopify/shopify.server";
+
+
+export type RootLoaderData = {
+  lang: string;
+};
+
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { session } = await authenticate.admin(request);
   const lang = await getLanguageFromSession(session);
 
-  return json({ apiKey: process.env.SHOPIFY_API_KEY || "", lang });
+  return { lang };
 };
 
 
@@ -53,7 +58,10 @@ export default function App() {
 
 
 export function ErrorBoundary() {
-  const { lang } = useLoaderData<typeof loader>();
+  const data = useLoaderData<typeof loader>();
+  const lang = data?.lang ?? (typeof document !== "undefined"
+    ? document.documentElement.lang
+    : "fr");
   const error = useRouteError();
 
   if (isRouteErrorResponse(error) && error.status === 404) {
@@ -89,3 +97,7 @@ export function ErrorBoundary() {
 
    return boundary.error(error);
 }
+
+export const headers = (headersArgs: HeadersArgs) => {
+  return boundary.headers(headersArgs);
+};

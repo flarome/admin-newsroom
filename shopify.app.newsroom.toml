@@ -1,9 +1,9 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
-client_id = "4009a268e238bc6e3e39a27aed379c36"
+client_id = "6fc19979d31e0b4476e2cfd23853b7f7"
 name = "newsroom"
-handle = "newsroom-4"
-application_url = "https://trail-pod-its-webshots.trycloudflare.com"
+handle = "newsroom-5"
+application_url = "https://cabin-glucose-prison-recipients.trycloudflare.com"
 embedded = true
 
 [build]
@@ -18,7 +18,7 @@ api_version = "2025-07"
 scopes = "read_content,read_draft_orders,read_files,read_metaobject_definitions,read_metaobjects,read_online_store_pages,read_orders,read_themes,unauthenticated_read_content,unauthenticated_read_product_listings,write_content,write_files,write_metaobjects,write_products,write_themes"
 
 [auth]
-redirect_urls = ["https://trail-pod-its-webshots.trycloudflare.com/auth/callback", "https://trail-pod-its-webshots.trycloudflare.com/auth/shopify/callback", "https://trail-pod-its-webshots.trycloudflare.com/api/auth/callback"]
+redirect_urls = ["https://cabin-glucose-prison-recipients.trycloudflare.com/auth/callback", "https://cabin-glucose-prison-recipients.trycloudflare.com/auth/shopify/callback", "https://cabin-glucose-prison-recipients.trycloudflare.com/api/auth/callback"]
 
 [pos]
 embedded = false

@@ -9,7 +9,7 @@ const Actions = ({ handleSubmit }) => {
   const {show: showDeleteModal} = useDeleteModal();
   const { handleSubmit: rhfHandleSubmit } = useFormContext();
   const { errors, isSubmitting, isDirty } = useFormState();
-
+ 
   const fn = rhfHandleSubmit(handleSubmit); // directement exécutable
 
   return (

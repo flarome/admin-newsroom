@@ -1,8 +1,8 @@
 import { useEffect, useCallback, useState } from "react";
-import { useNavigate } from "@remix-run/react";
+import { useHref, useNavigate } from "@remix-run/react";
 import { useAppBridge, TitleBar } from "@shopify/app-bridge-react";
 
-import { Page as PolarisPage, Badge } from "@shopify/polaris";
+import { Page as PolarisPage, Badge, BlockStack } from "@shopify/polaris";
 import { DeleteIcon, ViewIcon } from "@shopify/polaris-icons";
 import { useArticle } from "./context/articleContext";
 import { get as fetchAdjacentArticle } from "./services/adjacentArticle";
@@ -28,8 +28,27 @@ import { useApplyShopifyErrors } from "./helpers/shopifyErrors";
 import { Footer } from "../../components";
 import { useRoutes } from "../../routes";
 
+import {
+  Tags,
+  Banner,
+  Template,
+  Author,
+  Extrait,
+  Seo,
+  Visible,
+  MainImage,
+  MainVideo,
+  Blog as BlogA,
+  Title,
+  SubTitle,
+  Category,
+  Content,
+  EmbeddedContent,
+} from "./components";
 
 
+import { Banner as BannerForm } from "../../modules/form/components";
+import { Actions } from "./structures";
 
 
 export const Page = ({hasArticle, children}) => {
@@ -204,7 +223,22 @@ export const Page = ({hasArticle, children}) => {
         <TitleBar />
 
 
+
+  <BlockStack gap={{ xs: "400" }}>
+          <Banner />
+
+          <BannerForm />
+             <form
+                      method="get"
+                      action={useHref(".", { relative: "route" })}
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                      }} 
+                    >
 {children}
+        <Actions handleSubmit={handleSubmit} />
+          </form>
+        </BlockStack>
         
 
         <Footer />

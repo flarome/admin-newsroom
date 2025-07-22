@@ -34,22 +34,13 @@ import {
 import { Banner as BannerForm } from "../../../modules/form/components";
 import { Actions } from "../structures";
 
-export const Editor = ({handleSubmit, visible}) => {
+export const Editor = ({}) => {
 
 
   return (
-    <BlockStack gap={{ xs: "400" }}>
-          <Banner />
+  
 
-          <BannerForm />
-
-          <form
-            method="get"
-            action={useHref(".", { relative: "route" })}
-            onSubmit={(e) => {
-              e.preventDefault();
-            }}
-          >
+       
             <Layout>
               <Layout.Section>
                 <BlockStack gap={{ xs: "400" }} align="space-between">
@@ -102,9 +93,7 @@ export const Editor = ({handleSubmit, visible}) => {
               </Layout.Section>
             </Layout>
 
-            <Actions handleSubmit={handleSubmit} />
-          </form>
-        </BlockStack>
+    
   )
 
 }

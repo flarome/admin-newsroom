@@ -22,7 +22,7 @@ export const preloadAllLayouts = () => {
   Object.values(layouts).forEach(({ loader }) => loader());
 };
  
-const AppLayout = ({ handleSubmit }) => {
+const AppLayout = ({  }) => {
   const selectedType = useWatch({ name: typePath }) ?? "";
   const LazyLayout = layouts[selectedType]?.component ?? null;
 
@@ -34,7 +34,7 @@ const AppLayout = ({ handleSubmit }) => {
 
   return (
     <Suspense fallback={<Spinner accessibilityLabel="Chargement de l’éditeur…" size="large" />}>
-      <LazyLayout handleSubmit={handleSubmit} />
+      <LazyLayout />
     </Suspense>
   );
 };

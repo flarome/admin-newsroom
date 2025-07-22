@@ -13,13 +13,13 @@ export const LAYOUT = {
   "quick-read": QuickreadLayout,
 };
 
-const AppLayout = ({ handleSubmit }) => {
+const AppLayout = ({ }) => {
   const selectedType = useWatch({ name: typePath }) ?? "";
   const Layout = LAYOUT[selectedType] ?? null;
 
   if (!Layout) return <SelectTypeLayout />;
 
-  return <Layout handleSubmit={handleSubmit} />;
+  return <Layout/>;
 };
 
 export const Template = () => (

@@ -20,7 +20,7 @@ import { VPEBase } from "./context/PropsContext";
 import { useLoaderData } from "@remix-run/react";
 import type { LoaderData } from "../routes/a.vpe";
 
-
+import { Footer } from "../components/footer";
 type token = string | null;
 
 export type VpeConfig = {
@@ -136,6 +136,7 @@ const RouteInner = () => {
   return (
       <div data-cms="vpe">
         <Inner token={config.token} />
+        <Footer />
         {process.env.NODE_ENV !== "production" && <Dev />}
       </div>
   );
