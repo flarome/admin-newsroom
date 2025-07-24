@@ -1,7 +1,12 @@
 
 
+import type { Data as WYSIWYGDataType } from "../packages/WYSIWYG/_plate/types";
+
+
+
 export type Data = {
-settings: {},
-  sections: {}
+  WYSIWYG: WYSIWYGDataType;
+  settings: any;
 };
 
+  

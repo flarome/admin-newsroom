@@ -4,7 +4,10 @@ import { VPEAction } from "./actions";
 import type { OnAction } from "../types";
 import { AppStore } from "../store";
 import { PrivateAppState } from "../types/Internal";
-
+import { setAction } from "./actions/set";
+import { setDataAction } from "./actions/set-data";
+import { setUiAction } from "./actions/set-ui";
+import { makeStatePublic } from "../lib/data/make-state-public";
 
 export * from "./actions";
 
@@ -27,8 +30,6 @@ function storeInterceptor<UserData extends Data = Data>(
     const newAppState = reducer(state, action);
 
     const isValidType = ![
-      "registerZone",
-      "unregisterZone",
       "setData",
       "setUi",
       "set",
@@ -42,7 +43,7 @@ function storeInterceptor<UserData extends Data = Data>(
       if (record) record(newAppState);
     }
 
-  //  onAction?.(action, makeStatePublic(newAppState), makeStatePublic(state));
+    onAction?.(action, makeStatePublic(newAppState), makeStatePublic(state));
 
     return newAppState;
   };
@@ -50,7 +51,7 @@ function storeInterceptor<UserData extends Data = Data>(
 
 export function createReducer<UserData extends Data>({
   record,
-  onAction,
+  onAction, 
   appStore,
 }: {
   record?: (appState: AppState<UserData>) => void;
@@ -59,11 +60,21 @@ export function createReducer<UserData extends Data>({
 }): StateReducer<UserData> {
   return storeInterceptor(
     (state, action) => {
+      if (action.type === "set") {
+        return setAction(state, action, appStore) as PrivateAppState<UserData>;
+      }
 
+      if (action.type === "setData") {
+        return setDataAction(state, action, appStore);
+      }
+
+      if (action.type === "setUi") {
+        return setUiAction(state, action);
+      }
 
       return state;
     },
     record,
     onAction
   );
-}
+} 

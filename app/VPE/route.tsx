@@ -136,7 +136,7 @@ const RouteInner = () => {
   return (
       <div data-cms="vpe">
         <Inner token={config.token} />
-        <Footer />
+      
         {process.env.NODE_ENV !== "production" && <Dev />}
       </div>
   );

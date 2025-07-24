@@ -1,4 +1,4 @@
-export const editorData = 
+export const WYSIWYGData = 
 
 
 [ 

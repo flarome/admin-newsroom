@@ -9,7 +9,7 @@ export type HistorySlice<D = any> = {
   histories: History<D>[];
   record: (data: D) => void;
   back: VoidFunction;
-  forward: VoidFunction;
+  forward: VoidFunction; 
   currentHistory: () => History;
   nextHistory: () => History<D> | null;
   prevHistory: () => History<D> | null;

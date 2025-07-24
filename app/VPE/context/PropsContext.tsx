@@ -8,14 +8,25 @@ import {
 import { Config, UserGenerics,   UiState,  Data,  InitialHistory, } from "../types";
 
 
-export type VPEBase< 
+type RequestedData = {
+  content: any;
+  settings: any
+}
+
+type ResendData = {
+  content: any
+  settings: any
+}
+
+export type VPEBase<
   UserConfig extends Config = Config,
-    G extends UserGenerics<UserConfig> = UserGenerics<UserConfig>
+  G extends UserGenerics<UserConfig> = UserGenerics<UserConfig>
 > = {
-  config?: UserConfig;
-  data: Partial<G["UserData"] | Data>;
+  config: UserConfig;
   ui?: Partial<UiState>;
-  onChange?: (data: G["UserData"]) => void;
+  // data: Partial<G["UserData"] | Data>;
+  data: Partial<RequestedData>
+  onChange?: (data: ResendData) => void;
   initialHistory?: InitialHistory;
 };
 
@@ -38,8 +49,8 @@ export function PropsProvider<UserConfig extends Config = Config>(
     <propsContext.Provider value={props as VPEProps}>
       {props.children}
     </propsContext.Provider>
-  );
-}
+  ); 
+} 
 
 export const usePropsContext = () =>
   useContext<VPEProps>(propsContext as Context<VPEProps>);

@@ -5,7 +5,7 @@ import { memo, useCallback, useRef, useState } from "react";
 //import { Modal } from "../../../modules/VPE";
 
 import { Modal } from "../../../VPE";
-import Editor from "../../../VPE/editor";
+// import Editor from "../../../VPE/editor";
 import { useArticle } from "../context/articleContext";
 import { sections as bodySections } from "../../../data/article/input/body";
 import { form as FieldsMap } from "../../../data/article/config/fieldMap";
@@ -99,7 +99,7 @@ const EmbeddedContentInnert = () => {
             )}
           >
             <div onClick={handleClickChild}>
-              <Editor editor={{onChange: () => ""}} ui={{ mode: "EMBEDDED", minHeight: "200px", maxHeight: "430px" }} />
+          {/*  <Editor editor={{onChange: () => ""}} ui={{ mode: "EMBEDDED", minHeight: "200px", maxHeight: "430px" }} /> */}   
             </div>
           </div>
         </div>
