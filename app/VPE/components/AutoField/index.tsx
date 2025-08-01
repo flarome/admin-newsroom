@@ -9,6 +9,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import {
@@ -24,14 +25,486 @@ import {
 import { useAppStore } from "@VPE/store";
 import { useSafeId } from "@/lib";
 import { NestedFieldContext } from "./context";
-import classNames from "classnames";
+import {classnames as classNames} from "lib";
 import { HyperlinkedTextClass, LabelledSettingClass } from "@VPE/styles/OnlineStore";
-import {BlockStack, Label} from "@polaris/npm"
+import {BlockStack, Label, Tooltip} from "@polaris/npm"
 import { type FactoryOptions } from "../../../lib/get-class-name-factory";
 import type { SpaceScale } from '@shopify/polaris-tokens';
 
 
 import { InlineStack } from "@polaris/internal";
+import { useFeatureFlags, useViewportContext } from "@VPE/contexts";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function renderHelpText(text?: string): string | null {
+  if (!text) return null;
+
+  return text;
+}
+
+
+
+interface PiProps {
+  id: string;
+  label: React.ReactNode;
+  error?: React.ReactNode;
+  highlightText?: string;
+  actions?: Action
+  helpText?: string;
+  helpTextPosition?: "below" | "above" | string;
+  children?: React.ReactNode;
+  inline?: boolean;
+  stacked?: boolean;
+  layout?: string;
+  labelBlockAlign?: string;
+}
+
+
+function FieldWrapperInner({
+  id,
+  label,
+  error,
+  highlightText,
+  actions,
+  helpText,
+  helpTextPosition = "below",
+  children,
+  layout,
+  labelTopPadding,
+  labelBlockAlign = "input-baseline",
+  tone,
+}: Props) {
+  const { denseUIEnabled } = useFeatureFlags(); // remplace Ja()
+
+  const isHelpTextBelow = helpTextPosition === "below";
+
+  const helpTextMarkup = helpText ? (
+    <HelpText
+      paddingBlockStart={denseUIEnabled ? undefined : "100"}
+      id={`HelpText-${id}`}
+      paddingBlockEnd={isHelpTextBelow ? undefined : "100"}
+    >
+      <HelpTextContent content={helpText} tone={tone} />
+    </HelpText>
+  ) : null;
+
+  const errorList = Array.isArray(error) || error == null ? error : [error];
+
+  const errorMarkup =
+    errorList && errorList.length > 0 ? (
+      <div className={denseUIEnabled ? styles.DenseError : styles.Error}>
+        {errorList.map((message, index) => (
+          <ErrorMessage key={index} message={message} fieldID={`Error-${id}`} />
+        ))}
+      </div>
+    ) : null;
+
+  const highlightMarkup = highlightText ? (
+    <HighlightText text={highlightText} />
+  ) : null;
+
+  const actionsMarkup = actions ? <ActionsWrapper wrap={false}>{actions}</ActionsWrapper> : null;
+
+  if (denseUIEnabled) {
+    if (layout === "stacked") {
+      return (
+        <StackedLayout
+          label={label}
+          id={id}
+          renderHelpTextBelow={isHelpTextBelow}
+          helpTextMarkup={helpTextMarkup}
+          actionsMarkup={actionsMarkup}
+          highlightMarkup={highlightMarkup}
+          errorMarkup={errorMarkup}
+          tone={tone}
+        >
+          {children}
+        </StackedLayout>
+      );
+    }
+    return (
+      <DefaultLayout
+        label={label}
+        id={id}
+        layout={layout}
+        helpTextMarkup={helpTextMarkup}
+        highlightMarkup={highlightMarkup}
+        errorMarkup={errorMarkup}
+        labelTopPadding={labelTopPadding}
+        labelBlockAlign={labelBlockAlign}
+        tone={tone}
+      >
+        {children}
+      </DefaultLayout>
+    );
+  }
+
+  // Non dense UI case
+
+  const labelWrapper = (
+    <>
+      <div className={styles.LabelWrapper}>
+        <LabelComponent id={id} tone={tone === Tone.Magic ? Tone.Magic : undefined}>
+          <span className={styles.Label}>{label}</span>
+        </LabelComponent>
+        {actionsMarkup}
+      </div>
+      {isHelpTextBelow ? null : helpTextMarkup}
+    </>
+  );
+
+  const content =
+    layout === "inline" ? (
+      <div className={styles.Wrapper}>
+        {labelWrapper}
+        {children}
+      </div>
+    ) : (
+      <>
+        {labelWrapper}
+        {children}
+      </>
+    );
+
+  return (
+    <>
+      {content}
+      {errorMarkup}
+      {isHelpTextBelow ? helpTextMarkup : null}
+      {highlightMarkup}
+    </>
+  );
+}
+
+interface Action {
+  disabled: boolean;
+  content: React.ReactNode;
+  disabledContent?: React.ReactNode;
+  icon?: React.ReactNode;
+  pickerToggle?: {
+    active: boolean;
+    togglePicker: () => void;
+    closePicker: () => void;
+  };
+  onAction?: () => void;
+  url?: string;
+  tooltipDisabled?: boolean;
+  pickerOptions?: {
+    width?: number | string;
+  };
+  pickerContent?: React.ReactNode;
+}
+
+interface ActionButtonProps {
+  action: Action;
+  fillContainer?: boolean;
+}
+
+
+interface PopoverProps {
+  children: ReactNode;
+  activator: ReactNode;
+  containerElement?: ElementType;
+  containerClassname?: string;
+  // Ajoute d'autres props spécifiques que Gee accepte ici si besoin
+  [key: string]: any;
+}
+
+
+
+
+
+interface UsePopoverAccessibilityPropsArgs {
+  id?: string;
+  open?: boolean;
+  ariaHasPopup?: string;
+}
+
+interface UsePopoverAccessibilityPropsResult {
+  activatorAccessibilityProps: {
+    "aria-controls": string;
+    "aria-expanded": boolean;
+    "aria-haspopup"?: string;
+  };
+  popoverAccessibilityProps: {
+    role: string;
+    id: string;
+  };
+  isOpen: boolean;
+  open: () => void;
+  close: () => void;
+  toggle: () => void;
+}
+
+
+// Fonction fictive pour générer un id accessible
+function getAccessibleId(base: string, id?: string) {
+  return id ? `${base}-${id}` : base;
+}
+
+// Fonction fictive pour définir le rôle en fonction de ariaHasPopup
+function getRole(ariaHasPopup?: string): string {
+  if (ariaHasPopup === "dialog") return "dialog";
+  if (ariaHasPopup === "menu") return "menu";
+  return "region";
+}
+
+
+function useBoolean(e: boolean) {
+    const [t,n] = useState(e);
+    return {
+        value: t,
+        toggle: useCallback( () => n(r => !r), []),
+        setTrue: useCallback( () => n(!0), []),
+        setFalse: useCallback( () => n(!1), [])
+    }
+}
+
+
+
+
+
+import { useUniqueId } from "@VPE/contexts/UniqueIdContext";
+
+export function usePopoverAccessibilityProps({
+  id,
+  open = false,
+  ariaHasPopup,
+}: UsePopoverAccessibilityPropsArgs): UsePopoverAccessibilityPropsResult {
+  const { value: isOpen, setTrue: openPopover, setFalse: closePopover, toggle } = useBoolean(open);
+
+  const popoverId = useUniqueId("Popover", id);
+
+  const activatorAccessibilityProps = useMemo(() => ({
+    "aria-controls": popoverId,
+    "aria-expanded": isOpen,
+    "aria-haspopup": ariaHasPopup,
+  }), [ariaHasPopup, popoverId, isOpen]);
+
+  const popoverAccessibilityProps = useMemo(() => ({
+    role: getRole(ariaHasPopup),
+    id: popoverId,
+  }), [ariaHasPopup, popoverId]);
+
+  return {
+    activatorAccessibilityProps,
+    popoverAccessibilityProps,
+    isOpen,
+    open: openPopover,
+    close: closePopover,
+    toggle,
+  };
+}
+
+
+
+function Popover({
+  children,
+  activator,
+  containerElement: Container = "div",
+  containerClassname,
+  ...restProps
+}: PopoverProps) {
+  const { activatorAccessibilityProps, popoverAccessibilityProps } = usePopoverAccessibilityProps({
+    ariaHasPopup: "dialog",
+  });
+
+  return (
+<>
+      <Container {...activatorAccessibilityProps} className={containerClassname}>
+        {activator}
+      </Container>
+      <Gee popoverAccessibilityProps={popoverAccessibilityProps} {...restProps}>
+        {children}
+      </Gee>
+   </>
+  );
+}
+
+
+
+import {styles as EditorStyles} from '@VPE/styles/Editor';
+
+function ActionButton({ action, fillContainer = false }: ActionButtonProps) {
+  const { mobile } = useViewportContext(); // remplace qe()
+  const { denseUIEnabled } = useFeatureFlags(); // remplace Wt()
+
+  const { disabled, content, disabledContent, icon } = action;
+  const hasPickerToggle = Boolean(action.pickerToggle);
+  const hasOnAction = Boolean(action.onAction);
+  const hasUrl = Boolean(action.url);
+  
+  const isTooltipDisabled =
+    action.tooltipDisabled ||
+    (action.pickerToggle?.active ?? false) ||
+    mobile ||
+    (disabled && !disabledContent);
+
+  function handleClick() {
+    if (hasPickerToggle) {
+      action.pickerToggle!.togglePicker();
+    } else if (hasOnAction) {
+      action.onAction!();
+    }
+  }
+
+  const buttonContent = (
+    <div
+      className={classNames(
+        EditorStyles.LabelAction,
+        action.pickerToggle?.active && !mobile && EditorStyles.active,
+        {
+          [EditorStyles.fillContainer]: fillContainer,
+          [EditorStyles.DenseUI]: denseUIEnabled,
+        }
+      )}
+    >
+      <TooltipWrapper content={disabled ? disabledContent : content} disabled={isTooltipDisabled}>
+        <Button
+          accessibilityLabel={content}
+          icon={icon}
+          onClick={handleClick}
+          disabled={disabled}
+          url={hasUrl ? action.url : undefined}
+          external={hasUrl}
+          slim
+          fillContainer={fillContainer}
+        />
+      </TooltipWrapper>
+    </div>
+  );
+
+  if (hasPickerToggle) {
+    return (
+      <Popover
+        activator={buttonContent}
+        active={action.pickerToggle!.active}
+        width={action.pickerOptions?.width}
+        onClose={action.pickerToggle!.closePicker}
+        containerElement={fillContainer ? "span" : "div"}
+      >
+        {action.pickerContent}
+      </Popover>
+    );
+  }
+
+  return <div>{buttonContent}</div>;
+}
+
+interface TooltipWrapperProps {
+  content: React.ReactNode;
+  children: React.ReactNode;
+  disabled?: boolean;
+}
+
+function TooltipWrapper({ content, children, disabled = false }: TooltipWrapperProps) {
+  if (disabled) return <>{children}</>;
+  return (
+    <Tooltip
+      content={content}
+      preferredPosition="above"
+      accessibilityLabel={content?.toString()}
+      dismissOnMouseOut
+    >
+      {children}
+    </Tooltip>
+  );
+}
+
+interface ActionsListProps {
+  actions: Action[];
+}
+
+export function ActionsList({ actions }: ActionsListProps) {
+  return <>{actions.map((action, index) => <ActionButton key={`Action-${index}`} action={action} />)}</>;
+}
+
+
+function FieldWrapper(props: PiProps) {
+  const {
+    id,
+    label,
+    error,
+    highlightText,
+    actions,
+    helpText,
+    helpTextPosition = "below",
+    children,
+    inline,
+    stacked,
+    layout,
+    labelBlockAlign,
+  } = props;
+
+  // Supposé hook/custom hook retournant si UI dense activé
+  const { denseUIEnabled } = useFeatureFlags();
+
+  const actionsElement = actions ? <ActionsList actions={actions} /> : null;
+
+  const helpTextElement = renderHelpText(helpText);
+
+  const computeLayout = () => {
+    if (layout) return layout;
+    if (stacked) return "stacked";
+    if (inline || denseUIEnabled) return "inline";
+    return "stacked";
+  };
+
+  return (
+    <FieldWrapperInner
+      id={id}
+      label={label}
+      error={error}
+      highlightText={highlightText}
+      actions={actionsElement}
+      helpText={helpTextElement}
+      helpTextPosition={helpTextPosition}
+      layout={computeLayout()}
+      labelBlockAlign={denseUIEnabled ? labelBlockAlign : undefined}
+    >
+      {children}
+    </FieldWrapperInner>
+  );
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export const FieldLabel = ({
   id,
@@ -73,30 +546,95 @@ style={styles}
   );
 };
 
+
+
+
+
+
+
+
 type FieldLabelPropsInternal = {
-  children?: ReactNode;
-  label?: string | ReactNode;
+
   readOnly?: boolean;
-  id: string;
   labelledOptions?: FactoryOptions;
   topPadding?: SpaceScale;
+
+
+  id: string;
+  label: string | React.ReactNode;
+  error?: React.ReactNode;
+  highlightText?: string;
+  actions?: React.ReactNode;
+  helpText?: React.ReactNode;
+  helpTextPosition?: "below" | "above" | string;
+  children?: React.ReactNode;
+  inline?: boolean;
+  stacked?: boolean;
+  layout?: string;
+  labelBlockAlign?: string;
 };
 
 export const FieldLabelInternal = ({
-  children,
-  label,
+
   readOnly,
-  id,
   labelledOptions,
-  topPadding
+  topPadding,
+
+
+      id,
+    label,
+    error,
+    highlightText,
+    actions,
+    helpText,
+    helpTextPosition = "below",
+    children,
+    inline,
+    stacked,
+    layout,
+    labelBlockAlign,
 }: FieldLabelPropsInternal) => {
+
+
+  const { denseUIEnabled } = useFeatureFlags();
+
+  const actionsElement = actions ? <ActionsWrapper actions={actions} /> : null;
+
+    const helpTextElement = renderHelpText(helpText);
+
+
+      const computeLayout = () => {
+    if (layout) return layout;
+    if (stacked) return "stacked";
+    if (inline || denseUIEnabled) return "inline";
+    return "stacked";
+  };
+
+
+    return (
+    <FieldWrapper
+      id={id}
+      label={label}
+      error={error}
+      highlightText={highlightText}
+      actions={actionsElement}
+      helpText={helpTextElement}
+      helpTextPosition={helpTextPosition}
+      layout={computeLayout()}
+      labelBlockAlign={denseUIEnabled ? labelBlockAlign : undefined}
+    >
+      {children}
+    </FieldWrapper>
+  );
+
+
 
   if (!label) {
     return <>{children}</>;
   }
 
 if(children) {
-  return (
+  return ( 
 
     <div className={LabelledSettingClass.DenseWrapper}>
     <FieldLabel 

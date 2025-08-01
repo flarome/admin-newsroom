@@ -5,10 +5,8 @@ import {
   getTopBarLayoutGroupClass,
   getTopBarExitActionClass,
   getTopBarLayoutGroupSpacingExtraClass,
-  getSegmentedControlClass,
-  getSegmentedControlOptionClass,
-  styles as OnlineStoreStyles,
   SegmentedControlClass,
+  styles as OnlineStoreStyles,
   getPlainActionClass,
 } from "@VPE/styles/OnlineStore";
 
@@ -227,10 +225,10 @@ const ZoomControl = () => {
 
   return (
     <ul
-      className={classnames(OnlineStoreStyles["Online-Store-UI-SegmentedControl__SegmentedControlContainer"], getSegmentedControlClass({ dense: true }, false))}
+      className={classnames(OnlineStoreStyles["Online-Store-UI-SegmentedControl__SegmentedControlContainer"], SegmentedControlClass._({ dense: true }, false))}
     >
       <li
-        className={`${OnlineStoreStyles["Online-Store-UI-SegmentedControl-Option__OptionWrapper"]} ${getSegmentedControlOptionClass({ dense: true, truncate: true, selected: zoomConfig === "DESKTOP" }, false)}`}
+        className={`${OnlineStoreStyles["Online-Store-UI-SegmentedControl-Option__OptionWrapper"]} ${SegmentedControlClass.Option._({ dense: true, truncate: true, selected: zoomConfig === "DESKTOP" }, false)}`}
       >
         <span>
           <ZoomControlItem
@@ -245,7 +243,7 @@ const ZoomControl = () => {
         </span>
       </li>
       <li
-        className={`${OnlineStoreStyles["Online-Store-UI-SegmentedControl-Option__OptionWrapper"]} ${getSegmentedControlOptionClass({ dense: true, truncate: true, selected: zoomConfig === "MOBILE" || zoomConfig === "MOBILE_LANDSCAPE" }, false)}`}
+        className={`${OnlineStoreStyles["Online-Store-UI-SegmentedControl-Option__OptionWrapper"]} ${SegmentedControlClass.Option._({ dense: true, truncate: true, selected: zoomConfig === "MOBILE" || zoomConfig === "MOBILE_LANDSCAPE" }, false)}`}
       >
         <span>
           <ZoomControlItem
@@ -262,7 +260,7 @@ const ZoomControl = () => {
         </span>
       </li>
       <li
-        className={`${OnlineStoreStyles["Online-Store-UI-SegmentedControl-Option__OptionWrapper"]} ${getSegmentedControlOptionClass({ dense: true, truncate: true, selected: zoomConfig === "FULLSCREEN" }, false)}`}
+        className={`${OnlineStoreStyles["Online-Store-UI-SegmentedControl-Option__OptionWrapper"]} ${SegmentedControlClass.Option._({ dense: true, truncate: true, selected: zoomConfig === "FULLSCREEN" }, false)}`}
       >
         <span>
           <ZoomControlItem

@@ -15,7 +15,7 @@ import { exposePostMessageTools } from "@/_dev";
 
 // --- VPE ---
 import type { Config, InputData, UserGenerics } from "@VPE/types";
-import { vpeInner } from "@VPE/context";
+import { vpeInner } from "@VPE/contexts";
 
 type VpeInnerWithoutOnChange<
   UserConfig extends Config = Config,

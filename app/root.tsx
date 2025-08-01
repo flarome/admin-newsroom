@@ -14,9 +14,6 @@ import { type LoaderFunctionArgs, type HeadersArgs } from "@remix-run/node";
 import { boundary } from "@shopify/shopify-app-remix/server";
 import P404 from "./frontend/_status/404";
 import styles from "./frontend/_status/404/styles/styles.css?url"
-import { getLanguageFromSession } from "./models/language.server";
-import { authenticate } from "./lib/shopify/shopify.server";
-
 
 export type RootLoaderData = {
   lang: string;

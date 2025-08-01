@@ -39538,6 +39538,7 @@ function RK(e) {
 function YX() {
     return D.useContext(O3)
 }
+//  
 function DK(e) {
     let {features: t, children: r} = e;
     const [a,i] = D.useState(null)
@@ -39546,7 +39547,7 @@ function DK(e) {
         className: lw(sF.AppProvider, {
             [sF.dense]: t?.denseUIEnabled
         }),
-        ref: i
+        ref: i  
     }, nt.createElement(RW, null, nt.createElement(uK, {
         features: t
     }, nt.createElement(mK, null, nt.createElement(lK.Provider, {
@@ -39556,7 +39557,7 @@ function DK(e) {
     }, nt.createElement(AM, {
         container: a
     }, r))))))))
-}
+}    
 function xK() {
     return D.useContext(oK)
 }

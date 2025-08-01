@@ -12,7 +12,7 @@ import {
 import { memo } from "react";
 
 import { useAppStore } from "@VPE/store";
-import { usePropsContext } from "@VPE/context";
+import { usePropsContext } from "@VPE/contexts";
 
 
 import {

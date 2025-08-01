@@ -15,7 +15,7 @@ import { EditorProps } from "./_plate/context/PropsContext";
 import { EditorContextProvider } from "./_plate/context/EditorContext";*/
 
 
-import { usePropsContext } from "@VPE/context/PropsContext";
+import { usePropsContext } from "@VPE/contexts/PropsContext";
 
 
 

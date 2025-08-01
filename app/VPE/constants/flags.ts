@@ -6,6 +6,6 @@ export const defaultFeatureFlags = {
   usesBottomSheet: false,
   disablesRightSidebar: false,
   denseUIEnabled: false,
-} as const;
+};
 
 export type FeatureFlags = typeof defaultFeatureFlags;

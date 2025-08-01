@@ -18,8 +18,9 @@ function getSubClassName(rootClass: string, subClass: string) {
 }
  
 /*-- AppProvider --*/
-export const getAppProviderClass = getClassNameFactory("AppProvider");
-
+export const AppProviderClass = {
+    _: getClassNameFactory("AppProvider")
+}
 /*-- Frame --*/
 export const getFrameClass = getClassNameFactory("Frame");
 export const getFrameSidebarClass = getClassNameFactory("Frame-Sidebar");
@@ -38,8 +39,6 @@ export const getTopBarExitActionClass = getClassNameFactory("TopBar-ExitAction")
 export const getTopBarLayoutGroupSpacingExtraClass = getClassNameFactory("TopBar-LayoutGroup__spacingExtra");
 
 /*-- SegmentedControl --*/
-export const getSegmentedControlClass = getClassNameFactory("SegmentedControl");
-export const getSegmentedControlOptionClass = getClassNameFactory("SegmentedControl-Option");
 export const SegmentedControlClass = {
     _: getClassNameFactory("SegmentedControl"),
     SegmentedControlContainer: getSubClassName("SegmentedControl", "SegmentedControlContainer"),
@@ -52,9 +51,6 @@ export const SegmentedControlClass = {
 
 }
 
-
-
-
 /*-- PlainAction --*/
 export const getPlainActionClass = getClassNameFactory("PlainAction");
 
@@ -65,7 +61,7 @@ export const getNavHeaderSectionClass = getClassNameFactory("NavHeader-Section")
 export const getStaticPanelLayoutClass = getClassNameFactory("StaticPanel-Layout");
 export const getStaticPanelHeaderClass = getClassNameFactory("StaticPanel-Header")
 
-
+/*-- StaticPanel --*/
 export const StaticPanelClass = {
     layout: {
         _: getClassNameFactory("StaticPanel-Layout"),
@@ -75,7 +71,7 @@ export const StaticPanelClass = {
 
 }
 
-
+/*-- SectionHeader --*/
 export const SectionHeaderClass = {
     _: getClassNameFactory("SectionHeader"),
     SubheadingWrapper: getSubClassName("SectionHeader", "SubheadingWrapper"),
@@ -89,7 +85,7 @@ export const SubheadingButtonClass = {
 
 
 
-
+/*-- LabelledSetting --*/
 export const LabelledSettingClass = {
     _: getClassNameFactory("LabelledSetting"),
 DenseLabelWrapper: getSubClassName("LabelledSetting", "DenseLabelWrapper"),
@@ -99,7 +95,7 @@ ChildrenWrapper: getSubClassName("LabelledSetting", "ChildrenWrapper"),
 }
 
 
-
+/*-- HyperlinkedText --*/
 export const HyperlinkedTextClass = {
     _: getClassNameFactory("HyperlinkedText"),
     _base: getClassName("HyperlinkedText")

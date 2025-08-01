@@ -2,7 +2,7 @@ import classNames from "classnames";
 import { useId, useRef } from "react";
 import {useSafeLayoutEffect} from '../../../hooks';
 import { SegmentedControlClass } from "../../styles/OnlineStore";
-import { useFeatureFlags, useViewportContext } from "../../context";
+import { useFeatureFlags, useViewportContext } from "../../contexts";
 import { Text, Tooltip, type TooltipProps } from "@polaris/npm";
 import {type IconType, InternalIcon  } from "../../../admin-ui-foundations";
 import {Tone} from '../../../constants/tone';  
@@ -106,14 +106,14 @@ export const Option: React.FC<OptionProps> = ({
 
 
 type SegmentedOption = {
-  value: string;
+  value: any;
   label: string;
   tooltip?: TooltipProps['content'];
   [key: string]: any; // permet d'étendre les props pour Option
 }
 
 interface SegmentedControlProps {
-  options: SegmentedOption[];
+  options: Array<SegmentedOption> | ReadonlyArray<SegmentedOption>;
   value: string;
   label?: string;
   onChange: (value: string) => void;

@@ -6,7 +6,9 @@ import classNames from "classnames";
 import { Text } from "@polaris/npm";
 
 
- 
+ import {SegmentedControl} from '@VPE/components/ui';
+import { useState } from "react";
+
 type RenderMode = "SegmentedControl" | "Select";
 
 function selectMode(options): RenderMode {
@@ -14,7 +16,7 @@ function selectMode(options): RenderMode {
 
   return options.length <= 3 ? "SegmentedControl" : "Select";
 }
-export const SelectField = ({
+export const SelectField = ({ 
   field,
   onChange,
   label,
@@ -29,6 +31,7 @@ export const SelectField = ({
     return null;
   } 
 
+ const [isOverflowed, setIsOverflowed] = useState(false);
 
 
 
@@ -44,7 +47,15 @@ export const SelectField = ({
       readOnly={readOnly}
       topPadding="200"
     >
- 
+
+      <SegmentedControl
+          accessibilityLabel={label || name}
+          options={field.options}
+          value={value}
+          onChange={onchange}
+          onOverflow={() => setIsOverflowed(true)}
+          tone={undefined}
+        />
 
 {field.options.length <= 3 ? (
  

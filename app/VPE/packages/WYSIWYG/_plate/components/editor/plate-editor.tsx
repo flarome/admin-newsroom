@@ -7,7 +7,7 @@ import { Plate, usePlateEditor, createPlateEditor } from 'platejs/react';
 import { EditorKit } from './editor-kit';
 import { SettingsDialog } from './settings-dialog';
 import { Editor, EditorContainer } from '../ui/editor';
-import { usePropsContext } from '../../../../../context/PropsContext';
+import { usePropsContext } from '../../../../../contexts/PropsContext';
 import { data as dataTEST } from '../../__test__/data';
 import { createUseVPE } from '../../../../../lib/use-vpe';
 

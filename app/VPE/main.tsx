@@ -1,27 +1,43 @@
 import { styles as ThemeStyles } from "@VPE/styles/Theme";
-import { getAppProviderClass } from "@VPE/styles/OnlineStore";
+import { AppProviderClass } from "@VPE/styles/OnlineStore";
 
-import { memo } from "react";
+import { memo, useState } from "react";
 
-import { DesignSystemProvider, PropsProvider, type  VPEBase} from "@VPE/context";
+import { DesignSystemProvider, FeatureFlagsProvider, PropsProvider, type  VPEBase, UniqueIdProvider, KeyboardShortcutProvider, ViewportProvider} from "@VPE/contexts";
 
 import App from "@VPE/app";
-import { useSafeId } from "@/lib";
+import { useSafeId } from "lib";;
 
 
-const Main = (props: VPEBase) => {
+const Main = (props: VPEBase) => { 
   const uniqueId = useSafeId();
+  const [ref,setRef] = useState<HTMLDivElement | null>(null);
+
   return ( 
 <>
       <div className={`${ThemeStyles["html"]} ${ThemeStyles["p-theme-light"]}`}>
         <div className={ThemeStyles["body"]}>
           <div id={`vpe-app-${uniqueId}`}>
-            <div className={getAppProviderClass({ dense: true })}>
+            <div ref={setRef} className={AppProviderClass._({ dense: true })}>
+
+<KeyboardShortcutProvider>
+<FeatureFlagsProvider features={{denseUIEnabled: true}}>
+
+<ViewportProvider>
+<UniqueIdProvider>
+
+
               <PropsProvider {...props} id={uniqueId}>
                 <DesignSystemProvider {...props}>
                   <App {...props} />
                 </DesignSystemProvider>
               </PropsProvider>
+
+              
+              </UniqueIdProvider>
+              </ViewportProvider>
+              </FeatureFlagsProvider>
+              </KeyboardShortcutProvider>
             </div>
           </div>
         </div>

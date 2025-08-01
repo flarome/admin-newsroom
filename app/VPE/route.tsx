@@ -11,7 +11,7 @@ import MainStyles from "@VPE/styles/Main.css?url";
 import { exposePostMessageTools } from "@/_dev";
 import { ChildChanel, type ChildAPI } from "@/utils";
 import type { LoaderData } from "../routes/a.m.vpe";
-import { type VPEBaseCallback, type vpeInner } from "./context/PropsContext";
+import { type VPEBaseCallback, type vpeInner } from "./contexts/PropsContext";
 import { VPE } from ".";
 
 export const links = [
