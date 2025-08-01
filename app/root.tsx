@@ -23,12 +23,7 @@ export type RootLoaderData = {
 };
 
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  const { session } = await authenticate.admin(request);
-  const lang = await getLanguageFromSession(session);
 
-  return { lang };
-}; 
 
 
 
@@ -92,16 +87,13 @@ export function HTML({lang, children}: {lang: string, children: React.ReactNode}
 }
 
 export function ErrorBoundary() {
-  const data = useLoaderData<typeof loader>();
-  const lang = data?.lang ?? (typeof document !== "undefined"
-    ? document.documentElement.lang
-    : "fr");
+ 
   const error = useRouteError();
 
   if (isRouteErrorResponse(error) && error.status === 404) {
 
       return (
-        <html lang={lang} dir="ltr">
+        <html lang={"fr"} dir="ltr">
           <head>
             <meta charSet="utf-8" />
             <meta
