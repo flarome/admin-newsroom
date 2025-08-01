@@ -2,7 +2,7 @@ import { useEffect, useCallback, useState } from "react";
 import { useHref, useNavigate } from "@remix-run/react";
 import { useAppBridge, TitleBar } from "@shopify/app-bridge-react";
 
-import { Page as PolarisPage, Badge, BlockStack } from "@shopify/polaris";
+import { Page as PolarisPage, Badge, BlockStack } from "@polaris/npm";
 import { DeleteIcon, ViewIcon } from "@shopify/polaris-icons";
 import { useArticle } from "./context/articleContext";
 import { get as fetchAdjacentArticle } from "./services/adjacentArticle";
@@ -16,7 +16,7 @@ import {
   AppWrapper as AppWrapperV2,
   PageGroup,
   Text as TextV2,
-} from "@polaris/22.1.0";
+} from "@polaris/internal";
 
 
 import {  SaveBar } from "./structures";

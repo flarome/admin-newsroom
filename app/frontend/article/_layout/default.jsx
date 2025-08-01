@@ -2,7 +2,7 @@
 
 import {  useHref } from "@remix-run/react";
 
-import { Page, Badge, Layout, BlockStack, Text, Button, InlineGrid, Box, List, Spinner } from "@shopify/polaris";
+import { Page, Badge, Layout, BlockStack, Text, Button, InlineGrid, Box, List, Spinner } from "@polaris/npm";
 
  
 import {
@@ -29,7 +29,7 @@ import {
   AppWrapper as AppWrapperV2,
   PageGroup,
   Text as TextV2,
-} from "@polaris/22.1.0";
+} from "@polaris/internal";
 
 import { Banner as BannerForm } from "../../../modules/form/components";
 import { Actions } from "../structures";

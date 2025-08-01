@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { useLocation, useNavigate } from "@remix-run/react";
-import { Banner as ShopifyBanner, Text, Link, Button } from "@shopify/polaris";
+import { Banner as ShopifyBanner, Text, Link, Button } from "@polaris/npm";
 import { CheckCircleIcon } from "@shopify/polaris-icons";
 import { useArticle } from "../context/articleContext";
 import { useGetUrl } from "../selectors/article";

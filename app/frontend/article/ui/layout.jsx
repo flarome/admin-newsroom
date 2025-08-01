@@ -1,4 +1,4 @@
-import { Layout, Text, Button, InlineGrid, Box } from "@shopify/polaris";
+import { Layout, Text, Button, InlineGrid, Box } from "@polaris/npm";
 
 import {
   Card as CardV2,
@@ -6,7 +6,7 @@ import {
   AppWrapper as AppWrapperV2,
   PageGroup,
   Text as TextV2,
-} from "@polaris/22.1.0";
+} from "@polaris/internal";
 
 import { Controller, useFormContext } from "react-hook-form";
 

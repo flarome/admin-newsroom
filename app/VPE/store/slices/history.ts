@@ -1,6 +1,6 @@
 import { AppState, History } from "../../types";
 import { AppStore, useAppStoreApi } from "../";
-import { generateId } from "lib/generate-id";
+import { generateId } from "@/lib/generate-id";
 
 export type HistorySlice<D = any> = {
   index: number;

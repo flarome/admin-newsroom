@@ -19,7 +19,7 @@ export const useChat = () => {
       abortControllerRef.current = null;
     }
   };
-
+ 
   const chat = useBaseChat({
     id: 'editor',
     // Mock the API response. Remove it when you implement the route /api/ai/command

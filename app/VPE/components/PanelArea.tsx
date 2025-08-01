@@ -1,13 +1,13 @@
-import { styles as LoadingStyles } from "styles/Loading";
-import { styles as OnlineStoreStyles } from "styles/OnlineStore";
+import { styles as LoadingStyles } from "@VPE/styles/Loading";
+import { styles as OnlineStoreStyles } from "@VPE/styles/OnlineStore";
 
-import { useAppStore } from "store";
+import { useAppStore } from "@VPE/store";
 
 import {
   SkeletonBodyText,
   SkeletonDisplayText,
   SkeletonThumbnail,
-} from "@shopify/polaris";
+} from "@polaris/npm";
 
 import { Sections } from "./Sections";
 import { Settings } from "./Settings";

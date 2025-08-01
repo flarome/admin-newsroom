@@ -16,7 +16,7 @@ function getClassName(rootClass: string) {
 function getSubClassName(rootClass: string, subClass: string) {
     return getClassName(`${rootClass}__${subClass}`)
 }
-
+ 
 /*-- AppProvider --*/
 export const getAppProviderClass = getClassNameFactory("AppProvider");
 
@@ -41,13 +41,19 @@ export const getTopBarLayoutGroupSpacingExtraClass = getClassNameFactory("TopBar
 export const getSegmentedControlClass = getClassNameFactory("SegmentedControl");
 export const getSegmentedControlOptionClass = getClassNameFactory("SegmentedControl-Option");
 export const SegmentedControlClass = {
+    _: getClassNameFactory("SegmentedControl"),
+    SegmentedControlContainer: getSubClassName("SegmentedControl", "SegmentedControlContainer"),
     Option: {
         _: getClassNameFactory("SegmentedControl-Option"),
         ButtonContainer: getSubClassName("SegmentedControl-Option", "ButtonContainer"),
         SegmentedControlItem:  getSubClassName("SegmentedControl-Option", "SegmentedControlItem"),
+        OptionWrapper: getSubClassName("SegmentedControl-Option", "OptionWrapper"),
     }
 
 }
+
+
+
 
 /*-- PlainAction --*/
 export const getPlainActionClass = getClassNameFactory("PlainAction");
@@ -58,3 +64,43 @@ export const getNavHeaderSectionClass = getClassNameFactory("NavHeader-Section")
 /*-- StaticPanel --*/
 export const getStaticPanelLayoutClass = getClassNameFactory("StaticPanel-Layout");
 export const getStaticPanelHeaderClass = getClassNameFactory("StaticPanel-Header")
+
+
+export const StaticPanelClass = {
+    layout: {
+        _: getClassNameFactory("StaticPanel-Layout"),
+        section: getSubClassName("StaticPanel-Layout", "Section"),
+        ChildrenWrapper: getSubClassName("StaticPanel-Layout", "ChildrenWrapper"),
+    }
+
+}
+
+
+export const SectionHeaderClass = {
+    _: getClassNameFactory("SectionHeader"),
+    SubheadingWrapper: getSubClassName("SectionHeader", "SubheadingWrapper"),
+}
+
+/*-- SubheadingButton --*/
+export const SubheadingButtonClass = {
+    _: getClassNameFactory("SubheadingButton"),
+}
+
+
+
+
+
+export const LabelledSettingClass = {
+    _: getClassNameFactory("LabelledSetting"),
+DenseLabelWrapper: getSubClassName("LabelledSetting", "DenseLabelWrapper"),
+DenseLabel: getSubClassName("LabelledSetting", "DenseLabel"),
+DenseWrapper: getSubClassName("LabelledSetting", "DenseWrapper"),
+ChildrenWrapper: getSubClassName("LabelledSetting", "ChildrenWrapper"),
+}
+
+
+
+export const HyperlinkedTextClass = {
+    _: getClassNameFactory("HyperlinkedText"),
+    _base: getClassName("HyperlinkedText")
+}

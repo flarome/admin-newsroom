@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "include": [
+    "env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "global.d.ts",
+    "**/*.cts",
+    "**/*.ctsx",
+    "**/*.mts",
+    "**/*.mtsx"
+  ],
+  "exclude": ["node_modules", "build"],
+  "compilerOptions": {
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "strict": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "allowSyntheticDefaultImports": true,
+    "removeComments": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "jsx": "react-jsx",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "target": "ES2022",
+    "baseUrl": "./app",
+    "types": ["node"],
+
+
+
+
+
+      //  "noImplicitOverride": false, // true?
+     //   "noFallthroughCasesInSwitch": false, // true de base ?
+     //   "exactOptionalPropertyTypes": false, // true?
+        "allowUnreachableCode": false,
+        "allowUnusedLabels": false,
+      "strictNullChecks": true,
+       // "noUncheckedIndexedAccess": false,
+        "noUnusedLocals": false,
+        "noUnusedParameters": false,
+        "checkJs": false,
+        "esModuleInterop": true,
+        "moduleDetection": "force", // test
+        "allowImportingTsExtensions": false,
+        "incremental": true,
+        "declaration": false,
+        "declarationMap": false,
+        "sourceMap": true, // set undefined in production
+        "pretty": true,
+        "preserveWatchOutput": true,
+
+
+    "paths": {
+      "~": ["."],
+      "@/*": ["."],
+      "@polaris/*": ["./polaris/*"],
+      "react-tweet": ["../node_modules/react-tweet/dist/swr.js"]
+    }
+  }
+}

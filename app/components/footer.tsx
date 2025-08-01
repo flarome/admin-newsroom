@@ -5,7 +5,7 @@ import {
   Button,
   Text,
   Box,
-} from "@shopify/polaris";
+} from "@polaris/npm";
 import { GlobeIcon } from "@shopify/polaris-icons";
 import { getYear } from "../utils/date";
 import { useGlobalLang, useSetGlobalLang } from "../i18n/global";

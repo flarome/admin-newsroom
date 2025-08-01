@@ -1,4 +1,4 @@
-import { Select, FormLayout } from "@shopify/polaris";
+import { Select, FormLayout } from "@polaris/npm";
 import _ from "lodash";
 import { Controller, useFormContext } from "react-hook-form";
 import { useArticle } from "../context/articleContext";

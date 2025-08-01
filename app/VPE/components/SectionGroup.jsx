@@ -14,7 +14,7 @@ import {
   Scrollable,
   BlockStack,
   OptionList,
-} from "@shopify/polaris";
+} from "@polaris/npm";
 import {
   CaretDownIcon,
   ChevronDownIcon,

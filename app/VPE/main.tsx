@@ -1,16 +1,16 @@
-import { styles as ThemeStyles } from "styles/Theme";
-import { getAppProviderClass } from "styles/OnlineStore";
+import { styles as ThemeStyles } from "@VPE/styles/Theme";
+import { getAppProviderClass } from "@VPE/styles/OnlineStore";
 
-import { memo, useId } from "react";
+import { memo } from "react";
 
-import { DesignSystemProvider } from "./context/DesignSystemContext";
-import { PropsProvider, VPEBase } from "context/PropsContext";
+import { DesignSystemProvider, PropsProvider, type  VPEBase} from "@VPE/context";
 
-import App from "./app";
+import App from "@VPE/app";
+import { useSafeId } from "@/lib";
 
 
 const Main = (props: VPEBase) => {
-  const uniqueId = useId();
+  const uniqueId = useSafeId();
   return ( 
 <>
       <div className={`${ThemeStyles["html"]} ${ThemeStyles["p-theme-light"]}`}>

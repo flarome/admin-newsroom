@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useCallback } from "react";
 import { Modal as AppModal } from "@shopify/app-bridge-react";
-import { Modal as PolarisModal, Text } from "@shopify/polaris";
+import { Modal as PolarisModal, Text } from "@polaris/npm";
 import { TitleBar } from "@shopify/app-bridge-react";
 import { useAppBridge } from "@shopify/app-bridge-react";
 import { useArticle } from "./articleContext";

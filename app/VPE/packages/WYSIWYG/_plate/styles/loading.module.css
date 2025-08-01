@@ -1,0 +1,24 @@
+.spinner {
+ /*  box-sizing: border-box;
+    margin: 0;
+    min-width: 0;
+    padding: 0;
+        flex-basis: 100%;
+    max-width: 100%;
+        inset-inline-start: 48.25%;
+   position: absolute;
+    top: 50%;
+    z-index: 99999*/
+
+
+
+        position: absolute;
+    inset: 0px;
+    display: flex
+;
+    justify-content: center;
+    align-items: center;
+
+
+    
+}

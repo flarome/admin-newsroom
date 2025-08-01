@@ -1,12 +1,12 @@
 
-import { styles as EditorStyles } from "styles/Editor";
+import { styles as EditorStyles } from "@VPE/styles/Editor";
 import {
   getNavHeaderSectionClass,
   getStaticPanelLayoutClass,
   styles as OnlineStoreStyles,
-} from "styles/OnlineStore";
+} from "@VPE/styles/OnlineStore";
 
-import { Box, Text } from "@shopify/polaris";
+import { Box, Text } from "@polaris/npm";
 
 export const Sections = () => (
   <>

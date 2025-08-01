@@ -1,5 +1,5 @@
 import { Data } from "../../types";
-import { generateId } from "../../lib/generate-id";
+import { generateId } from "../../../lib/generate-id";
 import { DuplicateAction } from "../actions";
 import { PrivateAppState } from "../../types/Internal";
 import { walkAppState } from "../../lib/data/walk-app-state";

@@ -1,5 +1,5 @@
-import { styles as LoadingStyles } from "styles/Loading";
-import { styles as EditorStyles } from "styles/Editor";
+import { styles as LoadingStyles } from "@VPE/styles/Loading";
+import { styles as EditorStyles } from "@VPE/styles/Editor";
 import {
   getTopBarClass,
   getTopBarLayoutGroupClass,
@@ -10,12 +10,12 @@ import {
   styles as OnlineStoreStyles,
   SegmentedControlClass,
   getPlainActionClass,
-} from "styles/OnlineStore";
+} from "@VPE/styles/OnlineStore";
 
 import { useShallow } from "zustand/react/shallow";
 import { CSSProperties, memo, ReactNode, useCallback } from "react";
 
-import { useAppStore } from "store";
+import { useAppStore } from "@VPE/store";
 
 import {
   Badge,
@@ -24,13 +24,14 @@ import {
   SkeletonDisplayText,
   Text,
   Tooltip,
-} from "@shopify/polaris";
+} from "@polaris/npm";
 
-import { LegacyIcon } from "LegacyIcon";
+import { LegacyIcon } from "@VPE/LegacyIcon";
 import { IconType, InternalIcon } from "../../admin-ui-foundations";
 import clsx from "clsx";
 
 import classnames from "classnames";
+import { useAppBridge } from "@shopify/app-bridge-react";
 
 export const SkeletonHeader = () => (
   <>
@@ -165,20 +166,44 @@ const HistoryButtons = () => (
   </>
 );
 
-const SaveButton = memo(() => (
-  <Tooltip content="Enregistrer">
-    <Button
-      variant="primary"
-      size="medium"
-      textAlign="center"
-      disabled={false}
-      onClick={() => ""}
-    >
-      Enregistrer
-    </Button>
-  </Tooltip>
-));
 
+
+const SaveButton = memo(() => {
+  const shopify = useAppBridge();
+
+  const { save, modified, saving } = useAppStore(
+    useShallow((s) => ({
+      save: s.save,
+      saving: s.saving,
+      modified: s.modified,
+    }))
+  );
+
+  const handleClick = async () => {
+    const success = await save();
+     console.log("Success:", success); // <--- check ici
+    if (success) {
+      shopify.toast.show("Enregistrement réussi");
+    } else {
+      shopify.toast.show("Erreur lors de l'enregistrement", {isError: true});
+    }
+  };
+
+  return (
+    <Tooltip content="Enregistrer">
+      <Button
+        variant="primary"
+        size="medium"
+        textAlign="center"
+        loading={saving}
+        disabled={saving || !modified}
+        onClick={handleClick}
+      >
+        Enregistrer
+      </Button>
+    </Tooltip>
+  );
+});
 const ZoomControl = () => {
   const { zoomConfig, setZoomConfig } = useAppStore(
     useShallow((s) => ({

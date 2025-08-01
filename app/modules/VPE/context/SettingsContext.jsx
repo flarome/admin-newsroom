@@ -295,7 +295,7 @@ useEffect(() => {
       {children}
     </SettingsContext.Provider>
   );
-}
+} 
 
 export function useSettings() {
   const ctx = useContext(SettingsContext);

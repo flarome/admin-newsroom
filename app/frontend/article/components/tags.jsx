@@ -5,7 +5,7 @@ import {
   FormLayout,
   BlockStack,
   InlineStack,
-} from "@shopify/polaris";
+} from "@polaris/npm";
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 import { PlusCircleIcon } from "@shopify/polaris-icons";
 import _ from "lodash";

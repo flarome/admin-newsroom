@@ -18,7 +18,7 @@ import {
   FormLayout,
   ProgressBar,
   Select,
-} from "@shopify/polaris";
+} from "@polaris/npm";
 import {
  
   ClipboardIcon,

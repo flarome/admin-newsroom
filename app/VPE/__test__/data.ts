@@ -4,7 +4,7 @@ export const WYSIWYGData =
 [ 
   {
     children: [{ text: "Welcome to the Plate Playground!" }],
-    type: "h1",
+    type: "h1", 
   },
   {
     children: [
@@ -15,7 +15,7 @@ export const WYSIWYGData =
       {
         text: ". This playground showcases just a part of Plate's capabilities. ",
       },
-      {
+      { 
         children: [{ text: "Explore the documentation" }],
         type: "a",
         url: "/docs",
@@ -570,8 +570,93 @@ export const settingsData = {
     },
   }, 
 };
+export const SETTINGS_CATALOG =
 
-export const SETTINGS_CATALOG = [
+
+
+
+[
+  { name: "title", value: "oldestUpdate", field: {
+             // label: "Type",
+                type: "select",
+                options: [
+                   {label: 'Newest update', value: 'newestUpdate'},
+    {label: 'Oldest update', value: 'oldestUpdate'},
+    {label: 'Most spent', value: 'mostSpent'},
+
+                ]
+            } },
+
+  {
+    name: "seo",
+    label: "SEO",
+    settings: [
+      { name: "seoTitle", field: {
+             // label: "Type",
+                type: "select",
+                options: [
+                   {label: 'Newest update', value: 'newestUpdate'},
+    {label: 'Oldest update', value: 'oldestUpdate'},
+    {label: 'Most spent', value: 'mostSpent'},
+    {label: 'Most orders', value: 'mostOrders'},
+    {label: 'Last name A–Z', value: 'lastNameAlpha'},
+    {label: 'Last name Z–A', value: 'lastNameReverseAlpha'},
+                ]
+            } },
+      { name: "seoDesc", field: {
+             // label: "Type",
+                type: "select",
+                options: [
+                   {label: 'Newest update', value: 'newestUpdate'},
+    {label: 'Oldest update', value: 'oldestUpdate'},
+    {label: 'Most spent', value: 'mostSpent'},
+    {label: 'Most orders', value: 'mostOrders'},
+    {label: 'Last name A–Z', value: 'lastNameAlpha'},
+    {label: 'Last name Z–A', value: 'lastNameReverseAlpha'},
+                ]
+            } },
+    ],
+  },
+
+  {
+    name: "group_general",
+    label: "General",
+    settings: [
+      { name: "subtitle",   field: {
+             // label: "Type",
+                type: "select",
+                options: [
+                   {label: 'Newest update', value: 'newestUpdate'},
+    {label: 'Oldest update', value: 'oldestUpdate'},
+    {label: 'Most spent', value: 'mostSpent'},
+    {label: 'Most orders', value: 'mostOrders'},
+    {label: 'Last name A–Z', value: 'lastNameAlpha'},
+    {label: 'Last name Z–A', value: 'lastNameReverseAlpha'},
+                ]
+            }
+           },
+      {
+        name: "advanced",
+        label: "Advanced",
+        settings: [
+          { name: "jsonLd", field: {
+             // label: "Type",
+                type: "select",
+                options: [
+                   {label: 'Newest update', value: 'newestUpdate'},
+    {label: 'Oldest update', value: 'oldestUpdate'},
+    {label: 'Most spent', value: 'mostSpent'},
+    {label: 'Most orders', value: 'mostOrders'},
+    {label: 'Last name A–Z', value: 'lastNameAlpha'},
+    {label: 'Last name Z–A', value: 'lastNameReverseAlpha'},
+                ]
+            } },
+        ],
+      },
+    ],
+  },
+];
+export const SETTINGS_CATALOG1 = [
   {
     title: "Hero Section",
     name: "hero",
@@ -587,7 +672,7 @@ export const SETTINGS_CATALOG = [
         title: "Image",
         props: [
           {
-            name: "title",
+            name: "title", 
             type: "plainText",
             label: "Title",
             value: "Hero title",
@@ -1047,6 +1132,49 @@ export const sectionsData = {
   modele: [],
   // Ajoute ici tes groupes custom
 };
+
+
+
+export const sectionsData1 =  [ 
+    {
+      title: "Hero Section",
+      type: "hero", 
+      visible: true,
+      blocks: [
+        {
+          type: "text_block",
+        },
+        {
+          type: "text_block",
+        },
+        {
+          type: "text_block",
+        },
+        {
+          type: "text_block",
+        },
+      ],
+      values: {
+        title: "data title",
+        cta: {
+          showCta: false,
+        },
+      },
+    },
+    {
+      title: "Hero Section",
+      type: "hero",
+      visible: true,
+      values: {},
+    },
+    {
+      title: "Hero Section",
+      type: "hero",
+      visible: true,
+      values: {},
+    },
+  ];
+
 
 export const SECTIONS_CATALOG = {
   header: { label: "header", sections: SECTION_CATALOG },

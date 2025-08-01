@@ -2,17 +2,18 @@ import { create, useStore, StoreApi } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
 import { createContext, useContext } from "react";
 
-import type { AppState,  Config, UserGenerics } from "../types";
-import { VPEAction, createReducer } from "reducer";
+import type { AppState,  Config, InputData, UserGenerics, Data } from "@VPE/types";
+import { VPEAction, createReducer } from "@VPE/reducer";
 import { createHistorySlice, HistorySlice } from "./slices/history";
+
 
 export type Status = "LOADING" | "MOUNTED" | "READY";
 export type Actions = "SECTIONS" | "SETTINGS";
 
-
 import { defaultAppState } from "./default-app-state";
+import { defaultAppConfig } from "./default-app-config";
 
-
+export {defaultAppState, defaultAppConfig}
 
 export type ZoomConfig =
   | "DESKTOP"
@@ -33,8 +34,10 @@ export type AppStore<
   dispatch: (action: VPEAction) => void;
   
   onAction?: (action: VPEAction, newState: AppState, state: AppState) => void;
+  onSave?: (data: InputData) => void | Promise<void>;
+  save:  () => Boolean | Promise<Boolean>;
+
   history: HistorySlice;
-  
 
   zoomConfig: ZoomConfig;
   setZoomConfig: (zoomConfig: ZoomConfig) => void;
@@ -46,10 +49,22 @@ export type AppStore<
   setSelectedAction: (selectedAction: Actions) => void;
 
 
-   state: G["UserAppState"];
-     config: UserConfig;
+  selectedSetting: string;
+  setSelectedSetting: (selectedSetting: string) => void;
 
-  
+
+    saving: boolean;
+    setSaving: (saving: boolean) => void;
+
+
+   state: G["UserAppState"];
+   lastSavedData: Data;
+setLastSavedData: (lastSavedState: Data) => void;
+modified: boolean;
+
+     config: G["UserConfig"];
+
+   
 };
 
 export type AppStoreApi = StoreApi<AppStore>;
@@ -58,6 +73,8 @@ export type AppStoreApi = StoreApi<AppStore>;
 export const createAppStore = (initialAppStore?: Partial<AppStore>) =>
   create<AppStore>()(
     subscribeWithSelector((set, get) => ({
+
+      
       zoomConfig: "DESKTOP",
       setZoomConfig: (zoomConfig) => set({ zoomConfig }),
 
@@ -68,11 +85,48 @@ export const createAppStore = (initialAppStore?: Partial<AppStore>) =>
       setSelectedAction: (selectedAction) => set({ selectedAction }),
 
 
+      saving: false,
+      setSaving: (saving) => set({ saving }),
+
+
+      onSave: () => {},
+     
+
       // Default content
-      config: { settings: { catalog: {} }, content: { catalog: {} } },
+      config: defaultAppConfig,
       state: defaultAppState, 
+      
  
       ...initialAppStore,
+
+
+      selectedSetting: "",
+     setSelectedSetting: (selectedSetting) => set({ selectedSetting }),
+
+
+      lastSavedData: initialAppStore?.state?.data || defaultAppState.data,
+      setLastSavedData: (newState) => set({ lastSavedData: newState }),
+      modified: false,
+save: async () => {
+  set({ saving: true }); // démarre tout de suite le mode saving
+  try {
+    const onSave = get().onSave;
+    const saveData = get().state.data;
+
+    if (typeof onSave === "function") {
+      await Promise.resolve(onSave(saveData));
+    }
+
+    set({ lastSavedData: saveData, modified: false });
+    return true;
+  } catch (error) {
+    console.error("Erreur lors de la sauvegarde :", error);
+    return false;
+  } finally {
+    set({ saving: false });
+  }
+},
+      
       history: createHistorySlice(set, get),
 
         dispatch: (action: VPEAction) =>
@@ -100,7 +154,7 @@ export const createAppStore = (initialAppStore?: Partial<AppStore>) =>
 
     }))
   );
-
+ 
 export const appStoreContext = createContext<AppStoreApi>(createAppStore());
 
 export function useAppStore<T>(selector: (state: AppStore) => T) {

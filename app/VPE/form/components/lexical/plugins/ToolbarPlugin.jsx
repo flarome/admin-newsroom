@@ -28,7 +28,7 @@ import {
   TextField,
   Popover,
   
-} from "@shopify/polaris";
+} from "@polaris/npm";
 
 import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
 import { mergeRegister } from "@lexical/utils";

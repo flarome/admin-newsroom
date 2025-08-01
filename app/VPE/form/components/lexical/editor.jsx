@@ -263,7 +263,7 @@ function MyOnChangePlugin({ onChange }) {
   return null;
 }
 
-import { ActionList, AppProvider, Popover } from "@shopify/polaris";
+import { ActionList, AppProvider, Popover } from "@polaris/npm";
 
 import polarisTranslations from "@shopify/polaris/locales/fr.json";
 

@@ -15,11 +15,11 @@ import {
   Collapsible,
   DropZone, 
   ActionList,
-} from "@shopify/polaris";
+} from "@polaris/npm";
 
 
 
-import { Card as CardV2 } from "@polaris/22.1.0";
+import { Card as CardV2 } from "@polaris/internal";
 import {
   DeleteIcon,
   NoteIcon,

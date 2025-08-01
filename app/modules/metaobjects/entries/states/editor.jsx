@@ -21,7 +21,7 @@ import {
   Box,
   Popover,
   ColorPicker,
-} from "@shopify/polaris";
+} from "@polaris/npm";
 import { Banner } from "../../../form/components";
 import { prefix } from "../config/ids";
 import { EditIcon, ClipboardIcon } from "@shopify/polaris-icons";

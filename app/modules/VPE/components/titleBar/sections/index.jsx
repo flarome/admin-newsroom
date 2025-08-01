@@ -1,7 +1,7 @@
 import React, { useState, useMemo } from "react";
 import clsx from "clsx";
 
-import { Icon, Text, Box, BlockStack } from "@shopify/polaris";
+import { Icon, Text, Box, BlockStack } from "@polaris/npm";
 import { ChevronLeftIcon } from "@shopify/polaris-icons";
 
 import { Fields } from "../form";

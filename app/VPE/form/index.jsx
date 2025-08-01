@@ -1,6 +1,6 @@
 // DebouncedField.jsx
 import { useDebouncedFieldValue } from "./utils/debounce";
-import { TextField, Checkbox, Select } from "@shopify/polaris";
+import { TextField, Checkbox, Select } from "@polaris/npm";
 import { Inline } from "./components/lexical";
 
 import { RangeSlider } from "./components";

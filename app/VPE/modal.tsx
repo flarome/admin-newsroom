@@ -1,15 +1,26 @@
-// components/CMS.tsx
 import { memo, useEffect, useRef, useState } from "react";
-import { Modal as BridgeModal, TitleBar } from "@shopify/app-bridge-react";
-import { createMessageChannel } from "../utils/postMessageSecure";
-import { v4 as uuidv4 } from "uuid";
-import { useGlobalLang } from "../i18n/global";
-import { exposePostMessageTools } from "../_dev";
-import { ModalProps } from "./route";
-import { messageChanel } from "./_intercom";
 
-import { Config, UserGenerics } from "./types";
-import { useRoutes } from "../routes";
+// --- Shopify App Bridge ---
+import { Modal as BridgeModal, TitleBar } from "@shopify/app-bridge-react";
+
+// --- Utils ---
+import { ParentChanel, type ParentAPI } from "@/utils";
+import { generateId } from "@/lib";
+
+// --- Routing ---
+import { useRoutes } from "@/routes";
+
+// --- Dev Only ---
+import { exposePostMessageTools } from "@/_dev";
+
+// --- VPE ---
+import type { Config, InputData, UserGenerics } from "@VPE/types";
+import { vpeInner } from "@VPE/context";
+
+type VpeInnerWithoutOnChange<
+  UserConfig extends Config = Config,
+  G extends UserGenerics<UserConfig> = UserGenerics<UserConfig>,
+> = Omit<vpeInner<UserConfig, G>, "onChange">;
 
 interface CMSProps<
   UserConfig extends Config = Config,
@@ -18,19 +29,29 @@ interface CMSProps<
   open: boolean;
   modalId: string;
   closeModal: () => void;
-  data: ModalProps;
-  onChange?: (data: Partial<G["UserData"]>) => void;
+  root: VpeInnerWithoutOnChange;
+  onChange?: (data: InputData) => void;
 }
 
-const CMS = ({ open, modalId, closeModal, data, onChange }: CMSProps) => {
+const token = generateId();
+
+const CMS = ({ open, modalId, closeModal, root: data, onChange }: CMSProps) => {
   const modalRef = useRef<HTMLIFrameElement | null>(null);
-  const [channel, setChannel] = useState<ReturnType<
-    typeof createMessageChannel
-  > | null>(null);
-  const [iframeReady, setIframeReady] = useState(false);
-  const [token] = useState(() => uuidv4());
+  const [channel, setChannel] = useState<InstanceType<typeof ParentAPI> | null>(
+    null,
+  );
+
+  // const [token] = useState(() => uuidv4());
+  const lastToken = useRef<String>();
+  const dataRef = useRef(data);
+  const onChangeRef = useRef(onChange);
 
   const routes = useRoutes();
+
+  useEffect(() => {
+    dataRef.current = data;
+    onChangeRef.current = onChange;
+  }, [data, onChange]);
 
   // Récupère le modal
   useEffect(() => {
@@ -39,73 +60,65 @@ const CMS = ({ open, modalId, closeModal, data, onChange }: CMSProps) => {
 
   // Crée le channel une seule fois
   useEffect(() => {
-    if (!modalRef.current) return;
+    if (channel && token === lastToken.current) return;
+    lastToken.current = token;
 
     console.log("[CMS] Creating secure message channel...");
-    const ch = createMessageChannel({
-      targetOrigin: window.location.origin,
+
+    const ch = new ParentChanel({
+      url: window.location.origin,
       token,
+      model: {
+        data: () => dataRef.current,
+        setData: (data) => onChangeRef.current?.(data),
+      },
     });
 
-    setChannel(ch);
 
-    ch.on(messageChanel._READY, () => {
-      console.log("[CMS] Received READY message from iframe");
-      setIframeReady(true);
-      ch.send(messageChanel._ACK, { msg: "Ready received" });
-    });
+     if (process.env.NODE_ENV !== "production") {
+ParentChanel.debug = true;
+     }
 
-    ch.on(messageChanel._ACK, (payload) => {
-      console.log("[CMS] Received ACK from iframe:", payload);
-    });
 
-    ch.on(messageChanel.set, (data: ModalProps) => {
-      console.log("[CMS] Received DATA:", data);
-      onChange?.(data?.data);
-      ch.send(messageChanel._ACK, { msg: "Data received" });
+
+
+    let isCancelled = false;
+    let currentAPI: InstanceType<typeof ParentAPI> | null = null;
+
+    ch.awaitHandshake().then((api) => {
+      if (isCancelled) {
+        // le composant a été démonté entre-temps → on clean l’API
+        api.destroy();
+        return;
+      }
+      currentAPI = api;
+      setChannel(api);
     });
 
     return () => {
-      console.log("[CMS] Destroying message channel");
-      ch.destroy();
+      isCancelled = true;
+      currentAPI?.destroy(); // API déjà prête ?
+      ch.destroy(); // Toujours destroy le canal brut
       setChannel(null);
-      setIframeReady(false);
     };
-  }, [modalRef.current, token]);
+  }, [token]);
 
   // Quand le channel est prêt et iframeReady, on set le contentWindow
 
   useEffect(() => {
-    if (!iframeReady || !channel) return;
+    if (!channel || !modalRef.current || !open) return;
 
     const trySetWindow = () => {
-      if (modalRef.current!.contentWindow) {
-        console.log("[CMS] iframe.contentWindow disponible");
-        channel?.setTargetWindow(modalRef.current!.contentWindow);
-      } else {
+      const valid = channel.setIframe(modalRef.current!);
+
+      if (!valid) {
         console.log("[CMS] Attente de contentWindow...");
         setTimeout(trySetWindow, 100); // Retry loop
       }
     };
 
     trySetWindow();
-  }, [modalRef.current, channel, iframeReady]);
-
-  // Envoie les données dès que tout est prêt
-
-  useEffect(() => {
-    if (!open) {
-      setIframeReady(false);
-      return;
-    }
-    if (!iframeReady || !channel) {
-      console.log("[CMS] Waiting for iframe to be ready...");
-      return;
-    }
-
-    console.log("[CMS] Sending DATA to iframe:", data);
-    channel.send(messageChanel.set, data);
-  }, [open, iframeReady, channel, data]);
+  }, [channel, open]);
 
   return (
     <>
@@ -113,7 +126,7 @@ const CMS = ({ open, modalId, closeModal, data, onChange }: CMSProps) => {
         variant="max"
         open={open}
         id={modalId}
-        src={`${routes.vpe}?token=${token}`}
+        src={`${routes._modules.vpe}?token=${token}`}
         onHide={closeModal}
       >
         <TitleBar title="Contenu de l'article" />
@@ -124,7 +137,7 @@ const CMS = ({ open, modalId, closeModal, data, onChange }: CMSProps) => {
   );
 };
 
-function Dev({ modalId }) {
+function Dev({ modalId }: { modalId: CMSProps["modalId"] }) {
   useEffect(() => {
     const modal = document.getElementById(modalId) as HTMLIFrameElement;
 

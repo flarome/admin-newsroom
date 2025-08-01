@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { TextField, FormLayout } from "@shopify/polaris";
+import { TextField, FormLayout } from "@polaris/npm";
 import { Controller, useFormContext } from "react-hook-form";
 import { prefix } from "../../../config/ids";
 import { form as FormFieldsMap } from "../../../../../data/article/config/fieldMap";

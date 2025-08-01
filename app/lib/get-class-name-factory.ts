@@ -1,6 +1,7 @@
-import classnames from "classnames";
+import  {classnames} from './classnames';
 
 type ModifierOptions = Record<string, boolean | undefined | null>;
+export type FactoryOptions = string | ModifierOptions;
 export type Styles = Record<string, string>;
 
 export const getGlobalClassName = (
@@ -39,7 +40,7 @@ const getClassNameFactory = (
   config: Config = { baseClass: "" }
 ) => {
   return (
-    options: string | ModifierOptions = {},
+    options: FactoryOptions = {},
     showDefault = true
   ): string => {
     if (typeof options === "string") {

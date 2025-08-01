@@ -1,7 +1,7 @@
 import { FC, ReactNode } from "react";
 import classNames from "classnames";
 import styles from "./styles.module.css"; // Remplace par Zu dans ton code obfusqué
-import { Text } from "@shopify/polaris";
+import { Text } from "@polaris/npm";
 
 type StatusProps = {
   imgSrc?: string;

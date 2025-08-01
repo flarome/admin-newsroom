@@ -1,4 +1,4 @@
-import { Box, InlineStack, Spinner } from "@shopify/polaris";
+import { Box, InlineStack, Spinner } from "@polaris/npm";
 
 const Loading = () => {
   return (

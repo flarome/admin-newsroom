@@ -1,5 +1,5 @@
 import { memo, useEffect } from "react";
-import { Checkbox, FormLayout } from "@shopify/polaris";
+import { Checkbox, FormLayout } from "@polaris/npm";
 import { prefix } from "../../../config/ids";
 import { form as FormFieldsMap } from "../../../../../data/article/config/fieldMap";
 import { getFieldPath } from "../../../../../utils/getFieldPath";

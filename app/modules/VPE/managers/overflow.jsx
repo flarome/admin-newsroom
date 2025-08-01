@@ -14,7 +14,7 @@ import {
   Scrollable,
   Button,
   Collapsible,
-} from "@shopify/polaris";
+} from "@polaris/npm";
 import { ChevronDownIcon, ChevronRightIcon } from "@shopify/polaris-icons";
 import { useAppBridge } from "@shopify/app-bridge-react";
 

@@ -1,6 +1,6 @@
 // modal/index.jsx
 import { memo, useCallback, useEffect } from "react";
-import {  Modal as PolarisModal } from "@shopify/polaris";
+import {  Modal as PolarisModal } from "@polaris/npm";
 import { Modal, TitleBar } from "@shopify/app-bridge-react";
 import Skeleton from "./states/loading";
 import Editor from "./states/editor";

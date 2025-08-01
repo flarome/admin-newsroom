@@ -1,29 +1,49 @@
 
 
-import * as React from 'react';
+import {useRef, useState} from 'react';
 
-import { Plate, usePlateEditor } from 'platejs/react';
+import { Plate, usePlateEditor, createPlateEditor } from 'platejs/react';
 
 import { EditorKit } from './editor-kit';
 import { SettingsDialog } from './settings-dialog';
 import { Editor, EditorContainer } from '../ui/editor';
-import { usePropsContext } from '../../context/PropsContext';
-import { useAppStore } from '../../store';
+import { usePropsContext } from '../../../../../context/PropsContext';
 import { data as dataTEST } from '../../__test__/data';
+import { createUseVPE } from '../../../../../lib/use-vpe';
+
+import isEqual from 'lodash/isEqual';
+
+
+const useVPE = createUseVPE(); 
 
 export function PlateEditor() {
 
-  const {onChange, id} = usePropsContext();
+  console.log('[PlateEditor] RENDER')
+  const {id} = usePropsContext();
 
-const data = useAppStore((s) => s.data);
+  const data = useVPE((s) => s.WYSIWYG);
+  const dispatch = useVPE((s) => s.dispatch);
  
+  const onChange = (value) => {
+  if (!isEqual(data, value)) {
+    dispatch({
+      type: "setData",
+      data: { WYSIWYG: value },
+    });
+  }
+};
 
-  const editor = usePlateEditor({
-    id: id,
+
+const editor =  usePlateEditor({
+    id,
     plugins: EditorKit,
+    // une valeur initiale fixe
     value: data || dataTEST,
-    
-  });
+  })
+
+
+
+
  
 
   return (

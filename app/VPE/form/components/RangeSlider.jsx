@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState, useCallback } from "react";
-import { RangeSlider as PolarisRangeSlider } from "@shopify/polaris";
+import { RangeSlider as PolarisRangeSlider } from "@polaris/npm";
 
 export function RangeSlider({ field, onCommit }) {
   const [value, setValue] = useState(field.value);

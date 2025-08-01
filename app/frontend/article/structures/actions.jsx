@@ -1,4 +1,4 @@
-import { PageActions } from "@shopify/polaris";
+import { PageActions } from "@polaris/npm";
 import { memo } from "react";
 import { useArticle } from "../context/articleContext";
 import { useFormState, useFormContext } from "react-hook-form";

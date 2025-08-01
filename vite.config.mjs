@@ -7,9 +7,26 @@ import path from "path";
 import tailwindcss from "@tailwindcss/vite";
 import { fileURLToPath } from "url";
 import { dirname, resolve } from "path";
-
+ 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+function getTsconfigAliases(tsconfigPath = "tsconfig.json") {  
+  const config = JSON.parse(fs.readFileSync(tsconfigPath, "utf-8"));
+  const paths = config.compilerOptions?.paths || {};
+  const baseUrl = config.compilerOptions?.baseUrl || ".";
+
+  const aliases = {};  
+
+  for (const [alias, targetPaths] of Object.entries(paths)) {
+    const viteAlias = alias.replace(/\/\*$/, "");
+    const targetPath = targetPaths[0].replace(/\/\*$/, "");
+
+    aliases[viteAlias] = path.resolve(__dirname, baseUrl, targetPath);
+  }
+
+  return aliases;
+}
 
 function graphqlRawLoader() {
   return {
@@ -265,13 +282,20 @@ export default defineConfig({
     minify: "terser",
   },
 
-  resolve: {
+ /* resolve: {
     alias: {
       "~": path.resolve(__dirname, "app"),
       "react-tweet": resolve(__dirname, "node_modules/react-tweet/dist/swr.js"),
       '@polaris': path.resolve(__dirname, 'app/polaris'),
     },
-  },
+  },*/
+
+    resolve: {
+    alias: {
+      ...getTsconfigAliases("tsconfig.json"),
+      // tu peux ajouter ici des alias spécifiques au runtime si besoin
+    },
+  }   
 
   // 👇 pour désactiver les chunks dynamiques et tout mettre dans un seul fichier
   // brotliSize: false,

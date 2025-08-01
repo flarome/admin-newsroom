@@ -1,144 +1,96 @@
-// components/RouteInner.tsx
-import { memo, useCallback, useEffect, useMemo, useState } from "react";
-import { VPE } from ".";
-import { exposePostMessageTools } from "../_dev";
-import { createMessageChannel } from "../utils/postMessageSecure";
-import { messageChanel } from "./_intercom";
+import { memo, useCallback, useEffect } from "react";
 
-// @ts-ignore
-import DesignSystemProviderStyles from "./styles/DesignSystemProvider.css?url";
-// @ts-ignore
-import MainStyles from "./styles/Main.css?url";
+// Remix
+import { useLoaderData } from "@remix-run/react";
+
+// Styles
+import DesignSystemProviderStyles from "@VPE/styles/DesignSystemProvider.css?url";
+import MainStyles from "@VPE/styles/Main.css?url";
+
+// App
+import { exposePostMessageTools } from "@/_dev";
+import { ChildChanel, type ChildAPI } from "@/utils";
+import type { LoaderData } from "../routes/a.m.vpe";
+import { type VPEBaseCallback, type vpeInner } from "./context/PropsContext";
+import { VPE } from ".";
 
 export const links = [
   { rel: "stylesheet", href: DesignSystemProviderStyles },
   { rel: "stylesheet", href: MainStyles },
 ];
 
-import { Config, UserGenerics, UiState, Data, InitialHistory } from "./types";
-import { VPEBase } from "./context/PropsContext";
-import { useLoaderData } from "@remix-run/react";
-import type { LoaderData } from "../routes/a.vpe";
-
-import { Footer } from "../components/footer";
 type token = string | null;
 
 export type VpeConfig = {
   token: token;
 };
 
-export type ModalProps<
-  UserConfig extends Config = Config,
-  G extends UserGenerics<UserConfig> = UserGenerics<UserConfig>,
-> = {
-  data: Partial<G["UserData"] | Data>;
-};
-
-
-
-
-
-const Inner = ({token}: {token: token}) => {
-  const [payload, setPayload] = useState<ModalProps | null>(null);
-  const [channel, setChannel] = useState<ReturnType<
-    typeof createMessageChannel
-  > | null>(null);
-
-  useEffect(() => {
-  if (!token) {
-    console.log("[Modal] Pas de token → pas de communication attendue → mode autonome");
-    setPayload({
-      data: {}, // ou fake data
-    });
-    return;
-  }
-
+const Inner = ({ token }: { token: token }) => {
+  const getInitialProps = useCallback(async (): Promise<VPEBaseCallback> => {
+    // Mode "fallback local" si pas de token
     if (!token) {
-      console.error("[Modal] Missing token, cannot init secure channel");
-      return;
+      return {
+        config: {
+          settings: { catalog: {} },
+          content: { catalog: {} },
+        },
+        data: {},
+      };
     }
 
-    console.log("[Modal] Creating secure message channel...");
-    const ch = createMessageChannel({
-      targetWindow: window.opener || window.parent,
-      targetOrigin: window.location.origin,
+    // Ne pas rouvrir de channel si déjà actif avec ce token
+    // if (channel && token === lastToken.current) return;
+
+    // lastToken.current = token;
+
+    const ch = new ChildChanel({
+      url: window.location.origin,
       token,
+      model: {},
     });
 
-    setChannel(ch);
+    let currentAPI: InstanceType<typeof ChildAPI> | null = null;
+    const child = await ch.sendHandshake();
+    // setChannel(child);
 
-    ch.on(messageChanel.set, (data: ModalProps) => {
-      console.log("[Modal] Received DATA:", data);
-      setPayload(data);
-      ch.send(messageChanel._ACK, { msg: "Data received" });
-    });
+    currentAPI = child;
+    const data = (await child.get("data")) as Partial<vpeInner>;
 
-    ch.on(messageChanel._ACK, (payload) => {
-      console.log("[Modal] Received ACK from CMS:", payload);
-    });
+    const onChange = async (updated) => {
+      // await new Promise((resolve) => setTimeout(resolve, 3000));
 
-    ch.send(messageChanel._READY, { timestamp: Date.now() });
-    console.log("[Modal] Sent READY message to CMS");
+      const { error, success, response } = await child.exec("setData", updated);
 
-    return () => {
-      console.log("[Modal] Destroying message channel");
-      setChannel(null);
-      ch.destroy();
+      if (!success) throw new Error("Erreur", error);
     };
+
+    return {
+      ...data,
+      onChange,
+      _destroy: () => {
+        currentAPI?.destroy(); // API déjà prête ?
+        ch.destroy(); // Toujours destroy le canal brut
+      },
+    } as VPEBaseCallback;
   }, [token]);
 
-  const onChange = useCallback(
-    (data: ModalProps) => {
-      if (!channel) {
-        console.warn("[onChange] Channel not available, aborting send.");
-        return;
-      }
-
-      console.log("[onChange] Sending data to channel:", data);
-      channel.send(messageChanel.set, data);
-    },
-    [channel],
-  );
-
-  const VPEData: VPEBase = useMemo(
-    () => ({
-      ...payload,
-      onChange,
-    }),
-    [payload, onChange],
-  );
-
   return (
-    <>
-      {payload ? (
-        <VPE {...VPEData} />
-      ) : (
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            height: "100vh",
-            fontFamily: "sans-serif",
-            color: "#999",
-          }}
-        >
-          <span>Chargement de l'éditeur…</span>
-        </div>
-      )}
-    </>
-  ); 
+    <VPE
+      dataMode="CALLBACK"
+      getInitialProps={getInitialProps}
+      root={{ mode: "VPE" }}
+    />
+  );
 };
 
-
 const RouteInner = () => {
-   const { config } = useLoaderData<LoaderData>();
+  const { config } = useLoaderData<LoaderData>();
   return (
-      <div data-cms="vpe">
-        <Inner token={config.token} />
-      
-        {process.env.NODE_ENV !== "production" && <Dev />}
-      </div>
+    <div data-cms="vpe">
+      <Inner token={config.token} />
+
+      {process.env.NODE_ENV !== "production" && <Dev />}
+    </div>
   );
 };
 

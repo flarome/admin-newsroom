@@ -1,5 +1,5 @@
-import { styles as EditorStyles } from "styles/Editor";
-import { styles as LoadingStyles } from "styles/Loading";
+import { styles as EditorStyles } from "@VPE/styles/Editor";
+import { styles as LoadingStyles } from "@VPE/styles/Loading";
 import {
   getFrameSidebarClass,
   getFrameMainAreaClass,
@@ -7,13 +7,12 @@ import {
   getPreviewClass,
   getFrameClass,
   styles as OnlineStoreStyles,
-} from "styles/OnlineStore";
+} from "@VPE/styles/OnlineStore";
 
-import { memo, useEffect, useState } from "react";
-import { useShallow } from "zustand/react/shallow";
+import { memo } from "react";
 
-import { useAppStore } from "store";
-import { usePropsContext } from "context/PropsContext";
+import { useAppStore } from "@VPE/store";
+import { usePropsContext } from "@VPE/context";
 
 
 import {
@@ -46,13 +45,7 @@ const Loading = () => (
 );
 
 const LayoutInner = () => {
-  const { zoomConfig/*, setStatus*/ } = useAppStore(
-    useShallow((s) => ({
-      zoomConfig: s.zoomConfig,
-     // setStatus: s.setStatus,
-    })),
-  );
-
+  const zoomConfig = useAppStore((s) => s.zoomConfig);
  // const [canRenderEditor, setCanRenderEditor] = useState(false);
 
  /* // On attend que le layout soit monté (hors Editor)
@@ -108,13 +101,7 @@ const LayoutInner = () => {
 const Layout = memo(LayoutInner);
 
 const App = (props: any) => {
- // const status = useAppStore((s) => s.status);
-
-    return (
-    <>
-     <Layout />
-    </>
-  );
+ const status = useAppStore((s) => s.status);
 
   return (
     <>
@@ -127,3 +114,4 @@ const App = (props: any) => {
 };
 
 export default memo(App);
+ 

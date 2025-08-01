@@ -5,36 +5,73 @@ import {
   ReactNode
 } from "react";
 
-import { Config, UserGenerics,   UiState,  Data,  InitialHistory, } from "../types";
+import { Config, UserGenerics,   UiState,  InputData, InitialHistory, } from "../types";
 
 
-type RequestedData = {
-  content: any;
-  settings: any
+
+type MaybePromise<T> = T | Promise<T>;
+
+type InternalCallBackInner = {
+  _destroy?: MaybePromise<any>;  // rendu optionnel si possible
+};
+
+export type vpeInner<UserConfig extends Config = Config, G extends UserGenerics<UserConfig> = UserGenerics<UserConfig>> = {
+  config: UserConfig;
+  ui?: Partial<UiState>;
+  data: Partial<InputData>;
+  onChange?: (data: InputData) => void;
+  initialHistory?: InitialHistory;
 }
 
-type ResendData = {
-  content: any
-  settings: any
-}
+type Mode = "VPE" | "WYSIWYG";
 
-export type VPEBase<
+type VPEALL =
+  | {
+      root: {
+        mode: "VPE";
+        // ❌ pas de height, minHeight, maxHeight autorisés
+      };
+    }
+  | {
+      root: {
+        mode: Exclude<Mode, "VPE">; // "WYSIWYG"
+        height?: string;
+        minHeight?: string;
+        maxHeight?: string;
+      };
+    };
+export type VPEBaseDirect<UserConfig extends Config = Config, G extends UserGenerics<UserConfig> = UserGenerics<UserConfig>> = vpeInner & {
+  dataMode: "DIRECT";
+};
+
+
+
+export type VPEBaseCallback<
+  UserConfig extends Config = Config,
+  G extends UserGenerics<UserConfig> = UserGenerics<UserConfig>
+> = vpeInner<UserConfig, G> & InternalCallBackInner;
+
+
+
+
+
+export type VPEBaseWithCallback<
   UserConfig extends Config = Config,
   G extends UserGenerics<UserConfig> = UserGenerics<UserConfig>
 > = {
-  config: UserConfig;
-  ui?: Partial<UiState>;
-  // data: Partial<G["UserData"] | Data>;
-  data: Partial<RequestedData>
-  onChange?: (data: ResendData) => void;
-  initialHistory?: InitialHistory;
+  dataMode: "CALLBACK";
+  getInitialProps: () => MaybePromise<VPEBaseCallback<UserConfig, G>>;
 };
+
+
+export type VPEBase<UserConfig extends Config = Config> =
+  VPEALL & (VPEBaseDirect<UserConfig> | VPEBaseWithCallback);
 
 
 export type VPEProps<
   UserConfig extends Config = Config,
   G extends UserGenerics<UserConfig> = UserGenerics<UserConfig>
-> = VPEBase<UserConfig, G> & {
+> = VPEBase<UserConfig> & {
   id: string; // Utilise string (primitif) et non String (wrapper)
   children?: ReactNode;
 };

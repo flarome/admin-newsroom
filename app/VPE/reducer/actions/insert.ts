@@ -1,6 +1,6 @@
 import { Data } from "../../types";
 import { insert } from "../../lib/data/insert";
-import { generateId } from "../../lib/generate-id";
+import { generateId } from "../../../lib/generate-id";
 import { InsertAction } from "../actions";
 import { PrivateAppState } from "../../types/Internal";
 import { walkAppState } from "../../lib/data/walk-app-state";

@@ -1,5 +1,16 @@
 {
-  "include": ["env.d.ts", "**/*.ts", "**/*.tsx", "global.d.ts"],
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "include": [
+    "env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "global.d.ts",
+    "**/*.cts",
+    "**/*.ctsx",
+    "**/*.mts",
+    "**/*.mtsx"
+  ],
+  "exclude": ["node_modules", "build", "__ignore__"],
   "compilerOptions": {
     "lib": ["DOM", "DOM.Iterable", "ES2022"],
     "strict": true,
@@ -18,10 +29,33 @@
     "baseUrl": "./app",
     "types": ["node"],
 
+
+
+
+        "allowUnreachableCode": false,
+        "allowUnusedLabels": false,
+      "strictNullChecks": true,
+
+        "noUnusedLocals": false,
+        "noUnusedParameters": false,
+        "checkJs": false,
+        "esModuleInterop": true,
+        "moduleDetection": "force", 
+        "allowImportingTsExtensions": false,
+        "incremental": true,
+        "declaration": false,
+        "declarationMap": false,
+        "sourceMap": true, 
+        "pretty": true,
+        "preserveWatchOutput": true,
+
+
     "paths": {
-    "@polaris": ["app/polaris"],
-      "@VPE/*": ["app/VPE/*"],
-      "@EDITOR/*": ["app/VPE/editor/*"],
+      "~": ["."],
+      "@/*": ["."],
+      "@polaris/*": ["./polaris/*"],
+      "react-tweet": ["../node_modules/react-tweet/dist/swr.js"],
+      "@VPE/*": ["./VPE/*"]
     }
   }
 }

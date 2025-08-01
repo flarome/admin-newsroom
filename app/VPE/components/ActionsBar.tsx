@@ -1,16 +1,16 @@
-import { styles as LoadingStyles } from "styles/Loading";
+import { styles as LoadingStyles } from "@VPE/styles/Loading";
 import {
   getPlainActionClass,
   styles as OnlineStoreStyles,
-} from "styles/OnlineStore";
+} from "@VPE/styles/OnlineStore";
 
 import { useShallow } from "zustand/react/shallow";
 import { CSSProperties, memo, ReactNode, useCallback } from "react";
 
-import { useAppStore } from "store";
+import { useAppStore } from "@VPE/store";
 
-import { SkeletonThumbnail, Tooltip } from "@shopify/polaris";
-import { IconName, LegacyIcon } from "LegacyIcon";
+import { SkeletonThumbnail, Tooltip } from "@polaris/npm";
+import { IconName, LegacyIcon } from "@VPE/LegacyIcon";
 
 export const SkeletonActionsBar = () => (
   <>
@@ -31,7 +31,7 @@ type ActionsBarItemProps = {
   Action: () => void;
 };
 
-export const ActionsBarItem = memo(
+const ActionsBarItem = memo(
   ({
     tooltipContent,
     selected,

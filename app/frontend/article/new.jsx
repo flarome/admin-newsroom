@@ -1,5 +1,5 @@
 import { Suspense, lazy, useEffect } from "react";
-import { Spinner } from "@shopify/polaris";
+import { Spinner } from "@polaris/npm";
 import { useWatch } from "react-hook-form";
 import { defaultLayoutName, SelectTypeLayout, fieldPath as typePath } from './ui/layout';
 import { Page as AppPage } from './page';

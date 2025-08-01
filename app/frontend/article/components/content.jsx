@@ -1,5 +1,5 @@
 import { useController, useFormContext } from "react-hook-form";
-import { FormLayout, MediaCard, Text } from "@shopify/polaris";
+import { FormLayout, MediaCard, Text } from "@polaris/npm";
 import { useAppBridge } from "@shopify/app-bridge-react";
 import { memo, useCallback, useRef, useState } from "react";
 //import { Modal } from "../../../modules/VPE";
@@ -16,19 +16,19 @@ export const settingsFieldPath = FieldsMap.settings;
 
 export const bodyFieldPath = getFieldPath(FieldsMap, ["content", "body"]);
 export const headerFieldPath = getFieldPath(FieldsMap, ["content", "header"]);
-import { clsx } from "clsx"; 
+import { clsx } from "clsx";
 import EditorStyles from "../styles/Editor.module.css";
+import { SETTINGS_CATALOG } from "../../../VPE/__test__/data";
 
 const sectionsCatalog = {
   body: { label: "MON BODY", sections: bodySections },
 };
 
-const settingsCatalog = [];
+const settingsCatalog = SETTINGS_CATALOG;
 
 const modalId = `${prefix}:${getFieldRoot(FieldsMap, ["content"])}:modal`;
 
 const EmbeddedContentInnert = () => {
-  
   const [focus, setFocus] = useState(false);
   const inputRef = useRef(null);
 
@@ -99,7 +99,7 @@ const EmbeddedContentInnert = () => {
             )}
           >
             <div onClick={handleClickChild}>
-          {/*  <Editor editor={{onChange: () => ""}} ui={{ mode: "EMBEDDED", minHeight: "200px", maxHeight: "430px" }} /> */}   
+              {/*  <Editor editor={{onChange: () => ""}} ui={{ mode: "EMBEDDED", minHeight: "200px", maxHeight: "430px" }} /> */}
             </div>
           </div>
         </div>
@@ -112,7 +112,6 @@ export const EmbeddedContent = memo(EmbeddedContentInnert);
 
 const Content = () => {
   const { control } = useFormContext();
-  const { themes } = useArticle();
   const shopify = useAppBridge();
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -166,21 +165,40 @@ const Content = () => {
         closeModal={closeModal}
         open={modalOpen}
         modalId={modalId}
-        data={{data: {}}}
-        onChange={(data) => ""}
-       /* sections={{
-          [FieldsMap.content.body]: bodyField.value,
-          [FieldsMap.content.header]: headerField.value,
+        root={{
+          data: {
+    content: bodyField.value,
+          settings: settingsField.value,
+          },
+          config: {
+                settings: {
+        catalog: settingsCatalog
+    },
+    content: {
+        catalog: sectionsCatalog
+    },
+          }
+      
         }}
-        settings={settingsField.value}
-        sectionsCatalog={sectionsCatalog}
-        settingsCatalog={settingsCatalog}
-        onSectionsChange={(content) => {
-          bodyField.onChange(content.body || []);
-          headerField.onChange(content.header || []);
-        }}
-        onSettingsChange={(newSettings) => settingsField.onChange(newSettings)}
-        themes={themes.nodes}*/
+
+          onChange={async (data) => {
+    console.log("[CONTENT] ONCHANGE CALLED", data);
+
+
+      // Simule un délai de traitement async (remplace par ton vrai code si besoin)
+    //  await new Promise((resolve) => setTimeout(resolve, 30000));
+/*
+      const content = data.content;
+      bodyField.onChange(content.body || []);
+      headerField.onChange(content.header || []);
+
+      const settings = data.settings;
+      settingsField.onChange(settings);*/
+
+ 
+  }}
+
+  
       />
     </div>
   );

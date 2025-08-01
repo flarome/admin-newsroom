@@ -1,5 +1,5 @@
 // components/Subtitle.jsx
-import { TextField, FormLayout } from "@shopify/polaris";
+import { TextField, FormLayout } from "@polaris/npm";
 import { Controller, useFormContext } from "react-hook-form";
 import { prefix } from "../config/ids";
 import { form as FieldsMap } from "../../../data/article/config/fieldMap";

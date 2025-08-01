@@ -9,7 +9,7 @@ import {
   Page,
   Text,
   TextField,
-} from "@shopify/polaris";
+} from "@polaris/npm";
 import polarisTranslations from "@shopify/polaris/locales/fr.json";
 import polarisStyles from "@shopify/polaris/build/esm/styles.css?url";
 import { login } from "../../lib/shopify/shopify.server";

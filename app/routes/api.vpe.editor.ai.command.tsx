@@ -8,6 +8,10 @@ import { InvalidArgumentError } from "@ai-sdk/provider";
 import { delay as originalDelay } from "@ai-sdk/provider-utils";
 import { convertToCoreMessages, streamText } from "ai";
 
+import { eventStream } from "remix-utils/sse/server"; // ✅ Chemin explicite 
+ 
+
+
 /**
  * Detects the first chunk in a buffer.
  *
@@ -138,12 +142,16 @@ export async function action({ request }: ActionFunctionArgs) {
     return json({ error: "Missing OpenAI API key." }, { status: 401 });
   }
 
+  console.log('1')
+
   const openai = createOpenAI({ apiKey });
 
   let isInCodeBlock = false;
   let isInTable = false;
   let isInList = false;
   let isInLink = false;
+
+    console.log('2')
 
   try {
     const result = streamText({
@@ -204,24 +212,21 @@ export async function action({ request }: ActionFunctionArgs) {
     });
 
 
-  // 👇 C’est ici qu’on utilise bien result.textStream (c’est LUI l’async iterable)
-  const stream = new ReadableStream({
-    async pull(controller) {
-      for await (const chunk of result.textStream) {
-        controller.enqueue(new TextEncoder().encode(chunk.textDelta ?? ""));
-      }
-      controller.close();
-    },
-  });
+      console.log('3')
+// C’est un stream de tokens que tu dois consommer :
+return eventStream(request.signal, function setup(send) {
 
-  return new Response(stream, {
-    headers: {
-      "Content-Type": "text/plain; charset=utf-8",
-      "Cache-Control": "no-cache",
-      "Transfer-Encoding": "chunked",
-      "X-Accel-Buffering": "no",
-    },
-  });
+  (async () => {
+    for await (const delta of result.textStream) {
+        console.log('4')
+      send({ data: delta });
+    }
+  })();
+
+  return () => {};
+});
+  
+    
 
     return result.toDataStreamResponse();
   } catch {

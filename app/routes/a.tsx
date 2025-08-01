@@ -1,4 +1,5 @@
 import {
+  type LoaderFunctionArgs,
   type LinksFunction,
 } from "@remix-run/node";
 import {
@@ -16,14 +17,17 @@ import { useRoutes } from "../routes";
 import type { RootLoaderData } from "../root";
 export const links: LinksFunction = () => [...admin.links];
 
-export const loader = async () => {
-  return { apiKey: process.env.SHOPIFY_API_KEY || "" };
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const url = new URL(request.url);
+  const isModule = url.pathname.startsWith("/a/m/");
+
+  return { apiKey: process.env.SHOPIFY_API_KEY || "",  isModule, };
 };
 
 const distribution = admin.handle;
 
 export default function App() {
-  const { apiKey } = useLoaderData<typeof loader>();
+  const { apiKey, isModule } = useLoaderData<typeof loader>();
 
   // Récupérer les données du loader root (parent)
   const matches = useMatches();
@@ -37,7 +41,11 @@ export default function App() {
   return (
     <AppProvider theme="light" isEmbeddedApp apiKey={apiKey}>
       <GlobalApp distribution={distribution} lang={rootData.lang}>
-        <AppInner />
+
+        {isModule   ? 
+        
+        <Outlet />  :        <AppInner />}
+       
       </GlobalApp>
     </AppProvider>
   );
@@ -49,10 +57,12 @@ const AppInner = () => {
   return (
     <>
       <NavMenu>
-        <Link to={routes.articles} rel="home">
+      <Link to={routes.articles._home} rel="home">
           Articles
         </Link>
-        <Link to={routes.article("new")}>Nouveau</Link>
+        <Link to={routes.articles.edit("new")}>
+          Ajouter un article
+        </Link>
       </NavMenu>
       <Outlet />
     </>

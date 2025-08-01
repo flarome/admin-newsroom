@@ -1,5 +1,5 @@
 import { createI18nContext } from "../../../i18n/context";
-import { AppProvider as PolarisProviderOriginal } from "@shopify/polaris";
+import { AppProvider as PolarisProviderOriginal } from "@polaris/npm";
 import fr from "../locales/fr.json";
 import { language } from "../../../config/app";
 

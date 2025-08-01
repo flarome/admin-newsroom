@@ -1,6 +1,6 @@
 import { PuckAction, createReducer } from "../../../reducer";
 import { ComponentData, Config, Data, Slot, UiState } from "../../../types";
-import { generateId } from "../../../lib/generate-id";
+import { generateId } from "../../../../lib/generate-id";
 import {
   createAppStore,
   defaultAppState as _defaultAppState,

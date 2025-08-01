@@ -1,5 +1,5 @@
 import { useFormContext, useFormState } from "react-hook-form";
-import { List, Banner as ShopifyBanner } from "@shopify/polaris";
+import { List, Banner as ShopifyBanner } from "@polaris/npm";
 import { useEffect, useRef, useState } from "react";
 import { extractMessages } from "../../../modules/form";
 

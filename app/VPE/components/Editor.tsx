@@ -1,12 +1,13 @@
-import { styles as LoadingStyles } from "../styles/Loading";
-import { styles as EditorStyles } from "../styles/Editor";
+import { styles as LoadingStyles } from "@VPE/styles/Loading";
+import { styles as EditorStyles } from "@VPE/styles/Editor";
 import {
   styles as OnlineStoreStyles,
   getPreviewClass,
 } from "../styles/OnlineStore";
 
-import { useAppStore } from "store";
-import { clsx } from "clsx";
+import { useAppStore } from "@VPE/store";
+
+import { classnames as clsx } from "@/lib";
 
 import EditorSW from "../packages/WYSIWYG";
 import { createUseVPE } from "../lib/use-vpe";
@@ -70,7 +71,7 @@ export const Editor = (
 const useVPE = createUseVPE(); 
 
 const SW = () => {
- const data = useVPE((s) => s.WYSIWYG);
+/* const data = useVPE((s) => s.WYSIWYG);
  const dispatch = useVPE((s) => s.dispatch);
 
 
@@ -79,14 +80,11 @@ const SW = () => {
       type: "setData",
       data: { WYSIWYG: value },
     });
-  };
-
+  };*/
+ 
 
   return (
-  <EditorSW
-                  ui={{ mode: "PAGE" }}
-                  editor={{ data: data, onChange: onChange }}
-                />
+  <EditorSW />
   )
 }
 

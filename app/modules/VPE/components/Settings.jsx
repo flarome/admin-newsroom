@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useMemo } from "react";
-import { BlockStack, Collapsible, Icon, Text } from "@shopify/polaris";
+import { BlockStack, Collapsible, Icon, Text } from "@polaris/npm";
 import { ChevronDownIcon, ChevronUpIcon } from "@shopify/polaris-icons";
 import { useSettings } from "../context/SettingsContext";
 import { Fields } from "../form"; // Ton composant Fields

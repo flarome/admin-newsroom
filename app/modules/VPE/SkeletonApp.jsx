@@ -1,4 +1,4 @@
-import { SkeletonBodyText } from "@shopify/polaris";
+import { SkeletonBodyText } from "@polaris/npm";
 
 const App = () => {
   return (

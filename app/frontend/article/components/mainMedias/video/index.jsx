@@ -4,8 +4,8 @@ import {
   Text,
   BlockStack,
   InlineStack,
-} from "@shopify/polaris";
-import { Card as CardV2 } from "@polaris/22.1.0";
+} from "@polaris/npm";
+import { Card as CardV2 } from "@polaris/internal";
 const MainVideo = () => { 
  
   return (
