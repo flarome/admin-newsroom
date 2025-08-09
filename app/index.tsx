@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState, ReactNode } from "react";
+import { memo, useEffect, useRef, useState, ReactNode, useMemo } from "react";
 import {
   createAppStore,
   useAppStoreApi,
@@ -19,6 +19,9 @@ import classNames from "classnames";
 import { secondsToMs } from "./utils/time";
 import { Distribution } from "_distribution";
 import { RoutesProvider, createRoutesContext } from "./routes";
+import { UserAgentProvider } from "contexts";
+
+import {I18nContext, I18nManager} from '@shopify/react-i18n';
 
 export const globalAppI18n = createI18nContext({
   fallback: language,
@@ -119,7 +122,7 @@ console.log('Animation ended:', e.animationName);
   useEffect(() => {
     const unsubscribe = store.subscribe(
       (s) => s.ui.loading,
-      (isLoading) => {
+      (isLoading) => { 
 
         console.log('Spinner state changed:', isLoading);
         if (isLoading) {
@@ -316,16 +319,44 @@ useEffect(() => {
   );
 };
 
-export const App = ({ lang, children, distribution }: {lang?: string, children: ReactNode, distribution: Distribution}) => {
+export const App = ({ lang, children, distribution, userAgent }: {lang?: string, children: ReactNode, distribution: Distribution, userAgent: string}) => {
   const [routes] = useState(() => createRoutesContext(distribution));
   const [appStore] = useState(() => createAppStore({}));
 
+const i18n = useMemo(() => {
+  return new I18nManager({
+    locale: "fr",
+    fallbackLocale: "fr",
+    currency: "eur",
+    country: "fr",
+    timezone: "fr",
+    onError: (error) => {
+      console.error("i18n error:", error);
+    },
+    pseudolocalize: false
+  });
+}, []);
+
   return (
+
+
+    <UserAgentProvider userAgent={userAgent}>
     <RoutesProvider value={routes}>
     <appStoreContext.Provider value={appStore}>
+
+
+
+<I18nContext.Provider value={i18n}>
+
       <RenderWrapper lang={lang}>{children}</RenderWrapper>
+    
+</I18nContext.Provider>
+
+
+
     </appStoreContext.Provider>
     </RoutesProvider>
+      </UserAgentProvider>
   );
 };
 export default memo(App);

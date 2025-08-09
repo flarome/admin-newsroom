@@ -22517,7 +22517,7 @@ class uq {
         return this.ua.getUA().includes("WSC6X") || this.ua.getUA().includes("WTH11")
     }
 }
-const cq = D.createContext(new uq({
+const cq = D.createContext(new uq({ // UserAgentContext
     userAgent: ""
 }))
   , Ik = D.createContext({
@@ -28457,17 +28457,17 @@ function kI(e) {
     const t = e.split("-")[1];
     return t && t.toUpperCase()
 }
-function N_(e) {
+function N_(e) { // extractLanguage
     return e.split("-")[0].toLowerCase()
 }
 const IL = new Map([["a", "α"], ["b", "ḅ"], ["c", "ͼ"], ["d", "ḍ"], ["e", "ḛ"], ["f", "ϝ"], ["g", "ḡ"], ["h", "ḥ"], ["i", "ḭ"], ["j", "ĵ"], ["k", "ḳ"], ["l", "ḽ"], ["m", "ṃ"], ["n", "ṇ"], ["o", "ṓ"], ["p", "ṗ"], ["q", "ʠ"], ["r", "ṛ"], ["s", "ṡ"], ["t", "ṭ"], ["u", "ṵ"], ["v", "ṽ"], ["w", "ẁ"], ["x", "ẋ"], ["y", "ẏ"], ["z", "ẓ"], ["A", "Ḁ"], ["B", "Ḃ"], ["C", "Ḉ"], ["D", "Ḍ"], ["E", "Ḛ"], ["F", "Ḟ"], ["G", "Ḡ"], ["H", "Ḥ"], ["I", "Ḭ"], ["J", "Ĵ"], ["K", "Ḱ"], ["L", "Ḻ"], ["M", "Ṁ"], ["N", "Ṅ"], ["O", "Ṏ"], ["P", "Ṕ"], ["Q", "Ǫ"], ["R", "Ṛ"], ["S", "Ṣ"], ["T", "Ṫ"], ["U", "Ṳ"], ["V", "Ṿ"], ["W", "Ŵ"], ["X", "Ẋ"], ["Y", "Ŷ"], ["Z", "Ż"]])
   , LI = 1.15
   , MI = new Map([["zh", .5], ["ja", .5], ["ko", .8], ["fr", 1.3], ["it", 1.3], ["de", 1.5], ["nl", 1.5]]);
-function YU(e) {
+function YU(e) { // getPseudolocaleExpansionRatio
     let {to: t} = e;
     return t == null ? LI : MI.get(t) || MI.get(N_(t)) || LI
 }
-function KU(e) {
+function KU(e) { // pseudotranslateString
     let {delimiter: t, startDelimiter: r=t, endDelimiter: a=t, prepend: i, append: s, toLocale: l} = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
     const c = QU(e, {
         startDelimiter: r,
@@ -28494,13 +28494,13 @@ function KU(e) {
     , "");
     return `${i || ""}${g}${s || ""}`
 }
-function OL(e) {
+function OL(e) {// isAllowedChar
     return IL.has(e)
 }
-function XU(e) {
+function XU(e) {//countFilteredChars
     return [...e].filter(OL).length
 }
-function QU(e, t) {
+function QU(e, t) { // splitInterpolatedParts
     let {startDelimiter: r, endDelimiter: a} = t;
     const i = r && a ? ZU(r, a) : void 0;
     let s = 0;
@@ -28517,7 +28517,7 @@ function QU(e, t) {
         l.push(e);
     return l
 }
-function ZU(e, t) {
+function ZU(e, t) { // createInterpolationRegex
     if (e.length === 1 && t.length === 1)
         return new RegExp(`\\${e}[^\\${t}]*\\${t}`,"g");
     const r = [...e].map(i => `\\${i}`).join("")
@@ -29031,10 +29031,10 @@ function we(e, t) {
 const gz = D.createContext(new j_({
     shopDomain: "shop1.my.shop.dev"
 }))
-  , vz = nt.createContext(null)
-  , $I = nt.createContext([])
-  , ML = nt.createContext(null);
-class CX {
+  , vz = nt.createContext(null) // I18nManagerContext
+  , $I = nt.createContext([]) // NamespaceContext
+  , ML = nt.createContext(null); // TranslationContext
+class CX { 
     get loading() {
         return this.translationPromises.size > 0
     }
@@ -29167,7 +29167,7 @@ function _z(e) {
     return typeof e == "function" ? e : t => e[t]
 }
 const wz = 50;
-function Zn(e, t) {
+function Zn(e, t) { // createCacheWrapper
     const r = new WeakMap
       , a = new Map
       , i = [];
@@ -29810,7 +29810,7 @@ const Yz = /{\s*(\w+)\s*}/g
   , tO = "latn"
   , ni = e => typeof e == "string"
   , Qb = new Map;
-function ai(e, t) {
+function ai(e, t) { // getNumberFormatter
     const r = Kz(e)
       , a = Qz(r, t);
     if (Qb.has(a))
@@ -29819,10 +29819,10 @@ function ai(e, t) {
     return Qb.set(a, i),
     i
 }
-function Kz(e) {
+function Kz(e) { // normalizeLocale
     return Array.isArray(e) ? e.map(t => rO(t)) : rO(e)
 }
-function rO(e) {
+function rO(e) { // normalizeSingleLocale
     if (!e)
         return e;
     try {
@@ -29849,7 +29849,7 @@ function Zz(e) {
     let t = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
     return new Intl.PluralRules(e,t)
 }
-const Vl = Zn(Zz, function(e) {
+const Vl = Zn(Zz, function(e) {// getPluralRules
     let t = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
     return `${e}${JSON.stringify(t)}`
 });
@@ -29867,7 +29867,7 @@ function Zb(e, t, r, a) {
     }
     throw new UL(e,r)
 }
-function Jz(e, t, r, a) {
+function Jz(e, t, r, a) { // translateFromKey
     const {scope: i, replacements: s, pseudotranslate: l, interpolate: c} = t
       , d = Array.isArray(r) ? r : [r]
       , f = tW(e, i);
@@ -29881,7 +29881,7 @@ function Jz(e, t, r, a) {
     }
     throw new UL(f,a)
 }
-function eW(e, t, r, a) {
+function eW(e, t, r, a) { // resolveTranslation
     let {pseudotranslate: i=!1, interpolate: s} = arguments.length > 4 && arguments[4] !== void 0 ? arguments[4] : {}
       , l = t;
     for (const f of e.split(Ed)) {
@@ -29914,7 +29914,7 @@ function eW(e, t, r, a) {
         }
     }
     const d = ni(l) && i ? KU(l, {
-        ...Xz,
+        ...Xz, 
         toLocale: typeof i == "boolean" ? void 0 : i
     }) : l;
     return ni(d) ? Bl(d, {
@@ -29924,7 +29924,7 @@ function eW(e, t, r, a) {
         interpolate: s
     }) : P1
 }
-function Bl(e) {
+function Bl(e) { // interpolateString
     let t = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {}
       , {interpolate: r} = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : {};
     const a = []
@@ -29989,7 +29989,7 @@ const Jb = 2
 function nW(e) {
     return rW.filter(t => new RegExp(`${t}`).test(e))
 }
-function aO(e, t) {
+function aO(e, t) { // extractCurrencySymbol
     const r = aW(0, e, t)
       , a = new RegExp(`${en.DirectionControl}*`,"gu")
       , i = r.replace(a, "")
@@ -30022,7 +30022,7 @@ let C1 = class {
         return N_(this.locale)
     }
     get region() {
-        return kI(this.locale)
+        return kI(this.locale) 
     }
     get countryCode() {
         return kI(this.locale)
@@ -30042,7 +30042,7 @@ let C1 = class {
         this.getCurrencySymbol = function(v) {
             let g = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : a.locale;
             const y = v || a.defaultCurrency;
-            if (y == null)
+            if (y == null)    
                 throw new JI("formatCurrency cannot be called without a currency code.");
             return a.getShortCurrencySymbol(y, g)
         }
@@ -30477,7 +30477,7 @@ let C1 = class {
     }
 }
 ;
-function $_(e) {
+function $_(e) { // useTranslation
     const t = nt.useContext(vz);
     if (t == null)
         throw new Error("Missing i18n manager. Make sure to use an <I18nContext.Provider /> somewhere in your React tree.");
@@ -30488,10 +30488,10 @@ function $_(e) {
 }
 function uW(e, t) {
     let {id: r, fallback: a, translations: i} = e;
-    const s = nt.useRef(null)
-      , l = nt.useRef(fW)
-      , c = nt.useContext($I)
-      , d = w1( () => r ? [r, ...c] : c);
+    const s = nt.useRef(null) // currentContextRef
+      , l = nt.useRef(fW) // unsubscribeRef
+      , c = nt.useContext($I) // contextChain
+      , d = w1( () => r ? [r, ...c] : c); // namespacesToListen 
     t !== s.current && (s.current = t,
     l.current(),
     l.current = t.subscribe(d.current, (g, y) => {
@@ -30518,7 +30518,7 @@ function uW(e, t) {
         })
     }
     )
-      , h = nt.useRef(f);
+      , h = nt.useRef(f); 
     nt.useEffect( () => l.current, []);
     const v = w1( () => function(y) {
         let {children: b} = y;
@@ -32146,9 +32146,9 @@ function rH(e) {
 }
 const Y_ = typeof window > "u" || typeof document > "u"
   , ds = Y_ ? D.useEffect : D.useLayoutEffect;
-function K_(e, t, r, a) {
+function K_(e, t, r, a) { // polaris useEventListener
     const i = D.useRef(t)
-      , s = D.useRef(a);
+      , s = D.useRef(a); 
     ds( () => {
         i.current = t
     }
@@ -34410,7 +34410,7 @@ const LO = ["span", "strong"]
     })
 }
 ;
-function GM(e) {
+function GM(e) { // polaris spinner
     let {size: t="large", accessibilityLabel: r, hasFocusableParent: a} = e;
     const i = df()
       , s = Ie(kO.Spinner, t && kO[Cr("size", t)])
@@ -34479,13 +34479,13 @@ const yu = D.memo(D.forwardRef(function(t, r) {
         ref: r
     })
 }));
-function LG(e) {
+function LG(e) { //ui/Button
     let {id: t, children: r, className: a, url: i, external: s, target: l, download: c, submit: d, disabled: f, loading: m, pressed: h, accessibilityLabel: v, role: g, ariaControls: y, ariaExpanded: b, ariaDescribedBy: w, ariaChecked: A, form: S, onClick: P, onFocus: C, onBlur: I, onKeyDown: T, onKeyPress: O, onKeyUp: N, onMouseEnter: k, onTouchStart: F, ...L} = e, U;
     const W = {
         id: t,
         className: a,
         "aria-label": v
-    }
+    } 
       , Z = {
         ...W,
         role: g,
@@ -34648,8 +34648,8 @@ var td = {
     Box: "Polaris-Box",
     visuallyHidden: "Polaris-Box--visuallyHidden",
     printHidden: "Polaris-Box--printHidden"
-};
-const Dt = D.forwardRef( (e, t) => {
+}; 
+const Dt = D.forwardRef( (e, t) => { // Box
     let {as: r="div", background: a, borderColor: i, borderStyle: s, borderWidth: l, borderBlockStartWidth: c, borderBlockEndWidth: d, borderInlineStartWidth: f, borderInlineEndWidth: m, borderRadius: h, borderEndStartRadius: v, borderEndEndRadius: g, borderStartStartRadius: y, borderStartEndRadius: b, children: w, color: A, id: S, minHeight: P, minWidth: C, maxWidth: I, overflowX: T, overflowY: O, outlineColor: N, outlineStyle: k, outlineWidth: F, padding: L, paddingBlock: U, paddingBlockStart: W, paddingBlockEnd: Z, paddingInline: te, paddingInlineStart: Q, paddingInlineEnd: re, role: q, shadow: J, tabIndex: X, width: ue, printHidden: fe, visuallyHidden: _e, position: me, insetBlockStart: Ve, insetBlockEnd: ve, insetInlineStart: $e, insetInlineEnd: de, zIndex: Ce, opacity: ye, ...Be} = e;
     const Ne = s || (i || l || c || d || f || m ? "solid" : void 0)
       , ut = k || (N || F ? "solid" : void 0)
@@ -34714,7 +34714,7 @@ function BG(e) {
 var jG = {
     InlineStack: "Polaris-InlineStack"
 };
-const Gi = function(t) {
+const Gi = function(t) { // Polaris InlineStack
     let {as: r="div", align: a, direction: i="row", blockAlign: s, gap: l, wrap: c=!0, children: d, ...f} = t;
     const m = {
         "--pc-inline-stack-align": a,
@@ -35027,7 +35027,7 @@ function WG() {
         throw new Error("No portals manager was provided. Your application must be wrapped in an <AppProvider> component. See https://polaris.shopify.com/components/app-provider for implementation instructions.");
     return e
 }
-function ZM(e) {
+function ZM(e) { // Polaris Portal
     let {children: t, idPrefix: r="", onPortalCreated: a=HG, hideBreadcrumbs: i=!0} = e;
     const s = QW()
       , {container: l} = WG()
@@ -36114,7 +36114,7 @@ var fn = {
 function l3(e) {
     return `${e}Label`
 }
-function fV(e) {
+function fV(e) { // polaris Label
     let {children: t, id: r, hidden: a, requiredIndicator: i, truncate: s, variant: l="bodyMd", tone: c} = e;
     const d = Ie(rd.Label, a && rd.hidden);
     return R.jsx("div", {
@@ -36136,8 +36136,8 @@ function fV(e) {
 var $O = {
     InlineError: "Polaris-InlineError",
     Icon: "Polaris-InlineError__Icon"
-};
-function pV(e) {
+}; 
+function pV(e) { // Polaris InlineError
     let {message: t, fieldID: r} = e;
     const {mdUp: a} = cf();
     return t ? R.jsxs("div", {
@@ -38055,7 +38055,7 @@ var u1 = {
     monochrome: "Polaris-Link--monochrome",
     removeUnderline: "Polaris-Link--removeUnderline"
 };
-function tY(e) {
+function tY(e) { // polaris link
     let {url: t, children: r, onClick: a, external: i, target: s, id: l, monochrome: c, removeUnderline: d, accessibilityLabel: f, dataPrimaryLink: m} = e;
     return R.jsx(VV.Consumer, {
         children: h => {
@@ -38745,7 +38745,7 @@ function AY(e) {
     , [w]),
     null
 }
-function SY(e) {
+function SY(e) { // useEventListener
     let {event: t, capture: r, disabled: a, passive: i, target: s, handler: l} = e;
     const c = D.useRef(l);
     Ck( () => {
@@ -39390,7 +39390,7 @@ function mK(e) {
       , d = Va(Qa.mobileCommon)
       , f = Va(Qa.landscape)
       , m = Va(Qa.prefersReducedMotion)
-      , h = D.useMemo( () => {
+      , h = D.useMemo( () => { 
         const v = {
             mobile: c,
             phablet: a,
@@ -39535,7 +39535,7 @@ function RK(e) {
         value: i
     }, t)
 }
-function YX() {
+function YX() { // useLayoutRefs
     return D.useContext(O3)
 }
 //  
@@ -39550,9 +39550,9 @@ function DK(e) {
         ref: i  
     }, nt.createElement(RW, null, nt.createElement(uK, {
         features: t
-    }, nt.createElement(mK, null, nt.createElement(lK.Provider, {
-        value: s.current
-    }, nt.createElement(RK, null, nt.createElement(wK, {
+    }, nt.createElement(mK, null, nt.createElement(lK.Provider, { 
+        value: s.current  // UniqueIdProvider
+    }, nt.createElement(RK, null, nt.createElement(wK, {//LayoutRefsProvider
         features: t
     }, nt.createElement(AM, {
         container: a

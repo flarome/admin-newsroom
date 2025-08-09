@@ -7,7 +7,6 @@ import {
   useRouteError,
   isRouteErrorResponse,
   useLoaderData,
-  LiveReload,
 } from "@remix-run/react";
 import { type LoaderFunctionArgs, type HeadersArgs } from "@remix-run/node";
 
@@ -77,7 +76,6 @@ export function HTML({lang, children}: {lang: string, children: React.ReactNode}
        {children}
         <ScrollRestoration />
         <Scripts />
-            {process.env.NODE_ENV !== "production" && <LiveReload />}
       </body>
     </html>
   )

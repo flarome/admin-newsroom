@@ -21,7 +21,7 @@ import classNames from "classnames";
 import { InternalIcon } from "../../admin-ui-foundations";
 import { useShallow } from "zustand/react/shallow";
 
-import { AutoField } from "./AutoField";
+import { AutoFieldPrivate } from "./AutoField";
 
 const Setting = ({ setting }: { setting: PrivateSetting }) => {
   return (
@@ -31,7 +31,7 @@ const Setting = ({ setting }: { setting: PrivateSetting }) => {
       data-component-extra-setting-name={setting.name}
       data-component-extra-setting-type={setting.field.type}
     >
-      <AutoField
+      <AutoFieldPrivate
         field={setting.field}
         value={setting.value}
         id={setting.id}

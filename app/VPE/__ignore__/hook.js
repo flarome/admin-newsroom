@@ -596,7 +596,7 @@ var _n = Object.values || function(t) {
             value: c
         }, N.createElement(n, s, d))
     }
-    ,
+
     r
 }(N.Component);
 Ne.propTypes = {};
@@ -621,7 +621,7 @@ function On(t) {
     ), [r]),
     null
 }
-function An(t) {
+function An(t) { // Backdrop
     const {onClick: r, onTouchStart: o, belowNavigation: e, transparent: i, setClosing: n} = t
       , a = j(ge.Backdrop, e && ge.belowNavigation, i && ge.transparent)
       , s = () => {
@@ -1178,17 +1178,17 @@ function Yn(t) {
     , [n, e, a, r]),
     c
 }
-function Jn(t) {
+function Jn(t) { // polaris TrapFocus
     let {trapping: r=!0, children: o} = t;
     const {canSafelyFocus: e} = Yn({
-        trapping: r
+        trapping: r 
     })
       , i = u.useRef(null)
       , [n,a] = u.useState(!0);
     u.useEffect( () => {
         const d = e && !(i.current && i.current.contains(document.activeElement)) ? !r : !0;
         a(d)
-    }
+    } 
     , [e, r]);
     const s = d => {
         const f = i.current && i.current.contains(document.activeElement);

@@ -580,9 +580,9 @@ export const SETTINGS_CATALOG =
              // label: "Type",
                 type: "select",
                 options: [
-                   {label: 'Newest update', value: 'newestUpdate'},
-    {label: 'Oldest update', value: 'oldestUpdate'},
-    {label: 'Most spent', value: 'mostSpent'},
+                   {label: 'A', value: 'A'},
+    {label: 'B', value: 'B'},
+    {label: 'C', value: 'C'},
 
                 ]
             } },

@@ -26,13 +26,18 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
    const { session } = await authenticate.admin(request);
     const lang = await getLanguageFromSession(session);
 
-  return { apiKey: process.env.SHOPIFY_API_KEY || "",  isModule, lang };
+
+     const userAgent = request.headers.get("user-agent") || "";
+
+
+
+  return { apiKey: process.env.SHOPIFY_API_KEY || "",  isModule, lang, userAgent };
 };
 
 const distribution = admin.handle;
 
 export default function App() {
-  const { apiKey, isModule, lang } = useLoaderData<typeof loader>();
+  const { apiKey, isModule, lang, userAgent } = useLoaderData<typeof loader>();
 
   // Récupérer les données du loader root (parent)
  /* const matches = useMatches();
@@ -46,7 +51,7 @@ export default function App() {
   return (
     <HTML lang={lang}>
     <AppProvider theme="light" isEmbeddedApp apiKey={apiKey}>
-      <GlobalApp distribution={distribution} lang={lang}>
+      <GlobalApp distribution={distribution} lang={lang} userAgent={userAgent}>
 
         {isModule   ? 
         

@@ -1,0 +1,33 @@
+export enum TrackingTarget {
+  Edit = "edit button",
+  Close = "close button",
+  Back = "back button",
+  Expand = "expand button",
+  Collapse = "collapse button",
+  Tree = "navigation tree",
+  Sidebar = "sidebar",
+  PowerPreview = "power_preview",
+  Undo = "undo",
+  Redo = "redo",
+  KeyboardShortcut = "keyboard shortcut",
+  Mobile = "mobile",
+  MobileEditMode = "mobile edit mode",
+  PowerGesture = "power gesture",
+  ThemeSetting = "theme settings category",
+  ColorSchemeGroupSetting = "color scheme group setting",
+  AddColorScheme = "add color scheme",
+  TemplateSetting = "section/block settings",
+  Sidekick = "sidekick",
+  SidekickBatchUndo = "sidekickBatchUndo",
+  SidekickBatchRedo = "sidekickBatchRedo",
+  RightClickMenuSidebar = "right-click-sidebar",
+  RightClickMenuPreview = "right-click-preview",
+  GenerateAiThemeBlock = "generate ai theme block",
+  GenerateAiThemeBlockError = "generate ai theme block error",
+}
+
+export enum TargetType {
+  Section = "section",
+  Block = "block",
+  Template = "template",
+}

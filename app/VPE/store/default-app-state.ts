@@ -7,7 +7,9 @@ export const defaultAppState: PrivateAppState = {
     arrayState: {},
     itemSelector: null,
     isDragging: false,
+     field: { focus: null },
   },
+ 
   indexes: {
     nodes: {},
     zones: {},

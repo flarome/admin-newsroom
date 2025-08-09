@@ -61,7 +61,7 @@ export function createGlobalI18nStore(initialLang?: Lang) {
             typeof document !== "undefined" &&
             document &&
             document.documentElement &&
-            document.documentElement.lang
+            document.documentElement.lang && typeof requestIdleCallback !== "undefined"
           ) {
             requestIdleCallback(
               () => {
@@ -79,7 +79,7 @@ export function createGlobalI18nStore(initialLang?: Lang) {
     set({ _abortController: controller });
 
     // 5. Appelle l’API en parallèle (non bloquant)
-    fetch(API_ROUTES.lang, {
+    fetch(API_ROUTES._config.lang, {
       method: "POST",
       body: JSON.stringify({ lang }),
       headers: { "Content-Type": "application/json" },

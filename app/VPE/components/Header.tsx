@@ -24,7 +24,7 @@ import {
   Tooltip,
 } from "@polaris/npm";
 
-import { LegacyIcon } from "@VPE/LegacyIcon";
+import { LegacyIcon } from "@VPE/components/ui/LegacyIcon";
 import { IconType, InternalIcon } from "../../admin-ui-foundations";
 import clsx from "clsx";
 

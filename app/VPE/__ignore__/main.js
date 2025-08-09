@@ -34154,13 +34154,13 @@ function M1(e, r, t) {
         return n.replace(i, t)
     }, e)
 }
-function P6(e, r) {
+function P6(e, r) { // deepGetWithDotDelimiter
     return r === void 0 && (r = {}),
     A6(e, oe({
         delimiter: "."
     }, r))
 }
-function w6(e, r) {
+function w6(e, r) { // deepGetWithUnderscoreDelimiter
     return r === void 0 && (r = {}),
     P6(e, oe({
         delimiter: "_"
@@ -34359,7 +34359,7 @@ const q6 = Ee.createContext(new B6);
 function V6() {
     return Ee.useContext(q6)
 }
-function $6(e) {
+function $6(e) {// usePrevious
     const r = Ee.useRef();
     return Ee.useEffect( () => {
         r.current = e
@@ -40037,7 +40037,7 @@ function PL() {
         const a = r.reduceRight( (o, s) => s(o), i);
         return OL(a, i)
     }
-}
+} 
 function tJ(e) {
     let {children: r, urlDetails: t, adminUrl: n} = e;
     const {spellbookHost: i} = t
@@ -41786,7 +41786,7 @@ const IX = "Online-Store-UI-LegacyIconOSUI__Icon_1a5o2"
   , VX = "Online-Store-UI-LegacyIconOSUI--toneSuccess_1hggh"
   , $X = "Online-Store-UI-LegacyIconOSUI--tonePrimary_10vqy"
   , GX = "Online-Store-UI-LegacyIconOSUI--toneEmphasis_1v0wz"
-  , HX = "Online-Store-UI-LegacyIconOSUI--toneMagic_mhjn5"
+  , HX = "Online-Store-UI-LegacyIconOSUI--toneMagic_mhjn5" 
   , WX = "Online-Store-UI-LegacyIconOSUI--toneTextCaution_xkvzb"
   , zX = "Online-Store-UI-LegacyIconOSUI--toneTextWarning_mpn69"
   , QX = "Online-Store-UI-LegacyIconOSUI--toneTextCritical_1b703"
@@ -44328,7 +44328,7 @@ function XZ(e) {
     , [n.currencyCode, n.shopCountryCode, n.ianaTimezone, i, t]);
     return z.jsx(uB.Provider, {
         value: a,
-        children: z.jsx(JZ, {
+        children: z.jsx(JZ, { 
             children: r
         })
     })
@@ -49361,11 +49361,11 @@ function zte(e) {
                 client: u.apolloClient,
                 children: z.jsx(RX, {
                     children: z.jsx(XZ, {
-                        locale: i,
+                        locale: i, 
                         children: z.jsx(tJ, {
                             adminUrl: n,
                             urlDetails: a,
-                            children: z.jsx(hB.Provider, {
+                            children: z.jsx(hB.Provider, { // UserAgentContext
                                 value: r,
                                 children: z.jsxs(pB, {
                                     children: [z.jsx(jJ, {}), z.jsx(AJ, {

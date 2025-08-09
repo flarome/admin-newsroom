@@ -1772,7 +1772,7 @@
     width: 100%
 }
 
-@media (hover: hover) and (pointer: fine) {
+@media (hover: hover) and (pointer: fine) { 
     .LabelAction:not(.active) a:hover,.LabelAction:not(.active) button:hover {
         background-color:var(--p-color-bg-surface-hover)
     }

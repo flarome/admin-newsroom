@@ -1,4 +1,4 @@
-const CONFIG_SYMBOL = Symbol("langLoaderConfig");
+// const CONFIG_SYMBOL = Symbol("langLoaderConfig");
 
 type TranslationType =
   | { type: "json"; value: string } // JSON brut (string à parser)
@@ -14,7 +14,8 @@ export type LangLoaderConfig<Lang extends string> = {
 };
 
 type LangLoader<Lang extends string> = Record<Lang, () => Promise<any>> & {
-  [CONFIG_SYMBOL]: LangLoaderConfig<Lang> & { availableLangs: readonly Lang[] };
+  // [CONFIG_SYMBOL]: LangLoaderConfig<Lang> & { availableLangs: readonly Lang[] };
+  _config: LangLoaderConfig<Lang> & { availableLangs: readonly Lang[] };
 };
 
 export function createLangLoader<
@@ -44,7 +45,13 @@ export function createLangLoader<
     }
   }
 
-  Object.defineProperty(loader, CONFIG_SYMBOL, {
+
+  (loader as any)._config = {
+  ...config,
+  availableLangs,
+};
+
+ /*Object.defineProperty(loader, CONFIG_SYMBOL, {
     value: {
       ...config,
       availableLangs, // ajouté ici pour qu’on puisse y accéder ensuite
@@ -52,7 +59,7 @@ export function createLangLoader<
     enumerable: false,
     writable: false,
     configurable: false,
-  });
+  });*/
 
   return loader as LangLoader<Lang>;
 }
@@ -100,7 +107,8 @@ export async function loadLang<Lang extends string>(
   loader: LangLoader<Lang>,
   requestedLang: Lang,
 ): Promise<Record<string, any>> {
-  const config = loader[CONFIG_SYMBOL];
+ // const config = loader[CONFIG_SYMBOL];
+ const config = loader._config;
   const { availableLangs, fallback } = config;
 
   const langToUse = availableLangs.includes(requestedLang)

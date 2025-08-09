@@ -1,6 +1,6 @@
 import  {useContext, useRef, createContext, type ReactNode} from 'react';
 
-import { useStableRef } from 'hooks';
+import { useLazyRef } from '@shopify/react-hooks';
 import { name as projectName } from '@VPE/config/project';
 
 
@@ -45,7 +45,7 @@ const UniqueIdContext = createContext<UniqueIdFactory | null>(null);
 export function UniqueIdProvider({ children }: { children: ReactNode }) {
 
 
-    const ref = useStableRef(new ScopedIdFactory(createScopedIdGenerator));
+    const ref = useLazyRef(() => new ScopedIdFactory(createScopedIdGenerator));
     return (
             <UniqueIdContext.Provider value={ref.current}>
               {children}

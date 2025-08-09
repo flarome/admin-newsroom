@@ -10,7 +10,7 @@ const IconsNamesSet = new Set([
   ...Object.keys(internalIcons)
 ]);
 
-export function hasIcon(e: string) {
+export function hasIcon(e: any) {
   return typeof e === "string" && IconsNamesSet.has(e);
 }
 
@@ -63,7 +63,7 @@ function getIconClass({
     .join(" ");
 }
 
-interface IconProps {
+export interface IconProps {
   type: IconType;
   color?: IconColor;
   tone?: IconTone;

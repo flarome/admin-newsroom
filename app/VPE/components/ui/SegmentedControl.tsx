@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { useId, useRef } from "react";
-import {useSafeLayoutEffect} from '../../../hooks';
+import {useIsomorphicLayoutEffect } from '@shopify/react-hooks'
 import { SegmentedControlClass } from "../../styles/OnlineStore";
 import { useFeatureFlags, useViewportContext } from "../../contexts";
 import { Text, Tooltip, type TooltipProps } from "@polaris/npm";
@@ -146,7 +146,7 @@ const optionsRender = options.map(m => (
 ));
 
 
-    useSafeLayoutEffect( () => {
+    useIsomorphicLayoutEffect( () => {
         const m = ref.current;
         onOverflow && m && m.scrollWidth > m.offsetWidth && onOverflow()
     }

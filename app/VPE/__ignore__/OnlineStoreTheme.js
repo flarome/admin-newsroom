@@ -153,7 +153,7 @@ function Be(n) {
         content: u,
         preferredPosition: r ?? "below"
     }, S) : S;
-    return b.createElement("li", {
+    return b.createElement("li", { 
         className: q(x.OptionWrapper, {
             [x.dense]: l,
             [x.truncate]: f,

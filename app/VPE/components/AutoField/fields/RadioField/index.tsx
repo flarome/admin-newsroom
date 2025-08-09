@@ -25,14 +25,15 @@ export const RadioField = ({
  <>
 
     <Label
-      label={ <span className={HyperlinkedTextClass._({hideExternalIcon: true})}>
-                    {label || name}
-                  </span>
-                  }
+
+label= {label || name}
+    helpText= {label || name}
+
       readOnly={readOnly}
       id={`RadioSetting-${id}`}
-      labelledOptions={{stacked:true,blockAlignCenter:true}}
-    />
+     labelBlockAlign="center"
+     stacked
+    >
 
 
   <LegacyStack vertical>
@@ -48,11 +49,11 @@ export const RadioField = ({
       />
  ))}
  </LegacyStack>
+
+
+
+</Label>
    </>
-
-
-
-
 
   );
 };

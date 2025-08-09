@@ -3,7 +3,7 @@
 client_id = "6fc19979d31e0b4476e2cfd23853b7f7"
 name = "newsroom"
 handle = "newsroom-5"
-application_url = "https://tunnel-gas-grande-flashing.trycloudflare.com"
+application_url = "https://latinas-ian-anticipated-showcase.trycloudflare.com"
 embedded = true
 
 [build]
@@ -18,7 +18,7 @@ api_version = "2025-07"
 scopes = "read_content,read_draft_orders,read_files,read_metaobject_definitions,read_metaobjects,read_online_store_pages,read_orders,read_themes,unauthenticated_read_content,unauthenticated_read_product_listings,write_content,write_files,write_metaobjects,write_products,write_themes"
 
 [auth]
-redirect_urls = ["https://tunnel-gas-grande-flashing.trycloudflare.com/auth/callback", "https://tunnel-gas-grande-flashing.trycloudflare.com/auth/shopify/callback", "https://tunnel-gas-grande-flashing.trycloudflare.com/api/auth/callback"]
+redirect_urls = ["https://latinas-ian-anticipated-showcase.trycloudflare.com/auth/callback", "https://latinas-ian-anticipated-showcase.trycloudflare.com/auth/shopify/callback", "https://latinas-ian-anticipated-showcase.trycloudflare.com/api/auth/callback"]
 
 [pos]
 embedded = false

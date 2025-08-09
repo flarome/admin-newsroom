@@ -1,22 +1,14 @@
-import { FieldPropsInternal } from "../..";
-import { HyperlinkedTextClass, SegmentedControlClass } from "@VPE/styles/OnlineStore";
+import React, { useState } from "react";
 
-import { Select } from "@polaris/internal";
-import classNames from "classnames";
-import { Text } from "@polaris/npm";
+import { Select } from "@polaris/npm";
 
+import { SegmentedControl } from "@VPE/components/ui";
 
- import {SegmentedControl} from '@VPE/components/ui';
-import { useState } from "react";
+import type { FieldPropsInternal } from "../..";
 
-type RenderMode = "SegmentedControl" | "Select";
+interface SelectFieldProps extends FieldPropsInternal {}
 
-function selectMode(options): RenderMode {
-
-
-  return options.length <= 3 ? "SegmentedControl" : "Select";
-}
-export const SelectField = ({ 
+export const SelectField: React.FC<SelectFieldProps> = ({
   field,
   onChange,
   label,
@@ -26,80 +18,55 @@ export const SelectField = ({
   name,
   readOnly,
   id,
-}: FieldPropsInternal) => {
+}) => {
+  // Ne rien afficher si type incorrect ou pas d'options
   if (field.type !== "select" || !field.options) {
     return null;
-  } 
+  }
 
- const [isOverflowed, setIsOverflowed] = useState(false);
-
-
+  const [isOverflowed, setIsOverflowed] = useState(false);
 
   return (
     <Label
-      id={`SelectSetting-${id}`}
-      label={
-        <span className={HyperlinkedTextClass._({ hideExternalIcon: true })}>
-          {label || name}
-        </span>
-      }
-      labelledOptions={{ blockAlignFlexible: true }}
-      readOnly={readOnly}
-      topPadding="200"
-    >
+    actions={[{
 
-      <SegmentedControl
+      disabled: false,
+      content: "TEST",
+      icon: "info",
+      pickerToggle: {active: false, closePicker: () => "", togglePicker: () => ""},
+      pickerContent: (
+        <>
+        TEST CONTENT
+        </>
+      ),
+      pickerOptions: {width: 300}
+
+    }]}
+      id={`SelectSetting-${id}`}
+      label={label || name}
+      labelBlockAlign="input-baseline"
+      readOnly={readOnly}
+      layout="stacked"
+    >
+      {isOverflowed ? (
+        <Select
+          label={label || name}
+          labelHidden
+          options={field.options}
+          onChange={onChange}
+          value={value}
+          disabled={readOnly}
+        />
+      ) : (
+        <SegmentedControl
           accessibilityLabel={label || name}
           options={field.options}
           value={value}
-          onChange={onchange}
+          onChange={onChange} // corrigé ici (pas "onchange")
           onOverflow={() => setIsOverflowed(true)}
           tone={undefined}
         />
-
-{field.options.length <= 3 ? (
- 
- <ul className={classNames(SegmentedControlClass.SegmentedControlContainer, SegmentedControlClass._({dense:true}))} aria-label={label || name}>
-
- {field.options.map((option, i) => {
-
-
-const selected = option.value === value;
-
-           return (
-
-              
-
-<li key={i} className={classNames(SegmentedControlClass.Option.OptionWrapper, SegmentedControlClass.Option._({dense:true, selected }))}>
-
-
-  <div className={classNames(SegmentedControlClass.Option.ButtonContainer, SegmentedControlClass.Option._({dense:true}))}>
-
-    <button className={classNames(SegmentedControlClass.Option.SegmentedControlItem, SegmentedControlClass.Option._({selected,dense:true}))} aria-current={value === option.value}>
-<Text as="span" variant="bodySm">
-  {option.label || option.value}
-</Text>
-    </button>
-
-</div>
-</li>
-
-            )
-
-  })}
-
- </ul>
-) : (  <Select
-            label={label || name}
-            labelHidden
-            options={field.options}
-            onChange={onChange}
-            value={value}
-            disabled={readOnly}
-          />
       )}
-     
-
     </Label>
   );
 };

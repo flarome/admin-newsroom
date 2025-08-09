@@ -1,5 +1,5 @@
 import { vitePlugin as remix } from "@remix-run/dev";
-import { defineConfig } from "vite";
+import { defineConfig, type Plugin } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
 import prefixSelector from "postcss-prefix-selector";
 import fs, { readFileSync } from "fs";
@@ -11,27 +11,38 @@ import { dirname, resolve } from "path";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-function getTsconfigAliases(tsconfigPath = "tsconfig.json") {  
-  const config = JSON.parse(fs.readFileSync(tsconfigPath, "utf-8"));
+type Tsconfig = {
+  compilerOptions?: {
+    baseUrl?: string;
+    paths?: Record<string, string[]>;
+  };
+};
+
+export function getTsconfigAliases(tsconfigPath: string = "tsconfig.json"): Record<string, string> {
+  const raw = fs.readFileSync(tsconfigPath, "utf-8");
+  const config: Tsconfig = JSON.parse(raw);
   const paths = config.compilerOptions?.paths || {};
   const baseUrl = config.compilerOptions?.baseUrl || ".";
 
-  const aliases = {};  
+  const aliases: Record<string, string> = {};
 
   for (const [alias, targetPaths] of Object.entries(paths)) {
+    if (!targetPaths.length) continue;
+
     const viteAlias = alias.replace(/\/\*$/, "");
     const targetPath = targetPaths[0].replace(/\/\*$/, "");
 
-    aliases[viteAlias] = path.resolve(__dirname, baseUrl, targetPath);
+    aliases[viteAlias] =  resolve(__dirname, baseUrl, targetPath);
   }
 
   return aliases;
 }
 
-function graphqlRawLoader() {
+
+function graphqlRawLoader(): Plugin {
   return {
     name: "vite-plugin-graphql-raw-loader",
-    transform(code, id) {
+    transform(code, id: string) {
       if (id.endsWith(".graphql")) {
         const raw = fs.readFileSync(id, "utf8");
         return {
@@ -43,11 +54,11 @@ function graphqlRawLoader() {
   };
 }
 
-function importRtfAsBufferPlugin() {
+function importRtfAsBufferPlugin(): Plugin {
   return {
     name: "vite:rtf-as-buffer",
     enforce: "pre",
-    load(id) {
+    load(id: string) {
       if (id.endsWith(".rtf")) {
         const content = readFileSync(id); // Buffer, pas utf8
         const encoded = content.toJSON().data; // Array of numbers
@@ -84,7 +95,7 @@ if (host === "localhost") {
   hmrConfig = {
     protocol: "wss",
     host: host,
-    port: parseInt(process.env.FRONTEND_PORT) || 8002,
+    port: process.env.FRONTEND_PORT ? parseInt(process.env.FRONTEND_PORT) : 8002,
     clientPort: 443,
   };
 }

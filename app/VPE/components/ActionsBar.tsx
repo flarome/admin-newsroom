@@ -10,7 +10,7 @@ import { CSSProperties, memo, ReactNode, useCallback } from "react";
 import { useAppStore } from "@VPE/store";
 
 import { SkeletonThumbnail, Tooltip } from "@polaris/npm";
-import { IconName, LegacyIcon } from "@VPE/LegacyIcon";
+import { IconName, LegacyIcon } from "@VPE/components/ui/LegacyIcon";
 
 export const SkeletonActionsBar = () => (
   <>

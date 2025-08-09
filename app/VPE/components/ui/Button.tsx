@@ -2,7 +2,7 @@ import React from "react";
 import {blurOnMouseUp} from '../../../utils';
 
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   id?: string;
   children?: React.ReactNode;
   className?: string;
@@ -30,8 +30,6 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   onKeyUp?: React.KeyboardEventHandler<HTMLElement>;
   onMouseEnter?: React.MouseEventHandler<HTMLElement>;
   onTouchStart?: React.TouchEventHandler<HTMLElement>;
-  // Any other props are allowed
-  [key: string]: any;
 }
 
 

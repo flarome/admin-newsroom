@@ -3,7 +3,8 @@ import { AppProviderClass } from "@VPE/styles/OnlineStore";
 
 import { memo, useState } from "react";
 
-import { DesignSystemProvider, FeatureFlagsProvider, PropsProvider, type  VPEBase, UniqueIdProvider, KeyboardShortcutProvider, ViewportProvider} from "@VPE/contexts";
+import {ShortcutProvider} from '@shopify/react-shortcuts'
+import { DesignSystemProvider, FeatureFlagsProvider, PropsProvider, type  VPEBase, UniqueIdProvider, ViewportProvider, LayoutRefsProvider} from "@VPE/contexts";
 
 import App from "@VPE/app";
 import { useSafeId } from "lib";;
@@ -20,11 +21,14 @@ const Main = (props: VPEBase) => {
           <div id={`vpe-app-${uniqueId}`}>
             <div ref={setRef} className={AppProviderClass._({ dense: true })}>
 
-<KeyboardShortcutProvider>
+<ShortcutProvider>
 <FeatureFlagsProvider features={{denseUIEnabled: true}}>
 
 <ViewportProvider>
 <UniqueIdProvider>
+
+
+<LayoutRefsProvider>
 
 
               <PropsProvider {...props} id={uniqueId}>
@@ -34,10 +38,14 @@ const Main = (props: VPEBase) => {
               </PropsProvider>
 
               
+
+</LayoutRefsProvider>
+
+
               </UniqueIdProvider>
               </ViewportProvider>
               </FeatureFlagsProvider>
-              </KeyboardShortcutProvider>
+              </ShortcutProvider>
             </div>
           </div>
         </div>

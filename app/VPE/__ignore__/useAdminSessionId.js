@@ -4255,7 +4255,7 @@ const Zb = {
     exitActive: jT,
     LoadingIndicator: $T
 };
-function VT(r) {
+function VT(r) { // filterStringValues
     const e = {};
     return Object.keys(r).forEach(t => {
         typeof r[t] == "string" && (e[t] = r[t])
@@ -4286,9 +4286,9 @@ function UT(r) {
     }
     , {})
 }
-const Fd = Ie.createContext(null)
+const Fd = Ie.createContext(null) // TransitionContext
   , zT = ["appear", "enter", "exit"];
-function n1(r) {
+function n1(r) { // NestedTransitionGroup
     let {children: e} = r;
     return Se.createElement(gC, {
         childFactory: HT,
@@ -4321,7 +4321,7 @@ const HT = r => Se.createElement(WT, {
     key: r.key,
     child: r
 });
-function E0(r) {
+function E0(r) { // TransitionWrapper
     let {children: e, sharedTransition: t=!1, transitionClassNames: n={}, onEnter: i, onExited: s} = r;
     const {prefersReducedMotion: o} = il()
       , a = Ie.useContext(Fd)
@@ -4879,7 +4879,7 @@ function wO(r) {
         value: i
     }, e)
 }
-function cp() {
+function cp() { // useHeaderContext
     return Ie.useContext(o1)
 }
 function kO() {
@@ -5002,7 +5002,7 @@ const PO = {
     easing: "ease-in-out"
 }
   , IO = {
-    duration: 400
+    duration: 400 
 };
 function BO(r) {
     let {ref: e, disabled: t} = r;
@@ -5054,7 +5054,7 @@ const NO = "Online-Store-UI-BottomSheet-DraggableRegion_lwwnh"
     isModal: GO,
     exiting: XO
 };
-function Yl(r) {
+function Yl(r) { // extractTextFromReactNode
     if (typeof r == "string")
         return r;
     if (Ie.isValidElement(r)) {
@@ -5065,7 +5065,7 @@ function Yl(r) {
         return r.map(Yl).join(" ");
     return ""
 }
-function C0(r) {
+function C0(r) { // getTone
     let {tone: e, isSubdued: t} = r;
     return e === Ka.Magic ? Ka.Magic : t ? "subdued" : void 0
 }
@@ -5130,7 +5130,7 @@ const KO = "Online-Store-UI-BottomSheet-Header_o6ums"
     SubtitleSuffixWrapper: h2,
     SuffixWrapper: d2
 }
-  , p2 = r => Ie.createElement("svg", {
+  , p2 = r => Ie.createElement("svg", { // DragIconComponent
     width: 32,
     height: 3,
     fill: "none",
@@ -5228,7 +5228,7 @@ function O2(r) {
         tone: "legacy-inherit"
     })) : null
 }
-function u1(r) {
+function u1(r) { // TruncateWithTooltip
     let {children: e} = r;
     const t = Ie.useRef(null)
       , [n,i] = Ie.useState(!1);
@@ -5288,7 +5288,7 @@ const F2 = "Online-Store-UI-EditableText__PlainTextWrapper_ekaf9"
     bodyMd: q2,
     bodyLg: Q2
 };
-function c1(r) {
+function c1(r) { // EditableText
     let {text: e, defaultText: t, textProps: n, isEditing: i, onEditModeChange: s, onChange: o, tooltip: a, disableClick: l=!1, showClearButton: u=!1, maxLength: c} = r;
     const [f] = Gs({
         id: "EditableText_1us3mht",
@@ -5392,7 +5392,7 @@ function c1(r) {
         const pn = u && Fe !== ""
           , nr = pn ? Se.createElement("button", {
             type: "button",
-            className: Lo.ClearButton,
+            className: Lo.ClearButton, 
             onClick: Xt,
             "aria-label": f.translate("clear"),
             "data-clear-button": !0
@@ -5400,12 +5400,12 @@ function c1(r) {
             as: "span",
             visuallyHidden: !0
         }, f.translate("clear")), Se.createElement(bo, {
-            tone: "neutral",
+            tone: "neutral", 
             color: "subdued",
             type: "x-circle"
         })) : null
           , In = dr(Lo.TextField, ht.variant && Lo[(Jt = ht.variant) != null ? Jt : "bodyMd"], pn && Lo.ClearButtonSpacing);
-        return Se.createElement("div", {
+        return Se.createElement("div", { 
             className: Lo.TextFieldWrapper,
             onKeyDown: gt,
             onBlur: Dt,
@@ -5445,7 +5445,7 @@ function c1(r) {
     }, Se.createElement(Li, {
         ...ht
     }, ht.truncate ? Se.createElement(u1, null, Fe) : Fe));
-    return a ? Se.createElement(Jl, {
+    return a ? Se.createElement(Jl, {  
         content: a
     }, On) : On
 }
@@ -5453,7 +5453,7 @@ var A0 = (r => (r.Primary = "Primary",
 r.Secondary = "Secondary",
 r.MoreActions = "MoreActions",
 r))(A0 || {});
-function G2(r) {
+function G2(r) { // Header
     let {expanded: e, onTap: t, actionButtonWidth: n, renamingOptions: i, tone: s} = r;
     const o = cp()
       , {buttons: a, visuallyHiddenTitles: l} = o
@@ -5466,6 +5466,7 @@ function G2(r) {
     }, Se.createElement(ZS, {
         variant: "segmented"
     }, f, w)));
+    // middleSection
     function ce(He) {
         return t && !u ? Se.createElement("div", {
             className: bi.MiddleActionInteractive
@@ -5485,7 +5486,7 @@ function G2(r) {
         renamingOptions: i,
         tone: s
     }), J2(l)))
-      , Te = ce(ge);
+      , Te = ce(ge); 
     if (i != null && i.canRename && i != null && i.isEditing)
         return Se.createElement("nav", {
             className: bi.Header
@@ -5502,7 +5503,7 @@ function G2(r) {
     }, Se.createElement("div", {
         className: bi.SecondaryAction
     }, c), Te, M));
-    function Fe(He) {
+    function Fe(He) { // extractActionMarkup
         const ht = {
             secondaryActionMarkup: null,
             primaryActionMarkup: null,
@@ -5529,7 +5530,7 @@ function G2(r) {
         ht
     }
 }
-function X2(r) {
+function X2(r) { // PanelTitle
     let {renamingOptions: e, tone: t} = r;
     var n;
     const i = JO()
@@ -5571,14 +5572,14 @@ function X2(r) {
       , f = a?.content
       , w = e != null && e.canRename && f ? Se.createElement(c1, {
         text: e.text,
-        defaultText: e.initialText,
+        defaultText: e.initialText, 
         isEditing: e.isEditing,
         onChange: e.onRename,
         onEditModeChange: e.onEditModeChange,
         textProps: c,
         showClearButton: !0,
         disableClick: !0,
-        maxLength: e.maxLength
+        maxLength: e.maxLength 
     }) : null
       , M = f ? Se.createElement(Li, {
         ...c
@@ -5625,14 +5626,14 @@ function X2(r) {
         className: bi.SubtitleWrapper
     }, He, Fe, ht) : null)
 }
-function J2(r) {
+function J2(r) { // renderVisuallyHiddenTitles
     return r ? Array.from(r.values()).map(t => Se.createElement(K2, {
         key: `${t.id}-${t.title}`,
         title: t.title,
         isSubtitle: t.isSubtitle
     })) : null
 }
-function K2(r) {
+function K2(r) { // VisuallyHiddenTitle
     let {title: e, isSubtitle: t} = r;
     return Se.createElement(Li, {
         variant: "bodySm",
@@ -5640,7 +5641,7 @@ function K2(r) {
         visuallyHidden: !0
     }, e)
 }
-function Cm(r) {
+function Cm(r) { // ActionButton
     let {isSheetExpanded: e, onSheetExpandChange: t, button: n} = r;
     if (!n)
         return null;
@@ -5660,10 +5661,10 @@ function Cm(r) {
         ...u
     }, s)
 }
-function Y2(r) {
+function Y2(r) { // hasIconSource
     return r?.source !== void 0
 }
-function Th(r) {
+function Th(r) { // renderIcon
     let {iconData: e, isRenaming: t, isSubtitle: n, tone: i} = r;
     if (t || !Y2(e))
         return null;
@@ -5675,20 +5676,20 @@ function Th(r) {
     return xd({
         ...e,
         ...o,
-        ...n ? {
+        ...n ? { 
             tone: "neutral",
             color: "subdued",
             size: "small"
         } : {}
     })
 }
-const Z2 = Ie.forwardRef(function(e, t) {
+const Z2 = Ie.forwardRef(function(e, t) { // BottomSheetContent
     let {children: n, expansion: i, fullCollapse: s, isModal: o, backgroundSheetContent: a, showBackgroundSheet: l, minHeightCollapsed: u, maxHeight: c, scrollable: f, onTitleTap: w, backgroundSheetVariant: M="primary", renamingOptions: ce, ...ge} = e;
     var Te;
     const {isDragging: Fe, listeners: He, transform: ht, setNodeRef: vt} = $b({
         id: df("BottomSheetDraggableRegion")
     })
-      , st = cp()
+      , st = cp() // useHeaderContext
       , gt = Xb(i)
       , [Dt,Rt] = Se.useState(!1);
     Ie.useEffect( () => (Rt(!0),
@@ -5697,7 +5698,7 @@ const Z2 = Ie.forwardRef(function(e, t) {
     }
     ), []);
     const {noVisibleHeaderContent: Vt} = st
-      , Yt = Ie.useContext(Fd)
+      , Yt = Ie.useContext(Fd) // isModalContext
       , Xt = dr(Ji.DraggableRegion, {
         [Ji.dragging]: Fe,
         [Ji.expanded]: gt && Dt,
@@ -5713,7 +5714,7 @@ const Z2 = Ie.forwardRef(function(e, t) {
       , bn = dr(Ji.DragHandle, {
         [Ji.reducedHeightDragHandle]: Vt
     })
-      , {sheetHeight: xn, translateHeight: On} = Jb(c, i, Fe)
+      , {sheetHeight: xn, translateHeight: On} = Jb(c, i, Fe) // calculateSheetDimensions
       , En = Vt && u != null ? {
         "--osui_height-bottom-sheet-collapsed-drag-handle": `${c * u * 100}dvh`,
         "--osui_height-bottom-sheet-header": `${c * u * 100}dvh`
@@ -5740,7 +5741,7 @@ const Z2 = Ie.forwardRef(function(e, t) {
         className: bn,
         ...He,
         ref: vt
-    }, Se.createElement(G2, {
+    }, Se.createElement(G2, { // Header
         expanded: gt,
         onTap: w,
         renamingOptions: ce,
@@ -5751,7 +5752,7 @@ const Z2 = Ie.forwardRef(function(e, t) {
     }, Se.createElement("div", {
         className: Ji.ContentInterior
     }, n)));
-    return Yt ? Se.createElement(E0, {
+    return Yt ? Se.createElement(E0, { // ModalWrapper
         transitionClassNames: nr
     }, sr) : sr
 });
@@ -5771,7 +5772,7 @@ const eF = "Online-Store-UI-BottomSheet-DroppableRegion__Droppable_y9qaq"
     DroppableMid: rF,
     DroppableTop: iF
 };
-function sF() {
+function sF() { // DroppableRegion
     const {active: r, setNodeRef: e} = id({
         id: sd.FullExpand
     })
@@ -5781,7 +5782,7 @@ function sF() {
       , {setNodeRef: n} = id({
         id: sd.MidExpand
     });
-    return r ? Se.createElement("div", {
+    return r ? Se.createElement("div", { 
         className: bc.Droppable
     }, Se.createElement("div", {
         className: bc.DroppableInterior
@@ -5809,7 +5810,7 @@ r.SecondaryAction = "secondaryAction",
 r.PrimaryPanel = "primaryPanel",
 r.SecondaryPanel = "secondaryPanel",
 r))(qi || {});
-function lF(r) {
+function lF(r) { // FramePortal
     let {children: e, disableDestination: t=!1, frameArea: n=qi.SecondaryPanel} = r;
     const {area: i, setFrameAreaRef: s} = sl()
       , o = i[n]
@@ -5828,16 +5829,16 @@ const uF = 1e3
         distance: 2
     }
 }
-  , fF = Ie.forwardRef(function(e, t) {
+  , fF = Ie.forwardRef(function(e, t) { // BottomSheetInner
     let {children: n, maxHeight: i=Gb, isModal: s=!1, fullCollapse: o=!1, useFramePortal: a=!1, backgroundSheetContent: l, showBackgroundSheet: u, horizontalHeaderPadding: c="base", transparentBackdrop: f=!1, expansion: w="mid", titleTapExpansion: M="mid", minHeightCollapsed: ce, scrollable: ge=!0, onExpansionChange: Te, backgroundSheetVariant: Fe, renamingOptions: He, analyticsMetadata: ht={}, ...vt} = e;
     const st = Ie.useRef({
         distance: 0,
         timestamp: 0,
         velocity: 0
     })
-      , gt = Xb(w)
-      , Dt = xb(nd(v0, cF))
-      , Rt = Ie.useMemo( () => [Qb, Wk(i)], [i])
+      , gt = Xb(w) // useExpansionState
+      , Dt = xb(nd(v0, cF)) // useSensor DND
+      , Rt = Ie.useMemo( () => [Qb, Wk(i)], [i]) // modifiers
       , Vt = Ie.useRef(null)
       , Yt = BO({
         ref: Vt,
@@ -5856,8 +5857,8 @@ const uF = 1e3
       , bn = dr($a.BottomSheetInterior, {
         [$a.isModal]: s
     })
-      , xn = a ? Se.createElement(lF, null, n) : n
-      , On = Se.createElement(Z2, {
+      , xn = a ? Se.createElement(lF, null, n) : n // content
+      , On = Se.createElement(Z2, { // sheetContent
         expansion: w,
         onTitleTap: M === "disabled" ? void 0 : nr,
         fullCollapse: o,
@@ -5887,12 +5888,12 @@ const uF = 1e3
         transparent: f,
         onClick: In
     }) : null, Se.createElement(wO, null, Se.createElement(sk, {
-        autoScroll: !1,
+        autoScroll: !1, 
         modifiers: Rt,
         sensors: Dt,
         onDragMove: sr,
         onDragEnd: hr,
-        onDragCancel: Cr
+        onDragCancel: Cr 
     }, Se.createElement("div", {
         style: {
             "--osui_max-droppable-height-bottom-sheet": `${i * 100}vh`
@@ -5938,7 +5939,7 @@ const uF = 1e3
     }
     function Rr(Fr) {
         if (Fr > 0)
-            switch (w) {
+            switch (w) { 
             case "collapsed":
             case "mid":
                 Te("full");

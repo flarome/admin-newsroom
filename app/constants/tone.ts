@@ -1,6 +1,8 @@
-// UI tone variants
-export const Tone = {
-  Magic: "magic",
-  Info: "info",
-} as const;
-export type Tone = typeof Tone[keyof typeof Tone];
+
+export enum Tone {
+  Default = "default",
+  Magic = "magic",
+  Subdued = "subdued",
+  Info = "info"
+  // autres valeurs possibles...
+}

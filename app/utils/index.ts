@@ -1,2 +1,2 @@
 export * from './dom';
-export * from './postMessageSecure';
+export * from '../lib/postMessageSecure';

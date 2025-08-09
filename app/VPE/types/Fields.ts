@@ -1,12 +1,13 @@
 import { ReactElement } from "react";
 import { DefaultComponentProps, Metadata, UiState } from ".";
 
-type FieldOption = {
+export type FieldOption<ExtraProps = {}> = {
   label: string;
   value: string | number | boolean | undefined | null | object;
-};
+} & ExtraProps;
 
-type FieldOptions = Array<FieldOption> | ReadonlyArray<FieldOption>;
+
+type FieldOptions<ExtraProps = {}> = Array<FieldOption<ExtraProps>> | ReadonlyArray<FieldOption<ExtraProps>>;
 
 export type BaseField = {
   label?: string;
@@ -39,7 +40,7 @@ export type SelectField = BaseField & {
 
 export type RadioField = BaseField & {
   type: "radio";
-  options: FieldOptions;
+  options: FieldOptions<{ helpText?: string }>;
 };
 
 export type ArrayField<Props extends any = { [key: string]: any }> =

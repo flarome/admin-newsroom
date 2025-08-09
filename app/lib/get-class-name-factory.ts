@@ -41,7 +41,7 @@ const getClassNameFactory = (
 ) => {
   return (
     options: FactoryOptions = {},
-    showDefault = true
+    showDefault = true,
   ): string => {
     if (typeof options === "string") {
       const style = styles[`${rootClass}-${options}`];

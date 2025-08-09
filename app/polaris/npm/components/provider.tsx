@@ -5,14 +5,14 @@ import { language } from "../../../config/app";
 
 import { languages } from "../locales";
 
-
+ 
 const polarisI18n = createI18nContext({
   fallback: language,
   translations: {
     // Langues à charger dynamiquement
     ...Object.fromEntries(
       languages
-        .filter((lang) => lang !== 'fr')
+        .filter((lang) => lang !== language)
         .map((lang) => [
           lang,
           { type: 'import' as const, value: () => import(`../locales/${lang}.json`) }
@@ -20,7 +20,7 @@ const polarisI18n = createI18nContext({
     ),
 
     // Langue déjà chargée
-    fr: {
+    [language]: {
       type: 'parsed',
       value: fr,
     }
