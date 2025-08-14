@@ -3,5 +3,7 @@
 // export * from "./ExternalField";
 export * from "./RadioField";
 export * from "./SelectField";
+export * from './Range';
+
 // export * from "./TextareaField";
 // export * from './ObjectField'

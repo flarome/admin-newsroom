@@ -14,6 +14,7 @@ export type BaseField = {
   labelIcon?: ReactElement;
   metadata?: Metadata;
   visible?: boolean;
+  defaultValue?: string | number | boolean | undefined | null | object;
 };
 
 export type TextField = BaseField & {
@@ -28,7 +29,7 @@ export type NumberField = BaseField & {
   step?: number;
 };
 
-export type TextareaField = BaseField & {
+export type TextareaField = BaseField & { 
   type: "textarea";
   placeholder?: string;
 };
@@ -37,6 +38,20 @@ export type SelectField = BaseField & {
   type: "select";
   options: FieldOptions;
 };
+
+export type RangeField = BaseField & {
+  type: "range";
+  min: number;
+  max: number;
+  step: number;
+    unit?: string;
+   isOverridden?: boolean;
+   info?: string;
+    actions?: any;
+   tone?: any;
+    resetOverrideAction?: any;        
+};
+
 
 export type RadioField = BaseField & {
   type: "radio";
@@ -132,6 +147,7 @@ export type Field<ValueType = any> =
   | NumberField
   | TextareaField
   | SelectField
+  | RangeField
   | RadioField
   | ArrayField<ValueType>
   | ObjectField<ValueType>

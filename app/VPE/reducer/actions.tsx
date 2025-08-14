@@ -51,6 +51,12 @@ export type SetUiAction = {
   ui: Partial<UiState> | ((previous: UiState) => Partial<UiState>);
 };
 
+
+export type SetSettingAction = {
+  type: "setSetting";
+  setting: Partial<UiState> | ((previous: UiState) => Partial<UiState>);
+};
+
 export type SetDataAction = {
   type: "setData";
   data: Partial<Data> | ((previous: Data) => Partial<Data>);
@@ -73,6 +79,7 @@ export type VPEAction = { recordHistory?: boolean } & (
   | RemoveAction
   | DuplicateAction
   | SetAction
-  | SetDataAction
+  | SetDataAction 
   | SetUiAction
+  | SetSettingAction
 );

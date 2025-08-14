@@ -14,9 +14,10 @@ import {
   registeredSources,
   type Lang,
   i18nCache,
-} from "./global";
+} from "./manager";
 import { I18n } from "./i18";
 
+import {} from '@shopify/react-i18n'
 type Translations = Record<string, any>;
 
 type InitialTranslations = {

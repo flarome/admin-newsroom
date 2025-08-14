@@ -8,6 +8,7 @@ import { nanoid } from 'nanoid';
 
 // 1. settingSchema
 const settingSchema: z.ZodType<Setting> = z.object({
+  id: z.string().min(1, "Missing setting id"),  // Ajouté
   name: z.string().min(1, "Missing setting name"),
   field: z.any(),
   value: z.any().optional(),
@@ -55,21 +56,63 @@ const settingsGroupSchema: z.ZodType<SettingsGroup> = z.lazy(() =>
 );
 
 
+
+
 const SettingsCatalogSchema: z.ZodType<SettingsSchema> = z.array(z.union([
   settingSchema,
   settingsPartSchema,
   settingsGroupSchema,
 ])).superRefine((entries, ctx) => {
+
   const names = entries.map((s) => s.name);
-  const duplicates = names.filter((n, i) => names.indexOf(n) !== i);
+  const duplicatesNames = names.filter((n, i) => names.indexOf(n) !== i);
+  if (duplicatesNames.length) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: `Duplicate setting name(s) at top level: ${[...new Set(duplicatesNames)].join(", ")}`,
+      path: []
+    });
+  }
+
+  // Tableau pour collecter tous les settings (récursivement)
+  const allSettings: Setting[] = [];
+
+  // Fonction récursive qui collecte tous les settings dans une liste plate
+  function collectSettings(entries: SettingsSchema) {
+    for (const entry of entries) {
+      if (isSetting(entry)) {
+        allSettings.push(entry);
+      } else if (isPart(entry)) {
+        // ici on ajoute tous les settings du part
+        collectSettings(entry.settings);
+      } else if (isGroup(entry)) {
+        for (const sub of entry.settings) {
+          if (isPart(sub)) {
+            collectSettings(sub.settings);
+          } else {
+            allSettings.push(sub);
+          }
+        }
+      }
+    }
+  }
+
+  collectSettings(entries);
+
+  // On vérifie les doublons sur les ids
+  const ids = allSettings.map(s => s.id);
+  const duplicates = ids.filter((id, i) => ids.indexOf(id) !== i);
+
   if (duplicates.length) {
     ctx.addIssue({
       code: z.ZodIssueCode.custom,
-      message: `Duplicate setting name(s) at top level: ${[...new Set(duplicates)].join(", ")}`,
+      message: `Duplicate setting id(s): ${[...new Set(duplicates)].join(", ")}`,
       path: []
     });
   }
 });
+
+
 
 
 
@@ -98,7 +141,7 @@ function isPart(x: any): x is SettingsPart {
 }
 
 function isGroup(x: any): x is SettingsGroup {
-  return typeof x === "object" && Array.isArray(x.settings) && x.settings.every((s) => isSetting(s) || isPart(s));
+  return typeof x === "object" && Array.isArray(x.settings) && x.settings.every((s: any): s is SettingsPart | Setting => isSetting(s) || isPart(s));
 }
 
 
@@ -118,7 +161,7 @@ export function userInputToInternalSettingsCatalog(catalog: SettingsSchema): Pri
     if (isSetting(entry)) {
       settings.push({
         ...entry,
-        id: nanoid(),
+       // id: nanoid(),
         type: "setting",
       });
     }
@@ -130,7 +173,7 @@ export function userInputToInternalSettingsCatalog(catalog: SettingsSchema): Pri
         type: "part",
         settings: entry.settings.map((s) => ({
           ...s,
-          id: nanoid(),
+         // id: nanoid(),
           type: "setting",
         })),
       };
@@ -149,14 +192,14 @@ export function userInputToInternalSettingsCatalog(catalog: SettingsSchema): Pri
             type: "part",
             settings: sub.settings.map((s) => ({
               ...s,
-              id: nanoid(),
+              // id: nanoid(),
               type: "setting",
             })),
           });
         } else {
           flatSettings.push({
             ...sub,
-            id: nanoid(),
+            // id: nanoid(),
             type: "setting",
           });
         }
@@ -196,6 +239,50 @@ export function userInputToInternalSettingsCatalog(catalog: SettingsSchema): Pri
  * @returns Données nettoyées et normalisées (Settings)
  */
 export function userInputToSettingsMap(
+  catalog: SettingsSchema = [],
+  data: Record<string, any> = {}
+): Record<string, any> {
+  const result: Record<string, any> = {};
+
+  const allSettings: Setting[] = [];
+
+function collectSettings(entries: SettingsSchema) {
+   console.log('collectSettings called with entries:', entries.length);
+  for (const entry of entries) {
+    console.log('collectSettings entry:', entry);
+    if (isSetting(entry)) {
+      allSettings.push(entry);
+    } else if (isPart(entry)) {
+      collectSettings(entry.settings);
+    } else if (isGroup(entry)) {
+      for (const sub of entry.settings) {
+        if (isPart(sub)) {
+          collectSettings(sub.settings);
+        } else {
+          allSettings.push(sub);
+        }
+      }
+    }
+  }
+}
+
+  collectSettings(catalog);
+
+  console.log("All settings collecteds:", allSettings.map(s => ({ id: s.id, name: s.name })));
+  console.log("Data keys:", Object.keys(data));
+
+  for (const setting of allSettings) {
+    const val = data?.[setting.id];
+    result[setting.id] = val !== undefined ? val : (setting.field.defaultValue !== undefined ? setting.field.defaultValue : null);
+  }
+
+  console.log('result', result);
+  return result;
+}
+
+
+/*
+export function userInputToSettingsMap(
   catalog: SettingsSchema,
   data: Settings
 ): Settings {
@@ -206,7 +293,7 @@ export function userInputToSettingsMap(
 
     // Cas 1 : simple prop (champ direct)
     if (isSetting(entry)) {
-      result[entry.name] = value ?? entry.value;
+      result[entry.name] = value ?? entry.defaultValue;
 
     // Cas 2 : part (objet contenant plusieurs props, non groupé)
     } else if (isPart(entry)) {
@@ -216,7 +303,7 @@ export function userInputToSettingsMap(
         if (subVal !== undefined) {
           part[sub.name] = subVal;
         } else {
-          part[sub.name] = sub.value;
+          part[sub.name] = sub.defaultValue;
         }
       }
       result[entry.name] = part;
@@ -234,13 +321,13 @@ export function userInputToSettingsMap(
           const part: Record<string, any> = {};
           for (const s of sub.settings) {
             const v = subVal?.[s.name];
-            part[s.name] = v !== undefined ? v : s.value;
+            part[s.name] = v !== undefined ? v : s.defaultValue;
           }
           group[sub.name] = part;
 
         // Cas 3.2 : champ direct dans un group
         } else {
-          group[sub.name] = subVal !== undefined ? subVal : sub.value;
+          group[sub.name] = subVal !== undefined ? subVal : sub.defaultValue;
         }
       }
 
@@ -249,7 +336,7 @@ export function userInputToSettingsMap(
   }
 
   return result;
-}
+}*/
 
 
 
@@ -263,6 +350,49 @@ export function userInputToSettingsMap(
  * @param data Données utilisateur brutes
  * @returns Données nettoyées et normalisées
  */
+
+
+export function userInputToSettingsMapWithPrivateCatalog(
+  catalog: PrivateSettingsSchema,
+  data: Record<string, any>
+): Record<string, any> {
+  const result: Record<string, any> = {};
+
+  // On traite tous les settings, quelle que soit leur profondeur, à plat
+
+  // 1. Settings simples racine
+  for (const setting of catalog.settings) {
+    const val = data?.[setting.id];
+    result[setting.id] = val !== undefined ? val : setting.field.defaultValue;
+  }
+
+  // 2. Settings Parts
+  for (const part of catalog.settingsParts) {
+    for (const setting of part.settings) {
+      const val = data?.[setting.id];
+      result[setting.id] = val !== undefined ? val : setting.field.defaultValue
+    }
+  }
+
+  // 3. Settings Groups
+  for (const group of catalog.settingsGroups) {
+    // Settings plats
+    for (const setting of group.settings) {
+      const val = data?.[setting.id];
+      result[setting.id] = val !== undefined ? val :setting.field.defaultValue
+    }
+    // Settings parts imbriqués
+    for (const part of group.settingsParts) {
+      for (const setting of part.settings) {
+        const val = data?.[setting.id];
+        result[setting.id] = val !== undefined ? val : setting.field.defaultValue
+      }
+    }
+  }
+
+  return result;
+}
+/*
 export function userInputToSettingsMapWithPrivateCatalog(
   catalog: PrivateSettingsSchema,
   data: Settings
@@ -272,7 +402,7 @@ export function userInputToSettingsMapWithPrivateCatalog(
   // 1. Settings simples (niveau racine)
   for (const setting of catalog.settings) {
     const val = data?.[setting.name];
-    result[setting.name] = val !== undefined ? val : setting.value;
+    result[setting.name] = val !== undefined ? val : setting.defaultValue;
   }
 
   // 2. Settings Parts (objets simples imbriqués)
@@ -281,7 +411,7 @@ export function userInputToSettingsMapWithPrivateCatalog(
     const partResult: Record<string, any> = {};
     for (const setting of part.settings) {
       const val = partData?.[setting.name];
-      partResult[setting.name] = val !== undefined ? val : setting.value;
+      partResult[setting.name] = val !== undefined ? val : setting.defaultValue;
     }
     result[part.name] = partResult;
   }
@@ -294,7 +424,7 @@ export function userInputToSettingsMapWithPrivateCatalog(
     // a) settings plats dans le group
     for (const setting of group.settings) {
       const val = groupData?.[setting.name];
-      groupResult[setting.name] = val !== undefined ? val : setting.value;
+      groupResult[setting.name] = val !== undefined ? val : setting.defaultValue;
     }
 
     // b) parts imbriqués dans le group
@@ -304,7 +434,7 @@ export function userInputToSettingsMapWithPrivateCatalog(
 
       for (const setting of part.settings) {
         const val = partData?.[setting.name];
-        partResult[setting.name] = val !== undefined ? val : setting.value;
+        partResult[setting.name] = val !== undefined ? val : setting.defaultValue;
       }
 
       groupResult[part.name] = partResult;
@@ -314,4 +444,4 @@ export function userInputToSettingsMapWithPrivateCatalog(
   }
 
   return result;
-}
+} */

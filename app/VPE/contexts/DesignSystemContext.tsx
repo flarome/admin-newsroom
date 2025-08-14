@@ -17,7 +17,7 @@ function computeAppConfig<G extends UserGenerics<any>>(
   initialConfig: Config,
 ): G["UserConfig"] {
 
-
+ 
   const newConfig = {
     ...defaultAppConfig,
     settings: {
@@ -46,6 +46,8 @@ function computeAppState<G extends UserGenerics<any>>(
   initialData?: any,
   initialUi?: Partial<G["UserAppState"]["ui"]>
 ): G["UserAppState"] {
+
+  
   const initialUiMerged = { ...defaultAppState.ui, ...initialUi };
   const newAppState = {
     ...defaultAppState,
@@ -197,7 +199,7 @@ const {
     const computeLoadedConfig = computeAppConfig<G>(loadedConfig);
 
 
-    const newAppState = computeAppState<G>(config, loadedData, loadedUi);
+    const newAppState = computeAppState<G>(loadedConfig, loadedData, loadedUi);
     const newBlendedHistories = blendHistories<G>(loadedInitialHistory, newAppState, loadedConfig);
     const newInitialHistoryIndex = loadedInitialHistory?.index ?? newBlendedHistories.length - 1;
     const newInitialAppState = newBlendedHistories[newInitialHistoryIndex]?.state ?? newAppState;

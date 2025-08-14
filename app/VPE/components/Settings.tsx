@@ -10,7 +10,7 @@ import {
 } from "@VPE/styles/OnlineStore";
 
 import { BlockStack, Box, Collapsible, Text } from "@polaris/npm";
-import { memo, useMemo } from "react";
+import { memo, useCallback, useMemo } from "react";
 import { useAppStore } from "@VPE/store";
 import type {
   PrivateSetting,
@@ -21,9 +21,58 @@ import classNames from "classnames";
 import { InternalIcon } from "../../admin-ui-foundations";
 import { useShallow } from "zustand/react/shallow";
 
-import { AutoFieldPrivate } from "./AutoField";
+import { AutoField } from "./AutoField";
+import { createUseVPE } from "@VPE/lib";
+import { useAppStoreApi, type AppStore } from "@VPE/store";
+import { StoreApi } from "zustand";
+
+
+const useVPE = createUseVPE(); 
+
+
+const createOnChange =
+  (fieldID: string, appStore: StoreApi<AppStore>) =>
+  async (value: any) => {
+    const { dispatch, state } =
+      appStore.getState();
+
+    const { data } = state;
+
+    const currentSettings = data.settings;
+
+    const newProps = {
+      ...currentSettings,
+      [fieldID]: value,
+    };
+
+  
+        // DEPRECATED
+        dispatch({
+          type: "setData",
+          data: { settings: newProps },
+        });
+      
+    
+
+
+  };
+
+
 
 const Setting = ({ setting }: { setting: PrivateSetting }) => {
+
+ const settingValue = useVPE((s) => s.appState.data.settings[setting.id]);
+
+
+
+typeof settingValue
+    const appStore = useAppStoreApi();
+
+  const onChange = useCallback(createOnChange(setting.id, appStore), [
+    setting.id,
+  ]);
+
+
   return (
     <div
       className={classNames(EditorStyles.Setting, EditorStyles.DenseSetting)}
@@ -31,16 +80,18 @@ const Setting = ({ setting }: { setting: PrivateSetting }) => {
       data-component-extra-setting-name={setting.name}
       data-component-extra-setting-type={setting.field.type}
     >
-      <AutoFieldPrivate
+      <AutoField
         field={setting.field}
-        value={setting.value}
+        value={settingValue}
         id={setting.id}
-        onChange={() => ""}
+        onChange={onChange}
         name={setting.name}
       />
     </div>
   );
 };
+
+const SettingMemo = memo(Setting);
 
 const SettingsPart = ({
   showLine,
@@ -86,7 +137,7 @@ const SettingsPart = ({
               )}
               <div>
                 {settings.map((setting) => (
-                  <Setting key={setting.id} setting={setting} />
+                  <SettingMemo key={setting.id} setting={setting} />
                 ))}
               </div>
             </BlockStack>

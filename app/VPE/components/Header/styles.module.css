@@ -1,0 +1,8 @@
+.Badges {
+    display: flex;
+    align-items: flex-end
+}
+
+.Badges>*:first-child {
+    margin-right: var(--p-space-100)
+}

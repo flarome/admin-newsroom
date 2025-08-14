@@ -6,9 +6,10 @@ import { Field } from "./Fields";
 
 
 export type Setting <F = Field<any>> = {
+  id: string;
   name: string;
   field: F;
-  value?: any;
+  // defaultValue?: any;
 }
 
 export type SettingsPart = {
@@ -39,7 +40,6 @@ export type SettingsCatalog = SettingsSchema;
 // ===== LOCAL SECTIONS PACKAGES REQUESTED TYPE (FOR SECTIONS) =====
 
 export type ContentCatalog =  Record<string, any>;
-
 
 
 

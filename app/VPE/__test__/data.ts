@@ -1,10 +1,9 @@
-export const WYSIWYGData = 
+import { SettingsSchema } from "@VPE/types";
 
-
-[ 
+export const WYSIWYGData = [
   {
     children: [{ text: "Welcome to the Plate Playground!" }],
-    type: "h1", 
+    type: "h1",
   },
   {
     children: [
@@ -15,7 +14,7 @@ export const WYSIWYGData =
       {
         text: ". This playground showcases just a part of Plate's capabilities. ",
       },
-      { 
+      {
         children: [{ text: "Explore the documentation" }],
         type: "a",
         url: "/docs",
@@ -556,11 +555,7 @@ export const WYSIWYGData =
     children: [{ text: "" }],
     type: "p",
   },
-]; 
-
-
-
-
+];
 
 // src/data/sectionCatalog.js
 export const settingsData = {
@@ -568,53 +563,76 @@ export const settingsData = {
     img: {
       title: "mon titre perso",
     },
-  }, 
+  },
 };
-export const SETTINGS_CATALOG =
+export const SETTINGS_CATALOG: SettingsSchema = [
+  {
+    id: "test",
+    name: "SELECT COMPACT",
+    field: {
+      // label: "Type",
+      type: "select",
+      options: [
+        { label: "A", value: "A" },
+        { label: "B", value: "B" },
+        { label: "C", value: "C" },
+      ],
+    },
+  },
 
+  
 
+    {
+    id: "range",
+    name: "RANGE",
+    field: {
+      // label: "Type",
+      defaultValue: "100",
+      type: "range",
+        "min": 50,
+        "max": 300,
+        "step": 10,
+        "unit": "px",
+    },
+  },
 
-
-[
-  { name: "title", value: "oldestUpdate", field: {
-             // label: "Type",
-                type: "select",
-                options: [
-                   {label: 'A', value: 'A'},
-    {label: 'B', value: 'B'},
-    {label: 'C', value: 'C'},
-
-                ]
-            } },
 
   {
     name: "seo",
     label: "SEO",
     settings: [
-      { name: "seoTitle", field: {
-             // label: "Type",
-                type: "select",
-                options: [
-                   {label: 'Newest update', value: 'newestUpdate'},
-    {label: 'Oldest update', value: 'oldestUpdate'},
-    {label: 'Most spent', value: 'mostSpent'},
-    {label: 'Most orders', value: 'mostOrders'},
-    {label: 'Last name A–Z', value: 'lastNameAlpha'},
-    {label: 'Last name Z–A', value: 'lastNameReverseAlpha'},
-                ]
-            } },
-      { name: "seoDesc", field: {
-             // label: "Type",
-                type: "select",
-                options: [
-                   {label: 'Newest update', value: 'newestUpdate'},
-    {label: 'Oldest update', value: 'oldestUpdate'},
-    {label: 'Most spent', value: 'mostSpent'},
-    {label: 'Most orders', value: 'mostOrders'},
-    {label: 'Last name A–Z', value: 'lastNameAlpha'},
-    {label: 'Last name Z–A', value: 'lastNameReverseAlpha'},
-                ]
-            } },
+      {
+        id: "test_2",
+        name: "SELECT",
+        field: {
+          // label: "Type",
+          type: "select",
+          options: [
+            { label: "Newest update", value: "newestUpdate" },
+            { label: "Oldest update", value: "oldestUpdate" },
+            { label: "Most spent", value: "mostSpent" },
+            { label: "Most orders", value: "mostOrders" },
+            { label: "Last name A–Z", value: "lastNameAlpha" },
+            { label: "Last name Z–A", value: "lastNameReverseAlpha" },
+          ],
+        },
+      },
+      {
+        id: "test_3",
+        name: "seoDesc",
+        field: {
+          // label: "Type",
+          type: "select",
+          options: [
+            { label: "Newest update", value: "newestUpdate" },
+            { label: "Oldest update", value: "oldestUpdate" },
+            { label: "Most spent", value: "mostSpent" },
+            { label: "Most orders", value: "mostOrders" },
+            { label: "Last name A–Z", value: "lastNameAlpha" },
+            { label: "Last name Z–A", value: "lastNameReverseAlpha" },
+          ],
+        },
+      },
     ],
   },
 
@@ -622,35 +640,42 @@ export const SETTINGS_CATALOG =
     name: "group_general",
     label: "General",
     settings: [
-      { name: "subtitle",   field: {
-             // label: "Type",
-                type: "select",
-                options: [
-                   {label: 'Newest update', value: 'newestUpdate'},
-    {label: 'Oldest update', value: 'oldestUpdate'},
-    {label: 'Most spent', value: 'mostSpent'},
-    {label: 'Most orders', value: 'mostOrders'},
-    {label: 'Last name A–Z', value: 'lastNameAlpha'},
-    {label: 'Last name Z–A', value: 'lastNameReverseAlpha'},
-                ]
-            }
-           },
+      {
+        id: "test_4",
+        name: "subtitle",
+        field: {
+          // label: "Type",
+          type: "select",
+          options: [
+            { label: "Newest update", value: "newestUpdate" },
+            { label: "Oldest update", value: "oldestUpdate" },
+            { label: "Most spent", value: "mostSpent" },
+            { label: "Most orders", value: "mostOrders" },
+            { label: "Last name A–Z", value: "lastNameAlpha" },
+            { label: "Last name Z–A", value: "lastNameReverseAlpha" },
+          ],
+        },
+      },
       {
         name: "advanced",
         label: "Advanced",
         settings: [
-          { name: "jsonLd", field: {
-             // label: "Type",
-                type: "select",
-                options: [
-                   {label: 'Newest update', value: 'newestUpdate'},
-    {label: 'Oldest update', value: 'oldestUpdate'},
-    {label: 'Most spent', value: 'mostSpent'},
-    {label: 'Most orders', value: 'mostOrders'},
-    {label: 'Last name A–Z', value: 'lastNameAlpha'},
-    {label: 'Last name Z–A', value: 'lastNameReverseAlpha'},
-                ]
-            } },
+          {
+            id: "test_5",
+            name: "jsonLd",
+            field: {
+              // label: "Type",
+              type: "select",
+              options: [
+                { label: "Newest update", value: "newestUpdate" },
+                { label: "Oldest update", value: "oldestUpdate" },
+                { label: "Most spent", value: "mostSpent" },
+                { label: "Most orders", value: "mostOrders" },
+                { label: "Last name A–Z", value: "lastNameAlpha" },
+                { label: "Last name Z–A", value: "lastNameReverseAlpha" },
+              ],
+            },
+          },
         ],
       },
     ],
@@ -661,18 +686,18 @@ export const SETTINGS_CATALOG1 = [
     title: "Hero Section",
     name: "hero",
     props: [
-         { 
-            name: "title",
-            type: "plainText",
-            label: "Title",
-            value: "Hero title",
-          },
+      {
+        name: "title",
+        type: "plainText",
+        label: "Title",
+        value: "Hero title",
+      },
       {
         name: "img",
         title: "Image",
         props: [
           {
-            name: "title", 
+            name: "title",
             type: "plainText",
             label: "Title",
             value: "Hero title",
@@ -986,10 +1011,9 @@ export const SETTINGS_CATALOG1 = [
       },
     ],
   },
-]; 
+];
 
-
-const SECTION_CATALOG =  [ 
+const SECTION_CATALOG = [
   {
     title: "Hero Section",
     type: "hero",
@@ -998,7 +1022,6 @@ const SECTION_CATALOG =  [
     defaultInstancesNumber: 1, // ← exemple de default
     props: [
       {
-     
         name: "cta",
         label: "Boutons",
         props: [
@@ -1032,7 +1055,7 @@ const SECTION_CATALOG =  [
     ],
     blocks: [
       {
-            minInstances: 11,
+        minInstances: 11,
         defaultInstancesNumber: 2, // ← exemple de default
         maxInstances: 11, // Limite de 2 "hero" max (optionnel)
         type: "text_block",
@@ -1085,12 +1108,11 @@ const SECTION_CATALOG =  [
   },
 ];
 
-
 export const sectionsData = {
-  header: [ 
+  header: [
     {
       title: "Hero Section",
-      type: "hero", 
+      type: "hero",
       visible: true,
       blocks: [
         {
@@ -1133,51 +1155,48 @@ export const sectionsData = {
   // Ajoute ici tes groupes custom
 };
 
-
-
-export const sectionsData1 =  [ 
-    {
-      title: "Hero Section",
-      type: "hero", 
-      visible: true,
-      blocks: [
-        {
-          type: "text_block",
-        },
-        {
-          type: "text_block",
-        },
-        {
-          type: "text_block",
-        },
-        {
-          type: "text_block",
-        },
-      ],
-      values: {
-        title: "data title",
-        cta: {
-          showCta: false,
-        },
+export const sectionsData1 = [
+  {
+    title: "Hero Section",
+    type: "hero",
+    visible: true,
+    blocks: [
+      {
+        type: "text_block",
+      },
+      {
+        type: "text_block",
+      },
+      {
+        type: "text_block",
+      },
+      {
+        type: "text_block",
+      },
+    ],
+    values: {
+      title: "data title",
+      cta: {
+        showCta: false,
       },
     },
-    {
-      title: "Hero Section",
-      type: "hero",
-      visible: true,
-      values: {},
-    },
-    {
-      title: "Hero Section",
-      type: "hero",
-      visible: true,
-      values: {},
-    },
-  ];
-
+  },
+  {
+    title: "Hero Section",
+    type: "hero",
+    visible: true,
+    values: {},
+  },
+  {
+    title: "Hero Section",
+    type: "hero",
+    visible: true,
+    values: {},
+  },
+];
 
 export const SECTIONS_CATALOG = {
   header: { label: "header", sections: SECTION_CATALOG },
-   body: { label: "body", sections: SECTION_CATALOG },
+  body: { label: "body", sections: SECTION_CATALOG },
   // Ajoute ici tes groupes custom
 };

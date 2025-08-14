@@ -1,4 +1,3 @@
-import { styles as EditorStyles } from "@VPE/styles/Editor";
 import { styles as LoadingStyles } from "@VPE/styles/Loading";
 import {
   getFrameSidebarClass,

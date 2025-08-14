@@ -4,13 +4,17 @@ import type { Data as WYSIWYGDataType } from "../packages/WYSIWYG/_plate/types";
 
 
 // ===== GLOBAL SETTINGS REQUESTED  TYPE FOR VPE (FOR SETTINGS & SECTIONS SETTINGS) =====
-
+/*
 export type Settings = {
   [sectionName: string]: {
     [paramName: string]: any | {
       [propName: string]: any;
     };
   };
+};*/
+
+export type Settings = {
+  [settingId: string]: any;
 };
 
 

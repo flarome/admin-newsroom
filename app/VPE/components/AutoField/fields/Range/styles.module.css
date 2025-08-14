@@ -1,0 +1,36 @@
+.Input {
+    width: 4.375rem;
+    flex-shrink: 0
+}
+
+.Input.noSuffix {
+    width: 3.75rem
+}
+
+.Input.large {
+    width: 5rem
+}
+
+.Input.large.noSuffix {
+    width: 4.375rem
+}
+
+.Input.denseUIMobile input {
+    font-size: var(--p-font-size-350)
+}
+
+@media (max-width: 47.9975em) {
+    .Input {
+        width:5rem
+    }
+
+    .Input.large {
+        width: 5.625rem
+    }
+}
+
+@media (min-width: 0em) and (max-width: 30.6225em) {
+    .Input {
+        margin-top:var(--p-space-300)
+    }
+}

@@ -8,7 +8,7 @@ import {
 } from "@polaris/npm";
 import { GlobeIcon } from "@shopify/polaris-icons";
 import { getYear } from "../utils/date";
-import { useGlobalLang, useSetGlobalLang } from "../i18n/global";
+import { useGlobalLang, useSetGlobalLang } from "../i18n/manager";
 import { globalAppI18n, languages } from "..";
 // @ts-ignore
 import styles from "./styles.module.css";

@@ -1,0 +1,24 @@
+.StaticIframe {
+    position: absolute;
+    z-index: var(--osw-z-index-iframe-hidden);
+    top: 0;
+    display: block;
+    width: .0625rem;
+    min-width: 100%;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    background-color: var(--p-color-bg-surface);
+    opacity: 0
+}
+
+.visible {
+    position: relative;
+    z-index: var(--osw-z-index-iframe-visible);
+    opacity: 1
+}
+
+.disabled {
+    opacity: .7;
+    pointer-events: none
+}

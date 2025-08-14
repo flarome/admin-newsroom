@@ -1,6 +1,6 @@
 import './styles.css';
 
-import getClassNameFactoryGLOBAL from "../../../lib/get-class-name-factory";
+import {getClassNameFactory as getClassNameFactoryGLOBAL, getClassNameOptionsFactory as getClassNameOptionsFactoryGLOBAL  } from "../../../lib/get-class-name-factory";
 import styles from "./styles.module.css";
 
 export {styles};
@@ -9,6 +9,10 @@ const prefix = "Online-Store-UI";
 
 function getClassNameFactory(rootClass: string) {
   return getClassNameFactoryGLOBAL(`${prefix}-${rootClass}`, styles);
+} 
+
+function getClassNameOptionsFactory(rootClass: string) {
+  return getClassNameOptionsFactoryGLOBAL(`${prefix}-${rootClass}`, styles);
 } 
 
 function getName(rootClass: string) {
@@ -23,6 +27,41 @@ function getSubClassName(rootClass: string, subClass: string) {
     return getClassName(`${rootClass}__${subClass}`)
 }
  
+
+
+
+
+type ClassNamesReturn<T extends string> = {
+  _: string;
+  _options: (options?: any) => string;
+} & { [K in T]: string };
+
+export function createClassNames<T extends string>(
+  rootClass: string,
+  subClassNames: T[] = []
+): ClassNamesReturn<T> {
+  const baseClass = getClassName(rootClass);
+  const optionsFactory = getClassNameOptionsFactory(rootClass);
+
+  // Construire l'objet des sous-classes dynamiquement
+  const subClasses = subClassNames.reduce((acc, subClass) => {
+    acc[subClass] = getSubClassName(rootClass, subClass);
+    return acc;
+  }, {} as Record<T, string>);
+
+  return {
+    _: baseClass,
+    _options: optionsFactory,
+    ...subClasses,
+  } as ClassNamesReturn<T>;
+}
+
+
+
+
+
+
+
 /*-- AppProvider --*/
 export const AppProviderClass = {
     _: getClassNameFactory("AppProvider")
@@ -43,7 +82,15 @@ PanelArea: {
 export const getSkipToActionClass = getClassNameFactory("SkipToAction");
 
 /*-- Preview --*/
-export const getPreviewClass = getClassNameFactory("Preview");
+export const PreviewClass = {
+...createClassNames("Preview", ["PreviewInner","HeaderWrapper","Main","Interior","ShopFrame"])
+};
+
+/*-- LayoutGroup --*/
+export const LayoutGroupClass = {
+...createClassNames("LayoutGroup", []),
+Item: createClassNames("LayoutGroup-Item", [])
+};
 
 /*-- TopBar --*/
 export const getTopBarClass = getClassNameFactory("TopBar");

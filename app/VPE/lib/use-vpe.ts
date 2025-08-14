@@ -1,12 +1,18 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { createStore, StoreApi, useStore } from "zustand";
-
+import type { Config, UserGenerics } from "../types";
 import type { AppStore, useAppStoreApi } from "../store";
 import type { HistorySlice } from "../store/slices/history";
+import { makeStatePublic } from "./data";
 
 type WithGet<T> = T & { get: () => T };
 
-export type UseVPEData = {
+export type UseVPEData<
+  UserConfig extends Config = Config,
+  G extends UserGenerics<UserConfig> = UserGenerics<UserConfig>
+> = {
+    appState: G["UserPublicAppState"];
+      config: G["UserConfig"];
   dispatch: AppStore["dispatch"];
   history: {
     back: HistorySlice["back"];
@@ -18,17 +24,17 @@ export type UseVPEData = {
     hasPast: boolean;
     hasFuture: boolean;
   };
-  WYSIWYG: AppStore["WYSIWYG"];
-  settings: AppStore["settings"];
-};
 
-export type VPEApi = UseVPEData;
+}; 
 
-type UseVPEStore = WithGet<VPEApi>;
+export type VPEApi<UserConfig extends Config = Config> =
+  UseVPEData<UserConfig>;
+
+type UseVPEStore<UserConfig extends Config = Config> = VPEApi<UserConfig>;
 
 type PickedStore = Pick<
   AppStore,
-  "dispatch" | "history" | "settings" | "WYSIWYG"
+   "config" | "dispatch" | "history" | "state"
 >;
 
 export const generateUseVPE = (store: PickedStore): UseVPEStore => {
@@ -44,15 +50,13 @@ export const generateUseVPE = (store: PickedStore): UseVPEStore => {
   };
 
   const storeData: VPEApi = {
+    appState: makeStatePublic(store.state),
+    config: store.config,
     dispatch: store.dispatch,
     history,
-    WYSIWYG: store.WYSIWYG,
-    settings: store.settings,
   };
 
-  const get = () => storeData;
-
-  return { ...storeData, get };
+  return storeData;
 };
 
 export const UseVPEStoreContext = createContext<StoreApi<UseVPEStore> | null>(
@@ -60,10 +64,10 @@ export const UseVPEStoreContext = createContext<StoreApi<UseVPEStore> | null>(
 );
 
 const convertToPickedStore = (store: AppStore): PickedStore => ({
-  dispatch: store.dispatch,
-  history: store.history,
-  WYSIWYG: store.WYSIWYG,
-  settings: store.settings,
+    state: store.state,
+    config: store.config,
+    dispatch: store.dispatch,
+    history: store.history,
 });
 
 /**
@@ -77,6 +81,7 @@ export const useRegisterUseVPEStore = (
       generateUseVPE(convertToPickedStore(appStore.getState())),
     ),
   );
+
 
   useEffect(() => {
     return appStore.subscribe(

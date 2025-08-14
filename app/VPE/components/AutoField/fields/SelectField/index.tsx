@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import { Select } from "@polaris/npm";
 
-import { SegmentedControl } from "@VPE/components/ui";
+import { SegmentedControl } from "@VPE/components/_editorUI/SegmentedControl";
 
 import type { FieldPropsInternal } from "../..";
 

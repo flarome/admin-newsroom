@@ -13,6 +13,7 @@ import {
 import {
   RadioField,
   SelectField,
+  RangeField
  // ExternalField,
  // ArrayField,
  // DefaultField,
@@ -23,10 +24,9 @@ import {
 import { useAppStore } from "@VPE/store";
 import { useSafeId } from "lib";
 import { NestedFieldContext } from "./context";
-import {BlockStack} from "@polaris/npm"
 import { useFeatureFlags } from "@VPE/contexts";;
-import { ActionsList, type Action } from "../editor/Actions";
-import { LabelledSetting, LabelledSettingProps } from "../ui/LabelledSetting";
+import { ActionsList, type Action } from "../_editorUI/Actions";
+import { LabelledSetting, LabelledSettingProps } from "../_editorUI/LabelledSetting";
 
 
  
@@ -85,7 +85,7 @@ function FieldLabelInternal(props: FieldLabelPropsInternal) {
   const actionsElement = actions ? <ActionsList actions={actions} /> : null; 
 
   function renderHelpText(text?: string): string | null {
-  if (!text) return null;
+  if (!text) return null; 
 
   return text;
 }
@@ -171,6 +171,8 @@ function AutoFieldInternal<
     select: SelectField,
   //  textarea: TextareaField,
     radio: RadioField,
+
+    range: RangeField
    // text: DefaultField,
    // number: DefaultField,
   };
@@ -182,6 +184,8 @@ function AutoFieldInternal<
     select:  defaultFields.select,
   //  textarea:  defaultFields.textarea,
     radio:  defaultFields.radio,
+
+    range: defaultFields.range
   //  text:  defaultFields.text,
    // number:  defaultFields.number,
   };
@@ -236,11 +240,11 @@ function AutoFieldInternal<
       >
 
 
-   <BlockStack gap={{xs: '100'}} >
+
 
         <FieldComponent {...mergedProps}>{children}</FieldComponent>
 
-       </BlockStack>
+
       </div>
     </NestedFieldContext.Provider>
   );
@@ -292,3 +296,5 @@ export function AutoFieldPrivate<
 
   return <AutoFieldInternal<ValueType, FieldType> {...props} {...localProps} />;
 }
+
+export const AutoField = AutoFieldInternal 

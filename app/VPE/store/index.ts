@@ -12,7 +12,7 @@ export type Actions = "SECTIONS" | "SETTINGS";
 
 import { defaultAppState } from "./default-app-state";
 import { defaultAppConfig } from "./default-app-config";
-
+ 
 export {defaultAppState, defaultAppConfig}
 
 export type ZoomConfig =
@@ -22,10 +22,6 @@ export type ZoomConfig =
   | "MOBILE"
   | "MOBILE_LANDSCAPE";
 
-type Catalog = {
-  settings: Record<string, unknown>;
-  sections: Record<string, unknown>;
-};
 
 export type AppStore<
   UserConfig extends Config = Config,
@@ -112,8 +108,9 @@ save: async () => {
   try {
     const onSave = get().onSave;
     const saveData = get().state.data;
-
+ 
     if (typeof onSave === "function") {
+      
       await Promise.resolve(onSave(saveData));
     }
 
@@ -155,7 +152,7 @@ save: async () => {
     }))
   );
  
-export const appStoreContext = createContext<AppStoreApi>(createAppStore());
+export const appStoreContext = createContext(createAppStore());
 
 export function useAppStore<T>(selector: (state: AppStore) => T) {
   const context = useContext(appStoreContext);

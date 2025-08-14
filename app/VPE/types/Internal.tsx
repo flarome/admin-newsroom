@@ -20,7 +20,7 @@ export type ZoneIndex = Record<string, VPEZoneData>;
 // ===== GLOBAL SETTINGS INTERNAL TYPE FOR VPE (FOR SETTINGS & SECTIONS SETTINGS) =====
 
 export type PrivateSetting = Setting & {
-  id: string;
+ // id: string;
   type: "setting";
 };
 
@@ -37,11 +37,15 @@ export type PrivateSettingsGroup = SettingsGroup & {
   settingsParts: PrivateSettingsPart[];
 };
 
+
+
 export type PrivateSettingsSchema = {
   settings: PrivateSetting[];
   settingsParts: PrivateSettingsPart[];
   settingsGroups: PrivateSettingsGroup[];
 };
+
+
 
 
 // ===== LOCAL SETTINGS PACKAGES INTERNAL TYPE (FOR SETTINGS) =====
@@ -58,6 +62,10 @@ export type PrivateAppConfig<UserConfig extends Config = Config> =
       catalog: PrivateSettingsCatalog;
     };
   };
+
+
+ 
+
 
 
 

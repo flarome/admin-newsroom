@@ -8,10 +8,11 @@ import { setAction } from "./actions/set";
 import { setDataAction } from "./actions/set-data";
 import { setUiAction } from "./actions/set-ui";
 import { makeStatePublic } from "../lib/data/make-state-public";
+import { setSettingAction } from "./actions/set-setting";
 
 export * from "./actions";
 
-export type ActionType = "insert" | "reorder";
+export type ActionType = "insert" | "reorder"; 
 
 export type StateReducer<UserData extends Data = Data> = Reducer<
   PrivateAppState<UserData>,
@@ -66,6 +67,10 @@ export function createReducer<UserData extends Data>({
 
       if (action.type === "setData") {
         return setDataAction(state, action, appStore);
+      }
+
+      if (action.type === "setSetting") {
+        return setSettingAction(state, action);
       }
 
       if (action.type === "setUi") {

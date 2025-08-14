@@ -2,16 +2,20 @@
 import { Config } from "./Config";
 import { Data } from "./Data";
 import { PrivateAppState, PrivateAppConfig } from "./Internal";
-
+import type { AppState } from "./AppState"
 
 export type UserGenerics<
-   UserConfig1 extends Config = Config,
+   UserConfig extends Config = Config,
 
-  UserConfig extends PrivateAppConfig<UserConfig1> = PrivateAppConfig<UserConfig1>,
+  UserConfigInternal extends PrivateAppConfig<UserConfig> = PrivateAppConfig<UserConfig>,
+    UserPublicConfig extends Config = Config,
    UserData extends Data = Data,
     UserAppState extends PrivateAppState<UserData> = PrivateAppState<UserData>,
-> = {
-  UserConfig: UserConfig;
+      UserPublicAppState extends AppState<UserData> = AppState<UserData>,
+> = { 
+  UserConfig: UserConfigInternal;
+  UserPublicConfig: UserPublicConfig;
   UserData: UserData;
   UserAppState: UserAppState;
+  UserPublicAppState: UserPublicAppState;
 };

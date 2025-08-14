@@ -34,7 +34,7 @@ export interface Config {
  * @param styles Les classes générées par CSS Modules
  * @param config Optionnel : ajout d’un préfixe (baseClass)
  */
-const getClassNameFactory = (
+export const getClassNameFactory = (
   rootClass: string,
   styles: Styles,
   config: Config = { baseClass: "" }
@@ -69,5 +69,25 @@ const getClassNameFactory = (
     );
   };
 };
+
+
+/**
+ * Variante de getClassNameFactory sans afficher la classe de base par défaut
+ *
+ * @param rootClass
+ * @param styles
+ * @param config
+ */
+export const getClassNameOptionsFactory = (
+  rootClass: string,
+  styles: Styles,
+  config: Config = { baseClass: "" }
+) => {
+  // On réutilise getClassNameFactory en forçant showDefault à false
+  const factory = getClassNameFactory(rootClass, styles, config);
+  return (options: FactoryOptions = {}) => factory(options, false);
+};
+
+
 
 export default getClassNameFactory;
