@@ -16,11 +16,22 @@ COPY scripts ./scripts
 RUN echo "===> Contenu de /app :" && ls -al . && \
     echo "===> Contenu de /app/patches :" && ls -al ./patches || echo "AUCUN dossier /app/patches"
 
-# 3. Installer, patcher
-RUN npm ci --omit=dev && npm cache clean --force
-RUN npm install --no-save patch-package
-RUN npx patch-package
-RUN npm uninstall patch-package
+
+# 3. Installer pnpm globalement
+RUN npm install -g pnpm
+
+# 4. Installer les dépendances (prod uniquement)
+RUN pnpm install --prod --frozen-lockfile
+
+# 5. Installer patch-package, appliquer patches, puis supprimer patch-package
+RUN pnpm add --no-save patch-package && npx patch-package && pnpm remove patch-package
+
+
+# RUN npm ci --omit=dev && npm cache clean --force
+# RUN npm install --no-save patch-package
+# RUN npx patch-package
+# RUN npm uninstall patch-package
+
 
 # 4. Copier tout le reste du code (src, etc) APRES le patch
 COPY . .

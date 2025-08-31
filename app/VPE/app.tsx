@@ -1,4 +1,6 @@
 import { styles as LoadingStyles } from "@VPE/styles/Loading";
+
+
 import {
   getFrameSidebarClass,
   getFrameMainAreaClass,
@@ -8,7 +10,7 @@ import {
   styles as OnlineStoreStyles,
 } from "@VPE/styles/OnlineStore";
 
-import { memo } from "react";
+import { lazy, memo, useEffect, useMemo } from "react";
 
 import { useAppStore } from "@VPE/store";
 import { usePropsContext } from "@VPE/contexts";
@@ -99,11 +101,19 @@ const LayoutInner = () => {
 
 const Layout = memo(LayoutInner);
 
+
+
+
 const App = (props: any) => {
  const status = useAppStore((s) => s.status);
 
+
+
+
   return (
     <>
+
+
       {status === "LOADING" && <Loading />}
       <div style={{ display: status === "LOADING" ? "none" : "block" }}>
         <Layout />

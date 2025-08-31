@@ -128,7 +128,20 @@ export default defineConfig({
     include: ["react-lite-youtube-embed", "react-tweet"],
   },
   ssr: {
-    noExternal: ["react-lite-youtube-embed", "react-tweet"],
+    noExternal: ["react-lite-youtube-embed", "react-tweet",
+
+
+        '@plasmicapp/data-sources-context' ,
+      '@plasmicapp/loader-core' ,
+      '@plasmicapp/loader-fetcher' ,
+      '@plasmicapp/loader-react' ,
+      '@plasmicapp/loader-splits' ,
+      '@plasmicapp/prepass' ,
+      '@plasmicapp/query'
+
+
+
+    ],
   },
 
   server: {
