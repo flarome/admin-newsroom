@@ -6,8 +6,9 @@ import appStyles from "./styles/app.module.css";
 import { memo } from "react";
 // import App from "./_blocknote";
 //import App from "./_plate";
-import App from "./_tiptap"; 
+//import App from "./_tiptap"; 
 
+import App from "./_tiptap-simple"
 /*
 import { PropsProvider } from "./_plate/context/PropsContext";
 import { EditorProps } from "./_plate/context/PropsContext";

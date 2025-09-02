@@ -6,7 +6,10 @@ import GlobalApp from "../../";
 import "./styles/main.css";
 import "./styles/render.css";
 
+import {GraphQL} from 'graphql/GraphQL';
+
 export const Wrapper = ({ children, data, ...props }) => (
+<GraphQL>
     <div data-cms="index"> 
          <ArticleProvider data={data}>
         <App {...props}>
@@ -14,6 +17,7 @@ export const Wrapper = ({ children, data, ...props }) => (
         </App>
         </ArticleProvider>
     </div>
+    </GraphQL>
   );
 
 const App = ({ children, isDelete }) => {

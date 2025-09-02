@@ -16,30 +16,37 @@ COPY scripts ./scripts
 RUN echo "===> Contenu de /app :" && ls -al . && \
     echo "===> Contenu de /app/patches :" && ls -al ./patches || echo "AUCUN dossier /app/patches"
 
+# 3. Activer corepack pour Yarn
+RUN corepack enable
 
-# 3. Installer pnpm globalement
-RUN npm install -g pnpm
+# 4. Installer les dépendances avec Yarn (prod uniquement)
+RUN yarn install --frozen-lockfile --production
 
-# 4. Installer les dépendances (prod uniquement)
-RUN pnpm install --prod --frozen-lockfile
+# 5. Installer patch-package, appliquer les patches, puis supprimer patch-package
+RUN yarn add --dev patch-package && yarn dlx patch-package && yarn remove patch-package
 
-# 5. Installer patch-package, appliquer patches, puis supprimer patch-package
-RUN pnpm add --no-save patch-package && npx patch-package && pnpm remove patch-package
+# 6. Copier tout le reste du code (src, etc) APRES le patch
+COPY . .
 
+# 7. Clean Shopify CLI si besoin
+RUN yarn remove @shopify/cli || true
+
+# 8. Build
+RUN yarn build
 
 # RUN npm ci --omit=dev && npm cache clean --force
 # RUN npm install --no-save patch-package
 # RUN npx patch-package
 # RUN npm uninstall patch-package
 
-
 # 4. Copier tout le reste du code (src, etc) APRES le patch
-COPY . .
+# COPY . .
 
 # 5. Clean Shopify CLI si besoin
-RUN npm remove @shopify/cli
+#RUN npm remove @shopify/cli
 
 # 6. Build
-RUN npm run build
+# RUN npm run build
 
-CMD ["npm", "run", "docker-start"]
+CMD ["yarn", "docker-start"]
+# CMD ["npm", "run", "docker-start"]

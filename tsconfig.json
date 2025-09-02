@@ -55,7 +55,8 @@
       "@/*": ["."],
       "@polaris/*": ["./polaris/*"],
       "react-tweet": ["../node_modules/react-tweet/dist/swr.js"],
-      "@VPE/*": ["./VPE/*"]
+      "@VPE/*": ["./VPE/*"],
+      "@TIPTAP-SIMPLE/*": ["./VPE/packages/WYSIWYG/_tiptap-simple/*"]
     }
   }
 }
