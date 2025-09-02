@@ -3,5 +3,5 @@ roles = ["frontend", "backend"]
 webhooks_path = "/webhooks/app/uninstalled"
 
 [commands]
-predev = "yarn dlx prisma generate"
-dev = "yarn dlx prisma migrate deploy && yarn remix vite:dev"
+predev = "yarn prisma generate"
+dev = "yarn prisma migrate deploy && yarn remix vite:dev"

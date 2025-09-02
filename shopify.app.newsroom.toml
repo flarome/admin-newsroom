@@ -3,7 +3,7 @@
 client_id = "c27b14a7074536bc9aef8e70bf6bee24"
 name = "Newsroom"
 handle = "newsroom-3"
-application_url = "https://therapist-risk-sheet-correctly.trycloudflare.com"
+application_url = "https://law-invitation-sized-hottest.trycloudflare.com"
 embedded = true
 
 [build]
@@ -18,7 +18,7 @@ api_version = "2025-07"
 scopes = "read_content,read_draft_orders,read_files,read_metaobject_definitions,read_metaobjects,read_online_store_pages,read_orders,read_themes,unauthenticated_read_content,unauthenticated_read_product_listings,write_content,write_files,write_metaobjects"
 
 [auth]
-redirect_urls = ["https://therapist-risk-sheet-correctly.trycloudflare.com/auth/callback", "https://therapist-risk-sheet-correctly.trycloudflare.com/auth/shopify/callback", "https://therapist-risk-sheet-correctly.trycloudflare.com/api/auth/callback"]
+redirect_urls = ["https://law-invitation-sized-hottest.trycloudflare.com/auth/callback", "https://law-invitation-sized-hottest.trycloudflare.com/auth/shopify/callback", "https://law-invitation-sized-hottest.trycloudflare.com/api/auth/callback"]
 
 [pos]
 embedded = false

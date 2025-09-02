@@ -1,52 +1,52 @@
-diff --git a/node_modules/@platejs/math/dist/index.js b/node_modules/@platejs/math/dist/index.js
-index 9fbc88f..89e209e 100644
---- a/node_modules/@platejs/math/dist/index.js
-+++ b/node_modules/@platejs/math/dist/index.js
+diff --git a/dist/index.js b/dist/index.js
+index 9fbc88fe701d4b282127af3701545b90fcda86a0..669941e2096cc73b8f8b1ef6f63dc5276b4d12d7 100644
+--- a/dist/index.js
++++ b/dist/index.js
 @@ -68,7 +68,7 @@ var insertInlineEquation = (editor, texExpression, options) => {
  };
  
  // src/lib/BaseEquationPlugin.ts
 -var import_katex_min = require("katex/dist/katex.min.css");
-+
++//var import_katex_min = require("katex/dist/katex.min.css");
  var BaseEquationPlugin = (0, import_platejs3.createSlatePlugin)({
    key: import_platejs3.KEYS.equation,
    node: { isElement: true, isVoid: true }
-diff --git a/node_modules/@platejs/math/dist/index.mjs b/node_modules/@platejs/math/dist/index.mjs
-index ad2486d..f047036 100644
---- a/node_modules/@platejs/math/dist/index.mjs
-+++ b/node_modules/@platejs/math/dist/index.mjs
+diff --git a/dist/index.mjs b/dist/index.mjs
+index ad2486ddd9a946f0950b4d836953e15584b06b73..ef914a874b4ebde805035a03bee2115c8267b539 100644
+--- a/dist/index.mjs
++++ b/dist/index.mjs
 @@ -28,7 +28,7 @@ var insertInlineEquation = (editor, texExpression, options) => {
  };
  
  // src/lib/BaseEquationPlugin.ts
 -import "katex/dist/katex.min.css";
-+
++//import "katex/dist/katex.min.css";
  var BaseEquationPlugin = createSlatePlugin({
    key: KEYS3.equation,
    node: { isElement: true, isVoid: true }
-diff --git a/node_modules/@platejs/math/dist/react/index.js b/node_modules/@platejs/math/dist/react/index.js
-index c28e750..960bbd6 100644
---- a/node_modules/@platejs/math/dist/react/index.js
-+++ b/node_modules/@platejs/math/dist/react/index.js
+diff --git a/dist/react/index.js b/dist/react/index.js
+index c28e7503273247d65606cf8c74d910e6665c98d0..9b1f63050074589c8dfc675e04243b8844a536c3 100644
+--- a/dist/react/index.js
++++ b/dist/react/index.js
 @@ -70,7 +70,7 @@ var insertInlineEquation = (editor, texExpression, options) => {
  };
  
  // src/lib/BaseEquationPlugin.ts
 -var import_katex_min = require("katex/dist/katex.min.css");
-+
++//var import_katex_min = require("katex/dist/katex.min.css");
  var BaseEquationPlugin = (0, import_platejs3.createSlatePlugin)({
    key: import_platejs3.KEYS.equation,
    node: { isElement: true, isVoid: true }
-diff --git a/node_modules/@platejs/math/dist/react/index.mjs b/node_modules/@platejs/math/dist/react/index.mjs
-index 289d71f..e69ec16 100644
---- a/node_modules/@platejs/math/dist/react/index.mjs
-+++ b/node_modules/@platejs/math/dist/react/index.mjs
+diff --git a/dist/react/index.mjs b/dist/react/index.mjs
+index 289d71f499d7a4473cd01c0870172a9af2349ff0..62b0acd1f47d8193b2fcb5296180085328133518 100644
+--- a/dist/react/index.mjs
++++ b/dist/react/index.mjs
 @@ -31,7 +31,7 @@ var insertInlineEquation = (editor, texExpression, options) => {
  };
  
  // src/lib/BaseEquationPlugin.ts
 -import "katex/dist/katex.min.css";
-+
++//import "katex/dist/katex.min.css";
  var BaseEquationPlugin = createSlatePlugin({
    key: KEYS3.equation,
    node: { isElement: true, isVoid: true }

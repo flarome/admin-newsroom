@@ -1,0 +1,20 @@
+diff --git a/build/esm/csrf-link.mjs b/build/esm/csrf-link.mjs
+index 0dd7ff6a8bf975f5dabf12f697f551494d8ce82e..21d672ef1a8ce15dcd16c6f173f016997b60a6e0 100644
+--- a/build/esm/csrf-link.mjs
++++ b/build/esm/csrf-link.mjs
+@@ -1,4 +1,4 @@
+-import { setContext } from '@apollo/client/link/context';
++import { setContext } from '@apollo/client/link/context/context.cjs';
+ 
+ const SAME_SITE_HEADER = 'x-shopify-react-xhr';
+ const SAME_SITE_VALUE = '1';
+diff --git a/build/esm/request-id-link.mjs b/build/esm/request-id-link.mjs
+index 03f89dddee6a8b0ce8d184c19dac8959029869ea..bdadb16662e63c0c73ac79830535b107ac7aacdf 100644
+--- a/build/esm/request-id-link.mjs
++++ b/build/esm/request-id-link.mjs
+@@ -1,4 +1,4 @@
+-import { setContext } from '@apollo/client/link/context';
++import { setContext } from '@apollo/client/link/context/context.cjs';
+ 
+ function createRequestIdLink(requestId) {
+   return setContext((_, {

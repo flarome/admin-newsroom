@@ -1,7 +1,7 @@
 // app/routes/index.tsx
 import type { ActionFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { processRequestWithGraphQL } from "remix-graphql/index.server";
+import { processRequestWithGraphQL } from "graphql/.server/remix-graphql";
 
 import { schema, schemas } from "graphql/.server/schema";
 
@@ -54,3 +54,4 @@ export const action: ActionFunction = async (args) => {
     );
   }
 };
+ 

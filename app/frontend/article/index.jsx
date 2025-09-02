@@ -6,7 +6,7 @@ import GlobalApp from "../../";
 import "./styles/main.css";
 import "./styles/render.css";
 
-import {GraphQL} from 'graphql/GraphQL';
+import {GraphQL} from '../../graphql/GraphQL';
 
 export const Wrapper = ({ children, data, ...props }) => (
 <GraphQL>

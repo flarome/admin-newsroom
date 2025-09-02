@@ -8,7 +8,7 @@ WORKDIR /app
 
 # 1. Copier package + scripts (pour que postinstall fonctionne)
 COPY package.json package-lock.json* ./
-COPY patches ./patches
+# COPY patches ./patches
 COPY scripts ./scripts
 
 
@@ -22,14 +22,8 @@ RUN corepack enable
 # 4. Installer les dépendances avec Yarn (prod uniquement)
 RUN yarn install --frozen-lockfile --production
 
-# 5. Installer patch-package, appliquer les patches, puis supprimer patch-package
-RUN yarn add --dev patch-package && yarn dlx patch-package && yarn remove patch-package
-
 # 6. Copier tout le reste du code (src, etc) APRES le patch
 COPY . .
-
-# 7. Clean Shopify CLI si besoin
-RUN yarn remove @shopify/cli || true
 
 # 8. Build
 RUN yarn build

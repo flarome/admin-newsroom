@@ -1,4 +1,6 @@
 import fs from "fs";
+import pkg from '@yarnpkg/pnp';
+const { resolvePackagePath } = pkg;
 import path from "path";
 import { execSync } from "child_process";
 

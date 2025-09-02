@@ -7,7 +7,11 @@ import path from "path";
 import tailwindcss from "@tailwindcss/vite";
 import { fileURLToPath } from "url";
 import { dirname, resolve } from "path";
- 
+ import {viteCommonjs} from '@originjs/vite-plugin-commonjs';
+
+
+
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
@@ -131,7 +135,7 @@ export default defineConfig({
     noExternal: ["react-lite-youtube-embed", "react-tweet",
 
 
-        '@plasmicapp/data-sources-context' ,
+      '@plasmicapp/data-sources-context' ,
       '@plasmicapp/loader-core' ,
       '@plasmicapp/loader-fetcher' ,
       '@plasmicapp/loader-react' ,
@@ -161,6 +165,8 @@ export default defineConfig({
 
     importRtfAsBufferPlugin(),
     tailwindcss(),
+
+    viteCommonjs()
   ],
 
   assetsInclude: ["**/*.rtf"],
@@ -317,6 +323,7 @@ export default defineConfig({
     resolve: {
     alias: {
       ...getTsconfigAliases("tsconfig.json"),
+
       // tu peux ajouter ici des alias spécifiques au runtime si besoin
     },
   }   

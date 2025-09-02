@@ -1,8 +1,8 @@
 // GraphQL.tsx
 import React from 'react';
 import fetch from 'cross-fetch';
-import {createHttpLink} from '@apollo/client';
-import {GraphQLUniversalProvider} from '@shopify/react-graphql-universal-provider';
+import {createHttpLink} from '@apollo/client/link/http';
+
 
 export function GraphQL({
   url,
@@ -22,8 +22,8 @@ export function GraphQL({
   };
 
   return (
-    <GraphQLUniversalProvider createClientOptions={createClientOptions}>
+  <>
       {children}
-    </GraphQLUniversalProvider>
+   </>
   );
 }
